@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
+
 const routes = [
   {
     path: '/',
@@ -11,7 +12,31 @@ const routes = [
   },
   {
     path: '/dashboard',
-    component: () => import('@/views/DashboardView.vue'),
+    component: () => import('@/views/MainView.vue'),
+    children: [
+      {
+        path: '/products',
+        name: 'products',
+        component: () => import('@/views/Products/ProductsView.vue'),
+        children: [
+          {
+            path: ':id',
+            name: 'product',
+            component: () => import('@/views/Products/SingleProductView.vue')
+          }
+        ]
+      },
+      {
+        path: '/storehouses',
+        name: 'storehouses',
+        component: () => import('@/views/Storehouses/StorehousesView.vue'),
+      },
+      {
+        path: '/users',
+        name: 'users',
+        component: () => import('@/views/Users/UsersView.vue'),
+      },
+    ]
   },
 ];
 

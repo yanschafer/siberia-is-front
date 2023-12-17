@@ -12,7 +12,8 @@ import LoginView from "@/views/LoginView.vue";
   font-family: 'Lato', sans-serif;
 }
 #app {
-  width: 100%;
+  width: 100vw!important;
+  overflow: hidden;
   height: 100vh;
   padding: 0!important;
   display: flex;

@@ -1,6 +1,30 @@
+<template>
+  <MDBContainer class="d-flex flex-column align-items-center sidebar-bg">
+    <img class="logo" src="@/assets/Logo.svg">
+    <MDBCol class="sidebar-item-group d-flex justify-content-center flex-column">
+      <router-link
+          v-for="(item, index) in sidebarItems"
+          :key="index"
+          :to="{ name: item.route }"
+          class="sidebar-item"
+          :class="{ 'active': isRouteActive(item), 'inactive': !isRouteActive(item), 'disabled': item.disabled }"
+      >
+        <div class="item-icon" :class="{ 'active': isRouteActive(item), 'inactive': !isRouteActive(item), 'disabled': item.disabled }">
+          <component :is="item.icon" :color="item.iconColor" :size="item.iconSize" :stroke-width="item.strokeWidth" />
+        </div>
+        <span :class="{ 'item-name': true, 'active': isRouteActive(item), 'inactive': !isRouteActive(item), 'disabled': item.disabled }">{{ item.name }}</span>
+      </router-link>
+    </MDBCol>
+    <a class="logout" href="#" @click.prevent="logout"><IconLogout2 /> Log Out</a>
+  </MDBContainer>
+</template>
+
 <script lang="ts">
-import {MDBContainer, MDBCol} from "mdb-vue-ui-kit";
+import { ref, watch } from 'vue';
+import { RouterLink, RouterView, useRoute } from 'vue-router';
+import { MDBContainer, MDBCol } from "mdb-vue-ui-kit";
 import { IconPackages, IconLock, IconBuildingWarehouse, IconUsersGroup, IconLogout2 } from '@tabler/icons-vue';
+
 export default {
   name: 'SidebarComponent',
   components: {
@@ -18,26 +42,31 @@ export default {
       required: true,
       default: () => []
     }
-  }
-}
+  },
+  setup() {
+    const route = useRoute();
+
+    const isRouteActive = (item) => {
+      return route.name === item.route;
+    };
+
+    return {
+      isRouteActive,
+    };
+  },
+  methods: {
+    logout() {
+      this.$router.push('/');
+    },
+  },
+};
 </script>
 
-<template>
-  <MDBContainer class="d-flex flex-column align-items-center sidebar-bg">
-    <img class="logo" src="@/assets/Logo.svg">
-    <MDBCol class="sidebar-item-group d-flex justify-content-center flex-column">
-      <div v-for="(item, index) in sidebarItems" :key="index" :class="{'sidebar-item': true, 'active': item.active, 'inactive': !item.active, 'disabled': item.disabled}">
-        <div :class="{'item-icon': true, 'active': item.active, 'inactive': !item.active, 'disabled': item.disabled}">
-          <component :is="item.icon" :color="item.iconColor" :size="item.iconSize" :stroke-width="item.strokeWidth" />
-        </div>
-        <span :class="{ 'item-name': true, 'active': item.active, 'inactive': !item.active, 'disabled': item.disabled }">{{ item.name }}</span>
-      </div>
-    </MDBCol>
-    <a class="logout" href="#"><IconLogout2 /> Log Out</a>
-  </MDBContainer>
-</template>
 
 <style scoped>
+* {
+  transition: all 0.3s ease-in-out;
+}
 .sidebar-bg {
   background-color: #FCFCFC;
   border-right: 2px solid #EEEEEE;
@@ -82,6 +111,12 @@ export default {
   flex-direction: column;
   align-items: center;
   align-content: center;
+}
+.sidebar-item:hover {
+  cursor: pointer;
+}
+.sidebar-item:hover:first-child {
+  cursor: not-allowed;
 }
 .sidebar-item-group {
   gap: 1rem;

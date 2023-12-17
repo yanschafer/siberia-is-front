@@ -44,11 +44,8 @@ const route = useRoute();
 
 const login = async () => {
   try {
-    // Ваша временная логика аутентификации (без реального бекенда)
     if (username.value === 'test' && password.value === 'password') {
-      // Временный "вход" без реального бекенда
-      // Мы перенаправляем пользователя на DashboardView
-      await router.push('/dashboard');
+      await router.replace({ name: 'dashboard' });
     } else {
       error.value = 'This combination of login/password doesn’t exist. Please, check info provided or contact with your administrator.';
     }
