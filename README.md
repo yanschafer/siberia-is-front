@@ -1,1 +1,3 @@
-# siberia-is-front
+# Siberia IS
+
+Product and Inventory Management System
