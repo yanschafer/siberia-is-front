@@ -1,31 +1,31 @@
+<!-- TableComponent.vue -->
 <template>
-    <table v-if="paginatedRows.length > 0" class="table table-bordered animate__animated animate__fadeIn">
-      <thead>
-      <tr>
-        <th class="table-header" v-for="column in columns" :key="column.field">{{ column.header }}</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr class="table-row" v-for="(row, index) in paginatedRows" :key="index" :class="{ 'table-row-odd': index % 2 !== 0 }">
-        <td v-for="column in columns" :key="column.field">{{ row[column.field] }}</td>
-      </tr>
-      </tbody>
-    </table>
-    <div v-else>
-      Nothing was found, try to classify search query.
-    </div>
-    <nav aria-label="Page navigation">
-      <ul class="pagination">
-        <li class="page-item" v-for="page in totalPages" :key="page" :class="{ 'active': page === currentPage }">
-          <a class="page-link" @click="changePage(page)">{{ page }}</a>
-        </li>
-      </ul>
-    </nav>
+  <table v-if="paginatedRows.length > 0" class="table table-bordered animate__animated animate__fadeIn">
+    <thead>
+    <tr>
+      <th class="table-header" v-for="column in columns" :key="column.field">{{ column.header }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="table-row" @click="handleRowClick(row)" v-for="(row, index) in paginatedRows" :key="index" :class="{ 'table-row-odd': index % 2 !== 0 }">
+      <td v-for="column in columns" :key="column.field">{{ row[column.field] }}</td>
+    </tr>
+    </tbody>
+  </table>
+  <div v-else>
+    Nothing was found, try to classify search query.
+  </div>
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <li class="page-item" v-for="page in totalPages" :key="page" :class="{ 'active': page === currentPage }">
+        <a class="page-link" @click="changePage(page)">{{ page }}</a>
+      </li>
+    </ul>
+  </nav>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue';
-import { useRouter } from 'vue-router';
 
 export default defineComponent({
   props: {
@@ -52,6 +52,10 @@ export default defineComponent({
     },
   },
   methods: {
+    handleRowClick(row) {
+      // Вызываем событие rowClick и передаем в него объект строки (row)
+      this.$emit('rowClick', row);
+    },
     changePage(page: number) {
       this.currentPage = page;
     },
@@ -77,7 +81,6 @@ export default defineComponent({
   },
 });
 </script>
-
 
 <style scoped>
 .table {

@@ -15,29 +15,47 @@ const routes = [
     component: () => import('@/views/MainView.vue'),
     children: [
       {
-        path: '/products',
+        path: 'products',
         name: 'products',
         component: () => import('@/views/Products/ProductsView.vue'),
         children: [
           {
-            path: ':id',
-            name: 'product',
-            component: () => import('@/views/Products/SingleProductView.vue')
-          }
+            path: '/singleProduct/:id',
+            name: 'Product details',
+            component: () => import('@/views/Products/SingleProductView.vue'),
+            props: true
+          },
         ]
       },
       {
         path: '/storehouses',
         name: 'storehouses',
         component: () => import('@/views/Storehouses/StorehousesView.vue'),
+        children: [
+          {
+            path: '/:id',
+            name: 'Storehouse',
+            component: () => import('@/views/Storehouses/SingleStorehouseView.vue'),
+            props: true
+          }
+        ]
       },
       {
         path: '/users',
         name: 'users',
         component: () => import('@/views/Users/UsersView.vue'),
+        children: [
+          {
+            path: '/:id',
+            name: 'singleUser',
+            component: () => import('@/views/Users/SingleUserView.vue'),
+            props: true
+          }
+        ]
       },
     ]
   },
+
 ];
 
 const router = createRouter({

@@ -1,6 +1,10 @@
 <template>
-  <SearchComponent @search="handleSearch" />
-  <TableComponent :rows="storehousesData" :columns="storehousesColumns" :searchTerm="searchTerm" />
+  <div class="container-fluid" style="padding: 0;">
+    <template v-if="!$route.params.id">
+      <SearchComponent @search="handleSearch" />
+      <TableComponent :rows="storehousesRows" :columns="storehousesColumns" :searchTerm="searchTerm" @rowClick="handleRowClick" />
+    </template>
+    <router-view v-if="$route.params.id !== undefined" :storehousesData="storehousesData" :id="$route.params.id" /></div>
 </template>
 
 <script lang="ts">
@@ -8,37 +12,46 @@ import TableComponent from "@/components/TableComponent.vue";
 import SearchComponent from "@/components/SearchComponent.vue";
 
 export default  {
-  name: 'ProductsView',
+  name: 'StorehousesView',
   components: {SearchComponent, TableComponent },
   data() {
     return {
       searchTerm: '',
-      storehousesData: [
-        { name: 'Main Storehouse, named “Storehouse 1”', adress: '20152,  Via San Cosmo fuori Porta Nolana 91' },
-        { name: 'Main Storehouse, named “Storehouse 2”', adress: '20152,  Via San Cosmo fuori Porta Nolana 91' },
-        { name: 'Main Storehouse, named “Storehouse 3”', adress: '20152,  Via San Cosmo fuori Porta Nolana 91' },
-        { name: 'Main Storehouse, named “Storehouse 4”', adress: '20152,  Via San Cosmo fuori Porta Nolana 91' },
-        { name: 'Main Storehouse, named “Storehouse 5”', adress: '20152,  Via San Cosmo fuori Porta Nolana 91' },
-        { name: 'Main Storehouse, named “Storehouse 6”', adress: '20152,  Via San Cosmo fuori Porta Nolana 91' },
-        { name: 'Main Storehouse, named “Storehouse 7”', adress: '20152,  Via San Cosmo fuori Porta Nolana 91' },
-        { name: 'Main Storehouse, named “Storehouse 8”', adress: '20152,  Via San Cosmo fuori Porta Nolana 91' },
-        { name: 'Main Storehouse, named “Storehouse”', adress: '20152,  Via San Cosmo fuori Porta Nolana 91' },
-        { name: 'Main Storehouse, named “Storehouse”', adress: '20152,  Via San Cosmo fuori Porta Nolana 91' },
-        { name: 'Main Storehouse, named “Storehouse”', adress: '20152,  Via San Cosmo fuori Porta Nolana 91' },
-        { name: 'Main Storehouse, named “Storehouse”', adress: '20152,  Via San Cosmo fuori Porta Nolana 91' },
-        { name: 'Main Storehouse, named “Storehouse ”', adress: '20152,  Via San Cosmo fuori Porta Nolana 91' },
-        { name: 'Yan', adress: '20152,  Via San Cosmo fuori Porta Nolana 91' },
-
+      storehousesRows: [
+        { id: 1, name: 'Storehouse 1', address: '123 Main St' },
+        { id: 2, name: 'Storehouse 2', address: '456 Oak St' },
+        { id: 3, name: 'Storehouse 3', address: '123 Main St' },
       ],
       storehousesColumns: [
         { field: 'name', header: 'NAME' },
-        { field: 'adress', header: 'ADRESS' },
+        { field: 'address', header: 'ADDRESS' },
+      ],
+      storehousesData: [
+        {
+          id: '1',
+          storehouseName: 'Storehouse 1',
+          storehouseAdress: 'Storehouse adress 1'
+        },
+        {
+          id: '2',
+          storehouseName: 'Storehouse 2',
+          storehouseAdress: 'Storehouse adress 2'
+        },
+        {
+          id: '3',
+          storehouseName: 'Storehouse 3',
+          storehouseAdress: 'Storehouse adress 3'
+        }
       ],
     };
   },
   methods: {
     handleSearch(searchTerm) {
       this.searchTerm = searchTerm;
+    },
+    handleRowClick(row) {
+      console.log('Clicked row with id:', row.id);
+      this.$router.push({ name: 'Storehouse', params: { id: row.id.toString() } });
     },
   },
 }

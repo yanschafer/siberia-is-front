@@ -24,14 +24,14 @@ export default {
   data() {
     return {
       sidebarItems: [
-        { name: 'Dashboard',
-          icon: 'IconLock',
-          iconColor: '#E5E5E5',
-          iconSize: 32,
-          strokeWidth: 1,
-          disabled: true,
-          active: false
-        },
+        // { name: 'Dashboard',
+        //   icon: 'IconLock',
+        //   iconColor: '#E5E5E5',
+        //   iconSize: 32,
+        //   strokeWidth: 1,
+        //   disabled: true,
+        //   active: false,
+        // },
         { name: 'Products',
           icon: 'IconPackages',
           iconColor: '#B8B8B8',
@@ -65,10 +65,10 @@ export default {
     };
   },
   watch: {
-    '$route': 'updatePageTitle',
+    '$route': 'updatePageTitleAndContent',
   },
   methods: {
-    updatePageTitle() {
+    updatePageTitleAndContent() {
       const routeNames = this.$route.matched.map(route => route.name);
       const currentPageName = routeNames.pop() || 'dashboard';
 
@@ -77,6 +77,9 @@ export default {
       } else {
         this.pageTitle = 'Dashboard'; // По умолчанию, если нет имени страницы
       }
+
+      // Добавим этот код, чтобы увидеть, происходит ли переход
+      console.log('Navigating to:', currentPageName);
     },
     logout() {
       this.$router.push('/');
@@ -93,7 +96,7 @@ export default {
     },
   },
   mounted() {
-    this.updatePageTitle(); // Обновляет заголовок при монтировании компонента
+    this.updatePageTitleAndContent(); // Обновляет заголовок при монтировании компонента
   },
 };
 </script>

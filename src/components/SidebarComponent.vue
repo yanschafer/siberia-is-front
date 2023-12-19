@@ -47,7 +47,19 @@ export default {
     const route = useRoute();
 
     const isRouteActive = (item) => {
-      return route.name === item.route;
+      return isRouteActiveRecursive(route, item);
+    };
+
+    const isRouteActiveRecursive = (currentRoute, item) => {
+      if (currentRoute.name === item.route) {
+        return true;
+      }
+
+      if (currentRoute.matched && currentRoute.matched.some(record => record.name === item.route)) {
+        return true;
+      }
+
+      return currentRoute.matched && currentRoute.matched.some(record => isRouteActiveRecursive(record, item));
     };
 
     return {
@@ -114,9 +126,6 @@ export default {
 }
 .sidebar-item:hover {
   cursor: pointer;
-}
-.sidebar-item:hover:first-child {
-  cursor: not-allowed;
 }
 .sidebar-item-group {
   gap: 1rem;

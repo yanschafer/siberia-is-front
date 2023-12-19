@@ -112,6 +112,7 @@ export default defineComponent({
 .breadcrumbs {
   padding-left: 2rem;
   padding-top: 1rem;
+  margin: 0;
 }
 .breadcrumb-item {
   text-transform: capitalize;
