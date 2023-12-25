@@ -41,7 +41,7 @@ export default {
     },
     handleRowClick(row) {
       console.log('Clicked row with id:', row.id);
-      this.$router.push({ name: 'singleUser', params: { id: row.id.toString() } });
+      this.$router.push({ name: 'User', params: { id: row.id.toString() } });
     },
     getSelectedUser(id) {
       return this.usersDetails.find(user => user.id === id) || {};

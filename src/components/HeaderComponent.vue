@@ -2,7 +2,8 @@
   <header>
     <MDBContainer class="bg-container d-flex flex-row align-items-center gap-3" fluid>
       <MDBContainer class="d-flex gap-2 flex-row align-items-center">
-        <h1 :key="title" class="animate__animated animate__fadeInUp heading">{{ title }}</h1>
+        <h1 :key="title" class="animate__animated animate__fadeInUp heading">{{ title }}</h1> <span class="separator">|</span>
+        <h1 @click="openRoles" v-if="showRolesHeader" class="animate__animated animate__fadeInUp heading">Roles</h1>
         <MDBBtn v-if="showAddButton" class="animate__animated animate__fadeInUp utility-btn" outline="black">{{ addButtonLabel }}</MDBBtn>
       </MDBContainer>
       <MDBContainer class="d-flex flex-row align-items-center justify-content-end">
@@ -65,6 +66,16 @@ export default defineComponent({
       default: () => [],
     },
   },
+  methods: {
+    openRoles() {
+      this.$router.push('/roles')
+    }
+  },
+  computed: {
+    showRolesHeader() {
+      return this.$route.path.startsWith('/users');
+    },
+  },
 });
 </script>
 
@@ -112,9 +123,14 @@ export default defineComponent({
 .breadcrumbs {
   padding-left: 2rem;
   padding-top: 1rem;
-  margin: 0;
 }
 .breadcrumb-item {
   text-transform: capitalize;
+}
+.separator {
+  font-size: 32px;
+}
+h1 {
+  margin-bottom: 0;
 }
 </style>

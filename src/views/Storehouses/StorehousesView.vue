@@ -10,41 +10,52 @@
 <script lang="ts">
 import TableComponent from "@/components/TableComponent.vue";
 import SearchComponent from "@/components/SearchComponent.vue";
+import { useStorehousesStore } from '@/stores/store';
 
 export default  {
   name: 'StorehousesView',
   components: {SearchComponent, TableComponent },
-  data() {
+  setup() {
+    const storehousesStore = useStorehousesStore();
+
     return {
-      searchTerm: '',
-      storehousesRows: [
-        { id: 1, name: 'Storehouse 1', address: '123 Main St' },
-        { id: 2, name: 'Storehouse 2', address: '456 Oak St' },
-        { id: 3, name: 'Storehouse 3', address: '123 Main St' },
-      ],
-      storehousesColumns: [
-        { field: 'name', header: 'NAME' },
-        { field: 'address', header: 'ADDRESS' },
-      ],
-      storehousesData: [
-        {
-          id: '1',
-          storehouseName: 'Storehouse 1',
-          storehouseAdress: 'Storehouse adress 1'
-        },
-        {
-          id: '2',
-          storehouseName: 'Storehouse 2',
-          storehouseAdress: 'Storehouse adress 2'
-        },
-        {
-          id: '3',
-          storehouseName: 'Storehouse 3',
-          storehouseAdress: 'Storehouse adress 3'
-        }
-      ],
+      ...storehousesStore,
     };
   },
+  mounted() {
+    this.loadData();
+  },
+  // data() {
+  //   return {
+  //     searchTerm: '',
+  //     storehousesRows: [
+  //       { id: 1, name: 'Storehouse 1', address: '123 Main St' },
+  //       { id: 2, name: 'Storehouse 2', address: '456 Oak St' },
+  //       { id: 3, name: 'Storehouse 3', address: '123 Main St' },
+  //     ],
+  //     storehousesColumns: [
+  //       { field: 'name', header: 'NAME' },
+  //       { field: 'address', header: 'ADDRESS' },
+  //     ],
+  //     storehousesData: [
+  //       {
+  //         id: '1',
+  //         storehouseName: 'Storehouse 1',
+  //         storehouseAdress: 'Storehouse adress 1'
+  //       },
+  //       {
+  //         id: '2',
+  //         storehouseName: 'Storehouse 2',
+  //         storehouseAdress: 'Storehouse adress 2'
+  //       },
+  //       {
+  //         id: '3',
+  //         storehouseName: 'Storehouse 3',
+  //         storehouseAdress: 'Storehouse adress 3'
+  //       }
+  //     ],
+  //   };
+  // },
   methods: {
     handleSearch(searchTerm) {
       this.searchTerm = searchTerm;
@@ -52,6 +63,9 @@ export default  {
     handleRowClick(row) {
       console.log('Clicked row with id:', row.id);
       this.$router.push({ name: 'Storehouse', params: { id: row.id.toString() } });
+    },
+    loadData() {
+      this.loadStorehousesData();
     },
   },
 }

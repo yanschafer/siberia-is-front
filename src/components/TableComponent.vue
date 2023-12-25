@@ -75,9 +75,6 @@ export default defineComponent({
     searchTerm() {
       this.currentPage = 1;
     },
-    rows() {
-      this.currentPage = 1;
-    },
   },
 });
 </script>

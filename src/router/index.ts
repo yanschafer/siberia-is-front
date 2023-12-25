@@ -20,7 +20,7 @@ const routes = [
         component: () => import('@/views/Products/ProductsView.vue'),
         children: [
           {
-            path: '/singleProduct/:id',
+            path: '/product/:id',
             name: 'Product details',
             component: () => import('@/views/Products/SingleProductView.vue'),
             props: true
@@ -33,10 +33,24 @@ const routes = [
         component: () => import('@/views/Storehouses/StorehousesView.vue'),
         children: [
           {
-            path: '/:id',
+            path: '/storehouse/:id',
             name: 'Storehouse',
             component: () => import('@/views/Storehouses/SingleStorehouseView.vue'),
             props: true
+          }
+        ]
+      },
+      {
+        path: '/roles/',
+        name: 'Roles',
+        component: () => import('@/views/Users/Roles/RolesView.vue'),
+        props: true,
+        children: [
+          {
+            path: '/roles/:id',
+            name: 'Single role',
+            component: () => import('@/views/Users/Roles/SingleRoleView.vue'),
+            props: true,
           }
         ]
       },
@@ -46,11 +60,11 @@ const routes = [
         component: () => import('@/views/Users/UsersView.vue'),
         children: [
           {
-            path: '/:id',
-            name: 'singleUser',
+            path: '/user/:id',
+            name: 'User',
             component: () => import('@/views/Users/SingleUserView.vue'),
             props: true
-          }
+          },
         ]
       },
     ]

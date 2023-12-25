@@ -6,6 +6,7 @@
     </div>
     <div class="container-bg">
       <router-view />
+      <router-view v-if="shouldDisplayRolesView" />
     </div>
   </div>
 </template>
@@ -77,9 +78,6 @@ export default {
       } else {
         this.pageTitle = 'Dashboard'; // По умолчанию, если нет имени страницы
       }
-
-      // Добавим этот код, чтобы увидеть, происходит ли переход
-      console.log('Navigating to:', currentPageName);
     },
     logout() {
       this.$router.push('/');
@@ -93,6 +91,16 @@ export default {
       }));
 
       return breadcrumbs;
+    },
+    shouldDisplayRolesView() {
+      // Проверяем, является ли текущий маршрут UsersView и нет ли id в параметрах
+      const isUsersViewWithoutId = this.$route.name === 'users' && !this.$route.params.id;
+
+      // Проверяем, является ли текущий маршрут RolesView
+      const isRolesView = this.$route.name === 'roles';
+
+      // Возвращаем результат логического И для отображения router-view RolesView
+      return isUsersViewWithoutId && isRolesView;
     },
   },
   mounted() {
