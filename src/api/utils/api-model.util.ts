@@ -12,7 +12,7 @@ export default class ApiModelUtil {
   private onRefresh: ApiRequestDto | null = null
 
   private buildUrl(endpoint: string): string {
-    const baseUrl = `${serverConf.endpoint}/${this.baseEndpoint}/${endpoint}`.replace("//", "/").replace("//", "/")
+    const baseUrl = `${serverConf.endpoint}${this.baseEndpoint}${endpoint}`.replace("//", "/").replace("//", "/")
 
     return `${serverConf.proto}://${baseUrl}`
   }
@@ -34,6 +34,8 @@ export default class ApiModelUtil {
 
   private async refreshAccessAndExecute <T> (): Promise<ApiResponseDto<T>> {
     const refreshToken = TokenUtil.getRefresh()
+    const baseEndpoint = this.baseEndpoint
+    this.baseEndpoint = ""
     const refreshResult: ApiResponseDto<TokenPairDto> = await axios<TokenPairDto>({
       url: this.buildUrl(serverConf.refreshEndpoint),
       method: "POST",
@@ -45,9 +47,13 @@ export default class ApiModelUtil {
       .then((res: axios.AxiosResponse) => this.processSuccessResponse<TokenPairDto>(res))
       .catch((err: AxiosError) => this.processFailedResponse<TokenPairDto>(null, false, err))
 
+    this.baseEndpoint = baseEndpoint
+
     if (refreshResult && refreshResult.success && this.onRefresh) {
       TokenUtil.login(refreshResult.getData())
-      return this.authorizedRequest(this.onRefresh)
+      const afterRefresh = await this.authorizedRequest(this.onRefresh)
+      this.onRefresh = null;
+      return afterRefresh
     }
     else {
       return new ApiResponseDto<T>(false, null, refreshResult.getError())
@@ -63,7 +69,7 @@ export default class ApiModelUtil {
       return ApiResponseDto.networkError()
 
     const result = ApiResponseDto.buildFromError(error)
-    if (authorized && request && result.getError().httpStatusCode == 401) {
+    if (authorized && request && result.getError().httpStatusCode == 401 && this.onRefresh == null) {
       this.onRefresh = request
       return await this.refreshAccessAndExecute()
     }
