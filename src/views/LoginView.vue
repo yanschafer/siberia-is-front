@@ -32,8 +32,10 @@
 <script setup lang="ts">
 import {MDBContainer, MDBInput, MDBBtn} from "mdb-vue-ui-kit";
 import { ref } from 'vue';
-import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
+import AuthModel from "@/api/modules/auth/models/auth.model";
+import AuthInputDto from "@/api/modules/auth/dto/login/auth-input.dto";
+import UserModel from "@/api/modules/user/models/user.model";
 
 const username = ref('');
 const password = ref('');
@@ -41,6 +43,30 @@ const error = ref('');
 
 const router = useRouter();
 const route = useRoute();
+
+const authModel = new AuthModel()
+const userModel = new UserModel()
+const res = await authModel.auth(new AuthInputDto("huanitto", "pablo"))
+const authorized = await authModel.getAuthorized()
+console.log(authorized)
+const currentUser = await userModel.getCurrentUser()
+const currentUserRules = await userModel.getCurrentUserRules()
+const currentUserRoles = await userModel.getCurrentUserRoles()
+console.log(currentUser, currentUserRoles, currentUserRules)
+const getAll = await userModel.getAll()
+console.log(getAll)
+const getAllFiltered = await userModel.getAll({name: "Pablo"})
+console.log(getAllFiltered)
+const createUser = await userModel.create({
+  params: {
+    name: "",
+    login: "login",
+    password: ""
+  },
+  rules: [],
+  roles: []
+})
+console.log(createUser)
 
 const login = async () => {
   try {
@@ -77,7 +103,7 @@ section {
   border-radius: 17px;
   border: 1px solid #EEE;
   background: #FCFCFC;
-  box-shadow: 0px 15px 33px 11px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 15px 33px 11px rgba(0, 0, 0, 0.05);
   gap: 3rem;
 }
 .error-text {
