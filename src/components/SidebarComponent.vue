@@ -23,7 +23,7 @@
 import { ref, watch } from 'vue';
 import { RouterLink, RouterView, useRoute } from 'vue-router';
 import { MDBContainer, MDBCol } from "mdb-vue-ui-kit";
-import { IconPackages, IconLock, IconBuildingWarehouse, IconUsersGroup, IconLogout2 } from '@tabler/icons-vue';
+import { IconPackages, IconLock, IconBuildingWarehouse, IconUsersGroup, IconLogout2, IconUser } from '@tabler/icons-vue';
 
 export default {
   name: 'SidebarComponent',
@@ -34,7 +34,8 @@ export default {
     IconLock,
     IconBuildingWarehouse,
     IconUsersGroup,
-    IconLogout2
+    IconLogout2,
+    IconUser
   },
   props: {
     sidebarItems: {

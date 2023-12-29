@@ -2,21 +2,17 @@
   <header>
     <MDBContainer class="bg-container d-flex flex-row align-items-center gap-3" fluid>
       <MDBContainer class="d-flex gap-2 flex-row align-items-center">
-        <h1 :key="title" class="animate__animated animate__fadeInUp heading">{{ title }}</h1> <span class="separator">|</span>
-        <h1 @click="openRoles" v-if="showRolesHeader" class="animate__animated animate__fadeInUp heading">Roles</h1>
+        <h1 :key="title" class="animate__animated animate__fadeInUp heading">{{ title }}</h1>
         <MDBBtn v-if="showAddButton" class="animate__animated animate__fadeInUp utility-btn" outline="black">{{ addButtonLabel }}</MDBBtn>
       </MDBContainer>
       <MDBContainer class="d-flex flex-row align-items-center justify-content-end">
-        <MDBBtn v-if="showNotificationIcon" class="icon-bg d-flex justify-content-center align-items-center">
+        <MDBBtn class="icon-bg d-flex justify-content-center align-items-center">
           <IconRoute color="#B8B8B8" :size="24" stroke-width="1" />
         </MDBBtn>
+        <NotificationsComponent />
         <MDBBadge v-if="showNotificationIcon" class="badge" color="danger" pill notification>
-          {{ notificationCount > 999 ? '999+' : notificationCount }}
+        {{ notificationCount > 999 ? '999+' : notificationCount }}
         </MDBBadge>
-        <MDBBtn class="icon-bg d-flex justify-content-center align-items-center">
-          <IconBellFilled color="#B8B8B8" :size="24" stroke-width="1" />
-        </MDBBtn>
-        <MDBBadge class="badge" color="danger" pill notification>999+</MDBBadge>
       </MDBContainer>
     </MDBContainer>
 
@@ -37,12 +33,18 @@ import {
   MDBBreadcrumbItem,
   MDBBtn,
   MDBBadge,
+  MDBDropdownToggle,
+  MDBDropdownMenu,
+  MDBDropdown,
+  MDBCol,
 } from 'mdb-vue-ui-kit';
-import { IconBellFilled, IconRoute } from '@tabler/icons-vue';
+import { IconBellFilled, IconRoute, IconHistoryToggle, IconExclamationCircle, IconAlertTriangle, IconBell } from '@tabler/icons-vue';
+import { ref } from 'vue';
+import NotificationsComponent from "@/components/NotificationsComponent.vue";
 
 export default defineComponent({
   name: 'HeaderComponent',
-  components: { MDBContainer, MDBRow, MDBBreadcrumb, MDBBreadcrumbItem, MDBBtn, MDBBadge, IconRoute, IconBellFilled },
+  components: {NotificationsComponent, MDBContainer, MDBRow, MDBBreadcrumb, MDBBreadcrumbItem, MDBBtn, MDBBadge, MDBDropdownToggle, MDBDropdownMenu, MDBDropdown, MDBCol, IconRoute, IconBellFilled, IconHistoryToggle, IconExclamationCircle, IconAlertTriangle, IconBell },
   props: {
     title: String,
     showAddButton: {
@@ -66,16 +68,12 @@ export default defineComponent({
       default: () => [],
     },
   },
-  methods: {
-    openRoles() {
-      this.$router.push('/roles')
+  setup() {
+    const dropdown24 = ref(false);
+    return {
+      dropdown24
     }
-  },
-  computed: {
-    showRolesHeader() {
-      return this.$route.path.startsWith('/users');
-    },
-  },
+  }
 });
 </script>
 
@@ -113,6 +111,7 @@ export default defineComponent({
   border-radius: 50%;
   padding: 0;
   box-shadow: none;
+  background-color: white;
 }
 .badge {
   z-index: 999999;
@@ -126,11 +125,5 @@ export default defineComponent({
 }
 .breadcrumb-item {
   text-transform: capitalize;
-}
-.separator {
-  font-size: 32px;
-}
-h1 {
-  margin-bottom: 0;
 }
 </style>

@@ -52,13 +52,22 @@ export default {
           route: 'storehouses'
         },
         { name: 'Users',
-          icon: 'IconUsersGroup',
+          icon: 'IconUser',
           iconColor: '#B8B8B8',
           iconSize: 32,
           strokeWidth: 1,
           disabled: false,
           active: false,
           route: 'users'
+        },
+        { name: 'Roles',
+          icon: 'IconUsersGroup',
+          iconColor: '#B8B8B8',
+          iconSize: 32,
+          strokeWidth: 1,
+          disabled: false,
+          active: false,
+          route: 'roles'
         },
       ],
       router: useRouter(),
@@ -76,7 +85,7 @@ export default {
       if (currentPageName) {
         this.pageTitle = currentPageName.charAt(0).toUpperCase() + currentPageName.slice(1);
       } else {
-        this.pageTitle = 'Dashboard'; // По умолчанию, если нет имени страницы
+        this.pageTitle = 'Dashboard';
       }
     },
     logout() {
@@ -93,18 +102,13 @@ export default {
       return breadcrumbs;
     },
     shouldDisplayRolesView() {
-      // Проверяем, является ли текущий маршрут UsersView и нет ли id в параметрах
       const isUsersViewWithoutId = this.$route.name === 'users' && !this.$route.params.id;
-
-      // Проверяем, является ли текущий маршрут RolesView
       const isRolesView = this.$route.name === 'roles';
-
-      // Возвращаем результат логического И для отображения router-view RolesView
       return isUsersViewWithoutId && isRolesView;
     },
   },
   mounted() {
-    this.updatePageTitleAndContent(); // Обновляет заголовок при монтировании компонента
+    this.updatePageTitleAndContent();
   },
 };
 </script>

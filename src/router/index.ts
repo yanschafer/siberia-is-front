@@ -41,15 +41,15 @@ const routes = [
         ]
       },
       {
-        path: '/roles/',
-        name: 'Roles',
-        component: () => import('@/views/Users/Roles/RolesView.vue'),
+        path: '/roles',
+        name: 'roles',
+        component: () => import('@/views/Roles/RolesView.vue'),
         props: true,
         children: [
           {
             path: '/roles/:id',
-            name: 'Single role',
-            component: () => import('@/views/Users/Roles/SingleRoleView.vue'),
+            name: 'Role',
+            component: () => import('@/views/Roles/SingleRoleView.vue'),
             props: true,
           }
         ]

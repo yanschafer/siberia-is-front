@@ -149,3 +149,57 @@ export const useSearchStore = defineStore({
         },
     },
 });
+export const useNotificationsStore = defineStore('notifications', {
+    state: () => ({
+        errorNotification: {
+            type: 'error',
+            title: 'That’s an error notification',
+            text: 'Something went wrong. Please, try again or contact the administrator.',
+            icon: 'exclamation-circle',
+            iconColor: '#EA5555',
+            dateTime: '20.12.2023 | 12:00',
+            visible: true,
+        },
+        warningNotification: {
+            type: 'warning',
+            title: 'That’s a warning notification',
+            text: 'Something needs your attention. Please, click here to see the details',
+            icon: 'alert-triangle',
+            iconColor: '#FFE589',
+            dateTime: '20.12.2023 | 12:00',
+            visible: true,
+        },
+        defaultNotification1: {
+            type: 'default',
+            title: 'That’s a default notification',
+            text: 'Just a simple notification',
+            icon: 'bell',
+            iconColor: '#B8B8B8',
+            dateTime: '20.12.2023 | 12:00',
+            visible: true,
+        },
+        defaultNotification2: {
+            type: 'default',
+            title: 'That’s a default notification',
+            text: 'Just a simple notification',
+            icon: 'bell',
+            iconColor: '#B8B8B8',
+            dateTime: '20.12.2023 | 12:00',
+            visible: true,
+        },
+    }),
+
+    actions: {
+        hideNotification(notification) {
+            notification.visible = false;
+        },
+
+        hideAllNotifications() {
+            this.errorNotification.visible = false;
+            this.warningNotification.visible = false;
+            this.defaultNotification1.visible = false;
+            this.defaultNotification2.visible = false;
+        },
+
+    },
+});
