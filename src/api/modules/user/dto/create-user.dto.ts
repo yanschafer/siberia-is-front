@@ -1,12 +1,5 @@
 import LinkedRuleDto from "@/api/modules/auth/dto/rules/linked-rule.dto";
-
-class UserParams {
-  constructor(
-    public name: string,
-    public login: string,
-    public password: string,
-  ) {}
-}
+import UserParams from "@/api/modules/user/dto/user-params.dto";
 
 export default class CreateUserDto {
   constructor(
