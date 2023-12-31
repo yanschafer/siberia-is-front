@@ -2,12 +2,13 @@ import ApiModelUtil from "@/api/utils/api-model.util";
 import ApiResponseDto from "@/api/dto/api-response.dto";
 import UserDto from "@/api/modules/user/dto/user.dto";
 import ApiRequestDto from "@/api/dto/api-request.dto";
-import LinkedRuleDto from "@/api/modules/auth/dto/rules/linked-rule.dto";
+import LinkedRuleDto from "@/api/modules/rbac/dto/rules/linked-rule.dto";
 import UserSearchFilterDto from "@/api/modules/user/dto/user-search-filter.dto";
 import CreateUserDto from "@/api/modules/user/dto/create-user.dto";
 import UpdateUserDto from "@/api/modules/user/dto/update-user.dto";
 import UserRemoveResultDto from "@/api/modules/user/dto/user-remove-result.dto";
-import RoleDto from "@/api/modules/auth/dto/rules/role.dto";
+import RoleDto from "@/api/modules/rbac/dto/roles/role.dto";
+import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.dto";
 
 export default class UserModel extends ApiModelUtil {
   constructor() {
@@ -54,7 +55,7 @@ export default class UserModel extends ApiModelUtil {
     return this.authorizedRequest(new ApiRequestDto(`/${userId}/rules`, "GET"))
   }
   
-  public async appendRules(userId: number, linkedRules: LinkedRuleDto[]): Promise<ApiResponseDto<LinkedRuleDto[]>> {
+  public async appendRules(userId: number, linkedRules: LinkedRuleInputDto[]): Promise<ApiResponseDto<LinkedRuleDto[]>> {
     return this.authorizedRequest(new ApiRequestDto(`/${userId}/rules`, "POST", linkedRules))
   }
 
@@ -62,7 +63,7 @@ export default class UserModel extends ApiModelUtil {
     return this.authorizedRequest(new ApiRequestDto(`/${userId}/rules`, "POST", roles))
   }
 
-  public async removeRulesFromUser(userId: number, linkedRules: LinkedRuleDto[]): Promise<ApiResponseDto<any>> {
+  public async removeRulesFromUser(userId: number, linkedRules: LinkedRuleInputDto[]): Promise<ApiResponseDto<any>> {
     return this.authorizedRequest(new ApiRequestDto(`/${userId}/rules`, "DELETE", linkedRules))
   }
   
