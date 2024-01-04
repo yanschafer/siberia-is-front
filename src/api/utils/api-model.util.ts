@@ -32,7 +32,7 @@ export default class ApiModelUtil {
     }
   }
 
-  private async refreshAccessAndExecute <T> (): Promise<ApiResponseDto<T>> {
+  async refresh(): Promise<ApiResponseDto<TokenPairDto>> {
     const refreshToken = TokenUtil.getRefresh()
     const baseEndpoint = this.baseEndpoint
     this.baseEndpoint = ""
@@ -49,6 +49,11 @@ export default class ApiModelUtil {
 
     this.baseEndpoint = baseEndpoint
 
+    return refreshResult
+  }
+
+  private async refreshAccessAndExecute <T> (): Promise<ApiResponseDto<T>> {
+    const refreshResult = await this.refresh()
     if (refreshResult && refreshResult.success && this.onRefresh) {
       TokenUtil.login(refreshResult.getData())
       const afterRefresh = await this.authorizedRequest(this.onRefresh)
