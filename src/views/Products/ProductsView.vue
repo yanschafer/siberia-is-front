@@ -9,8 +9,8 @@
 </template>
 
 <script lang="ts">
-import TableComponent from "@/components/TableComponent.vue";
-import SearchComponent from "@/components/SearchComponent.vue";
+import TableComponent from "@/components/Elements/TableComponent.vue";
+import SearchComponent from "@/components/Elements/SearchComponent.vue";
 import { useProductsStore, useSearchStore } from '@/stores/store';
 
 export default {

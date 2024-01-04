@@ -2,49 +2,64 @@
   <div class="container-fluid" style="padding: 0;">
     <template v-if="!$route.params.id">
       <SearchComponent @search="handleSearch" />
-      <TableComponent :rows="usersData" :columns="usersColumns" :searchTerm="searchTerm" @rowClick="handleRowClick" />
+      <TableComponent :rows="filteredUsers" :columns="usersStore.usersColumns" :searchTerm="usersStore.searchTerm" @rowClick="handleRowClick" />
     </template>
   </div>
-  <router-view v-if="$route.params.id !== undefined" v-bind="getSelectedUser($route.params.id)" />
+  <router-view v-if="$route.params.id !== undefined" :usersData="usersStore.usersData" :currentUser="getCurrentUser" :id="$route.params.id" />
 </template>
 
 <script lang="ts">
-import TableComponent from "@/components/TableComponent.vue";
-import SearchComponent from "@/components/SearchComponent.vue";
+import TableComponent from "@/components/Elements/TableComponent.vue";
+import SearchComponent from "@/components/Elements/SearchComponent.vue";
+import { useUsersStore } from "@/stores/store";
+import { computed, ref } from "vue";
 
 export default {
   name: 'UsersView',
   components: { SearchComponent, TableComponent },
-  data() {
+  setup() {
+    const usersStore = useUsersStore();
+    const filteredUsers = computed(() => {
+      const searchTerm = usersStore.getSearchTerm;
+      if (searchTerm.trim() === "") {
+        return usersStore.usersRows;
+      } else {
+        return usersStore.usersRows.filter((row) =>
+            Object.values(row).some((value) =>
+                String(value).toLowerCase().includes(searchTerm.toLowerCase())
+            )
+        );
+      }
+    });
+
+    const getCurrentUser = (userId) => {
+      return usersStore.usersData.find((user) => user.id == userId);
+    };
+
     return {
-      searchTerm: '',
-      usersData: [
-        { id: 1, name: 'Orlando R Fiorentini' },
-        { id: 2, name: 'Orlando R Fiorentini' },
-        // ...
-        { id: 15, name: 'Sane4ka' },
-      ],
-      usersColumns: [
-        { field: 'name', header: 'NAME' },
-      ],
-      usersDetails: [
-        { id: 1, details: 'Details for user 1' },
-        { id: 2, details: 'Details for user 2' },
-        // ...
-        { id: 15, details: 'Details for user 15' },
-      ],
+      usersStore,
+      filteredUsers,
+      getCurrentUser,
     };
   },
+  mounted() {
+    this.loadData();
+  },
   methods: {
+    loadData() {
+      this.usersStore.loadUsersData();
+    },
     handleSearch(searchTerm) {
-      this.searchTerm = searchTerm;
+      this.usersStore.searchTerm = searchTerm;
+      if (searchTerm.trim() === "") {
+        this.loadData();
+      } else {
+        this.usersStore.getFilteredUsers(searchTerm);
+      }
     },
     handleRowClick(row) {
       console.log('Clicked row with id:', row.id);
       this.$router.push({ name: 'User', params: { id: row.id.toString() } });
-    },
-    getSelectedUser(id) {
-      return this.usersDetails.find(user => user.id === id) || {};
     },
   },
 };

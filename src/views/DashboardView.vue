@@ -6,9 +6,9 @@
 </template>
 
 <script>
-import SidebarComponent from "@/components/SidebarComponent.vue";
+import SidebarComponent from "@/components/Navigation/SidebarComponent.vue";
 import { useAuthStore } from "@/stores/auth.ts";
-import HeaderComponent from "@/components/HeaderComponent.vue";
+import HeaderComponent from "@/components/Navigation/HeaderComponent.vue";
 
 export default {
   components: {

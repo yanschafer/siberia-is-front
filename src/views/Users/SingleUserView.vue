@@ -3,7 +3,7 @@
     <MDBRow class="d-flex justify-content-around">
       <MDBRow class="w-auto">
         <MDBCol class="col-auto">
-          <h1 class="username-heading">Orlando R Fiorentini</h1>
+          <h1 class="username-heading">{{ userName }}</h1>
         </MDBCol>
         <MDBCol class="align-self-center">
           <MDBRow class="d-flex flex-row flex-nowrap align-self-center">
@@ -22,52 +22,58 @@
     </MDBRow>
     <MDBRow class="d-flex flex-nowrap w-100">
       <span class="user-roles-heading">USERNAME</span>
-      <span class="username">ADMIN</span>
+      <span class="username">{{ userUsername }}</span>
     </MDBRow>
     <MDBRow class="d-flex flex-nowrap w-100">
       <span class="user-roles-heading">PASSWORD</span>
-      <span class="username">*******</span>
+      <span class="username">{{ userPassword }}</span>
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="pt-4">
-    <MDBTabs v-model="activeTabId4" vertical>
-      <!-- Tabs navs -->
-      <MDBTabNav pills tabsClasses="mb-3 text-center">
-        <MDBTabItem class="tab-item" :wrap="true" tabId="role1-1" href="role1-1">Personal permissions</MDBTabItem>
-        <MDBTabItem class="tab-item" :wrap="false" tabId="role1-2" href="role1-2">Admin 1</MDBTabItem>
-        <MDBTabItem class="tab-item" :wrap="false" tabId="role1-3" href="role1-3">Admin 2</MDBTabItem>
-        <MDBTabItem class="tab-item" :wrap="false" tabId="role1-4" href="role1-4">Mod 3</MDBTabItem>
-      </MDBTabNav>
-      <!-- Tabs navs -->
-      <!-- Tabs content -->
-      <MDBTabContent>
-        <MDBTabPane tabId="role1-1">Tab 1 content</MDBTabPane>
-        <MDBTabPane tabId="role1-2">Tab 2 content</MDBTabPane>
-        <MDBTabPane tabId="role1-3">Tab 3 content</MDBTabPane>
-        <MDBTabPane tabId="role1-4">Tab 3 content</MDBTabPane>
-      </MDBTabContent>
-      <!-- Tabs content -->
-    </MDBTabs>
+    <TabsComponent :userTabs="getUserTabs(selectedUser)" />
   </MDBContainer>
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
 import { MDBBtn,MDBContainer, MDBRow, MDBCol, MDBBadge, MDBTabs, MDBTabNav, MDBTabContent, MDBTabItem, MDBTabPane } from "mdb-vue-ui-kit";
+import TabsComponent from "@/components/Elements/TabsComponent.vue";
 export default {
   name: "SingleUserView",
-  components: { MDBBtn,MDBContainer, MDBRow, MDBCol, MDBBadge, MDBTabs, MDBTabNav, MDBTabContent, MDBTabItem, MDBTabPane },
+  components: {TabsComponent, MDBBtn,MDBContainer, MDBRow, MDBCol, MDBBadge, MDBTabs, MDBTabNav, MDBTabContent, MDBTabItem, MDBTabPane },
   props: {
+    usersData: {
+      type: Array,
+      required: true,
+    },
     id: {
       type: String,
       required: true,
-    }
+    },
+  },
+  computed: {
+    selectedUser() {
+      return this.usersData.find((user) => user.id == this.id) || {};
+    },
+    userName() {
+      return this.selectedUser.userName || '';
+    },
+    userUsername() {
+      return this.selectedUser.userUsername || '';
+    },
+    userPassword() {
+      return this.selectedUser.userPassword.replace(/./g, '*') || '';
+    },
   },
   data() {
     return {
-      activeTabId4: 'role1-1',
+      searchTerm: '',
     }
-  }
+  },
+  methods: {
+    getUserTabs(user) {
+      return user.tabs || [];
+    },
+  },
 }
 </script>
 

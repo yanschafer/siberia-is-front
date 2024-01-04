@@ -13,6 +13,9 @@ const routes = [
   {
     path: '/dashboard',
     component: () => import('@/views/MainView.vue'),
+    meta: {
+      hideTitle: true,
+    },
     children: [
       {
         path: 'products',
@@ -65,6 +68,19 @@ const routes = [
             component: () => import('@/views/Users/SingleUserView.vue'),
             props: true
           },
+        ]
+      },
+      {
+        path: '/history',
+        name: 'History',
+        component: () => import('@/views/History/HistoryView.vue'),
+        children: [
+          {
+            path: '/history/:id',
+            name: 'Single history',
+            component: () => import('@/views/History/SingleHistoryView.vue'),
+            props: true,
+          }
         ]
       },
     ]

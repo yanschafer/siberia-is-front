@@ -5,67 +5,41 @@
         <MDBCol class="col-auto">
           <h1 class="username-heading">{{ roleName }}</h1>
         </MDBCol>
-        <MDBCol class="align-self-center">
-          <MDBRow class="d-flex flex-row flex-nowrap align-self-center">
-            <span class="user-roles-heading">USER ROLES</span>
-            <div class="container">
-              <MDBBadge class="" color="secondary">Admin 1</MDBBadge>
-              <MDBBadge color="secondary">Admin 2</MDBBadge>
-              <MDBBadge color="secondary">Mod 3</MDBBadge>
-            </div>
-          </MDBRow>
-        </MDBCol>
       </MDBRow>
       <MDBCol class="d-flex justify-content-end">
         <MDBBtn class="utility-btn" outline="black">EDIT</MDBBtn>
       </MDBCol>
     </MDBRow>
-    <MDBRow class="d-flex flex-nowrap w-100">
-      <span class="user-roles-heading">USERNAME</span>
-      <span class="username">ADMIN</span>
-    </MDBRow>
-    <MDBRow class="d-flex flex-nowrap w-100">
-      <span class="user-roles-heading">PASSWORD</span>
-      <span class="username">*******</span>
-    </MDBRow>
   </MDBContainer>
   <MDBContainer class="pt-4">
-    <MDBTabs v-model="activeTabId4" vertical>
-      <!-- Tabs navs -->
-      <MDBTabNav pills tabsClasses="mb-3 text-center">
-        <MDBTabItem class="tab-item" :wrap="true" tabId="role1-1" href="role1-1">Personal permissions</MDBTabItem>
-        <MDBTabItem class="tab-item" :wrap="false" tabId="role1-2" href="role1-2">Admin 1</MDBTabItem>
-        <MDBTabItem class="tab-item" :wrap="false" tabId="role1-3" href="role1-3">Admin 2</MDBTabItem>
-        <MDBTabItem class="tab-item" :wrap="false" tabId="role1-4" href="role1-4">Mod 3</MDBTabItem>
-      </MDBTabNav>
-      <!-- Tabs navs -->
-      <!-- Tabs content -->
-      <MDBTabContent>
-        <MDBTabPane tabId="role1-1">Tab 1 content</MDBTabPane>
-        <MDBTabPane tabId="role1-2">Tab 2 content</MDBTabPane>
-        <MDBTabPane tabId="role1-3">Tab 3 content</MDBTabPane>
-        <MDBTabPane tabId="role1-4">Tab 3 content</MDBTabPane>
-      </MDBTabContent>
-      <!-- Tabs content -->
-    </MDBTabs>
+    <TabsComponent />
   </MDBContainer>
 </template>
 
 <script lang="ts">
 import { ref } from 'vue';
 import { MDBBtn,MDBContainer, MDBRow, MDBCol, MDBBadge, MDBTabs, MDBTabNav, MDBTabContent, MDBTabItem, MDBTabPane } from "mdb-vue-ui-kit";
+import TabsComponent from "@/components/Elements/TabsComponent.vue";
 export default {
   name: "SingleRoleView",
-  components: { MDBBtn,MDBContainer, MDBRow, MDBCol, MDBBadge, MDBTabs, MDBTabNav, MDBTabContent, MDBTabItem, MDBTabPane },
+  components: {TabsComponent, MDBBtn,MDBContainer, MDBRow, MDBCol, MDBBadge, MDBTabs, MDBTabNav, MDBTabContent, MDBTabItem, MDBTabPane },
   props: {
     id: {
       type: String,
       required: true,
     },
-    roleData: {
+    rolesData: {
       type: Array,
       required: true
     }
+  },
+  computed: {
+    selectedRole() {
+      return this.rolesData.find((role) => role.id == this.id) || {};
+    },
+    roleName() {
+      return this.selectedRole.roleName || '';
+    },
   },
   data() {
     return {

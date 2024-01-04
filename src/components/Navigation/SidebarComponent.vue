@@ -1,6 +1,6 @@
 <template>
   <MDBContainer class="d-flex flex-column align-items-center sidebar-bg">
-    <img class="logo" src="@/assets/Logo.svg">
+    <img class="logo" src="../../assets/logo.svg">
     <MDBCol class="sidebar-item-group d-flex justify-content-center flex-column">
       <router-link
           v-for="(item, index) in sidebarItems"

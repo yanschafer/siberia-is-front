@@ -6,19 +6,23 @@
         <MDBBtn v-if="showAddButton" class="animate__animated animate__fadeInUp utility-btn" outline="black">{{ addButtonLabel }}</MDBBtn>
       </MDBContainer>
       <MDBContainer class="d-flex flex-row align-items-center justify-content-end">
+        <MDBBtn @click="handleClick()" class="icon-bg d-flex justify-content-center align-items-center">
+          <IconHistoryToggle color="#B8B8B8" :size="24" stroke-width="1" />
+        </MDBBtn>
         <MDBBtn class="icon-bg d-flex justify-content-center align-items-center">
           <IconRoute color="#B8B8B8" :size="24" stroke-width="1" />
         </MDBBtn>
         <NotificationsComponent />
         <MDBBadge v-if="showNotificationIcon" class="badge" color="danger" pill notification>
-        {{ notificationCount > 999 ? '999+' : notificationCount }}
+          {{ notificationCount > 999 ? '999+' : notificationCount }}
         </MDBBadge>
       </MDBContainer>
     </MDBContainer>
 
     <MDBBreadcrumb class="breadcrumbs breadcrumb-with-mdb-icon">
       <MDBBreadcrumbItem v-for="(breadcrumb, index) in breadcrumbs" :key="index">
-        <router-link :to="{ path: breadcrumb.path }">{{ breadcrumb.name }}</router-link>
+        <router-link v-if="breadcrumb.path !== '/dashboard'" :to="{ path: breadcrumb.path }">{{ breadcrumb.name }}</router-link>
+        <span v-else>{{ breadcrumb.name }}</span>
       </MDBBreadcrumbItem>
     </MDBBreadcrumb>
   </header>
@@ -38,13 +42,13 @@ import {
   MDBDropdown,
   MDBCol,
 } from 'mdb-vue-ui-kit';
-import { IconBellFilled, IconRoute, IconHistoryToggle, IconExclamationCircle, IconAlertTriangle, IconBell } from '@tabler/icons-vue';
+import { IconHome2, IconBellFilled, IconRoute, IconHistoryToggle, IconExclamationCircle, IconAlertTriangle, IconBell } from '@tabler/icons-vue';
 import { ref } from 'vue';
-import NotificationsComponent from "@/components/NotificationsComponent.vue";
+import NotificationsComponent from "@/components/Elements/NotificationsComponent.vue";
 
 export default defineComponent({
   name: 'HeaderComponent',
-  components: {NotificationsComponent, MDBContainer, MDBRow, MDBBreadcrumb, MDBBreadcrumbItem, MDBBtn, MDBBadge, MDBDropdownToggle, MDBDropdownMenu, MDBDropdown, MDBCol, IconRoute, IconBellFilled, IconHistoryToggle, IconExclamationCircle, IconAlertTriangle, IconBell },
+  components: {IconHome2, NotificationsComponent, MDBContainer, MDBRow, MDBBreadcrumb, MDBBreadcrumbItem, MDBBtn, MDBBadge, MDBDropdownToggle, MDBDropdownMenu, MDBDropdown, MDBCol, IconRoute, IconBellFilled, IconHistoryToggle, IconExclamationCircle, IconAlertTriangle, IconBell },
   props: {
     title: String,
     showAddButton: {
@@ -67,6 +71,11 @@ export default defineComponent({
       type: Array as PropType<Array<{ name: string; path: string }>>,
       default: () => [],
     },
+  },
+  methods: {
+    handleClick() {
+      this.$router.push({ name: 'History' });
+    }
   },
   setup() {
     const dropdown24 = ref(false);

@@ -1,47 +1,63 @@
 <template>
   <template v-if="!$route.params.id">
     <SearchComponent @search="handleSearch" />
-    <TableComponent :rows="rolesData" :columns="rolesColumns" :searchTerm="searchTerm" @rowClick="handleRowClick" />
+    <TableComponent :rows="filteredRoles" :columns="rolesStore.rolesColumns" :searchTerm="rolesStore.searchTerm" @rowClick="handleRowClick" />
   </template>
-  <router-view v-if="$route.params.id !== undefined" v-bind="getSelectedRole($route.params.id)" />
+  <router-view v-if="$route.params.id !== undefined" :rolesData="rolesStore.rolesData" :currentRole="getCurrentRole" :id="$route.params.id" />
 </template>
 
 <script lang="ts">
-import TableComponent from "@/components/TableComponent.vue";
-import SearchComponent from "@/components/SearchComponent.vue";
+import TableComponent from "@/components/Elements/TableComponent.vue";
+import SearchComponent from "@/components/Elements/SearchComponent.vue";
+import {useRolesStore} from "@/stores/store";
+import {computed} from "vue";
 
 export default {
   name: "RolesView",
   components: {SearchComponent, TableComponent},
-  data() {
+  setup() {
+    const rolesStore = useRolesStore();
+    const filteredRoles = computed(() => {
+      const searchTerm = rolesStore.getSearchTerm;
+      if (searchTerm.trim() === "") {
+        return rolesStore.rolesRows;
+      } else {
+        return rolesStore.rolesRows.filter((row) =>
+            Object.values(row).some((value) =>
+                String(value).toLowerCase().includes(searchTerm.toLowerCase())
+            )
+        );
+      }
+    });
+
+    const getCurrentRole = (roleId) => {
+      return rolesStore.rolesData.find((role) => role.id === roleId);
+    };
+
     return {
-      searchTerm: '',
-      rolesData: [
-        { id: 1, roleName: 'Administrator', usersPerRole: '2' },
-        { id: 2, roleName: 'Moderator', usersPerRole: '10' },
-        { id: 3, roleName: 'Seller', usersPerRole: '20' },
-      ],
-      rolesColumns: [
-        { field: 'roleName', header: 'ROLE NAME' },
-        { field: 'usersPerRole', header: 'USERS PER ROLE' }
-      ],
-      rolesDetails: [
-        { id: 1, details: 'Details for user 1' },
-        { id: 2, details: 'Details for user 2' },
-        { id: 15, details: 'Details for user 15' },
-      ],
+      rolesStore,
+      filteredRoles,
+      getCurrentRole,
     };
   },
+  mounted() {
+    this.loadData();
+  },
   methods: {
+    loadData() {
+      this.rolesStore.loadRolesData();
+    },
     handleSearch(searchTerm) {
-      this.searchTerm = searchTerm;
+      this.rolesStore.searchTerm = searchTerm;
+      if (searchTerm.trim() === "") {
+        this.loadData();
+      } else {
+        this.rolesStore.getFilteredRoles(searchTerm);
+      }
     },
     handleRowClick(row) {
       console.log('Clicked row with id:', row.id);
       this.$router.push({ name: 'Role', params: { id: row.id.toString() } });
-    },
-    getSelectedRole(id) {
-      return this.rolesDetails.find(user => user.id === id) || {};
     },
   },
 }

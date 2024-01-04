@@ -22,8 +22,8 @@
 <script lang="ts">
 import { IconMapPinFilled, IconRoute } from '@tabler/icons-vue';
 import { MDBBtn,MDBContainer, MDBRow } from "mdb-vue-ui-kit";
-import TableComponent from "@/components/TableComponent.vue";
-import SearchComponent from "@/components/SearchComponent.vue";
+import TableComponent from "@/components/Elements/TableComponent.vue";
+import SearchComponent from "@/components/Elements/SearchComponent.vue";
 
 export default {
   name: "SingleStorehouseView",
@@ -52,16 +52,6 @@ export default {
   data() {
     return {
       searchTerm: '',
-      productRows: [
-        { id: 1, name: 'TableZalupa', sku: '11111', quantity: '23', price: 100 },
-        { id: 2, name: 'TableZalupa2', sku: '2222', quantity: '3', price: 100 },
-      ],
-      productColumns: [
-        { field: 'name', header: 'NAME' },
-        { field: 'sku', header: 'SKU' },
-        { field: 'quantity', header: 'QUANTITY' },
-        { field: 'price', header: 'PRICE' },
-      ],
     }
   },
   methods: {

@@ -5,7 +5,7 @@
           type="text"
           class="form-control"
           placeholder="Search..."
-          v-model="searchTerm"
+          :value="searchQuery"
           @input="handleSearch"
           style="margin-bottom: 0;"
       />
@@ -14,17 +14,21 @@
 </template>
 
 <script lang="ts">
-
 export default {
   name: 'SearchComponent',
+  props: {
+    modelValue: String,
+  },
   data() {
     return {
-      searchTerm: '',
+      searchQuery: this.modelValue,
     };
   },
   methods: {
-    handleSearch() {
-      this.$emit('search', this.searchTerm);
+    handleSearch(event) {
+      this.searchQuery = event.target.value;
+      this.$emit('update:modelValue', this.searchQuery);
+      this.$emit('search', this.searchQuery);
     },
   },
 };

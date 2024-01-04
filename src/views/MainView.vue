@@ -14,8 +14,8 @@
 <script lang="ts">
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import SidebarComponent from "@/components/SidebarComponent.vue";
-import HeaderComponent from "@/components/HeaderComponent.vue";
+import SidebarComponent from "@/components/Navigation/SidebarComponent.vue";
+import HeaderComponent from "@/components/Navigation/HeaderComponent.vue";
 export default {
   name: 'DashboardView',
   components: {
