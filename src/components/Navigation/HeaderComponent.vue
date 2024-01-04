@@ -5,14 +5,35 @@
         <h1 :key="title" class="animate__animated animate__fadeInUp heading">{{ title }}</h1>
         <MDBBtn v-if="showAddButton" class="animate__animated animate__fadeInUp utility-btn" outline="black">{{ addButtonLabel }}</MDBBtn>
       </MDBContainer>
-      <MDBContainer class="d-flex flex-row align-items-center justify-content-end">
-        <MDBBtn @click="handleClick()" class="icon-bg d-flex justify-content-center align-items-center">
+      <MDBContainer class="d-flex gap-4 flex-row align-items-center justify-content-end">
+        <MDBTooltip v-model="tooltip1" tag="a" direction="left">
+        <template #reference>
+        <MDBBtn @click="handleClickHistory()" class="icon-bg d-flex justify-content-center align-items-center">
           <IconHistoryToggle color="#B8B8B8" :size="24" stroke-width="1" />
         </MDBBtn>
-        <MDBBtn class="icon-bg d-flex justify-content-center align-items-center">
+        </template>
+        <template #tip>
+          History
+        </template>
+        </MDBTooltip>
+        <MDBTooltip v-model="tooltip2" tag="a" direction="left">
+        <template #reference>
+        <MDBBtn @click="handleClickOperations()" class="icon-bg d-flex justify-content-center align-items-center">
           <IconRoute color="#B8B8B8" :size="24" stroke-width="1" />
         </MDBBtn>
-        <NotificationsComponent />
+        </template>
+          <template #tip>
+            Operations
+          </template>
+        </MDBTooltip>
+        <MDBTooltip v-model="tooltip3" tag="a" direction="left">
+          <template #reference>
+            <NotificationsComponent />
+          </template>
+          <template #tip>
+            Notifications
+          </template>
+        </MDBTooltip>
         <MDBBadge v-if="showNotificationIcon" class="badge" color="danger" pill notification>
           {{ notificationCount > 999 ? '999+' : notificationCount }}
         </MDBBadge>
@@ -41,6 +62,7 @@ import {
   MDBDropdownMenu,
   MDBDropdown,
   MDBCol,
+    MDBTooltip
 } from 'mdb-vue-ui-kit';
 import { IconHome2, IconBellFilled, IconRoute, IconHistoryToggle, IconExclamationCircle, IconAlertTriangle, IconBell } from '@tabler/icons-vue';
 import { ref } from 'vue';
@@ -48,7 +70,7 @@ import NotificationsComponent from "@/components/Elements/NotificationsComponent
 
 export default defineComponent({
   name: 'HeaderComponent',
-  components: {IconHome2, NotificationsComponent, MDBContainer, MDBRow, MDBBreadcrumb, MDBBreadcrumbItem, MDBBtn, MDBBadge, MDBDropdownToggle, MDBDropdownMenu, MDBDropdown, MDBCol, IconRoute, IconBellFilled, IconHistoryToggle, IconExclamationCircle, IconAlertTriangle, IconBell },
+  components: {IconHome2, MDBTooltip, NotificationsComponent, MDBContainer, MDBRow, MDBBreadcrumb, MDBBreadcrumbItem, MDBBtn, MDBBadge, MDBDropdownToggle, MDBDropdownMenu, MDBDropdown, MDBCol, IconRoute, IconBellFilled, IconHistoryToggle, IconExclamationCircle, IconAlertTriangle, IconBell },
   props: {
     title: String,
     showAddButton: {
@@ -73,13 +95,22 @@ export default defineComponent({
     },
   },
   methods: {
-    handleClick() {
+    handleClickHistory() {
       this.$router.push({ name: 'History' });
+    },
+    handleClickOperations() {
+      this.$router.push({ name: 'Operations' });
     }
   },
   setup() {
+    const tooltip1 = ref(false);
+    const tooltip2 = ref(false);
+    const tooltip3 = ref(false);
     const dropdown24 = ref(false);
     return {
+      tooltip1,
+      tooltip2,
+      tooltip3,
       dropdown24
     }
   }
@@ -126,7 +157,7 @@ export default defineComponent({
   z-index: 999999;
   position: relative;
   top: -15px;
-  left: -15px;
+  left: -30px;
 }
 .breadcrumbs {
   padding-left: 2rem;

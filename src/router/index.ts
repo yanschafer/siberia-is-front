@@ -83,6 +83,19 @@ const routes = [
           }
         ]
       },
+      {
+        path: '/operations',
+        name: 'Operations',
+        component: () => import('@/views/Operations/OperationsView.vue'),
+        children: [
+          {
+            path: '/operations/:id',
+            name: 'Single operation',
+            component: () => import('@/views/Operations/SingleOperationView.vue'),
+            props: true,
+          }
+        ]
+      }
     ]
   },
 
