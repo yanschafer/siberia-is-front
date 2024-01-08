@@ -1,4 +1,4 @@
-import FieldSearchWrapperDto from "@/api/utils/crud/dto/field-search-wrapper.dto";
+import FieldSearchWrapperDto from "@/utils/crud/dto/field-search-wrapper.dto";
 
 class ProductFilterDto {
   constructor(
@@ -20,7 +20,7 @@ class ProductFilterDto {
 
 export default class ProductSearchFilterDto {
   constructor(
-    public filters: ProductFilterDto
+    public filters: ProductFilterDto | null = null
   ) {
   }
 }

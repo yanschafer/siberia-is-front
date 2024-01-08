@@ -89,21 +89,27 @@
 import {MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput} from "mdb-vue-ui-kit";
 import FileUploadComponent from "@/components/Inputs/FileUploadComponent.vue";
 import CascadeSelect from 'primevue/cascadeselect';
+import FilesResolverUtil from "@/utils/files-resolver.util";
+import {useProductsStore} from "@/stores/products.store";
+import {useRoute} from "vue-router";
 export default {
   name: 'SingleProductView',
   components: {CascadeSelect, MDBInput, FileUploadComponent, MDBContainer, MDBRow, MDBCol, MDBBtn },
   props: {
-    productData: {
-      type: Array,
-      required: true,
-    },
     id: {
-      type: String,
+      type: Number,
       required: true,
     },
   },
-  data() {
+  async setup() {
+    const productStore = useProductsStore()
+    const route = useRoute()
+    await productStore.loadSelectedProduct(parseInt(route.params.id.toString()))
     return {
+      productStore
+    }
+  },
+  data: () => ({
       editing: false,
       selectedBrand: '',
       brandSubgroups: [
@@ -138,32 +144,30 @@ export default {
           ]
         }
       ],
-    }
-  },
+  }),
   methods: {
     startEditing() {
       this.editing = true;
-
     }
   },
   computed: {
     selectedProduct() {
-      return this.productData.find(product => product.id === parseInt(this.id)) || {};
+      return this.productStore.getSelectedProduct || {}
     },
     imageSource() {
-      return this.selectedProduct.imageSource || '';
+      return FilesResolverUtil.getStreamUrl(this.selectedProduct.photo || '');
     },
     productName() {
       return this.selectedProduct.productName || '';
     },
     sku() {
-      return this.selectedProduct.sku || '';
+      return this.selectedProduct.vendorCode || '';
     },
     barcodeImage() {
       return this.selectedProduct.barcodeImage || '';
     },
     brand() {
-      return this.selectedProduct.brand || '';
+      return this.selectedProduct.brand.name || '';
     },
     link() {
       return this.selectedProduct.link || '';
@@ -184,13 +188,13 @@ export default {
       return this.selectedProduct.status || '';
     },
     category() {
-      return this.selectedProduct.category || '';
+      return this.selectedProduct.category.name || '';
     },
     productDescription() {
-      return this.selectedProduct.productDescription || '';
+      return this.selectedProduct.description || '';
     },
     collectionName() {
-      return this.selectedProduct.collectionName || '';
+      return this.selectedProduct.collection.name || '';
     },
     color() {
       return this.selectedProduct.color || '';
@@ -202,10 +206,10 @@ export default {
       return this.selectedProduct.size || '';
     },
     quantityPerPackage() {
-      return this.selectedProduct.quantityPerPackage || '';
+      return this.selectedProduct.amountInBox || '';
     },
     distributionPrice() {
-      return this.selectedProduct.distributionPrice || '';
+      return this.selectedProduct.distributorPrice || '';
     },
     distributionPriceWithoutVat() {
       return this.selectedProduct.distributionPriceWithoutVat || '';
@@ -223,7 +227,7 @@ export default {
       return this.selectedProduct.professionalMarkup || '';
     },
     defaultPrice() {
-      return this.selectedProduct.defaultPrice || '';
+      return this.selectedProduct.commonPrice || '';
     },
     defaultPriceWithoutVat() {
       return this.selectedProduct.defaultPriceWithoutVat || '';
