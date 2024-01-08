@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
-import axios from "axios";
+import UserModel from "@/api/modules/user/models/user.model";
+import UpdateUserDto from "@/api/modules/user/dto/update-user.dto";
 
 export const useProductsStore = defineStore({
     id: 'products',
@@ -135,78 +136,67 @@ export const useStorehousesStore = defineStore({
         },
     },
 });
+
 export const useUsersStore = defineStore({
     id: 'users',
     state: () => ({
         searchTerm: '',
-        usersRows: [
-            { id: 1, name: 'Orlando R Fiorentini 1' },
-            { id: 2, name: 'Orlando R Fiorentini 2' },
-            { id: 15, name: 'Sane4ka' },
-        ],
+        usersRows: [],
         usersColumns: [
             { field: 'name', header: 'NAME' },
         ],
-        usersData: [
-            {
-                id: 1,
-                userName: 'Orlando R Fiorentini 1',
-                userUsername: 'orlando',
-                userPassword: '13213',
-                tabNames: ['Tab 1488', 'Tab 2'], // Add tabNames property
-                tabContent: ['Tab 1 Content', 'Tab 2 Content'] // Add tabContent property
-            },
-            {
-                id: 2,
-                userName: 'Orlando R Fiorentini 2',
-                userUsername: 'orlando',
-                userPassword: '123213',
-                tabNames: ['Tab 1488', 'Tab 2'], // Add tabNames property
-                tabContent: ['Tab 1 Content', 'Tab 2 Content'] // Add tabContent property
-            },
-            {
-                id: 15,
-                userName: 'Sane4ka',
-                userUsername: 'orlando',
-                userPassword: '123asd',
-                tabNames: ['Tab 1488', 'Tab 2'], // Add tabNames property
-                tabContent: ['1488', 'Tab 2 Content'] // Add tabContent property
-            },
-        ],
+        selectedUser: {},
     }),
     getters: {
-        getSearchTerm: (state) => state.searchTerm,
+      getSelectedUser: (state) => state.selectedUser,
+      getUserList: (state) => state.usersRows,
+      getSearchTerm: (state) => state.searchTerm,
     },
-
     actions: {
-        getFilteredUsers(searchTerm: string) {
-            const filteredUsers = this.usersData.filter((row) =>
-                Object.values(row).some((value) =>
-                    String(value).toLowerCase().includes(searchTerm.toLowerCase())
-                )
-            );
-            if (filteredUsers.length > 0) {
-                this.usersData = filteredUsers; // Обновляем значения в хранилище только если есть результаты
+      async loadSelectedUser(id: number) {
+        const userModel = new UserModel()
+        const getUser = await userModel.getOne(id)
+        if (getUser.success) {
+          const userData = {...getUser.getData()}
+          const rules = await userModel.getUserRules(id)
+          const roles = await userModel.getUserRoles(id)
+          if (rules.success && roles.success) {
+            this.selectedUser = {
+              ...userData,
+              roles: roles.getData(),
+              rules: rules.getData()
             }
-            return filteredUsers;
-        },
-        loadUsersData() {
-            const searchTerm = this.getSearchTerm;
-            const filteredUsers = this.usersData.filter((row) =>
-                Object.values(row).some((value) =>
-                    String(value).toLowerCase().includes(searchTerm.toLowerCase())
-                )
-            );
-            this.usersData = filteredUsers;
-            return filteredUsers;
-            // Получаем данные из API или другого источника данных
-            // и добавляем их в массивы storehousesRows и storehousesColumns
-            // ...
+          }
+        }
+      },
+      async loadUsersList() {
+        const userModel = new UserModel()
+        const getUsers = await userModel.getAll()
+        if (getUsers.success) {
+          this.usersRows = getUsers.getData()
+        } else {
+          this.usersRows = []
+        }
+      },
+      async updateUser(userId: number, userUpdateDto: UpdateUserDto) {
+        const userModel = new UserModel()
+        if (userUpdateDto.name != null)
+          this.usersRows = this.usersRows.map(el => {
+            if (el.id == userId)
+              el.name = userUpdateDto.name
 
-            // Затем вызываем функцию getFilteredStorehouses
-
-            // this.getFilteredStorehouses(this.searchTerm);
-        },
+            return el
+          })
+        const saveResult = await userModel.update(userId, userUpdateDto)
+        if (saveResult.success) {
+          this.selectedUser = Object.assign(this.selectedUser, saveResult.getData())
+          return true
+        }
+        else {
+          return false
+          //Show error
+        }
+      }
     },
 });
 
@@ -437,6 +427,7 @@ export const useTabsStore = defineStore('tabs', {
         },
     }),
 });
+
 export const useSearchStore = defineStore({
     id: 'search',
     state: () => ({

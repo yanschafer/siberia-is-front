@@ -10,9 +10,7 @@
           <MDBRow class="d-flex flex-row flex-nowrap align-self-center">
             <span class="user-roles-heading">USER ROLES</span>
             <div class="container">
-              <MDBBadge class="" color="secondary">Admin 1</MDBBadge>
-              <MDBBadge color="secondary">Admin 2</MDBBadge>
-              <MDBBadge color="secondary">Mod 3</MDBBadge>
+              <MDBBadge v-for="roleName in userRolesNameList" color="secondary">{{ roleName }}</MDBBadge>
             </div>
           </MDBRow>
         </MDBCol>
@@ -37,7 +35,7 @@
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="pt-4">
-    <TabsComponent :userTabs="getUserTabs(selectedUser)" />
+<!--    <TabsComponent :userTabs="getUserTabs(selectedUser)" />-->
   </MDBContainer>
 </template>
 
@@ -56,45 +54,55 @@ import {
   MDBInput
 } from "mdb-vue-ui-kit";
 import TabsComponent from "@/components/Elements/TabsComponent.vue";
+import {useUsersStore} from "@/stores/store";
+import UserFullDto from "@/api/modules/user/dto/user-full.dto";
+import {useRoute} from "vue-router";
+import UpdateUserDto from "@/api/modules/user/dto/update-user.dto";
 export default {
   name: "SingleUserView",
   components: {
     MDBInput,
-    TabsComponent, MDBBtn,MDBContainer, MDBRow, MDBCol, MDBBadge, MDBTabs, MDBTabNav, MDBTabContent, MDBTabItem, MDBTabPane },
+    TabsComponent, MDBBtn,MDBContainer, MDBRow, MDBCol, MDBBadge, MDBTabs, MDBTabNav, MDBTabContent, MDBTabItem, MDBTabPane
+  },
+  data: () => ({
+    editing: false,
+    searchTerm: '',
+    originalUserName: '',
+    newUserName: '',
+    originalUserUsername: '',
+    newUserUsername: '',
+    originalUserPassword: '',
+    newUserPassword: ''
+  }),
+  async setup() {
+    const userStore = useUsersStore()
+    const route = useRoute()
+    await userStore.loadSelectedUser(parseInt(route.params.id.toString()));
+    return {
+      userStore
+    }
+  },
   props: {
-    usersData: {
-      type: Array,
-      required: true,
-    },
     id: {
-      type: String,
+      type: Number,
       required: true,
     },
   },
   computed: {
-    selectedUser() {
-      return this.usersData.find((user) => user.id == this.id) || {};
+    selectedUser(): UserFullDto {
+      return this.userStore.getSelectedUser
     },
     userName() {
-      return this.selectedUser.userName || '';
+      return this.selectedUser.name || '';
     },
     userUsername() {
-      return this.selectedUser.userUsername || '';
+      return this.selectedUser.login || '';
     },
     userPassword() {
-      return this.selectedUser.userPassword.replace(/./g, '*') || '';
+      return "password".replace(/./g, '*') || '';
     },
-  },
-  data() {
-    return {
-      editing: false,
-      searchTerm: '',
-      originalUserName: '',
-      newUserName: '',
-      originalUserUsername: '',
-      newUserUsername: '',
-      originalUserPassword: '',
-      newUserPassword: ''
+    userRolesNameList() {
+      return this.selectedUser.roles.map(el => el.name)
     }
   },
   methods: {
@@ -105,13 +113,17 @@ export default {
       this.originalUserUsername = this.userUsername;
       this.newUserUsername = this.userUsername;
       this.originalUserPassword = this.userPassword;
-      this.newUserPassword = this.userPassword;
+      this.newUserPassword = "";
     },
-    saveChanges() {
-      this.editing = false;
-      this.originalUserName = '';
-      this.originalUserUsername = '';
-      this.originalUserPassword = '';
+    async saveChanges() {
+      const newName = (this.newUserName == this.originalUserName) ? null : this.newUserName
+      const newLogin = (this.newUserUsername == this.originalUserUsername) ? null : this.newUserUsername
+      const newPassword = (this.newUserPassword == "") ? null : this.newUserPassword
+      const userUpdateDto = new UpdateUserDto(
+        newName, newLogin, newPassword
+      );
+      this.editing = !(await this.userStore.updateUser(this.id, userUpdateDto))
+      
     },
     cancelEditing() {
       this.editing = false;

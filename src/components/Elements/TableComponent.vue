@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   props: {
@@ -33,6 +33,7 @@ export default defineComponent({
     columns: Array,
     searchTerm: String,
   },
+  emits: ["rowClick"],
   data() {
     return {
       currentPage: 1,
@@ -61,9 +62,9 @@ export default defineComponent({
     },
     filterDataBySearchTerm() {
       if (this.searchTerm) {
-        return this.rows.filter((row) =>
+        return this.rows?.filter((row) =>
             Object.values(row).some((value) =>
-                String(value).toLowerCase().includes(this.searchTerm.toLowerCase())
+                String(value).toLowerCase().includes(<string>this.searchTerm?.toLowerCase())
             )
         );
       } else {

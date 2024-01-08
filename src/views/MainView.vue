@@ -5,14 +5,17 @@
       <HeaderComponent :title="pageTitle" :breadcrumbs="navBreadcrumbs" />
     </div>
     <div class="container-bg">
-      <router-view />
-      <router-view v-if="shouldDisplayRolesView" />
+      <Suspense>
+        <router-view />
+      </Suspense>
+      <Suspense>
+        <router-view v-if="shouldDisplayRolesView" />
+      </Suspense>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import SidebarComponent from "@/components/Navigation/SidebarComponent.vue";
 import HeaderComponent from "@/components/Navigation/HeaderComponent.vue";
@@ -74,6 +77,11 @@ export default {
       pageTitle: '',
     };
   },
+  setup() {
+    return {
+      router: useRouter(),
+    }
+  },
   watch: {
     '$route': 'updatePageTitleAndContent',
   },
@@ -89,7 +97,7 @@ export default {
       }
     },
     logout() {
-      this.$router.push('/');
+      this.router.push('/');
     },
   },
   computed: {
