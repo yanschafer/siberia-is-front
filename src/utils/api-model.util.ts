@@ -1,14 +1,17 @@
 import ApiResponseDto from "@/api/dto/api-response.dto";
-import axios from "axios";
-import {AxiosError} from "axios";
+import axios, {AxiosError} from "axios";
 import {appConf} from "@/api/conf/app.conf";
 import ApiRequestDto from "@/api/dto/api-request.dto";
 import TokenPairDto from "@/api/modules/auth/dto/token-pair.dto";
 import TokenUtil from "@/utils/token.util";
 import LoggerUtil from "@/utils/logger/logger.util";
+import AuthorizedUserDto from "@/api/modules/auth/dto/authorized-user.dto";
+import {useRouter} from "vue-router";
 
 export default class ApiModelUtil {
   constructor(private baseEndpoint: string) {}
+
+  private baseEndpointBuffer = ""
 
   private onRefresh: ApiRequestDto | null = null
 
@@ -26,15 +29,16 @@ export default class ApiModelUtil {
   }
 
   private buildRequestOptions(request: ApiRequestDto): ApiRequestDto {
-    request.url = this.buildUrl(request.url)
-    return request
+    return new ApiRequestDto(
+      this.buildUrl(request.url), request.method, request.data
+    )
   }
 
   async refresh(): Promise<ApiResponseDto<TokenPairDto>> {
     const refreshToken = TokenUtil.getRefresh()
-    const baseEndpoint = this.baseEndpoint
+    this.baseEndpointBuffer = this.baseEndpoint
     this.baseEndpoint = ""
-    const refreshResult: ApiResponseDto<TokenPairDto> = await axios<TokenPairDto>({
+    return await axios<TokenPairDto>({
       url: this.buildUrl(appConf.refreshEndpoint),
       method: "POST",
       data: null,
@@ -44,23 +48,25 @@ export default class ApiModelUtil {
     })
       .then((res: axios.AxiosResponse) => this.processSuccessResponse<TokenPairDto>(res))
       .catch((err: AxiosError) => this.processFailedResponse<TokenPairDto>(null, false, err))
-
-    this.baseEndpoint = baseEndpoint
-
-    return refreshResult
   }
 
   private async refreshAccessAndExecute <T> (): Promise<ApiResponseDto<T>> {
     const refreshResult = await this.refresh()
     if (refreshResult && refreshResult.success && this.onRefresh) {
       TokenUtil.login(refreshResult.getData())
+      const authorizedUserDto = await this.authorizedRequest<AuthorizedUserDto>(new ApiRequestDto("/auth/authorized", "GET"))
+      TokenUtil.setAuthorized(authorizedUserDto.getData())
       LoggerUtil.debugPrefixed("API_MODEL", "Refresh succeed.",)
+      this.baseEndpoint = this.baseEndpointBuffer
       const afterRefresh = await this.authorizedRequest(this.onRefresh)
       this.onRefresh = null;
       return afterRefresh
     }
     else {
       LoggerUtil.debugPrefixed("API_MODEL", "Refresh failed with: ", refreshResult)
+      const router = useRouter()
+      TokenUtil.logout()
+      router.push("/login")
       return new ApiResponseDto<T>(false, null, refreshResult.getError())
     }
   }

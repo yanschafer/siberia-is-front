@@ -18,7 +18,7 @@ export default class RoleModel extends ApiModelUtil {
     return this.authorizedRequest(new ApiRequestDto(`/${roleId}`, "GET"))
   }
 
-  public async getAll(roleSearchDto: RoleSearchDto): Promise<ApiResponseDto<RoleDto[]>> {
+  public async getAll(roleSearchDto: RoleSearchDto = new RoleSearchDto()): Promise<ApiResponseDto<RoleDto[]>> {
     return this.authorizedRequest(new ApiRequestDto("/all", "POST", roleSearchDto))
   }
 

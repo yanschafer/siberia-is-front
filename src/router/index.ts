@@ -1,6 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import TokenUtil from "@/utils/token.util";
+import {appConf} from "@/api/conf/app.conf";
+import LoggerUtil from "@/utils/logger/logger.util";
 
+/*
+user-managing = "1"
+  rbac-managing = "2"
+  check-logs = "3"
+  brand-managing = "4"
+  collection-managing = "5"
+  category-managing = "6"
+  products-managing = "7"
+  stock-managing = "8"
+ */
 
 const routes = [
   {
@@ -27,6 +39,9 @@ const routes = [
         path: '/products',
         name: 'products',
         component: () => import('@/views/Products/ProductsView.vue'),
+        meta: {
+          ruleId: appConf.rules.productsManaging
+        },
         children: [
           {
             path: '/product/:id',
@@ -40,6 +55,9 @@ const routes = [
         path: '/storehouses',
         name: 'storehouses',
         component: () => import('@/views/Storehouses/StorehousesView.vue'),
+        meta: {
+          ruleId: appConf.rules.stockManaging
+        },
         children: [
           {
             path: '/storehouse/:id',
@@ -54,6 +72,9 @@ const routes = [
         name: 'roles',
         component: () => import('@/views/Roles/RolesView.vue'),
         props: true,
+        meta: {
+          ruleId: appConf.rules.rbacManaging
+        },
         children: [
           {
             path: '/roles/:id',
@@ -67,6 +88,9 @@ const routes = [
         path: '/users',
         name: 'users',
         component: () => import('@/views/Users/UsersView.vue'),
+        meta: {
+          ruleId: appConf.rules.userManaging
+        },
         children: [
           {
             path: '/user/:id',
@@ -80,6 +104,9 @@ const routes = [
         path: '/history',
         name: 'History',
         component: () => import('@/views/History/HistoryView.vue'),
+        meta: {
+          ruleId: appConf.rules.checkLogs
+        },
         children: [
           {
             path: '/history/:id',
@@ -119,10 +146,20 @@ router.beforeEach((to, from, next) => {
   if (requiresAuth && !TokenUtil.isAuthorized()) {
     //In case token is not valid
     next('/login');
+    return
   }
   if (!requiresAuth && TokenUtil.isAuthorized()) {
     next("/dashboard");
+    return
   }
+
+  if (to.meta["ruleId"]) {
+    if (!TokenUtil.hasAccessTo(parseInt(to.meta["ruleId"].toString()))) {
+      next("/dashboard")
+      return
+    }
+  } else LoggerUtil.debug(to, to.meta)
+
   next()
 });
 

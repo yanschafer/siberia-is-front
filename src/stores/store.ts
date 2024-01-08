@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import axios from "axios";
 
 export const useProductsStore = defineStore({
     id: 'products',
@@ -76,193 +75,7 @@ export const useProductsStore = defineStore({
     },
 });
 
-export const useStorehousesStore = defineStore({
-    id: 'storehouses',
-    state: () => ({
-        searchTerm: '',
-        storehousesRows: [
-            { id: 1, name: 'Storehouse 1', address: '123 Main St' },
-            { id: 2, name: 'Storehouse 2', address: '456 Oak St' },
-            { id: 3, name: 'Storehouse 3', address: '123 Main St' },
-        ],
-        storehousesColumns: [
-            { field: 'name', header: 'NAME' },
-            { field: 'address', header: 'ADDRESS' },
-        ],
-        storehousesData: [
-            {
-                id: '1',
-                storehouseName: 'Storehouse 1',
-                storehouseAdress: 'Storehouse adress 1'
-            },
-            {
-                id: '2',
-                storehouseName: 'Storehouse 2',
-                storehouseAdress: 'Storehouse adress 2'
-            },
-            {
-                id: '3',
-                storehouseName: 'Storehouse 3',
-                storehouseAdress: 'Storehouse adress 3'
-            }
-        ],
-    }),
-    getters: {
-        getSearchTerm: (state) => state.searchTerm,
-    },
 
-    actions: {
-        getFilteredStorehouses(searchTerm: string) {
-            const filteredStorehouses = this.storehousesRows.filter((row) =>
-                Object.values(row).some((value) =>
-                    String(value).toLowerCase().includes(searchTerm.toLowerCase())
-                )
-            );
-            if (filteredStorehouses.length > 0) {
-                this.storehousesRows = filteredStorehouses; // Обновляем значения в хранилище только если есть результаты
-            }
-            return filteredStorehouses;
-        },
-        loadStorehousesData() {
-            const searchTerm = this.getSearchTerm;
-            const filteredStorehouses = this.storehousesRows.filter((row) =>
-                Object.values(row).some((value) =>
-                    String(value).toLowerCase().includes(searchTerm.toLowerCase())
-                )
-            );
-            this.storehousesRows = filteredStorehouses;
-            return filteredStorehouses;
-        },
-    },
-});
-export const useUsersStore = defineStore({
-    id: 'users',
-    state: () => ({
-        searchTerm: '',
-        usersRows: [
-            { id: 1, name: 'Orlando R Fiorentini 1' },
-            { id: 2, name: 'Orlando R Fiorentini 2' },
-            { id: 15, name: 'Sane4ka' },
-        ],
-        usersColumns: [
-            { field: 'name', header: 'NAME' },
-        ],
-        usersData: [
-            {
-                id: 1,
-                userName: 'Orlando R Fiorentini 1',
-                userUsername: 'orlando',
-                userPassword: '13213',
-                tabNames: ['Tab 1488', 'Tab 2'], // Add tabNames property
-                tabContent: ['Tab 1 Content', 'Tab 2 Content'] // Add tabContent property
-            },
-            {
-                id: 2,
-                userName: 'Orlando R Fiorentini 2',
-                userUsername: 'orlando',
-                userPassword: '123213',
-                tabNames: ['Tab 1488', 'Tab 2'], // Add tabNames property
-                tabContent: ['Tab 1 Content', 'Tab 2 Content'] // Add tabContent property
-            },
-            {
-                id: 15,
-                userName: 'Sane4ka',
-                userUsername: 'orlando',
-                userPassword: '123asd',
-                tabNames: ['Tab 1488', 'Tab 2'], // Add tabNames property
-                tabContent: ['1488', 'Tab 2 Content'] // Add tabContent property
-            },
-        ],
-    }),
-    getters: {
-        getSearchTerm: (state) => state.searchTerm,
-    },
-
-    actions: {
-        getFilteredUsers(searchTerm: string) {
-            const filteredUsers = this.usersData.filter((row) =>
-                Object.values(row).some((value) =>
-                    String(value).toLowerCase().includes(searchTerm.toLowerCase())
-                )
-            );
-            if (filteredUsers.length > 0) {
-                this.usersData = filteredUsers; // Обновляем значения в хранилище только если есть результаты
-            }
-            return filteredUsers;
-        },
-        loadUsersData() {
-            const searchTerm = this.getSearchTerm;
-            const filteredUsers = this.usersData.filter((row) =>
-                Object.values(row).some((value) =>
-                    String(value).toLowerCase().includes(searchTerm.toLowerCase())
-                )
-            );
-            this.usersData = filteredUsers;
-            return filteredUsers;
-            // Получаем данные из API или другого источника данных
-            // и добавляем их в массивы storehousesRows и storehousesColumns
-            // ...
-
-            // Затем вызываем функцию getFilteredStorehouses
-
-            // this.getFilteredStorehouses(this.searchTerm);
-        },
-    },
-});
-
-export const useRolesStore = defineStore({
-    id: 'roles',
-    state: () => ({
-        searchTerm: '',
-        rolesRows: [
-            { id: 1, roleName: 'Administrator', usersPerRole: '2' },
-            { id: 2, roleName: 'Moderator', usersPerRole: '10' },
-            { id: 3, roleName: 'Seller', usersPerRole: '20' },
-        ],
-        rolesColumns: [
-            { field: 'roleName', header: 'ROLE NAME' },
-            { field: 'usersPerRole', header: 'USERS PER ROLE' }
-        ],
-        rolesData: [
-            { id: 1, roleName: 'Administrator' },
-            { id: 2, roleName: 'Moderator' },
-            { id: 3, roleName: 'Seller' },
-        ],
-    }),
-    getters: {
-        getSearchTerm: (state) => state.searchTerm,
-    },
-
-    actions: {
-        getFilteredRoles(searchTerm: string) {
-            const filteredRoles = this.rolesRows.filter((row) =>
-                Object.values(row).some((value) =>
-                    String(value).toLowerCase().includes(searchTerm.toLowerCase())
-                )
-            );
-            if (filteredRoles.length > 0) {
-                this.rolesRows = filteredRoles; // Обновляем значения в хранилище только если есть результаты
-            }
-            return filteredRoles;
-        },
-        loadRolesData() {
-            const searchTerm = this.getSearchTerm;
-            const filteredRoles = this.rolesRows.filter((row) =>
-                Object.values(row).some((value) =>
-                    String(value).toLowerCase().includes(searchTerm.toLowerCase())
-                )
-            );
-            this.rolesRows = filteredRoles;
-            return filteredRoles;
-        },
-        setRoleName(newRoleName: string) {
-            const role = this.rolesData.find((role) => role.id === 1); // Здесь вы можете использовать любую логику для поиска роли, которую нужно обновить
-            if (role) {
-                role.roleName = newRoleName;
-            }
-        },
-    },
-});
 
 export const useHistoryStore = defineStore({
     id: 'history',
@@ -437,6 +250,7 @@ export const useTabsStore = defineStore('tabs', {
         },
     }),
 });
+
 export const useSearchStore = defineStore({
     id: 'search',
     state: () => ({

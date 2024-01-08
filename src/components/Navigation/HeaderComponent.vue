@@ -6,7 +6,7 @@
         <MDBBtn v-if="showAddButton" class="animate__animated animate__fadeInUp utility-btn" outline="black">{{ addButtonLabel }}</MDBBtn>
       </MDBContainer>
       <MDBContainer class="d-flex gap-4 flex-row align-items-center justify-content-end">
-        <MDBTooltip v-model="tooltip1" tag="a" direction="left">
+        <MDBTooltip v-if="hasAccessToHistory" v-model="tooltip1" tag="a" direction="left">
         <template #reference>
         <MDBBtn @click="handleClickHistory()" class="icon-bg d-flex justify-content-center align-items-center">
           <IconHistoryToggle color="#B8B8B8" :size="24" stroke-width="1" />
@@ -67,6 +67,8 @@ import {
 import { IconHome2, IconBellFilled, IconRoute, IconHistoryToggle, IconExclamationCircle, IconAlertTriangle, IconBell } from '@tabler/icons-vue';
 import { ref } from 'vue';
 import NotificationsComponent from "@/components/Elements/NotificationsComponent.vue";
+import TokenUtil from "@/utils/token.util";
+import {appConf} from "@/api/conf/app.conf";
 
 export default defineComponent({
   name: 'HeaderComponent',
@@ -100,6 +102,11 @@ export default defineComponent({
     },
     handleClickOperations() {
       this.$router.push({ name: 'Operations' });
+    }
+  },
+  computed: {
+    hasAccessToHistory() {
+      return TokenUtil.hasAccessTo(appConf.rules.checkLogs)
     }
   },
   setup() {

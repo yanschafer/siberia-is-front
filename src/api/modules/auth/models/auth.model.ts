@@ -13,13 +13,15 @@ export default class AuthModel extends ApiModelUtil {
 
   public async auth(authInputDto: AuthInputDto): Promise<ApiResponseDto<TokenPairDto>> {
     const tokenPair = await this.unauthorizedRequest<TokenPairDto>(new ApiRequestDto("", "POST", authInputDto))
-
-    if (tokenPair.success)
+    if (tokenPair.success) {
       TokenUtil.login(tokenPair.getData())
+      const authorizedUserDto = await this.getAuthorized()
+      TokenUtil.setAuthorized(authorizedUserDto.getData())
+    }
     return tokenPair
   }
 
   public async getAuthorized(): Promise<ApiResponseDto<AuthorizedUserDto>> {
-    return this.unauthorizedRequest(new ApiRequestDto("/authorized", "GET"))
+    return this.authorizedRequest(new ApiRequestDto("/authorized", "GET"))
   }
 }
