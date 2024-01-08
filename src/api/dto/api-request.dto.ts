@@ -1,6 +1,6 @@
 export default class ApiRequestDto {
   constructor(
-    public endpoint: string,
+    public url: string,
     public method: string,
     public data: any | null = null
   ) {}

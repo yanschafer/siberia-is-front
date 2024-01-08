@@ -1,9 +1,9 @@
-import WebSocketRequestDto from "@/api/utils/ws/dto/web-socket-request.dto";
-import TokenUtil from "@/api/utils/token.util";
-import WebSocketRequestHeadersDto from "@/api/utils/ws/dto/web-socket-request-headers.dto";
-import ApiModelUtil from "@/api/utils/api-model.util";
-import {serverConf} from "@/api/conf/server.conf";
-import WebSocketEventDto from "@/api/utils/ws/dto/web-socket-event.dto";
+import WebSocketRequestDto from "@/utils/ws/dto/web-socket-request.dto";
+import WebSocketEventDto from "@/utils/ws/dto/web-socket-event.dto";
+import {appConf} from "@/api/conf/app.conf";
+import ApiModelUtil from "@/utils/api-model.util";
+import TokenUtil from "@/utils/token.util";
+import WebSocketRequestHeadersDto from "@/utils/ws/dto/web-socket-request-headers.dto";
 
 export default class WsResolverUtil {
   private socket: WebSocket | null
@@ -21,7 +21,7 @@ export default class WsResolverUtil {
         resolve()
 
       else {
-        this.socket = new WebSocket(serverConf.wsEndpoint)
+        this.socket = new WebSocket(appConf.wsEndpoint)
 
         this.socket.onopen = () => {
           resolve(true)

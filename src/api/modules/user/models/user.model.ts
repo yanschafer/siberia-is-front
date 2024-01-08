@@ -1,4 +1,3 @@
-import ApiModelUtil from "@/api/utils/api-model.util";
 import ApiResponseDto from "@/api/dto/api-response.dto";
 import UserDto from "@/api/modules/user/dto/user.dto";
 import ApiRequestDto from "@/api/dto/api-request.dto";
@@ -9,6 +8,7 @@ import UpdateUserDto from "@/api/modules/user/dto/update-user.dto";
 import UserRemoveResultDto from "@/api/modules/user/dto/user-remove-result.dto";
 import RoleDto from "@/api/modules/rbac/dto/roles/role.dto";
 import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.dto";
+import ApiModelUtil from "@/utils/api-model.util";
 
 export default class UserModel extends ApiModelUtil {
   constructor() {

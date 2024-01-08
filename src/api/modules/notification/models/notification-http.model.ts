@@ -1,9 +1,9 @@
-import ApiModelUtil from "@/api/utils/api-model.util";
 import NotificationSearchFilterDto from "@/api/modules/notification/dto/notification-search-filter.dto";
 import ApiResponseDto from "@/api/dto/api-response.dto";
 import NotificationDto from "@/api/modules/notification/dto/notification.dto";
 import ApiRequestDto from "@/api/dto/api-request.dto";
 import NotificationWatchResultDto from "@/api/modules/notification/dto/notification-watch-result.dto";
+import ApiModelUtil from "@/utils/api-model.util";
 
 export default class NotificationHttpModel extends ApiModelUtil {
   constructor() {
