@@ -20,7 +20,7 @@
 <script lang="ts">
 import { useTabsStore } from '@/stores/store';
 import {MDBTabContent, MDBAccordion, MDBAccordionItem, MDBCheckbox, MDBTabItem, MDBTabNav, MDBTabPane, MDBTabs} from "mdb-vue-ui-kit";
-import CheckboxGroup from "@/components/Filters/CheckboxGroupComponent.vue";
+import CheckboxGroup from "@/components/Inputs/CheckboxGroupComponent.vue";
 export default {
   components: {
     CheckboxGroup,

@@ -19,9 +19,9 @@ export const useProductsStore = defineStore({
             {
                 id: 1,
                 productName: "Product 1",
-                imageSource: "path/to/image1.jpg",
+                imageSource: "/product-img.jpg",
                 sku: "SKU123",
-                barcodeImage: "path/to/barcode1.jpg",
+                barcodeImage: "/sku.png",
                 brand: "BrandName",
                 link: "http://example.com/product1",
                 quantity: 10,
@@ -255,6 +255,12 @@ export const useRolesStore = defineStore({
             this.rolesRows = filteredRoles;
             return filteredRoles;
         },
+        setRoleName(newRoleName: string) {
+            const role = this.rolesData.find((role) => role.id === 1); // Здесь вы можете использовать любую логику для поиска роли, которую нужно обновить
+            if (role) {
+                role.roleName = newRoleName;
+            }
+        },
     },
 });
 
@@ -358,8 +364,6 @@ export const useOperationsStore = defineStore({
         },
     },
 });
-
-
 
 export const useNotificationsStore = defineStore('notifications', {
     state: () => ({

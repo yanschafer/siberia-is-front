@@ -3,7 +3,8 @@
     <MDBRow class="d-flex justify-content-around">
       <MDBRow class="w-auto">
         <MDBCol class="col-auto">
-          <h1 class="username-heading">{{ userName }}</h1>
+          <h1 v-if="!editing" class="username-heading">{{ userName }}</h1>
+          <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newUserName" />
         </MDBCol>
         <MDBCol class="align-self-center">
           <MDBRow class="d-flex flex-row flex-nowrap align-self-center">
@@ -16,17 +17,23 @@
           </MDBRow>
         </MDBCol>
       </MDBRow>
-      <MDBCol class="d-flex justify-content-end">
-        <MDBBtn class="utility-btn" outline="black">EDIT</MDBBtn>
+      <MDBCol v-if="!editing" class="d-flex justify-content-end">
+        <MDBBtn @click="startEditing" class="utility-btn" outline="black">EDIT</MDBBtn>
+      </MDBCol>
+      <MDBCol v-else class="d-flex justify-content-end">
+        <MDBBtn @click="cancelEditing" class="utility-btn" outline="black">CANCEL</MDBBtn>
+        <MDBBtn @click="saveChanges" class="utility-btn btn-black">SAVE</MDBBtn>
       </MDBCol>
     </MDBRow>
     <MDBRow class="d-flex flex-nowrap w-100">
       <span class="user-roles-heading">USERNAME</span>
-      <span class="username">{{ userUsername }}</span>
+      <span v-if="!editing" class="username">{{ userUsername }}</span>
+      <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newUserUsername" />
     </MDBRow>
     <MDBRow class="d-flex flex-nowrap w-100">
       <span class="user-roles-heading">PASSWORD</span>
-      <span class="username">{{ userPassword }}</span>
+      <span v-if="!editing" class="password">{{ userPassword }}</span>
+      <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newUserPassword" />
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="pt-4">
@@ -35,11 +42,25 @@
 </template>
 
 <script lang="ts">
-import { MDBBtn,MDBContainer, MDBRow, MDBCol, MDBBadge, MDBTabs, MDBTabNav, MDBTabContent, MDBTabItem, MDBTabPane } from "mdb-vue-ui-kit";
+import {
+  MDBBtn,
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBBadge,
+  MDBTabs,
+  MDBTabNav,
+  MDBTabContent,
+  MDBTabItem,
+  MDBTabPane,
+  MDBInput
+} from "mdb-vue-ui-kit";
 import TabsComponent from "@/components/Elements/TabsComponent.vue";
 export default {
   name: "SingleUserView",
-  components: {TabsComponent, MDBBtn,MDBContainer, MDBRow, MDBCol, MDBBadge, MDBTabs, MDBTabNav, MDBTabContent, MDBTabItem, MDBTabPane },
+  components: {
+    MDBInput,
+    TabsComponent, MDBBtn,MDBContainer, MDBRow, MDBCol, MDBBadge, MDBTabs, MDBTabNav, MDBTabContent, MDBTabItem, MDBTabPane },
   props: {
     usersData: {
       type: Array,
@@ -66,10 +87,41 @@ export default {
   },
   data() {
     return {
+      editing: false,
       searchTerm: '',
+      originalUserName: '',
+      newUserName: '',
+      originalUserUsername: '',
+      newUserUsername: '',
+      originalUserPassword: '',
+      newUserPassword: ''
     }
   },
   methods: {
+    startEditing() {
+      this.editing = true;
+      this.originalUserName = this.userName;
+      this.newUserName = this.userName;
+      this.originalUserUsername = this.userUsername;
+      this.newUserUsername = this.userUsername;
+      this.originalUserPassword = this.userPassword;
+      this.newUserPassword = this.userPassword;
+    },
+    saveChanges() {
+      this.editing = false;
+      this.originalUserName = '';
+      this.originalUserUsername = '';
+      this.originalUserPassword = '';
+    },
+    cancelEditing() {
+      this.editing = false;
+      this.newUserName = this.originalUserName;
+      this.newUserUsername = this.originalUserUsername;
+      this.newUserPassword = this.originalUserPassword;
+      this.originalUserName = '';
+      this.originalUserUsername = '';
+      this.originalUserPassword = '';
+    },
     getUserTabs(user) {
       return user.tabs || [];
     },
@@ -116,5 +168,12 @@ export default {
 :deep(.nav-link) {
   font-weight: 600!important;
 }
-
+.username {
+  width: 100%;
+  max-width: 20rem!important;
+}
+:deep(.form-outline) {
+  width: 100%;
+  max-width: 20rem!important;
+}
 </style>

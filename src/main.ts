@@ -1,5 +1,7 @@
 import 'mdb-vue-ui-kit/css/mdb.min.css';
 import 'animate.css';
+import PrimeVue from 'primevue/config';
+import 'primevue/resources/themes/fluent-light/theme.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -11,5 +13,7 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
+app.use(PrimeVue, {
+})
 
 app.mount('#app')

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import LoginView from "@/views/LoginView.vue";
+import ModalComponent from "@/components/Elements/ModalComponent.vue";
 </script>
 
 <template>
@@ -38,6 +39,10 @@ import LoginView from "@/views/LoginView.vue";
   height: 100vh;
   padding: 0!important;
   display: flex;
+}
+ul {
+  margin-bottom: 0;
+  padding-left: 0;
 }
 </style>
 

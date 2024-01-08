@@ -3,11 +3,16 @@
     <MDBRow class="d-flex justify-content-around">
       <MDBRow class="w-auto">
         <MDBCol class="col-auto">
-          <h1 class="username-heading">{{ roleName }}</h1>
+          <h1 v-if="!editing" class="animate__animated animate__fadeIn username-heading">{{ roleName }}</h1>
+          <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newRoleName" />
         </MDBCol>
       </MDBRow>
-      <MDBCol class="d-flex justify-content-end">
-        <MDBBtn class="utility-btn" outline="black">EDIT</MDBBtn>
+      <MDBCol v-if="!editing" class="d-flex justify-content-end">
+        <MDBBtn @click="startEditing" class="utility-btn" outline="black">EDIT</MDBBtn>
+      </MDBCol>
+      <MDBCol v-else class="d-flex justify-content-end">
+        <MDBBtn @click="cancelEditing" class="utility-btn" outline="black">CANCEL</MDBBtn>
+        <MDBBtn @click="saveChanges" class="utility-btn btn-black">SAVE</MDBBtn>
       </MDBCol>
     </MDBRow>
   </MDBContainer>
@@ -18,11 +23,16 @@
 
 <script lang="ts">
 import { ref } from 'vue';
-import { MDBBtn,MDBContainer, MDBRow, MDBCol, MDBBadge, MDBTabs, MDBTabNav, MDBTabContent, MDBTabItem, MDBTabPane } from "mdb-vue-ui-kit";
+import {MDBInput, MDBBtn, MDBContainer, MDBRow, MDBCol, MDBBadge, MDBTabs, MDBTabNav, MDBTabContent, MDBTabItem, MDBTabPane } from "mdb-vue-ui-kit";
 import TabsComponent from "@/components/Elements/TabsComponent.vue";
+import ModalComponent from "@/components/Elements/ModalComponent.vue";
 export default {
   name: "SingleRoleView",
-  components: {TabsComponent, MDBBtn,MDBContainer, MDBRow, MDBCol, MDBBadge, MDBTabs, MDBTabNav, MDBTabContent, MDBTabItem, MDBTabPane },
+  components: {
+    ModalComponent,
+    TabsComponent,
+    MDBBtn, MDBContainer, MDBRow, MDBCol, MDBBadge, MDBTabs, MDBTabNav, MDBTabContent, MDBTabItem, MDBTabPane, MDBInput
+  },
   props: {
     id: {
       type: String,
@@ -33,6 +43,32 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      activeTabId4: 'role1-1',
+      editing: false,
+      newRoleName: '',
+      originalRoleName: '',
+    }
+  },
+  methods: {
+    startEditing() {
+      this.editing = true;
+      this.originalRoleName = this.roleName;
+      this.newRoleName = this.roleName;
+    },
+    saveChanges() {
+      this.editing = false;
+      this.originalRoleName = ''; // Сбрасываем оригинальное имя
+      // Выполняем логику сохранения изменений
+      // this.roleName = this.newRoleName;
+    },
+    cancelEditing() {
+      this.editing = false;
+      this.newRoleName = this.originalRoleName; // Возвращаем оригинальное имя при отмене
+      this.originalRoleName = ''; // Сбрасываем оригинальное имя
+    }
+  },
   computed: {
     selectedRole() {
       return this.rolesData.find((role) => role.id == this.id) || {};
@@ -41,11 +77,6 @@ export default {
       return this.selectedRole.roleName || '';
     },
   },
-  data() {
-    return {
-      activeTabId4: 'role1-1',
-    }
-  }
 }
 </script>
 
