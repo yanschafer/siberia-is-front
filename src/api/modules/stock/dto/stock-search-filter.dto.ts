@@ -1,7 +1,7 @@
 export class StockSearchDto {
   constructor(
-    public name: string,
-    public address: string
+    public name: string | null = null,
+    public address: string | null = null
   ) {
   }
 }

@@ -61,8 +61,9 @@ class TokenUtil {
 
   logout() {
     this.accessToken = this.refreshToken = null
-    localStorage.removeItem("access")
-    localStorage.removeItem("refresh")
+    localStorage.removeItem(this.accessTokenKey)
+    localStorage.removeItem(this.refreshTokenKey)
+    localStorage.removeItem(this.authorizedUserKey)
   }
 }
 

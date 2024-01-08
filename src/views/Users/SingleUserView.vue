@@ -54,10 +54,10 @@ import {
   MDBInput
 } from "mdb-vue-ui-kit";
 import TabsComponent from "@/components/Elements/TabsComponent.vue";
-import {useUsersStore} from "@/stores/store";
 import UserFullDto from "@/api/modules/user/dto/user-full.dto";
 import {useRoute} from "vue-router";
 import UpdateUserDto from "@/api/modules/user/dto/update-user.dto";
+import {useUsersStore} from "@/stores/user.store";
 export default {
   name: "SingleUserView",
   components: {
@@ -122,7 +122,8 @@ export default {
       const userUpdateDto = new UpdateUserDto(
         newName, newLogin, newPassword
       );
-      this.editing = !(await this.userStore.updateUser(this.id, userUpdateDto))
+      const result = await this.userStore.updateUser(this.id, userUpdateDto)
+      this.editing = !result.success
       
     },
     cancelEditing() {

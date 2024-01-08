@@ -5,7 +5,7 @@
     <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newStorehouseName" />
     <span v-if="!editing" class="storehouse-adress">
     <IconMapPinFilled color="#4E4E4E" :size="24" stroke-width="1" />
-      {{ storehouseAdress }}
+      {{ storehouseAddress }}
     </span>
     <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newStorehouseAdress" />
     <MDBBtn v-if="!editing" @click="startEditing" class="utility-btn" outline="black">Edit storehouse</MDBBtn>
@@ -23,7 +23,7 @@
       <MDBBtn class="utility-btn" outline="black">+ REQUEST</MDBBtn>
       <SearchComponent class="search" @search="handleSearch" />
     </MDBRow>
-    <TableComponent class="table" :rows="productRows" :columns="productColumns" :searchTerm="searchTerm" />
+    <TableComponent :rows="productRows" :columns="productColumns" :searchTerm="searchTerm" />
   </MDBContainer>
 </template>
 
@@ -33,6 +33,10 @@ import {MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow} from "mdb-vue-ui-kit";
 import TableComponent from "@/components/Elements/TableComponent.vue";
 import SearchComponent from "@/components/Elements/SearchComponent.vue";
 import ModalComponent from "@/components/Elements/ModalComponent.vue";
+import {useRoute} from "vue-router";
+import {useStorehousesStore} from "@/stores/storehouse.store";
+import StockUpdateDto from "@/api/modules/stock/dto/stock-update.dto";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 
 export default {
@@ -43,35 +47,47 @@ export default {
     ModalComponent
   },
   props: {
-    storehousesData: {
-      type: Array,
-      required: true,
-    },
     id: {
-      type: String,
+      type: Number,
       required: true,
     },
+  },
+  data: () => ({
+    editing: false,
+    showModal: false,
+    searchTerm: '',
+    newStorehouseName: '',
+    originalStorehouseName: '',
+    newStorehouseAdress: '',
+    originalStorehouseAdress: '',
+    productColumns: [
+      { field: 'name', header: 'NAME' },
+      { field: 'sku', header: 'SKU' },
+      { field: 'quantity', header: 'QUANTITY' },
+      { field: 'price', header: 'PRICE' },
+    ]
+  }),
+  async setup() {
+    const storehouseStore = useStorehousesStore()
+    const route = useRoute()
+    await storehouseStore.loadSelectedStoreHouse(parseInt(route.params.id.toString()))
+    return {
+      storehouseStore
+    }
   },
   computed: {
     selectedStorehouse() {
-      return this.storehousesData.find(storehouse => storehouse.id === this.id) || {};
+      return this.storehouseStore.getSelectedStorehouse
     },
     storehouseName() {
-      return this.selectedStorehouse.storehouseName || '';
+      return this.selectedStorehouse.name || '';
     },
-    storehouseAdress() {
-      return this.selectedStorehouse.storehouseAdress || '';
+    storehouseAddress() {
+      return this.selectedStorehouse.address || '';
     },
-  },
-  data() {
-    return {
-      editing: false,
-      showModal: false,
-      searchTerm: '',
-      newStorehouseName: '',
-      originalStorehouseName: '',
-      newStorehouseAdress: '',
-      originalStorehouseAdress: '',
+    productRows() {
+      LoggerUtil.debug(this.selectedStorehouse.products)
+      return this.selectedStorehouse.products || []
     }
   },
   methods: {
@@ -89,13 +105,15 @@ export default {
       this.editing = true;
       this.originalStorehouseName = this.storehouseName;
       this.newStorehouseName = this.storehouseName;
-      this.originalStorehouseAdress = this.storehouseAdress;
-      this.newStorehouseAdress = this.storehouseAdress;
+      this.originalStorehouseAdress = this.storehouseAddress;
+      this.newStorehouseAdress = this.storehouseAddress;
     },
-    saveChanges() {
+    async saveChanges() {
       this.editing = false;
-      this.originalStorehouseName = this.storehouseName;
-      this.originalStorehouseAdress = this.storehouseAdress;
+      const result = await this.storehouseStore.updateStorehouse(this.id, new StockUpdateDto(
+        this.newStorehouseName, this.newStorehouseAdress
+      ))
+      this.editing = !result.success
     },
     cancelEditing() {
       this.editing = false;
