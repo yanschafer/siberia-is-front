@@ -26,8 +26,9 @@ export default class ApiModelUtil {
   }
 
   private buildRequestOptions(request: ApiRequestDto): ApiRequestDto {
-    request.url = this.buildUrl(request.url)
-    return request
+    return new ApiRequestDto(
+      this.buildUrl(request.url), request.method, request.data
+    )
   }
 
   async refresh(): Promise<ApiResponseDto<TokenPairDto>> {
