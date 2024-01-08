@@ -1,4 +1,3 @@
-import ApiModelUtil from "@/api/utils/api-model.util";
 import TransactionInputDto from "@/api/modules/transaction/dto/transaction-input.dto";
 import ApiResponseDto from "@/api/dto/api-response.dto";
 import TransactionSimpleDto from "@/api/modules/transaction/dto/transaction-simple.dto";
@@ -6,6 +5,7 @@ import ApiRequestDto from "@/api/dto/api-request.dto";
 import TransactionListItemDto from "@/api/modules/transaction/dto/transaction-list-item.dto";
 import ProductSearchFilterDto from "@/api/modules/product/dto/product-search-filter.dto";
 import TransactionDto from "@/api/modules/transaction/dto/transaction.dto";
+import ApiModelUtil from "@/utils/api-model.util";
 
 export default class TransactionModel extends ApiModelUtil {
   constructor(

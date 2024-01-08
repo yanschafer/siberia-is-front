@@ -1,7 +1,7 @@
-import ApiModelUtil from "@/api/utils/api-model.util";
 import ApiResponseDto from "@/api/dto/api-response.dto";
 import ApiRequestDto from "@/api/dto/api-request.dto";
-import RemoveResultDto from "@/api/utils/crud/dto/remove-result.dto";
+import ApiModelUtil from "@/utils/api-model.util";
+import RemoveResultDto from "@/utils/crud/dto/remove-result.dto";
 
 export default class ApiCrudModelUtil<Input, Output, Update> extends ApiModelUtil {
   constructor(public baseUri: string) {

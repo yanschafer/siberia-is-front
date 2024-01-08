@@ -6,7 +6,7 @@
           <!-- Email input -->
           <MDBInput
               class="form-control custom-input"
-              type="email"
+              type="text"
               label="Email address"
               id="loginEmail"
               v-model="username"
@@ -24,62 +24,56 @@
           <MDBBtn type="submit" color="black" block> Log in </MDBBtn>
         </form>
 
-        <p class="animate__animated animate__fadeIn error-text" v-if="error">{{ error }}</p>
+        <p class="animate__animated animate__fadeIn error-text" v-if="error !== ''">{{ error }}</p>
       </MDBContainer>
   </section>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
 import {MDBContainer, MDBInput, MDBBtn} from "mdb-vue-ui-kit";
-import { ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
+import PrintUtil from "@/utils/localization/print.util";
 import AuthModel from "@/api/modules/auth/models/auth.model";
 import AuthInputDto from "@/api/modules/auth/dto/login/auth-input.dto";
-import UserModel from "@/api/modules/user/models/user.model";
+import Router from "@/router";
 
-const username = ref('');
-const password = ref('');
-const error = ref('');
 
-const router = useRouter();
-const route = useRoute();
-
-const authModel = new AuthModel()
-const userModel = new UserModel()
-const res = await authModel.auth(new AuthInputDto("huanitto", "pablo"))
-const authorized = await authModel.getAuthorized()
-console.log(authorized)
-const currentUser = await userModel.getCurrentUser()
-const currentUserRules = await userModel.getCurrentUserRules()
-const currentUserRoles = await userModel.getCurrentUserRoles()
-console.log(currentUser, currentUserRoles, currentUserRules)
-const getAll = await userModel.getAll()
-console.log(getAll)
-const getAllFiltered = await userModel.getAll({name: "Pablo"})
-console.log(getAllFiltered)
-const createUser = await userModel.create({
-  params: {
-    name: "",
-    login: "login",
-    password: ""
+export default {
+  components: {
+    MDBContainer, MDBInput, MDBBtn
   },
-  rules: [],
-  roles: []
-})
-console.log(createUser)
-
-const login = async () => {
-  try {
-    if (username.value === 'test' && password.value === 'password') {
-      await router.replace({ name: 'dashboard' });
-    } else {
-      error.value = 'This combination of login/password doesn’t exist. Please, check info provided or contact with your administrator.';
+  data: () => ({
+    username: "",
+    password: "",
+    error: "",
+    router: Router
+  }),
+  created() {
+    this.router = useRouter()
+  },
+  methods: {
+    async login() {
+      try {
+        if (this.username === "" || this.password === "") {
+         this.error = await PrintUtil.localize("error_empty_fields", "auth")
+         return
+        }
+        const authModel = new AuthModel()
+        const res = await authModel.auth(new AuthInputDto(
+          this.username, this.password
+        ))
+        if (res.success) {
+          this.router.replace({ name: "dashboard" })
+        } else {
+          this.error = await PrintUtil.localize("bad_credentials", "auth");
+        }
+      } catch (e) {
+        console.error('Auth error:', e);
+        this.error = await PrintUtil.localize("something_wrong");
+      }
     }
-  } catch (e) {
-    console.error('Auth error:', e);
-    error.value = 'Something went wrong. Please, contact administrator';
   }
-};
+}
 </script>
 
 <!--<script setup lang="ts">-->

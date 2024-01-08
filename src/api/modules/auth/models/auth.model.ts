@@ -1,10 +1,10 @@
-import ApiModelUtil from "@/api/utils/api-model.util";
 import AuthInputDto from "@/api/modules/auth/dto/login/auth-input.dto";
 import ApiResponseDto from "@/api/dto/api-response.dto";
 import TokenPairDto from "@/api/modules/auth/dto/token-pair.dto";
 import ApiRequestDto from "@/api/dto/api-request.dto";
 import AuthorizedUserDto from "@/api/modules/auth/dto/authorized-user.dto";
-import TokenUtil from "@/api/utils/token.util";
+import ApiModelUtil from "@/utils/api-model.util";
+import TokenUtil from "@/utils/token.util";
 
 export default class AuthModel extends ApiModelUtil {
   constructor() {

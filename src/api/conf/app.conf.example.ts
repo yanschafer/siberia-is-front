@@ -3,5 +3,7 @@ export const serverConf = {
   endpoint: "",
   refreshEndpoint: "",
   transferInProgressStatus: 0,
-  wsEndpoint: ""
+  wsEndpoint: "",
+  loggerMode: "",
+  loggerExcludedPrefixes: []
 }
