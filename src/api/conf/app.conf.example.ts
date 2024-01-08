@@ -5,5 +5,8 @@ export const serverConf = {
   transferInProgressStatus: 0,
   wsEndpoint: "",
   loggerMode: "",
-  loggerExcludedPrefixes: []
+  loggerExcludedPrefixes: [],
+  rules: {
+   //Key-Value
+  }
 }

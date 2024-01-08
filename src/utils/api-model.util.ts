@@ -6,6 +6,7 @@ import ApiRequestDto from "@/api/dto/api-request.dto";
 import TokenPairDto from "@/api/modules/auth/dto/token-pair.dto";
 import TokenUtil from "@/utils/token.util";
 import LoggerUtil from "@/utils/logger/logger.util";
+import AuthorizedUserDto from "@/api/modules/auth/dto/authorized-user.dto";
 
 export default class ApiModelUtil {
   constructor(private baseEndpoint: string) {}
@@ -55,6 +56,8 @@ export default class ApiModelUtil {
     const refreshResult = await this.refresh()
     if (refreshResult && refreshResult.success && this.onRefresh) {
       TokenUtil.login(refreshResult.getData())
+      const authorizedUserDto = await this.authorizedRequest<AuthorizedUserDto>(new ApiRequestDto("/auth/authorized", "GET"))
+      TokenUtil.setAuthorized(authorizedUserDto.getData())
       LoggerUtil.debugPrefixed("API_MODEL", "Refresh succeed.",)
       const afterRefresh = await this.authorizedRequest(this.onRefresh)
       this.onRefresh = null;

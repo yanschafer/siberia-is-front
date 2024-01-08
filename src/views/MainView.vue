@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SidebarComponent :sidebarItems="sidebarItems" />
+    <SidebarComponent :sidebarItems="sidebar" />
     <div class="header-area">
       <HeaderComponent :title="pageTitle" :breadcrumbs="navBreadcrumbs" />
     </div>
@@ -19,6 +19,8 @@
 import { useRouter } from 'vue-router';
 import SidebarComponent from "@/components/Navigation/SidebarComponent.vue";
 import HeaderComponent from "@/components/Navigation/HeaderComponent.vue";
+import TokenUtil from "@/utils/token.util";
+import {appConf} from "@/api/conf/app.conf";
 export default {
   name: 'DashboardView',
   components: {
@@ -43,7 +45,8 @@ export default {
           strokeWidth: 1,
           disabled: false,
           active: true,
-          route: 'products'
+          route: 'products',
+          rule: appConf.rules.productsManaging
         },
         { name: 'Storehouse',
           icon: 'IconBuildingWarehouse',
@@ -52,7 +55,8 @@ export default {
           strokeWidth: 1,
           disabled: false,
           active: false,
-          route: 'storehouses'
+          route: 'storehouses',
+          rule: appConf.rules.stockManaging
         },
         { name: 'Users',
           icon: 'IconUser',
@@ -61,7 +65,8 @@ export default {
           strokeWidth: 1,
           disabled: false,
           active: false,
-          route: 'users'
+          route: 'users',
+          rule: appConf.rules.userManaging
         },
         { name: 'Roles',
           icon: 'IconUsersGroup',
@@ -70,7 +75,8 @@ export default {
           strokeWidth: 1,
           disabled: false,
           active: false,
-          route: 'roles'
+          route: 'roles',
+          rule: appConf.rules.rbacManaging
         },
       ],
       router: useRouter(),
@@ -101,6 +107,9 @@ export default {
     },
   },
   computed: {
+    sidebar() {
+      return this.sidebarItems.filter(el => TokenUtil.hasAccessTo(el.rule))
+    },
     navBreadcrumbs() {
       const breadcrumbs = this.$route.matched.map(route => ({
         name: route.name || 'dashboard',
