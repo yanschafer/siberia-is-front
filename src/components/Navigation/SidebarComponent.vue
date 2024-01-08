@@ -1,6 +1,6 @@
 <template>
   <MDBContainer class="d-flex flex-column align-items-center sidebar-bg">
-    <img class="logo" src="../../assets/logo.svg">
+    <img alt="logo" class="logo" src="../../assets/logo.svg">
     <MDBCol class="sidebar-item-group d-flex justify-content-center flex-column">
       <router-link
           v-for="(item, index) in sidebarItems"
@@ -20,10 +20,11 @@
 </template>
 
 <script lang="ts">
-import { ref, watch } from 'vue';
-import { RouterLink, RouterView, useRoute } from 'vue-router';
+import {useRoute} from 'vue-router';
 import { MDBContainer, MDBCol } from "mdb-vue-ui-kit";
 import { IconPackages, IconLock, IconBuildingWarehouse, IconUsersGroup, IconLogout2, IconUser } from '@tabler/icons-vue';
+import TokenUtil from "@/utils/token.util";
+import Router from "@/router";
 
 export default {
   name: 'SidebarComponent',
@@ -44,6 +45,9 @@ export default {
       default: () => []
     }
   },
+  data: () => ({
+    router: Router
+  }),
   setup() {
     const route = useRoute();
 
@@ -69,7 +73,8 @@ export default {
   },
   methods: {
     logout() {
-      this.$router.push('/');
+      TokenUtil.logout()
+      this.router.push('/');
     },
   },
 };

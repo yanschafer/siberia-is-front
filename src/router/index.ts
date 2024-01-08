@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import TokenUtil from "@/utils/token.util";
 
 
 const routes = [
@@ -9,12 +10,17 @@ const routes = [
   {
     path: '/login',
     component: () => import('@/views/LoginView.vue'),
+    meta: {
+      requireAuth: false
+    }
   },
   {
+    name: "dashboard",
     path: '/dashboard',
     component: () => import('@/views/MainView.vue'),
     meta: {
       hideTitle: true,
+      requireAuth: true
     },
     children: [
       {
@@ -106,23 +112,18 @@ const router = createRouter({
   routes,
 });
 
-//Check token
-const checkToken = () => {
-  //Future token validation logic
-  const token = localStorage.getItem('token');
-  return !!token;
-};
-
 //Global authorization check
 router.beforeEach((to, from, next) => {
-  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+  const requiresAuth = to.meta["requireAuth"]
 
-  if (requiresAuth && !checkToken()) {
+  if (requiresAuth && !TokenUtil.isAuthorized()) {
     //In case token is not valid
     next('/login');
-  } else {
-    next();
   }
+  if (!requiresAuth && TokenUtil.isAuthorized()) {
+    next("/dashboard");
+  }
+  next()
 });
 
 export default router;
