@@ -114,6 +114,7 @@ export default {
         this.newStorehouseName, this.newStorehouseAdress
       ))
       this.editing = !result.success
+      //TODO: Check for errors
     },
     cancelEditing() {
       this.editing = false;

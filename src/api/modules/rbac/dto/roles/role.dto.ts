@@ -4,6 +4,7 @@ export default class RoleDto {
   constructor(
     public id: number,
     public name: string,
+    public relatedUsersCount: number,
     public description: string,
     public rules: LinkedRuleDto[]
   ) {

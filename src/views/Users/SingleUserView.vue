@@ -124,6 +124,7 @@ export default {
       );
       const result = await this.userStore.updateUser(this.id, userUpdateDto)
       this.editing = !result.success
+      //TODO: Check for errors
       
     },
     cancelEditing() {

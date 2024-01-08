@@ -7,6 +7,12 @@
           <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newRoleName" />
         </MDBCol>
       </MDBRow>
+      <MDBRow class="w-auto">
+        <MDBCol class="col-auto">
+          <h1 v-if="!editing" class="animate__animated animate__fadeIn username-heading">{{ roleDescription }}</h1>
+          <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newRoleDescription" />
+        </MDBCol>
+      </MDBRow>
       <MDBCol v-if="!editing" class="d-flex justify-content-end">
         <MDBBtn @click="startEditing" class="utility-btn" outline="black">EDIT</MDBBtn>
       </MDBCol>
@@ -17,7 +23,7 @@
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="pt-4">
-    <TabsComponent />
+<!--    <TabsComponent />-->
   </MDBContainer>
 </template>
 
@@ -26,6 +32,9 @@ import { ref } from 'vue';
 import {MDBInput, MDBBtn, MDBContainer, MDBRow, MDBCol, MDBBadge, MDBTabs, MDBTabNav, MDBTabContent, MDBTabItem, MDBTabPane } from "mdb-vue-ui-kit";
 import TabsComponent from "@/components/Elements/TabsComponent.vue";
 import ModalComponent from "@/components/Elements/ModalComponent.vue";
+import {useRolesStore} from "@/stores/roles.store";
+import {useRoute} from "vue-router";
+import UpdateRoleDto from "@/api/modules/rbac/dto/roles/update-role.dto";
 export default {
   name: "SingleRoleView",
   components: {
@@ -35,33 +44,39 @@ export default {
   },
   props: {
     id: {
-      type: String,
+      type: Number,
       required: true,
     },
-    rolesData: {
-      type: Array,
-      required: true
-    }
   },
-  data() {
+  async setup() {
+    const rolesStore = useRolesStore()
+    const route = useRoute()
+    await rolesStore.loadSelectedRole(parseInt(route.params.id.toString()))
     return {
-      activeTabId4: 'role1-1',
-      editing: false,
-      newRoleName: '',
-      originalRoleName: '',
+      rolesStore
     }
   },
+  data: () => ({
+    activeTabId4: 'role1-1',
+    editing: false,
+    newRoleName: '',
+    originalRoleName: '',
+    newRoleDescription: '',
+    originalRoleDescription: '',
+  }),
   methods: {
     startEditing() {
       this.editing = true;
       this.originalRoleName = this.roleName;
       this.newRoleName = this.roleName;
+      this.originalRoleDescription = this.roleDescription;
+      this.newRoleDescription = this.roleDescription;
     },
-    saveChanges() {
-      this.editing = false;
-      this.originalRoleName = ''; // Сбрасываем оригинальное имя
-      // Выполняем логику сохранения изменений
-      // this.roleName = this.newRoleName;
+    async saveChanges() {
+      const updateResult = await this.rolesStore.updateRole(this.id, new UpdateRoleDto(this.newRoleName, this.newRoleDescription))
+      this.editing = !updateResult.success;
+      //TODO: Check for errors
+      
     },
     cancelEditing() {
       this.editing = false;
@@ -71,10 +86,13 @@ export default {
   },
   computed: {
     selectedRole() {
-      return this.rolesData.find((role) => role.id == this.id) || {};
+      return this.rolesStore.getSelectedRole || {};
     },
     roleName() {
-      return this.selectedRole.roleName || '';
+      return this.selectedRole.name || '';
+    },
+    roleDescription() {
+      return this.selectedRole.description || '';
     },
   },
 }

@@ -75,59 +75,7 @@ export const useProductsStore = defineStore({
     },
 });
 
-export const useRolesStore = defineStore({
-    id: 'roles',
-    state: () => ({
-        searchTerm: '',
-        rolesRows: [
-            { id: 1, roleName: 'Administrator', usersPerRole: '2' },
-            { id: 2, roleName: 'Moderator', usersPerRole: '10' },
-            { id: 3, roleName: 'Seller', usersPerRole: '20' },
-        ],
-        rolesColumns: [
-            { field: 'roleName', header: 'ROLE NAME' },
-            { field: 'usersPerRole', header: 'USERS PER ROLE' }
-        ],
-        rolesData: [
-            { id: 1, roleName: 'Administrator' },
-            { id: 2, roleName: 'Moderator' },
-            { id: 3, roleName: 'Seller' },
-        ],
-    }),
-    getters: {
-        getSearchTerm: (state) => state.searchTerm,
-    },
 
-    actions: {
-        getFilteredRoles(searchTerm: string) {
-            const filteredRoles = this.rolesRows.filter((row) =>
-                Object.values(row).some((value) =>
-                    String(value).toLowerCase().includes(searchTerm.toLowerCase())
-                )
-            );
-            if (filteredRoles.length > 0) {
-                this.rolesRows = filteredRoles; // Обновляем значения в хранилище только если есть результаты
-            }
-            return filteredRoles;
-        },
-        loadRolesData() {
-            const searchTerm = this.getSearchTerm;
-            const filteredRoles = this.rolesRows.filter((row) =>
-                Object.values(row).some((value) =>
-                    String(value).toLowerCase().includes(searchTerm.toLowerCase())
-                )
-            );
-            this.rolesRows = filteredRoles;
-            return filteredRoles;
-        },
-        setRoleName(newRoleName: string) {
-            const role = this.rolesData.find((role) => role.id === 1); // Здесь вы можете использовать любую логику для поиска роли, которую нужно обновить
-            if (role) {
-                role.roleName = newRoleName;
-            }
-        },
-    },
-});
 
 export const useHistoryStore = defineStore({
     id: 'history',
