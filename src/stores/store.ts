@@ -1,56 +1,5 @@
 import { defineStore } from 'pinia';
 
-export const useHistoryStore = defineStore({
-    id: 'history',
-    state: () => ({
-        searchTerm: '',
-        historyRows: [
-            { id: 1, target: 'Storehouse', targetName: 'Storehouse 1', type: 'Edited', author: 'orlando', dateTime: '2' },
-            { id: 2, target: 'Storehouse', targetName: 'Storehouse 1', type: 'Edited', author: 'orlando', dateTime: '2' },
-            { id: 3, target: 'Storehouse', targetName: 'Storehouse 1', type: 'Edited', author: 'orlando', dateTime: '2' },
-        ],
-        historyColumns: [
-            { field: 'target', header: 'TARGET' },
-            { field: 'targetName', header: 'TARGET NAME' },
-            { field: 'type', header: 'TYPE' },
-            { field: 'author', header: 'AUTHOR' },
-            { field: 'dateTime', header: 'DATE | TIME' }
-        ],
-        historyData: [
-            { id: 1, target: 'Storehouse', targetName: 'Storehouse 1', type: 'Edited', author: 'orlando', dateTime: '2' },
-            { id: 2, target: 'Storehouse', targetName: 'Storehouse 1', type: 'Edited', author: 'orlando', dateTime: '2' },
-            { id: 3, target: 'Storehouse', targetName: 'Storehouse 1', type: 'Edited', author: 'orlando', dateTime: '2' },
-        ],
-    }),
-    getters: {
-        getSearchTerm: (state) => state.searchTerm,
-    },
-
-    actions: {
-        getFilteredHistory(searchTerm: string) {
-            const filteredHistory = this.historyRows.filter((row) =>
-                Object.values(row).some((value) =>
-                    String(value).toLowerCase().includes(searchTerm.toLowerCase())
-                )
-            );
-            if (filteredHistory.length > 0) {
-                this.historyRows = filteredHistory; // Обновляем значения в хранилище только если есть результаты
-            }
-            return filteredHistory;
-        },
-        loadHistoryData() {
-            const searchTerm = this.getSearchTerm;
-            const filteredHistory = this.historyRows.filter((row) =>
-                Object.values(row).some((value) =>
-                    String(value).toLowerCase().includes(searchTerm.toLowerCase())
-                )
-            );
-            this.historyRows = filteredHistory;
-            return filteredHistory;
-        },
-    },
-});
-
 export const useOperationsStore = defineStore({
     id: 'operations',
     state: () => ({

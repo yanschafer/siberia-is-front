@@ -21,6 +21,8 @@
 <script lang="ts">
 import {MDBBadge, MDBBtn, MDBCol, MDBContainer, MDBRow} from "mdb-vue-ui-kit";
 import TabsComponent from "@/components/Elements/TabsComponent.vue";
+import {useHistoryStore} from "@/stores/history.store";
+import {useRoute} from "vue-router";
 
 export default {
   name: 'SingleHistoryView',
@@ -35,19 +37,27 @@ export default {
       required: true,
     },
   },
+  async setup() {
+    const historyStore = useHistoryStore()
+    const route = useRoute()
+    await historyStore.loadItem(parseInt(route.params.id.toString()))
+    return {
+      historyStore
+    }
+  },
   computed: {
     selectedHistory() {
-      return this.historyData.find((history) => history.id == this.id) || {};
+      return this.historyStore.selectedItem
     },
     targetName() {
-      return this.selectedHistory.targetName || '';
+      return this.selectedHistory.eventObjectName || '';
     },
     type() {
-      const selectedType = this.selectedHistory.type || '';
-      return selectedType.toLowerCase();
+      const selectedType = this.selectedHistory.eventType || '';
+      return selectedType.toLowerCase() + "d";
     },
     dateTime() {
-      return this.selectedHistory.dateTime || '';
+      return this.selectedHistory.timestamp || '';
     },
     author() {
       return this.selectedHistory.author || '';

@@ -9,7 +9,7 @@ export default class HistoryModel extends ApiModelUtil {
     super("/logs");
   }
 
-  public async getAll(searchFilterDto: HistorySearchFilterDto): Promise<ApiResponseDto<HistoryRowDto[]>> {
+  public async getAll(searchFilterDto: HistorySearchFilterDto = new HistorySearchFilterDto()): Promise<ApiResponseDto<HistoryRowDto[]>> {
     return this.authorizedRequest(new ApiRequestDto("", "POST", searchFilterDto))
   }
 }
