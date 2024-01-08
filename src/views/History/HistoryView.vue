@@ -1,52 +1,52 @@
 <template>
-  <template v-if="!$route.params.id">
+  <template v-if="!isIdProvided">
     <TableComponent :rows="filteredHistory" :columns="historyStore.historyColumns" :searchTerm="historyStore.searchTerm" @rowClick="handleRowClick" />
   </template>
-  <router-view v-if="$route.params.id !== undefined" :historyData="historyStore.historyData" :currentRole="getCurrentHistory" :id="$route.params.id" />
+  <router-view v-if="isIdProvided" :id="routeIdParam" />
 </template>
 <script lang="ts">
 import TableComponent from "@/components/Elements/TableComponent.vue";
 import SearchComponent from "@/components/Elements/SearchComponent.vue";
-import {useHistoryStore} from "@/stores/store";
-import {computed} from "vue";
+import {useRoute, useRouter} from "vue-router";
+import {useHistoryStore} from "@/stores/history.store";
 
 export default {
   name: "HistoryView",
   components: {SearchComponent, TableComponent},
-  setup() {
+  async setup() {
     const historyStore = useHistoryStore();
-    const filteredHistory = computed(() => {
-      const searchTerm = historyStore.getSearchTerm;
-      if (searchTerm.trim() === "") {
-        return historyStore.historyRows;
-      } else {
-        return historyStore.historyRows.filter((row) =>
-            Object.values(row).some((value) =>
-                String(value).toLowerCase().includes(searchTerm.toLowerCase())
-            )
-        );
-      }
-    });
-    const getCurrentHistory = (historyId) => {
-      return filteredHistory.value.find((history) => history.id === historyId);
-    };
-
+    const route = useRoute()
+    const router = useRouter()
+    await historyStore.loadHistoryList()
     return {
       historyStore,
-      filteredHistory,
-      getCurrentHistory,
+      route, router
     };
   },
-  mounted() {
-    this.loadData();
+  computed: {
+    filteredHistory() {
+      const searchTerm = this.historyStore.getSearchTerm;
+      if (searchTerm.trim() === "") {
+        return this.historyStore.historyRows;
+      } else {
+        return this.historyStore.historyRows.filter((row) =>
+          Object.values(row).some((value) =>
+            String(value).toLowerCase().includes(searchTerm.toLowerCase())
+          )
+        );
+      }
+    },
+    routeIdParam() {
+      return parseInt(this.route.params.id.toString())
+    },
+    isIdProvided() {
+      return !!this.route.params.id
+    }
   },
   methods: {
-    loadData() {
-      this.historyStore.loadHistoryData();
-    },
     handleRowClick(row) {
       console.log('Clicked row with id:', row.id);
-      this.$router.push({ name: 'Single history', params: { id: row.id.toString() } });
+      this.router.push({ name: 'Single history', params: { id: row.id.toString() } });
     },
   },
 }

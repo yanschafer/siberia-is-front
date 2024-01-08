@@ -64,9 +64,8 @@ export default class ApiModelUtil {
     }
     else {
       LoggerUtil.debugPrefixed("API_MODEL", "Refresh failed with: ", refreshResult)
-      const router = useRouter()
       TokenUtil.logout()
-      router.push("/login")
+      window.location = "/login"
       return new ApiResponseDto<T>(false, null, refreshResult.getError())
     }
   }
