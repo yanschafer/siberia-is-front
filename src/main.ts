@@ -1,7 +1,10 @@
 import 'mdb-vue-ui-kit/css/mdb.min.css';
 import 'animate.css';
 import PrimeVue from 'primevue/config';
-import 'primevue/resources/themes/fluent-light/theme.css'
+import 'primevue/resources/themes/lara-light-green/theme.css'
+import 'primeicons/primeicons.css'
+
+
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

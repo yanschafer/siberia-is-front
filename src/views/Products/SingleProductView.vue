@@ -15,8 +15,9 @@
             <MDBCol v-if="!editing">
               <h1 class="product-heading">{{ productName }}</h1>
             </MDBCol>
-            <MDBCol v-else>
-              <MDBInput class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newProductName" />
+            <MDBCol class="d-flex gap-1 align-items-center mb-3" v-else>
+              <h5 class="field-heading">PRODUCT NAME</h5>
+              <MDBInput id="product-name-input" class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newProductName" />
             </MDBCol>
             <MDBCol class="d-flex flex-column justify-content-start">
               <MDBBtn @click="startEditing" class="utility-btn" outline="black">EDIT</MDBBtn>
@@ -24,77 +25,78 @@
           </MDBRow>
           <MDBRow>
             <MDBCol class="d-flex flex-column gap-3 col-auto">
-              <h5 v-if="!editing" class="field-heading">SKU <span class="field-value copy-on">{{ sku }}</span></h5>
-              <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newSku" />
-              <img class="sku-img" :src="barcodeImage" alt="Barcode">
+              <h5 class="field-heading d-flex gap-1 align-items-center">SKU <span v-if="!editing" class="field-value copy-on">{{ sku }}</span><MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newSku" /></h5>
+<!--              <img class="sku-img" :src="barcodeImage" alt="Barcode">-->
               <h5 v-if="!editing" class="field-heading">BRAND <span class="field-value copy-on">{{ brand }}</span></h5>
-              <CascadeSelect
-                  v-else
-                  filter
-                  v-model="selectedBrand"
-                  :options="brandSubgroups"
-                  optionLabel="bname"
-                  optionGroupLabel="name"
-                  :optionGroupChildren="['brandGroups', 'brands']"
-                  placeholder="Select a brand"
-                  :pt="{
-        root: { style: { minWidth: '14rem' } }
-    }"
-              />
-              <h5 class="field-heading">LINK <a target="_blank" :href="link" class="field-value copy-on">OPEN IN NEW WINDOW</a></h5>
+              <SelectComponent v-else :items="brandList" />
+              <h5 class="field-heading d-flex gap-1 align-items-center">LINK <a v-if="!editing" target="_blank" :href="link" class="field-value copy-on">OPEN IN NEW WINDOW</a>
+                <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newLink" />
+              </h5>
             </MDBCol>
-            <MDBCol class="d-flex flex-column gap-2">
-              <h5 class="field-heading">QUANTITY <span class="field-value">{{ quantity }}</span></h5>
-              <h5 class="field-heading">LAST TIME ORDERED <span class="field-value">{{ lastTimeOrdered }}</span></h5>
-              <h5 class="field-heading">LAST PRICE ORDERED <span class="field-value">{{ lastPriceOrdered }}</span></h5>
-              <h5 class="field-heading">COST PRICE <span class="field-value">{{ costPrice }}</span></h5>
-              <h5 class="field-heading">STATUS <span class="field-value">{{ status }}</span></h5>
+            <MDBCol class="d-flex flex-column gap-3">
+              <h5 class="field-heading d-flex gap-1 align-items-center">QUANTITY <span v-if="!editing" class="field-value">{{ quantity }}</span>
+                <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newQuantity" />
+              </h5>
+              <h5 class="field-heading d-flex gap-1 align-items-center">LAST TIME ORDERED <span class="field-value">{{ lastTimeOrdered }}</span>
+              </h5>
+              <h5 class="field-heading d-flex gap-1 align-items-center">LAST PRICE ORDERED <span class="field-value">{{ lastPriceOrdered }}</span>
+              </h5>
+<!--              <h5 class="field-heading">COST PRICE <span class="field-value">{{ costPrice }}</span></h5>-->
+<!--              <h5 class="field-heading">STATUS <span class="field-value">{{ status }}</span></h5>-->
             </MDBCol>
           </MDBRow>
         </MDBCol>
       </MDBRow>
     </MDBContainer>
     <MDBContainer class="description-section" fluid>
-      <h5 class="field-heading">{{ category }}</h5>
-      <h1 class="product-heading">Product description <span class="field-heading collection-name">{{ collectionName }}</span> <span class="field-heading separator">|</span> <span class="field-heading color-name">{{ color }}</span></h1>
-      <p class="description">{{ productDescription }}</p>
+      <h5 v-if="!editing" class="field-heading">{{ category }}</h5>
+      <TreeDropdownComponent v-else :nodes="categoriesList" />
+      <h1 class="product-heading d-flex gap-1 align-items-center">Product description <span class="field-heading collection-name">{{ collectionName }}</span> <span class="field-heading separator">|</span> <span v-if="!editing" class="field-heading color-name">{{ color }}</span> <h5 v-else class="field-heading d-flex gap-1 align-items-center mb-0">NEW COLOR NAME <MDBInput class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newColor" /></h5></h1>
+      <p v-if="!editing" class="description">{{ productDescription }}</p>
+      <textarea v-else class="animate__animated animate__fadeIn username-input" id="description" type="textarea" v-model="newDescription" />
     </MDBContainer>
     <MDBContainer class="footer-section" fluid>
       <MDBRow>
         <MDBCol>
-          <h5 class="field-heading">VOLUME <span class="field-value">{{ volume }}</span></h5>
-          <h5 class="field-heading">SIZE <span class="field-value">{{ size }}</span></h5>
+<!--          <h5 class="field-heading">VOLUME <span class="field-value">{{ volume }}</span></h5>-->
+<!--          <h5 class="field-heading">SIZE <span class="field-value">{{ size }}</span></h5>-->
           <h5 class="field-heading">QUANTITY PER PACKAGE <span class="field-value">{{ quantityPerPackage }}</span></h5>
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">DISTRIBUTION PRICE <span class="field-value">{{ distributionPrice }}</span></h5>
-          <h5 class="field-heading">WITHOUT VAT <span class="field-value">{{ distributionPriceWithoutVat }}</span></h5>
-          <h5 class="field-heading">MARKUP <span class="field-value">{{ distributionMarkup }}</span></h5>
+<!--          <h5 class="field-heading">WITHOUT VAT <span class="field-value">{{ distributionPriceWithoutVat }}</span></h5>-->
+<!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ distributionMarkup }}</span></h5>-->
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">PROFESSIONAL PRICE <span class="field-value">{{ professionalPrice }}</span></h5>
-          <h5 class="field-heading">WITHOUT VAT <span class="field-value">{{ professionalPriceWithoutVat }}</span></h5>
-          <h5 class="field-heading">MARKUP <span class="field-value">{{ professionalMarkup }}</span></h5>
+<!--          <h5 class="field-heading">WITHOUT VAT <span class="field-value">{{ professionalPriceWithoutVat }}</span></h5>-->
+<!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ professionalMarkup }}</span></h5>-->
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">DEFAULT PRICE <span class="field-value">{{ defaultPrice }}</span></h5>
-          <h5 class="field-heading">WITHOUT VAT <span class="field-value">{{ defaultPriceWithoutVat }}</span></h5>
-          <h5 class="field-heading">MARKUP <span class="field-value">{{ defaultMarkup }}</span></h5>
+<!--          <h5 class="field-heading">WITHOUT VAT <span class="field-value">{{ defaultPriceWithoutVat }}</span></h5>-->
+<!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ defaultMarkup }}</span></h5>-->
         </MDBCol>
       </MDBRow>
     </MDBContainer>
   </div>
 </template>
 <script lang="ts">
-import {MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput} from "mdb-vue-ui-kit";
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput } from "mdb-vue-ui-kit";
 import FileUploadComponent from "@/components/Inputs/FileUploadComponent.vue";
 import CascadeSelect from 'primevue/cascadeselect';
 import FilesResolverUtil from "@/utils/files-resolver.util";
-import {useProductsStore} from "@/stores/products.store";
-import {useRoute} from "vue-router";
+import { useProductsStore } from "@/stores/products.store";
+import { useRoute } from "vue-router";
+import { useBrandStore } from "@/stores/brand.store";
+import { useCategoriesStore } from "@/stores/categories.store";
+import SelectComponent from "@/components/Elements/SelectComponent.vue";
+import TreeDropdownComponent from "@/components/Elements/TreeDropdownComponent.vue";
+
+
 export default {
   name: 'SingleProductView',
-  components: {CascadeSelect, MDBInput, FileUploadComponent, MDBContainer, MDBRow, MDBCol, MDBBtn },
+  components: {TreeDropdownComponent, SelectComponent, CascadeSelect, MDBInput, FileUploadComponent, MDBContainer, MDBRow, MDBCol, MDBBtn },
   props: {
     id: {
       type: Number,
@@ -102,48 +104,26 @@ export default {
     },
   },
   async setup() {
-    const productStore = useProductsStore()
-    const route = useRoute()
-    await productStore.loadSelectedProduct(parseInt(route.params.id.toString()))
+    const productStore = useProductsStore();
+    const brandStore = useBrandStore();
+    const categoriesStore = useCategoriesStore();
+    const route = useRoute();
+
+    await brandStore.loadBrandsList()
+    await categoriesStore.loadCategoriesList();
+
+
+
+    await productStore.loadSelectedProduct(parseInt(route.params.id.toString()));
+
     return {
-      productStore
-    }
+      productStore,
+      brandStore,
+      categoriesStore
+    };
   },
   data: () => ({
-      editing: false,
-      selectedBrand: '',
-      brandSubgroups: [
-        {
-          name: 'Brand group 2',
-          brandGroups: [{
-            name: 'Brand subgroup 2',
-            brands: [
-                {bname: 'Brand name'},
-            ]
-          }
-          ]
-        },
-        {
-          name: 'Brand group 1',
-          brandGroups: [{
-            name: 'Brand subgroup 1',
-            brands: [
-              {bname: 'Sydney'},
-            ]
-          }
-          ]
-        },
-        {
-          name: 'Brand group 1',
-          brandGroups: [{
-            name: 'Brand subgroup 1',
-            brands: [
-              {bname: 'Sydney'},
-            ]
-          }
-          ]
-        }
-      ],
+    editing: false,
   }),
   methods: {
     startEditing() {
@@ -151,6 +131,12 @@ export default {
     }
   },
   computed: {
+    categoriesList() {
+      return this.categoriesStore.getCategoriesList()
+    },
+    brandList() {
+      return this.brandStore.getBrandList()
+    },
     selectedProduct() {
       return this.productStore.getSelectedProduct || {}
     },
@@ -158,13 +144,10 @@ export default {
       return FilesResolverUtil.getStreamUrl(this.selectedProduct.photo || '');
     },
     productName() {
-      return this.selectedProduct.productName || '';
+      return this.selectedProduct.name || '';
     },
     sku() {
       return this.selectedProduct.vendorCode || '';
-    },
-    barcodeImage() {
-      return this.selectedProduct.barcodeImage || '';
     },
     brand() {
       return this.selectedProduct.brand.name || '';
@@ -240,7 +223,6 @@ export default {
     console.log('Props in SingleProductView:', this.$props);
     console.log('Product ID:', this.id);
   },
-
 }
 </script>
 <style scoped>
@@ -313,5 +295,31 @@ export default {
 }
 .p-cascadeselect-panel .p-cascadeselect-items {
   padding-left: 0!important;
+}
+.username-input {
+  width: 100%;
+}
+:deep(.form-outline) {
+  width: 100%;
+  max-width: 10rem;
+  background: #f8f8f8;
+  border: 0;
+  border-bottom: 2px solid #565656;
+  height: 2rem;
+  padding-top: 0!important;
+}
+:deep(.form-control) {
+  padding-top: 0.1rem;
+}
+#description {
+  width: 100%;
+  max-width: auto!important;
+  background: #f8f8f8;
+  border: 0;
+  border-bottom: 2px solid #565656;
+}
+:deep(#product-name-input) {
+  width: 100%;
+  max-width: 50vw!important;
 }
 </style>

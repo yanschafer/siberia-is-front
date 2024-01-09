@@ -1,43 +1,76 @@
 <!-- TableComponent.vue -->
 <template>
-  <table v-if="paginatedRows.length > 0" class="table table-bordered animate__animated animate__fadeIn">
-    <thead>
-    <tr>
-      <th class="table-header" v-for="column in columns" :key="column.field">{{ column.header }}</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr class="table-row" @click="handleRowClick(row)" v-for="(row, index) in paginatedRows" :key="index" :class="{ 'table-row-odd': index % 2 !== 0 }">
-      <td v-for="column in columns" :key="column.field">{{ row[column.field] }}</td>
-    </tr>
-    </tbody>
-  </table>
+  <DataTable
+      class="animate__animated animate__fadeIn"
+      v-if="paginatedRows.length > 0"
+      v-model:editingRows="editingRows"
+      editMode="row"
+      :value="paginatedRows"
+      :paginator="true"
+      :rows="7"
+      :currentPage="currentPage - 1"
+      selectionMode="single"
+      @onPage="changePage"
+      @row-select="handleRowClick"
+      :pt="{
+                table: { style: 'min-width: 50rem' },
+                column: {
+                    bodycell: ({ state }) => ({
+                        style:  state['d_editing'] && 'padding-top: 0.6rem; padding-bottom: 0.6rem'
+                    })
+                }
+            }"
+  >
+    <Column
+        class="animate__animated animate__fadeIn"
+        v-for="column in columns"
+        :key="column.field"
+        :field="column.field"
+        :header="column.header"
+        sortable
+    >
+      <template #editor="{ data, field }">
+        <InputNumber size="small" class="animate__animated animate__fadeIn number w-auto"  v-if="isEditable(column.field)" mode="currency" currency="USD" locale="en-US" v-model="data[field]" />
+        <div class="animate__animated animate__fadeIn" v-else>{{ data[field] }}</div>
+      </template>
+    </Column>
+    <div @row-select.stop="handleRowClick" class="container-fluid">
+      <Column v-if="showEditColumn" class="animate__animated animate__fadeIn utility-col" :rowEditor="true" style="width: 5rem; min-width: 8rem" bodyStyle="text-align:center"></Column>
+    </div>
+  </DataTable>
   <div v-else>
     Nothing was found, try to classify search query.
   </div>
-  <nav aria-label="Page navigation">
-    <ul class="pagination">
-      <li class="page-item" v-for="page in totalPages" :key="page" :class="{ 'active': page === currentPage }">
-        <a class="page-link" @click="changePage(page)">{{ page }}</a>
-      </li>
-    </ul>
-  </nav>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Paginator from 'primevue/paginator';
+import InputNumber from "primevue/inputnumber";
 
 export default defineComponent({
+  components: {
+    DataTable,
+    Column,
+    Paginator,
+    InputNumber
+  },
+
   props: {
     rows: Array,
     columns: Array,
     searchTerm: String,
+    showEditColumn: Boolean,
+    editableColumns: Array,
   },
   emits: ["rowClick"],
   data() {
     return {
       currentPage: 1,
       itemsPerPage: 7,
+      editingRows: [],
     };
   },
   computed: {
@@ -47,15 +80,16 @@ export default defineComponent({
       const filteredData = this.filterDataBySearchTerm();
       return filteredData ? filteredData.slice(start, end) : [];
     },
-    totalPages() {
-      const filteredData = this.filterDataBySearchTerm();
-      return filteredData ? Math.ceil(filteredData.length / this.itemsPerPage) : 0;
-    },
   },
   methods: {
-    handleRowClick(row) {
-      // Вызываем событие rowClick и передаем в него объект строки (row)
-      this.$emit('rowClick', row);
+    isEditable(columnField) {
+      return this.editableColumns && this.editableColumns.includes(columnField);
+    },
+    handleRowClick(event) {
+      if (!event.originalEvent.target.classList.contains('utility-col')) {
+        const selectedRow = event.data;
+        this.$emit('rowClick', selectedRow);
+      }
     },
     changePage(page: number) {
       this.currentPage = page;
@@ -112,5 +146,18 @@ export default defineComponent({
 }
 .page-item:hover {
   cursor: pointer;
+}
+* {
+  transition: all 0.3s ease-in-out;
+}
+:deep(.p-paginator-page.p-highlight) {
+  background: black!important;
+  color: white;
+}
+:deep(td.p-editable-column) {
+  height: 75px!important;
+}
+.number {
+  width: 10rem;
 }
 </style>

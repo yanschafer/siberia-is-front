@@ -2,7 +2,7 @@
   <div class="container-fluid" style="padding: 0;">
     <template v-if="!isIdProvided">
       <SearchComponent @search="handleSearch" />
-      <TableComponent :rows="productsStore.productRows" :columns="productsStore.productColumns" :searchTerm="productsStore.searchTerm" @rowClick="handleRowClick" />
+      <TableComponent :editableColumns="editableColumns" :showEditColumn=true :rows="productsStore.productRows" :columns="productsStore.productColumns" :searchTerm="productsStore.searchTerm" @rowClick="handleRowClick" />
     </template>
     <router-view v-if="isIdProvided" :id="routeIdParam" />
   </div>
@@ -26,6 +26,11 @@ export default {
       productsStore,
       route, router
     };
+  },
+  data() {
+    return {
+      editableColumns: ['price'],
+    }
   },
   computed: {
     getFilteredProducts() {
