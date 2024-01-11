@@ -27,25 +27,7 @@
       </template>
       <template v-else>
         <template v-if="newArrival">
-          <h5>New Arrival Registration</h5>
-          <MDBRow class="d-flex flex-row flex-nowrap">
-            <MDBCol class="col-auto">
-              <SelectComponent :items="productsList" v-model="newArrivalItem" />
-            </MDBCol>
-            <MDBCol class="col-auto">
-              <MDBInput class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newArrivalQuantity" />
-            </MDBCol>
-            <MDBCol class=col-auto>
-              <MDBInput class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newArrivalPrice" />
-            </MDBCol>
-            <MDBCol class="col-auto">
-              <MDBBtn class="utility-btn btn-black">+</MDBBtn>
-            </MDBCol>
-            <MDBCol>
-              <MDBBtn class="utility-btn btn-black">CANCEL</MDBBtn>
-              <MDBBtn class="utility-btn btn-success">SAVE</MDBBtn>
-            </MDBCol>
-          </MDBRow>
+          <StorehouseOperation title="New arrival" @cancel="newArrival = false" @save="saveNewArrival"></StorehouseOperation>
         </template>
         <template v-else-if="newSale">
           <h5>New Sale Registration</h5>
@@ -108,11 +90,13 @@ import LoggerUtil from "@/utils/logger/logger.util";
 import { useToast } from "primevue/usetoast";
 import SelectComponent from "@/components/Elements/SelectComponent.vue";
 import {useProductsStore} from "@/stores/products.store";
-import { ref } from 'vue';
+import StorehouseOperation from "@/views/Storehouses/StorehouseOperation.vue";
+import ProductListItemDto from "@/api/modules/product/dto/product-list-item.dto";
 
 export default {
   name: "SingleStorehouseView",
   components: {
+    StorehouseOperation,
     SelectComponent,
     MDBCol,
     MDBInput, SearchComponent, TableComponent, IconRoute, IconMapPinFilled, MDBBtn, MDBContainer, MDBRow,
@@ -137,7 +121,7 @@ export default {
     originalStorehouseAdress: '',
     productColumns: [
       { field: 'name', header: 'NAME' },
-      { field: 'sku', header: 'SKU' },
+      { field: 'vendorCode', header: 'SKU' },
       { field: 'quantity', header: 'QUANTITY' },
       { field: 'price', header: 'PRICE' },
     ]
@@ -188,6 +172,15 @@ export default {
       this.newArrival = true;
       this.newSale = false;
       this.newRequest = false;
+    },
+    async saveNewArrival(arrivalData: ProductListItemDto[]) {
+      const res = await this.storehouseStore.newArrival(this.id, arrivalData)
+      if (res.success) {
+        this.newArrival = false;
+      } else {
+        //TODO: Check for errors
+      }
+      
     },
     addNewSale() {
       this.newArrival = false;

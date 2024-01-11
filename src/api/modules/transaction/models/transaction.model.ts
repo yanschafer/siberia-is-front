@@ -23,7 +23,7 @@ export default class TransactionModel extends ApiModelUtil {
   }
   
   public async create(transactionInputDto: TransactionInputDto): Promise<ApiResponseDto<TransactionSimpleDto>> {
-    return this.authorizedRequest(new ApiRequestDto("/", "POST", transactionInputDto))
+    return this.authorizedRequest(new ApiRequestDto("", "POST", transactionInputDto))
   }
 
   public async approve(transactionId: number): Promise<ApiResponseDto<TransactionSimpleDto>> {

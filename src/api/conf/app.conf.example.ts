@@ -10,3 +10,9 @@ export const serverConf = {
    //Key-Value
   }
 }
+
+export enum TransactionType {
+  INCOME = 1,
+  OUTCOME,
+  TRANSFER
+}
