@@ -7,8 +7,7 @@
         </MDBCol>
         <MDBCol v-else class="col-auto animate__animated animate__flipInX animate__faster">
           <div class="product-img">
-<!--            <FileUploadComponent />-->
-            <FileUpload mode="basic" name="demo[]" url="/api/upload" accept="image/*" customUpload @uploader="customBase64Uploader" />
+            <FileUploadComponent />
           </div>
         </MDBCol>
         <MDBCol class="d-flex flex-column justify-content-center">
@@ -33,14 +32,13 @@
               <h5 class="field-heading d-flex gap-1 align-items-center">SKU <span v-if="!editing" class="field-value copy-on">{{ sku }}</span><MDBInput v-else class="animate__animated animate__flipInX animate__faster input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newSku" /></h5>
 <!--              <img class="sku-img" :src="barcodeImage" alt="Barcode">-->
               <h5 v-if="!editing" class="field-heading">BRAND <span class="field-value copy-on">{{ brand }}</span></h5>
-              <SelectComponent class="animate__animated animate__flipInX animate__faster" v-else :items="brandList" />
+              <SelectComponent :placeholder="placeholderBrand" class="animate__animated animate__flipInX animate__faster" v-else :items="brandList" />
               <h5 class="field-heading d-flex gap-1 align-items-center">LINK <a v-if="!editing" target="_blank" :href="link" class="field-value copy-on">OPEN IN NEW WINDOW</a>
                 <MDBInput v-else class="input-wrapper animate__animated animate__flipInX animate__faster username-input" type="text" v-model="newLink" />
               </h5>
             </MDBCol>
             <MDBCol class="d-flex flex-column gap-3">
-              <h5 class="field-heading d-flex gap-1 align-items-center">QUANTITY <span v-if="!editing" class="field-value">{{ quantity }}</span>
-                <MDBInput v-else class="input-wrapper animate__animated animate__flipInX animate__faster username-input" type="text" v-model="newQuantity" />
+              <h5 class="field-heading d-flex gap-1 align-items-center">QUANTITY <span class="field-value">{{ quantity }}</span>
               </h5>
               <h5 class="field-heading d-flex gap-1 align-items-center">LAST TIME ORDERED <span class="field-value">{{ lastTimeOrdered }}</span>
               </h5>
@@ -55,9 +53,9 @@
     </MDBContainer>
     <MDBContainer class="description-section" fluid>
       <h5 v-if="!editing" class="field-heading">{{ category }}</h5>
-      <TreeDropdownComponent v-else class="animate__animated animate__flipInX animate__faster" :nodes="categoriesList" />
+      <TreeDropdownComponent :placeholder="placeholderCategory" v-else class="animate__animated animate__flipInX animate__faster" :nodes="categoriesList" />
       <h1 class="product-heading d-flex gap-1 align-items-center">Product description <span v-if="!editing" class="field-heading collection-name">{{ collectionName }}</span>
-        <SelectComponent class="animate__animated animate__flipInX animate__faster" v-else :items="brandList" />
+        <SelectComponent :placeholder="placeholderCollection" class="animate__animated animate__flipInX animate__faster" v-else :items="collectionList" />
         <span class="field-heading separator">|</span> <span v-if="!editing" class="field-heading color-name">{{ color }}</span> <h5 v-else class="animate__animated animate__flipInX animate__faster field-heading d-flex gap-1 align-items-center mb-0">NEW COLOR NAME <MDBInput class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newColor" /></h5></h1>
       <p v-if="!editing" class="description">{{ productDescription }}</p>
       <textarea v-else class="animate__animated animate__flipInX animate__faster username-input" id="description" type="textarea" v-model="newDescription" />
@@ -109,6 +107,7 @@ import { useCategoriesStore } from "@/stores/categories.store";
 import SelectComponent from "@/components/Elements/SelectComponent.vue";
 import TreeDropdownComponent from "@/components/Elements/TreeDropdownComponent.vue";
 import ProductUpdateDto from "@/api/modules/product/dto/product-update.dto";
+import {useCollectionStore} from "@/stores/collection.store";
 
 
 export default {
@@ -123,12 +122,13 @@ export default {
   async setup() {
     const productStore = useProductsStore();
     const brandStore = useBrandStore();
+    const collectionStore = useCollectionStore();
     const categoriesStore = useCategoriesStore();
     const route = useRoute();
 
     await brandStore.loadBrandsList()
     await categoriesStore.loadCategoriesList();
-
+    await collectionStore.loadCollectionList();
 
 
     await productStore.loadSelectedProduct(parseInt(route.params.id.toString()));
@@ -136,10 +136,14 @@ export default {
     return {
       productStore,
       brandStore,
-      categoriesStore
+      categoriesStore,
+      collectionStore,
     };
   },
   data: () => ({
+    placeholderBrand: 'Select a brand',
+    placeholderCategory: 'Select a category',
+    placeholderCollection: 'Select a collection',
     editing: false,
     originalImageSource: '',
     newImageSource: '',
@@ -268,6 +272,9 @@ export default {
     },
     categoriesList() {
       return this.categoriesStore.getCategoriesList()
+    },
+    collectionList() {
+      return this.collectionStore.getCollectionList()
     },
     brandList() {
       return this.brandStore.getBrandList()
