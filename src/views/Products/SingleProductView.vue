@@ -291,7 +291,7 @@ export default {
       return this.selectedProduct.link || '';
     },
     quantity() {
-      return this.selectedProduct.quantity || '';
+      return this.selectedProduct.quantity || '0';
     },
     lastTimeOrdered() {
       const date =  new Date(parseInt(`${this.selectedProduct.lastPurchaseDate}000`)) || ''

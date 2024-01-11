@@ -7,7 +7,7 @@
     <MDBCol class="col-auto">
       <MDBInput class="input-wrapper animate__animated animate__fadeIn username-input" type="text" placeholder="Quantity" v-model="quantity" />
     </MDBCol>
-    <MDBCol class=col-auto>
+    <MDBCol v-if="showPrice" class=col-auto>
       <MDBInput class="input-wrapper animate__animated animate__fadeIn username-input" type="text" placeholder="Price" v-model="price" />
     </MDBCol>
     <MDBCol class="col-auto">
@@ -35,6 +35,15 @@ export default {
   },
   props: {
     title: String,
+    needValidation: {
+      type: Boolean,
+      "default": false
+    },
+    amountValidation: Object,
+    showPrice: {
+      type: Boolean,
+      "default": true
+    }
   },
   emits: [
     "cancel", "save"
@@ -49,7 +58,6 @@ export default {
       { field: 'name', header: 'NAME' },
       { field: 'sku', header: 'SKU' },
       { field: 'quantity', header: 'QUANTITY' },
-      { field: 'price', header: 'PRICE' },
     ]
   }),
   async setup() {
@@ -61,6 +69,8 @@ export default {
     }
   },
   created() {
+    if (this.showPrice)
+      this.addedColumns.push({ field: 'price', header: 'PRICE' })
     this.storehouseStore.$onAction(({name}) => {
       if (name == "operationSucceed")
         this.addedList = []
@@ -68,8 +78,17 @@ export default {
   },
   methods: {
     add() {
-      if (!this.price || !this.selectedProduct || !this.quantity)
+      if (!this.selectedProduct || !this.quantity)
         return
+      if (this.showPrice && !this.price)
+        return
+      //TODO: Show errors
+      
+      if (this.needValidation) {
+        if (this.amountValidation[this.selectedProduct.id] < this.quantity)
+          return
+        //TODO: Tell to user that amount is too big
+      }
       this.addedList.push({
         id: this.selectedProduct.id,
         name: this.selectedProduct.name,
@@ -77,6 +96,9 @@ export default {
         quantity: this.quantity,
         price: this.price
       })
+      this.selectedProduct = null
+      this.price = null
+      this.quantity = null
     },
     cancel() {
       this.storehouseStore.operationSucceed()

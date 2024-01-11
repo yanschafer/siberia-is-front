@@ -27,49 +27,13 @@
       </template>
       <template v-else>
         <template v-if="newArrival">
-          <StorehouseOperation title="New arrival" @cancel="newArrival = false" @save="saveNewArrival"></StorehouseOperation>
+          <StorehouseOperation title="New Arrival Registration" @cancel="newArrival = false" @save="saveNewArrival"></StorehouseOperation>
         </template>
         <template v-else-if="newSale">
-          <h5>New Sale Registration</h5>
-          <MDBRow class="d-flex flex-row flex-nowrap">
-            <MDBCol class="col-auto">
-              <SelectComponent  :items="productsList" v-model="newSaleItem" />
-            </MDBCol>
-            <MDBCol class="col-auto">
-              <MDBInput  class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newSaleQuantity" />
-            </MDBCol>
-            <MDBCol class="col-auto">
-              <MDBInput  class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newSalePrice" />
-            </MDBCol>
-            <MDBCol class="col-auto">
-              <MDBBtn class="utility-btn btn-black">+</MDBBtn>
-            </MDBCol>
-            <MDBCol>
-              <MDBBtn class="utility-btn btn-black">CANCEL</MDBBtn>
-              <MDBBtn class="utility-btn btn-success">SAVE</MDBBtn>
-            </MDBCol>
-          </MDBRow>
+          <StorehouseOperation title="New Sale Registration" :need-validation="true" :amount-validation="productListValidateObject" @cancel="newSale = false" @save="saveNewSale"></StorehouseOperation>
           </template>
         <template v-else-if="newRequest">
-          <h5>New Request Registration</h5>
-          <MDBRow class="d-flex flex-row flex-nowrap">
-            <MDBCol class="col-auto">
-              <SelectComponent  :items="productsList" v-model="newRequestItem" />
-            </MDBCol>
-            <MDBCol class="col-auto">
-              <MDBInput  class="input-wrapper animate__animated animate__fadeIn username-input" type="text" value="asdsad" v-model="newRequestQuantity" />
-            </MDBCol>
-            <MDBCol class="col-auto">
-              <MDBInput  class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newRequestPrice" />
-            </MDBCol>
-            <MDBCol class="col-auto">
-              <MDBBtn class="utility-btn btn-black">+</MDBBtn>
-            </MDBCol>
-            <MDBCol>
-              <MDBBtn class="utility-btn btn-black">CANCEL</MDBBtn>
-              <MDBBtn class="utility-btn btn-success">SAVE</MDBBtn>
-            </MDBCol>
-          </MDBRow>
+          <StorehouseOperation title="New Request Registration" :show-price="false" @cancel="newRequest = false" @save="saveNewRequest"></StorehouseOperation>
         </template>
       </template>
     </MDBRow>
@@ -146,13 +110,9 @@ export default {
       storehouseStore,
       showSuccess,
       productStore,
-      productRows: productStore.productRows
     };
   },
   computed: {
-    productsList() {
-      return this.productStore.getProductList;
-    },
     selectedStorehouse() {
       return this.storehouseStore.getSelectedStorehouse
     },
@@ -163,8 +123,14 @@ export default {
       return this.selectedStorehouse.address || '';
     },
     productRows() {
-      LoggerUtil.debug(this.selectedStorehouse.products)
       return this.selectedStorehouse.products || []
+    },
+    productListValidateObject() {
+      const obj = {}
+      this.productRows.forEach(el => {
+        obj[el.id] = el.quantity
+      })
+      return obj
     }
   },
   methods: {
@@ -180,17 +146,34 @@ export default {
       } else {
         //TODO: Check for errors
       }
-      
     },
     addNewSale() {
       this.newArrival = false;
       this.newSale = true;
       this.newRequest = false;
     },
+    async saveNewSale(saleData: ProductListItemDto[]) {
+      const res = await this.storehouseStore.newSale(this.id, saleData)
+      if (res.success) {
+        this.newSale = false;
+      } else {
+        //TODO: Check for errors
+      }
+    
+    },
     addNewRequest() {
       this.newArrival = false;
       this.newSale = false;
       this.newRequest = true;
+    },
+    async saveNewRequest(requestData: ProductListItemDto[]) {
+      const res = await this.storehouseStore.newRequest(this.id, requestData)
+      if (res.success) {
+        this.newRequest = false;
+      } else {
+        //TODO: Check for errors
+      }
+    
     },
     handleSearch(searchTerm) {
       this.searchTerm = searchTerm;
