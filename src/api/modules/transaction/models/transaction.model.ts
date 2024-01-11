@@ -27,11 +27,11 @@ export default class TransactionModel extends ApiModelUtil {
   }
 
   public async approve(transactionId: number): Promise<ApiResponseDto<TransactionSimpleDto>> {
-    return this.authorizedRequest(new ApiRequestDto(`/approve/${transactionId}`, "PATCH", null))
+    return this.authorizedRequest(new ApiRequestDto(`/${transactionId}/approve`, "PATCH", null))
   }
 
   public async cancel(transactionId: number): Promise<ApiResponseDto<TransactionSimpleDto>> {
-    return this.authorizedRequest(new ApiRequestDto(`/cancel/${transactionId}`, "PATCH", null))
+    return this.authorizedRequest(new ApiRequestDto(`/${transactionId}/cancel`, "PATCH", null))
   }
 
   public async changeStatus(transactionId: number, statusId: number): Promise<ApiResponseDto<TransactionSimpleDto>> {
