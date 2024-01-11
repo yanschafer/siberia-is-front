@@ -50,6 +50,7 @@ export default {
         )
       );
       const res = data.map(el => ({
+        id: el.id,
         operation: this.typeMapper[el.type.id],
         from: el.fromName,
         to: el.toName,

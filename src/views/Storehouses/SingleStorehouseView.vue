@@ -24,6 +24,7 @@
         <MDBBtn @click="addNewSale" class="utility-btn" outline="black">+ NEW SALE</MDBBtn>
         <MDBBtn @click="addNewRequest" class="utility-btn" outline="black">+ NEW REQUEST</MDBBtn>
         <SearchComponent class="search" @search="handleSearch" />
+        <TableComponent :rows="productRows" :columns="productColumns" :searchTerm="searchTerm" />
       </template>
       <template v-else>
         <template v-if="newArrival">
@@ -37,7 +38,6 @@
         </template>
       </template>
     </MDBRow>
-    <TableComponent :rows="productRows" :columns="productColumns" :searchTerm="searchTerm" />
   </MDBContainer>
 </template>
 
@@ -50,7 +50,6 @@ import ModalComponent from "@/components/Elements/ModalComponent.vue";
 import {useRoute} from "vue-router";
 import {useStorehousesStore} from "@/stores/storehouse.store";
 import StockUpdateDto from "@/api/modules/stock/dto/stock-update.dto";
-import LoggerUtil from "@/utils/logger/logger.util";
 import { useToast } from "primevue/usetoast";
 import SelectComponent from "@/components/Elements/SelectComponent.vue";
 import {useProductsStore} from "@/stores/products.store";
