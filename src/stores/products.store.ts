@@ -95,7 +95,6 @@ export const useProductsStore = defineStore({
             el.amountInBox = productUpdateDto.amountInBox
             el.expirationDate = productUpdateDto.expirationDate
             el.link = productUpdateDto.link
-
           return el
         })
       const saveResult = await productModel.update(productId, productUpdateDto)
