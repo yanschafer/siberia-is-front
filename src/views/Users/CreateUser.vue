@@ -3,16 +3,16 @@
     <MDBRow>
       <MDBCol class="d-flex flex-column col-4 gap-2">
         <h4 class="storehouse-heading">User name</h4>
-        <InputText :placeholder="namePlaceholder" class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newStorehouseName" />
+        <InputText :placeholder="namePlaceholder" class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newName" />
         <h4 class="storehouse-heading">Login</h4>
-        <InputText :placeholder="loginPlaceholder" class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newStorehouseAdress" />
+        <InputText :placeholder="loginPlaceholder" class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newLogin" />
 
       </MDBCol>
       <MDBCol class="d-flex flex-column col-4 gap-2">
         <h4 class="storehouse-heading">Password</h4>
-        <InputText :placeholder="passwordPlaceholder" class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newStorehouseAdress" />
+        <InputText :placeholder="passwordPlaceholder" class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newPassword" />
         <h4 class="storehouse-heading">Confirm password</h4>
-        <InputText :placeholder="passwordTwicePlaceholder" class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newStorehouseAdress" />
+        <InputText :placeholder="passwordTwicePlaceholder" class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newPasswordRepeat" />
       </MDBCol>
     </MDBRow>
     <MDBCol class="d-flex justify-content-start">
