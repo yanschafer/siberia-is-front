@@ -19,22 +19,62 @@
       <MDBBtn @click="cancelCreation" class="utility-btn" outline="black">CANCEL</MDBBtn>
       <MDBBtn @click="saveCreation" class="utility-btn btn-black">CREATE USER</MDBBtn>
     </MDBCol>
+    <MDBContainer>
+      <TabsComponent :roles="roles" />
+    </MDBContainer>
   </MDBContainer>
 </template>
 <script lang="ts">
 import {MDBBtn, MDBRow, MDBCol, MDBContainer, MDBInput} from "mdb-vue-ui-kit";
 import {IconMapPinFilled} from "@tabler/icons-vue";
 import InputText from "primevue/inputtext";
+import TabsComponent from "@/components/Elements/TabsComponent.vue";
+import {ref} from "vue";
 
 export default {
   name: "CreateUser",
-  components: {MDBInput, MDBRow, IconMapPinFilled, MDBContainer, MDBCol, MDBBtn, InputText},
+  components: {TabsComponent, MDBInput, MDBRow, IconMapPinFilled, MDBContainer, MDBCol, MDBBtn, InputText},
   data: () => ({
     namePlaceholder: "Enter a real user's name",
     loginPlaceholder: 'Create user login',
     passwordPlaceholder: "Create password",
     passwordTwicePlaceholder: "Confirm password",
   }),
+  methods: {
+    createRoles() {
+      return [
+        {
+          id: 'role1',
+          name: 'Role 1',
+          categories: [
+            { name: 'Accounting', key: 'A', selected: false },
+            { name: 'Marketing', key: 'M', selected: true },
+          ]
+        },
+        {
+          id: 'role2',
+          name: 'Hueta',
+          categories: [
+            { name: 'Accounting', key: 'A', selected: false },
+            { name: 'Marketing', key: 'M', selected: true },
+          ]
+        },
+        {
+          id: 'role3',
+          name: 'Zalupa',
+          categories: [
+            { name: 'Zalu2', key: '2', selected: false },
+            { name: 'Marketing', key: '3', selected: true },
+          ]
+        },
+      ];
+    },
+  },
+  computed: {
+    roles() {
+      return this.createRoles();
+    },
+  }
 }
 </script>
 <style scoped>

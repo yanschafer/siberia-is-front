@@ -1,71 +1,60 @@
 <template>
-  <MDBTabs v-model="tabs" vertical>
-    <MDBTabNav pills tabsClasses="mb-3 text-center">
-      <MDBTabItem v-for="tabId in Object.keys(tabContent)" :key="tabId" class="tab-item" :wrap="false" :tabId="tabId" :href="tabId">
-        {{ tabId }}
-      </MDBTabItem>
+  <MDBTabs v-model="activeTabId4" vertical>
+    <!-- Tabs navs -->
+    <MDBTabNav tabsClasses="mb-3 text-center">
+      <MDBTabItem :wrap="false" tabId="ex4-1" href="ex4-1">Role 1</MDBTabItem>
+      <MDBTabItem :wrap="false" tabId="ex4-2" href="ex4-2">Role 2</MDBTabItem>
+      <MDBTabItem :wrap="false" tabId="ex4-3" href="ex4-3">Role 3</MDBTabItem>
     </MDBTabNav>
-
     <MDBTabContent>
-      <MDBTabPane>
-        <CheckboxGroup />
-        <MDBCheckbox label="Permission 1" v-model="checkbox1" />
-        <MDBCheckbox label="Permission 1" v-model="checkbox2" />
-        <MDBCheckbox label="Permission 1" v-model="checkbox3" />
+      <MDBTabPane tabId="ex4-1">
+        <RolesComponent />
+      </MDBTabPane>
+      <MDBTabPane tabId="ex4-2">
+        <RolesComponent />
+      </MDBTabPane>
+      <MDBTabPane tabId="ex4-3">
+        <RolesComponent />
       </MDBTabPane>
     </MDBTabContent>
+    <!-- Tabs content -->
   </MDBTabs>
 </template>
 
 <script lang="ts">
-import { useTabsStore } from '@/stores/store';
-import {MDBTabContent, MDBAccordion, MDBAccordionItem, MDBCheckbox, MDBTabItem, MDBTabNav, MDBTabPane, MDBTabs} from "mdb-vue-ui-kit";
-import CheckboxGroup from "@/components/Inputs/CheckboxGroupComponent.vue";
-export default {
-  components: {
-    CheckboxGroup,
-    MDBTabContent, MDBCheckbox, MDBAccordion, MDBAccordionItem, MDBTabItem, MDBTabNav, MDBTabPane, MDBTabs},
-  name: "TabsComponent",
-  setup() {
-    const tabsStore = useTabsStore();
+import {MDBTabs, MDBTabNav, MDBTabItem, MDBTabContent, MDBTabPane} from "mdb-vue-ui-kit";
 
-    return {
-      tabs: tabsStore.activeTab,
-      tabContent: tabsStore.tabContent,
-    };
+import { defineComponent, ref } from 'vue';
+import  TabView from 'primevue/tabview';
+import TabPanel from "primevue/tabpanel";
+import Checkbox  from 'primevue/checkbox';
+import RolesComponent from "@/components/Elements/RolesComponent.vue";
+
+export default defineComponent({
+  components: {
+    RolesComponent,
+    TabView,
+    TabPanel,
+    Checkbox,
+    MDBTabs,
+    MDBTabNav,
+    MDBTabItem,
+    MDBTabContent,
+    MDBTabPane
   },
-}
+  setup() {
+    const categories = ref([
+      {name: "Accounting", key: "A"},
+      {name: "Marketing", key: "M"},
+      {name: "Production", key: "P"},
+      {name: "Research", key: "R"}
+    ]);
+    const selectedCategories = ref(['Marketing']);
+    return { categories, selectedCategories };
+  }
+});
 </script>
-<style>
-.nav-pills .nav-link.active {
-  color: white;
-  background-color: #121212;
-}
-.form-check-input[type=checkbox]:checked {
-  background-color: #121212!important;
-}
-.form-check-input:checked:focus {
-  background-color: #121212!important;
-}
-.form-check-input:checked:focus {
-  border-color: black!important;
-}
-.form-check-input:checked {
-  border-color: black!important;
-}
-.accordion-borderless .accordion-item .accordion-button:not(.collapsed) {
-  background-color: transparent;
-  color: black;
-}
-.accordion-button {
-  width: auto;
-  gap: 1rem;
-  padding: 0.3rem!important;
-}
-.accordion-button::after {
-  filter: brightness(0) saturate(100%)
-}
-* {
-  --mdb-accordion-active-color: #000!important;
-}
+
+<style scoped>
+/* Здесь вы можете добавить стили для вашего компонента */
 </style>

@@ -35,7 +35,7 @@
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="pt-4">
-<!--    <TabsComponent :userTabs="getUserTabs(selectedUser)" />-->
+    <TabsComponent :roles="roles" />
   </MDBContainer>
 </template>
 
@@ -105,9 +105,40 @@ export default {
     },
     userRolesNameList() {
       return this.selectedUser.roles.map(el => el.name)
-    }
+    },
+    roles() {
+      return this.createRoles();
+    },
   },
   methods: {
+    createRoles() {
+      return [
+        {
+          id: 'role1',
+          name: 'Role 1',
+          categories: [
+            { name: 'Accounting', key: 'A', selected: false },
+            { name: 'Marketing', key: 'M', selected: true },
+          ]
+        },
+        {
+          id: 'role2',
+          name: 'Hueta',
+          categories: [
+            { name: 'Accounting', key: 'A', selected: false },
+            { name: 'Marketing', key: 'M', selected: true },
+          ]
+        },
+        {
+          id: 'role3',
+          name: 'Zalupa',
+          categories: [
+            { name: 'Zalu2', key: '2', selected: false },
+            { name: 'Marketing', key: '3', selected: true },
+          ]
+        },
+      ];
+    },
     startEditing() {
       this.editing = true;
       this.originalUserName = this.userName;
@@ -122,12 +153,12 @@ export default {
       const newLogin = (this.newUserUsername == this.originalUserUsername) ? null : this.newUserUsername
       const newPassword = (this.newUserPassword == "") ? null : this.newUserPassword
       const userUpdateDto = new UpdateUserDto(
-        newName, newLogin, newPassword
+          newName, newLogin, newPassword
       );
       const result = await this.userStore.updateUser(this.id, userUpdateDto)
       this.editing = !result.success
       //TODO: Check for errors
-      
+
     },
     cancelEditing() {
       this.editing = false;
