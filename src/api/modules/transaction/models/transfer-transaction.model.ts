@@ -6,7 +6,7 @@ import {appConf} from "@/api/conf/app.conf";
 
 export default class TransferTransactionModel extends TransactionModel {
   constructor() {
-    super("transfer");
+    super("/transfer");
   }
 
   override async approve(transactionId: number): Promise<ApiResponseDto<TransactionSimpleDto>> {

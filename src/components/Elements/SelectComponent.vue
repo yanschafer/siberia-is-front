@@ -1,5 +1,5 @@
 <template>
-  <Dropdown v-model="selectedItem" :options="items" filter optionLabel="name" placeholder="Select an item" class="w-full md:w-14rem">
+  <Dropdown v-model="selectedItem" @change="handleChange" :options="items" filter optionLabel="name" placeholder="Select an item" class="w-full md:w-14rem">
     <template #value="slotProps">
       <div v-if="slotProps.value" class="flex align-items-center">
         <div>{{ slotProps.value[labelField] }}</div>
@@ -19,6 +19,7 @@
 <script lang="ts">
 import Dropdown from "primevue/dropdown";
 import { ref } from 'vue';
+import LoggerUtil from "@/utils/logger/logger.util";
 export default {
   name: 'SelectComponent',
   components: {
@@ -40,6 +41,7 @@ export default {
   setup(props, { emit }) {
     const selectedItem = ref(props.modelValue);
     const handleChange = (event) => {
+      LoggerUtil.debug(event)
       selectedItem.value = event.value;
       emit('update:modelValue', event.value);
     };

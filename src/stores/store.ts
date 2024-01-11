@@ -1,55 +1,5 @@
 import { defineStore } from 'pinia';
 
-export const useOperationsStore = defineStore({
-    id: 'operations',
-    state: () => ({
-        searchTerm: '',
-        operationsRows: [
-            { id: 1, operation: 'Transfer', from: 'Storehouse 1', to: 'Storehouse 2', status: 'Completed' },
-            { id: 2, operation: 'Transfer', from: 'Storehouse 1', to: 'Storehouse 2', status: 'Waiting for aprove' },
-            { id: 3, operation: 'New order', from: '', to: 'Storehouse 2', status: 'Waiting for aprove' },
-        ],
-        operationsColumns: [
-            { field: 'operation', header: 'OPERATION' },
-            { field: 'from', header: 'FROM' },
-            { field: 'to', header: 'TO' },
-            { field: 'status', header: 'STATUS' },
-        ],
-        operationsData: [
-            { id: 1, operation: 'Transfer', from: 'Storehouse 1', to: 'Storehouse 2', status: 'Completed' },
-            { id: 2, operation: 'Transfer', from: 'Storehouse 1', to: 'Storehouse 2', status: 'Waiting for aprove' },
-            { id: 3, operation: 'New order', from: '', to: 'Storehouse 2', status: 'Waiting for aprove' },
-        ],
-    }),
-    getters: {
-        getSearchTerm: (state) => state.searchTerm,
-    },
-
-    actions: {
-        getFilteredOperations(searchTerm: string) {
-            const filteredOperations = this.operationsRows.filter((row) =>
-                Object.values(row).some((value) =>
-                    String(value).toLowerCase().includes(searchTerm.toLowerCase())
-                )
-            );
-            if (filteredOperations.length > 0) {
-                this.operationsRows = filteredOperations; // Обновляем значения в хранилище только если есть результаты
-            }
-            return filteredOperations;
-        },
-        loadOperationsData() {
-            const searchTerm = this.getSearchTerm;
-            const filteredOperations = this.operationsRows.filter((row) =>
-                Object.values(row).some((value) =>
-                    String(value).toLowerCase().includes(searchTerm.toLowerCase())
-                )
-            );
-            this.operationsRows = filteredOperations;
-            return filteredOperations;
-        },
-    },
-});
-
 export const useNotificationsStore = defineStore('notifications', {
     state: () => ({
         errorNotification: {
