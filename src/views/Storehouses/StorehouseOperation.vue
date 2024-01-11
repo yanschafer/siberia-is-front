@@ -2,7 +2,7 @@
   <h5>{{ title }}</h5>
   <MDBRow class="d-flex flex-row flex-nowrap">
     <MDBCol class="col-auto">
-      <SelectComponent :items="productList" v-model="selectedProduct" />
+      <SelectComponent :placeholder="placeholder" :items="productList" v-model="selectedProduct" />
     </MDBCol>
     <MDBCol class="col-auto">
       <MDBInput class="input-wrapper animate__animated animate__fadeIn username-input" type="text" placeholder="Quantity" v-model="quantity" />
@@ -20,7 +20,6 @@
   </MDBRow>
   <TableComponent :rows="addedList" :columns="addedColumns" :searchTerm="addedSearchTerm" />
 </template>
-
 <script lang="ts">
 import {MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow} from "mdb-vue-ui-kit";
 import SelectComponent from "@/components/Elements/SelectComponent.vue";
@@ -54,6 +53,7 @@ export default {
     price: null,
     addedSearchTerm: "",
     addedList: [],
+    placeholder: "Select a product",
     addedColumns: [
       { field: 'name', header: 'NAME' },
       { field: 'sku', header: 'SKU' },

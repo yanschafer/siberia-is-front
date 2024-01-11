@@ -1,18 +1,5 @@
 <template>
-  <Dropdown v-model="selectedItem" @change="handleChange" :options="items" filter optionLabel="name" placeholder="Select an item" class="w-full md:w-14rem">
-    <template #value="slotProps">
-      <div v-if="slotProps.value" class="flex align-items-center">
-        <div>{{ slotProps.value[labelField] }}</div>
-      </div>
-      <span v-else>
-            {{ slotProps.placeholder }}
-        </span>
-    </template>
-    <template #option="slotProps">
-      <div class="flex align-items-center">
-        <div>{{ slotProps.option[labelField] }}</div>
-      </div>
-    </template>
+  <Dropdown v-model="selectedItem" @change="handleChange" :options="items" filter optionLabel="name" :placeholder="placeholder" class="w-full md:w-14rem">
   </Dropdown>
 </template>
 
@@ -37,6 +24,9 @@ export default {
     modelValue: {
       required: true,
     },
+    placeholder: {
+      type: String,
+    }
   },
   setup(props, { emit }) {
     const selectedItem = ref(props.modelValue);

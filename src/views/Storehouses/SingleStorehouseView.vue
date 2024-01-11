@@ -1,5 +1,5 @@
 <template>
-  <Toast position="center" group="tl" />
+  <Toast />
   <ModalComponent v-if="showModal" @closeModal="closeModal" />
   <MDBContainer class="storehouse-info d-flex flex-column gap-3">
     <h1 v-if="!editing" class="storehouse-heading">{{ storehouseName }}</h1>
@@ -56,6 +56,8 @@ import SelectComponent from "@/components/Elements/SelectComponent.vue";
 import {useProductsStore} from "@/stores/products.store";
 import StorehouseOperation from "@/views/Storehouses/StorehouseOperation.vue";
 import ProductListItemDto from "@/api/modules/product/dto/product-list-item.dto";
+import Toast from "primevue/toast";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "SingleStorehouseView",
@@ -65,6 +67,7 @@ export default {
     MDBCol,
     MDBInput, SearchComponent, TableComponent, IconRoute, IconMapPinFilled, MDBBtn, MDBContainer, MDBRow,
     ModalComponent,
+    Toast
   },
   props: {
     id: {
@@ -88,14 +91,11 @@ export default {
       { field: 'vendorCode', header: 'SKU' },
       { field: 'quantity', header: 'QUANTITY' },
       { field: 'price', header: 'PRICE' },
-    ]
+    ],
+    error: '',
   }),
   async setup() {
     const productStore = useProductsStore();
-    const toast = useToast();
-    const showSuccess = () => {
-      toast.add({ severity: 'success', summary: 'Success Message', detail: 'Message Content', life: 3000 });
-    };
 
     // await productStore.loadProductList()
     const storehouseStore = useStorehousesStore();
@@ -106,9 +106,7 @@ export default {
     await storehouseStore.loadSelectedStoreHouse(parseInt(route.params.id.toString()));
 
     return {
-      toast,
       storehouseStore,
-      showSuccess,
       productStore,
     };
   },
@@ -134,6 +132,28 @@ export default {
     }
   },
   methods: {
+    showSuccessToast() {
+      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Changes were saved', life: 3000 });
+    },
+    async showErrorToast() {
+      const errorMessage = await PrintUtil.localize("wrong_data_type", "storehousesSave");
+      const errorDetail = `Something went wrong, provide this error code to administrator.
+    <p style="font-weight: 600; text-decoration: underline; cursor: pointer;">${errorMessage}</p>`;
+      this.$toast.add({ severity: 'error', summary: 'Error occurred', detail: errorDetail, life: 10000 });
+
+      this.$nextTick(() => {
+        const toastElement = document.querySelector('.p-toast-detail');
+        if (toastElement) {
+          toastElement.innerHTML = errorDetail;
+
+          const errorMessageElement = toastElement.querySelector('p');
+          errorMessageElement.addEventListener('click', () => {
+            navigator.clipboard.writeText(errorMessage);
+            this.$toast.add({ severity: 'success', summary: 'Error message copied to clipboard', life: 2000 });
+          });
+        }
+      });
+    },
     addNewArrival() {
       this.newArrival = true;
       this.newSale = false;
@@ -197,12 +217,15 @@ export default {
       const result = await this.storehouseStore.updateStorehouse(this.id, new StockUpdateDto(
           this.newStorehouseName, this.newStorehouseAdress
       ));
-      this.showSuccess();
-      this.editing = !result.success;
-      //TODO: Check for errors
+      if (result && result.success) {
+        this.showSuccessToast();
+        this.editing = !result.success;
+      } else {
+        this.showErrorToast();
+        this.error = await PrintUtil.localize("wrong_data_type", "storehousesSave");
+      }
     },
     cancelEditing() {
-      this.showToast()
       this.editing = false;
     },
   }
@@ -253,5 +276,8 @@ export default {
 :deep(.p-toast) {
   position: relative;
   z-index: 99999999999999999999999999999999999!important;
+}
+.error-message {
+  font-weight: 800!important;
 }
 </style>

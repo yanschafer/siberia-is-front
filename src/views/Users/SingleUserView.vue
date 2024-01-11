@@ -4,7 +4,7 @@
       <MDBRow class="w-auto">
         <MDBCol class="col-auto">
           <h1 v-if="!editing" class="username-heading">{{ userName }}</h1>
-          <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newUserName" />
+          <InputText v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newUserName" />
         </MDBCol>
         <MDBCol class="align-self-center">
           <MDBRow class="d-flex flex-row flex-nowrap align-self-center">
@@ -26,12 +26,12 @@
     <MDBRow class="d-flex flex-nowrap w-100">
       <span class="user-roles-heading">USERNAME</span>
       <span v-if="!editing" class="username">{{ userUsername }}</span>
-      <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newUserUsername" />
+      <InputText v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newUserUsername" />
     </MDBRow>
     <MDBRow class="d-flex flex-nowrap w-100">
       <span class="user-roles-heading">PASSWORD</span>
       <span v-if="!editing" class="password">{{ userPassword }}</span>
-      <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newUserPassword" />
+      <InputText v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newUserPassword" />
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="pt-4">
@@ -58,10 +58,12 @@ import UserFullDto from "@/api/modules/user/dto/user-full.dto";
 import {useRoute} from "vue-router";
 import UpdateUserDto from "@/api/modules/user/dto/update-user.dto";
 import {useUsersStore} from "@/stores/user.store";
+import InputText from "primevue/inputtext";
 export default {
   name: "SingleUserView",
   components: {
     MDBInput,
+    InputText,
     TabsComponent, MDBBtn,MDBContainer, MDBRow, MDBCol, MDBBadge, MDBTabs, MDBTabNav, MDBTabContent, MDBTabItem, MDBTabPane
   },
   data: () => ({
