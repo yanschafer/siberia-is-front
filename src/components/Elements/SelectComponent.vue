@@ -51,5 +51,7 @@ export default {
 }
 </script>
 <style scoped>
-
+/deep/ .p-dropdown-filter .p-inputtext {
+  padding: 0 !important;
+}
 </style>

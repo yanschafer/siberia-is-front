@@ -7,7 +7,7 @@
           <MDBInput
               class="form-control custom-input"
               type="text"
-              label="Email address"
+              label="Login"
               id="loginEmail"
               v-model="username"
               wrapperClass="input mb-4"

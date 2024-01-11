@@ -7,7 +7,7 @@
       editMode="row"
       :value="paginatedRows"
       :paginator="true"
-      :rows="7"
+      :rows="6"
       :currentPage="currentPage - 1"
       selectionMode="single"
       @onPage="changePage"

@@ -1,6 +1,10 @@
 import {defineStore} from "pinia";
 import ProductModel from "@/api/modules/product/models/product.model";
 import ProductSearchFilterDto from "@/api/modules/product/dto/product-search-filter.dto";
+import ProductUpdateDto from "@/api/modules/product/dto/product-update.dto";
+import ApiResponseDto from "@/api/dto/api-response.dto";
+import ProductDto from "@/api/modules/product/dto/product.dto";
+
 
 export const useProductsStore = defineStore({
   id: 'products',
@@ -66,6 +70,39 @@ export const useProductsStore = defineStore({
       if (product.success) {
         this.selectedProduct = product.getData()
       }
+    },
+    async updateProduct(productId: number, productUpdateDto: ProductUpdateDto): ApiResponseDto<ProductDto> {
+      const productModel = new ProductModel()
+      if (productUpdateDto.name != null)
+        this.productRows = this.productRows.map(el => {
+          if (el.id == productId)
+            el.photo = productUpdateDto.photoBase64
+            el.photoName = productUpdateDto.photoName
+            el.vendorCode = productUpdateDto.vendorCode
+            el.barcode = productUpdateDto.barcode
+            el.brand = productUpdateDto.brand
+            el.name = productUpdateDto.name
+            el.description = productUpdateDto.description
+            el.purchasePrice = productUpdateDto.purchasePrice
+            el.cost = productUpdateDto.cost
+            el.lastPurchaseDate = productUpdateDto.lastPurchaseDate
+            el.distributorPrice = productUpdateDto.distributorPrice
+            el.professionalPrice = productUpdateDto.professionalPrice
+            el.commonPrice = productUpdateDto.commonPrice
+            el.category = productUpdateDto.category
+            el.collection = productUpdateDto.collection
+            el.color = productUpdateDto.color
+            el.amountInBox = productUpdateDto.amountInBox
+            el.expirationDate = productUpdateDto.expirationDate
+            el.link = productUpdateDto.link
+
+          return el
+        })
+      const saveResult = await productModel.update(productId, productUpdateDto)
+      if (saveResult.success) {
+        this.selectedProduct = Object.assign(this.selectedProduct, saveResult.getData())
+      }
+      return saveResult
     }
   },
 });

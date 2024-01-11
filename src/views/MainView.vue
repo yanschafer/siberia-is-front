@@ -30,14 +30,14 @@ export default {
   data() {
     return {
       sidebarItems: [
-        // { name: 'Dashboard',
-        //   icon: 'IconLock',
-        //   iconColor: '#E5E5E5',
-        //   iconSize: 32,
-        //   strokeWidth: 1,
-        //   disabled: true,
-        //   active: false,
-        // },
+        { name: 'Dashboard',
+          icon: 'IconLock',
+          iconColor: '#E5E5E5',
+          iconSize: 32,
+          strokeWidth: 1,
+          disabled: false,
+          active: false,
+        },
         { name: 'Products',
           icon: 'IconPackages',
           iconColor: '#B8B8B8',

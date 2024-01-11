@@ -5,9 +5,10 @@
         <MDBCol v-if="!editing" class="col-auto">
           <img class="product-img" :src="imageSource" :alt="productName">
         </MDBCol>
-        <MDBCol v-else class="col-auto">
+        <MDBCol v-else class="col-auto animate__animated animate__flipInX animate__faster">
           <div class="product-img">
-            <FileUploadComponent />
+<!--            <FileUploadComponent />-->
+            <FileUpload mode="basic" name="demo[]" url="/api/upload" accept="image/*" customUpload @uploader="customBase64Uploader" />
           </div>
         </MDBCol>
         <MDBCol class="d-flex flex-column justify-content-center">
@@ -15,27 +16,31 @@
             <MDBCol v-if="!editing">
               <h1 class="product-heading">{{ productName }}</h1>
             </MDBCol>
-            <MDBCol class="d-flex gap-1 align-items-center mb-3" v-else>
+            <MDBCol class="d-flex gap-1 align-items-center mb-3 animate__animated animate__flipInX animate__faster" v-else>
               <h5 class="field-heading">PRODUCT NAME</h5>
               <MDBInput id="product-name-input" class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newProductName" />
             </MDBCol>
-            <MDBCol class="d-flex flex-column justify-content-start">
+            <MDBCol v-if="!editing" class="d-flex flex-column justify-content-start">
               <MDBBtn @click="startEditing" class="utility-btn" outline="black">EDIT</MDBBtn>
+            </MDBCol>
+            <MDBCol class="animate__animated animate__flipInX animate__faster" v-else>
+              <MDBBtn @click="cancelEditing" class="utility-btn" outline="black">CANCEL</MDBBtn>
+              <MDBBtn @click="saveChanges" class="utility-btn" outline="black">SAVE</MDBBtn>
             </MDBCol>
           </MDBRow>
           <MDBRow>
             <MDBCol class="d-flex flex-column gap-3 col-auto">
-              <h5 class="field-heading d-flex gap-1 align-items-center">SKU <span v-if="!editing" class="field-value copy-on">{{ sku }}</span><MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newSku" /></h5>
+              <h5 class="field-heading d-flex gap-1 align-items-center">SKU <span v-if="!editing" class="field-value copy-on">{{ sku }}</span><MDBInput v-else class="animate__animated animate__flipInX animate__faster input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newSku" /></h5>
 <!--              <img class="sku-img" :src="barcodeImage" alt="Barcode">-->
               <h5 v-if="!editing" class="field-heading">BRAND <span class="field-value copy-on">{{ brand }}</span></h5>
-              <SelectComponent v-else :items="brandList" />
+              <SelectComponent class="animate__animated animate__flipInX animate__faster" v-else :items="brandList" />
               <h5 class="field-heading d-flex gap-1 align-items-center">LINK <a v-if="!editing" target="_blank" :href="link" class="field-value copy-on">OPEN IN NEW WINDOW</a>
-                <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newLink" />
+                <MDBInput v-else class="input-wrapper animate__animated animate__flipInX animate__faster username-input" type="text" v-model="newLink" />
               </h5>
             </MDBCol>
             <MDBCol class="d-flex flex-column gap-3">
               <h5 class="field-heading d-flex gap-1 align-items-center">QUANTITY <span v-if="!editing" class="field-value">{{ quantity }}</span>
-                <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newQuantity" />
+                <MDBInput v-else class="input-wrapper animate__animated animate__flipInX animate__faster username-input" type="text" v-model="newQuantity" />
               </h5>
               <h5 class="field-heading d-flex gap-1 align-items-center">LAST TIME ORDERED <span class="field-value">{{ lastTimeOrdered }}</span>
               </h5>
@@ -50,30 +55,40 @@
     </MDBContainer>
     <MDBContainer class="description-section" fluid>
       <h5 v-if="!editing" class="field-heading">{{ category }}</h5>
-      <TreeDropdownComponent v-else :nodes="categoriesList" />
-      <h1 class="product-heading d-flex gap-1 align-items-center">Product description <span class="field-heading collection-name">{{ collectionName }}</span> <span class="field-heading separator">|</span> <span v-if="!editing" class="field-heading color-name">{{ color }}</span> <h5 v-else class="field-heading d-flex gap-1 align-items-center mb-0">NEW COLOR NAME <MDBInput class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newColor" /></h5></h1>
+      <TreeDropdownComponent v-else class="animate__animated animate__flipInX animate__faster" :nodes="categoriesList" />
+      <h1 class="product-heading d-flex gap-1 align-items-center">Product description <span v-if="!editing" class="field-heading collection-name">{{ collectionName }}</span>
+        <SelectComponent class="animate__animated animate__flipInX animate__faster" v-else :items="brandList" />
+        <span class="field-heading separator">|</span> <span v-if="!editing" class="field-heading color-name">{{ color }}</span> <h5 v-else class="animate__animated animate__flipInX animate__faster field-heading d-flex gap-1 align-items-center mb-0">NEW COLOR NAME <MDBInput class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newColor" /></h5></h1>
       <p v-if="!editing" class="description">{{ productDescription }}</p>
-      <textarea v-else class="animate__animated animate__fadeIn username-input" id="description" type="textarea" v-model="newDescription" />
+      <textarea v-else class="animate__animated animate__flipInX animate__faster username-input" id="description" type="textarea" v-model="newDescription" />
     </MDBContainer>
     <MDBContainer class="footer-section" fluid>
       <MDBRow>
         <MDBCol>
 <!--          <h5 class="field-heading">VOLUME <span class="field-value">{{ volume }}</span></h5>-->
 <!--          <h5 class="field-heading">SIZE <span class="field-value">{{ size }}</span></h5>-->
-          <h5 class="field-heading">QUANTITY PER PACKAGE <span class="field-value">{{ quantityPerPackage }}</span></h5>
+          <h5 class="field-heading">QUANTITY PER PACKAGE <span v-if="!editing" class="field-value">{{ quantityPerPackage }}</span>
+            <MDBInput v-else class="input-wrapper animate__animated animate__flipInX animate__faster username-input" type="text" v-model="newQuantityPerPackage" />
+          </h5>
         </MDBCol>
         <MDBCol>
-          <h5 class="field-heading">DISTRIBUTION PRICE <span class="field-value">{{ distributionPrice }}</span></h5>
+          <h5 class="field-heading">DISTRIBUTION PRICE <span v-if="!editing" class="field-value">{{ distributionPrice }}</span>
+            <MDBInput v-else class="input-wrapper animate__animated animate__flipInX animate__faster username-input" type="text" v-model="newDistributionPrice" />
+          </h5>
 <!--          <h5 class="field-heading">WITHOUT VAT <span class="field-value">{{ distributionPriceWithoutVat }}</span></h5>-->
 <!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ distributionMarkup }}</span></h5>-->
         </MDBCol>
         <MDBCol>
-          <h5 class="field-heading">PROFESSIONAL PRICE <span class="field-value">{{ professionalPrice }}</span></h5>
+          <h5 class="field-heading">PROFESSIONAL PRICE <span v-if="!editing" class="field-value">{{ professionalPrice }}</span>
+            <MDBInput v-else class="input-wrapper animate__animated animate__flipInX animate__faster username-input" type="text" v-model="newProfessionalPrice" />
+          </h5>
 <!--          <h5 class="field-heading">WITHOUT VAT <span class="field-value">{{ professionalPriceWithoutVat }}</span></h5>-->
 <!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ professionalMarkup }}</span></h5>-->
         </MDBCol>
         <MDBCol>
-          <h5 class="field-heading">DEFAULT PRICE <span class="field-value">{{ defaultPrice }}</span></h5>
+          <h5 class="field-heading">DEFAULT PRICE <span v-if="!editing" class="field-value">{{ defaultPrice }}</span>
+            <MDBInput v-else class="input-wrapper animate__animated animate__flipInX animate__faster username-input" type="text" v-model="newDefaultPrice" />
+          </h5>
 <!--          <h5 class="field-heading">WITHOUT VAT <span class="field-value">{{ defaultPriceWithoutVat }}</span></h5>-->
 <!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ defaultMarkup }}</span></h5>-->
         </MDBCol>
@@ -82,6 +97,7 @@
   </div>
 </template>
 <script lang="ts">
+import FileUpload from "primevue/fileupload";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput } from "mdb-vue-ui-kit";
 import FileUploadComponent from "@/components/Inputs/FileUploadComponent.vue";
 import CascadeSelect from 'primevue/cascadeselect';
@@ -92,11 +108,12 @@ import { useBrandStore } from "@/stores/brand.store";
 import { useCategoriesStore } from "@/stores/categories.store";
 import SelectComponent from "@/components/Elements/SelectComponent.vue";
 import TreeDropdownComponent from "@/components/Elements/TreeDropdownComponent.vue";
+import ProductUpdateDto from "@/api/modules/product/dto/product-update.dto";
 
 
 export default {
   name: 'SingleProductView',
-  components: {TreeDropdownComponent, SelectComponent, CascadeSelect, MDBInput, FileUploadComponent, MDBContainer, MDBRow, MDBCol, MDBBtn },
+  components: {FileUpload, TreeDropdownComponent, SelectComponent, CascadeSelect, MDBInput, FileUploadComponent, MDBContainer, MDBRow, MDBCol, MDBBtn },
   props: {
     id: {
       type: Number,
@@ -124,13 +141,131 @@ export default {
   },
   data: () => ({
     editing: false,
+    originalImageSource: '',
+    newImageSource: '',
+    originalProductName: '',
+    newProductName: '',
+    originalSku: '',
+    newSku: '',
+    originalLink: '',
+    newLink: '',
+    originalQuantity: '',
+    newQuantity: '',
+    originalColor: '',
+    newColor: '',
+    originalProductDescription: '',
+    newDescription: '',
+    originalQuantityPerPackage: '',
+    newQuantityPerPackage: '',
+    originalDistributionPrice: '',
+    newDistributionPrice: '',
+    originalProfessionalPrice: '',
+    newProfessionalPrice: '',
+    originalDefaultPrice: '',
+    newDefaultPrice: '',
+    originalStatus: '',
+    newStatus: '',
+    originalBrand: '',
+    newBrand: '',
+    originalCategories: [],
+    newCategories: [],
+    originalLastTimeOrdered: '',
+    newLastTimeOrdered: '',
+    originalLastPriceOrdered: '',
+    newLastPriceOrdered: '',
+    originalCostPrice: '',
+    newCostPrice: '',
+
   }),
   methods: {
+    async uploadImage() {
+      return new Promise<string>((resolve) => {
+        const fileUploadRef = this.$refs.fileUpload;
+
+        if (fileUploadRef) {
+          const input = fileUploadRef.$el.querySelector('input[type="file"]');
+          const file = input?.files?.[0];
+
+          if (file) {
+            const reader = new FileReader();
+
+            reader.onloadend = function () {
+              const base64data = reader.result as string;
+              resolve(base64data.split(',')[1]); // Извлечение строки base64 из data URL
+            };
+
+            reader.readAsDataURL(file);
+          } else {
+            resolve('');
+          }
+        } else {
+          resolve('');
+        }
+      });
+    },
+    customBase64Uploader(event) {
+      const processFile = async () => {
+        const file = event.files[0];
+        const reader = new FileReader();
+        let blob = await fetch(file.objectURL).then((r) => r.blob());
+
+        reader.readAsDataURL(blob);
+
+        reader.onloadend = function () {
+          const base64data = reader.result;
+        };
+      };
+      processFile();
+    },
     startEditing() {
       this.editing = true;
-    }
+      this.originalImageSource = this.imageSource;
+      this.newImageSource = this.imageSource;
+      this.originalProductName = this.productName;
+      this.newProductName = this.productName;
+      this.originalSku = this.sku;
+      this.newSku = this.sku;
+      this.originalColor = this.color;
+      this.newColor = this.color;
+      this.originalLink = this.link;
+      this.newLink = this.link;
+      this.originalQuantity = this.quantity;
+      this.newQuantity = this.quantity;
+      this.originalProductDescription = this.productDescription;
+      this.newDescription = this.productDescription;
+      this.originalQuantityPerPackage = this.quantityPerPackage;
+      this.newQuantityPerPackage = this.quantityPerPackage;
+      this.originalDistributionPrice = this.distributionPrice;
+      this.newDistributionPrice = this.distributionPrice;
+      this.originalProfessionalPrice = this.professionalPrice;
+      this.newProfessionalPrice = this.professionalPrice;
+      this.originalDefaultPrice = this.defaultPrice;
+      this.newDefaultPrice = this.defaultPrice;
+    },
+    async saveChanges() {
+      const base64Image = await this.uploadImage();
+      const result = await this.productStore.updateProduct(this.id, new ProductUpdateDto (
+          base64Image,
+          this.newImageSource,
+          this.newColor,
+          this.newProductName,
+          this.newSku,
+          this.newLink,
+          this.newQuantity,
+          this.newDescription,
+          this.newQuantityPerPackage,
+          this.newDistributionPrice,
+          this.newProfessionalPrice,
+          this.newDefaultPrice
+      ));
+      this.editing = !result.success
+      //TODO: Check for errors
+    },
   },
   computed: {
+    async base64Image() {
+      return await this.uploadImage();
+    },
     categoriesList() {
       return this.categoriesStore.getCategoriesList()
     },
@@ -218,10 +353,6 @@ export default {
     defaultMarkup() {
       return this.selectedProduct.defaultMarkup || '';
     }
-  },
-  mounted() {
-    console.log('Props in SingleProductView:', this.$props);
-    console.log('Product ID:', this.id);
   },
 }
 </script>
@@ -321,5 +452,21 @@ export default {
 :deep(#product-name-input) {
   width: 100%;
   max-width: 50vw!important;
+}
+:deep(.p-dropdown-label) {
+  padding-right: 0.1rem;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+  width: 100%;
+  max-width: fit-content;
+}
+:deep(.p-dropdown) {
+  width: 100%;
+  max-width: fit-content;
+}
+:deep(.p-dropdown-filter) {
+  padding-right: 0.1rem;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
 }
 </style>

@@ -1,4 +1,5 @@
 <template>
+  <Toast position="center" group="tl" />
   <ModalComponent v-if="showModal" @closeModal="closeModal" />
   <MDBContainer class="storehouse-info d-flex flex-column gap-3">
     <h1 v-if="!editing" class="storehouse-heading">{{ storehouseName }}</h1>
@@ -37,14 +38,14 @@ import {useRoute} from "vue-router";
 import {useStorehousesStore} from "@/stores/storehouse.store";
 import StockUpdateDto from "@/api/modules/stock/dto/stock-update.dto";
 import LoggerUtil from "@/utils/logger/logger.util";
-
+import { useToast } from "primevue/usetoast";
 
 export default {
   name: "SingleStorehouseView",
   components: {
     MDBCol,
     MDBInput, SearchComponent, TableComponent, IconRoute, IconMapPinFilled, MDBBtn, MDBContainer, MDBRow,
-    ModalComponent
+    ModalComponent,
   },
   props: {
     id: {
@@ -68,12 +69,21 @@ export default {
     ]
   }),
   async setup() {
-    const storehouseStore = useStorehousesStore()
-    const route = useRoute()
-    await storehouseStore.loadSelectedStoreHouse(parseInt(route.params.id.toString()))
+    const toast = useToast();
+    const showSuccess = () => {
+      toast.add({ severity: 'success', summary: 'Success Message', detail: 'Message Content', life: 3000 });
+    };
+
+    const storehouseStore = useStorehousesStore();
+    const route = useRoute();
+
+    await storehouseStore.loadSelectedStoreHouse(parseInt(route.params.id.toString()));
+
     return {
-      storehouseStore
-    }
+      toast,
+      storehouseStore,
+      showSuccess
+    };
   },
   computed: {
     selectedStorehouse() {
@@ -111,12 +121,14 @@ export default {
     async saveChanges() {
       this.editing = false;
       const result = await this.storehouseStore.updateStorehouse(this.id, new StockUpdateDto(
-        this.newStorehouseName, this.newStorehouseAdress
-      ))
-      this.editing = !result.success
+          this.newStorehouseName, this.newStorehouseAdress
+      ));
+      this.showSuccess();
+      this.editing = !result.success;
       //TODO: Check for errors
     },
     cancelEditing() {
+      this.showToast()
       this.editing = false;
     },
   }
@@ -162,5 +174,9 @@ export default {
   align-content: center;
   align-items: center;
   align-self: center;
+}
+:deep(.p-toast) {
+  position: relative;
+  z-index: 99999999999999999999999999999999999!important;
 }
 </style>
