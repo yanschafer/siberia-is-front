@@ -6,9 +6,8 @@
       v-model:editingRows="editingRows"
       editMode="row"
       :value="paginatedRows"
-      :paginator="true"
+      paginator
       :rows="6"
-      :currentPage="currentPage - 1"
       selectionMode="single"
       @onPage="changePage"
       @row-select="handleRowClick"
@@ -50,6 +49,7 @@ import Column from 'primevue/column';
 import Paginator from 'primevue/paginator';
 import InputNumber from "primevue/inputnumber";
 
+
 export default defineComponent({
   components: {
     DataTable,
@@ -76,9 +76,8 @@ export default defineComponent({
   computed: {
     paginatedRows() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
       const filteredData = this.filterDataBySearchTerm();
-      return filteredData ? filteredData.slice(start, end) : [];
+      return filteredData ? filteredData.slice(start) : [];
     },
   },
   methods: {
