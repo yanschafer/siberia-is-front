@@ -294,10 +294,15 @@ export default {
       return this.selectedProduct.quantity || '';
     },
     lastTimeOrdered() {
-      return this.selectedProduct.lastTimeOrdered || '';
+      const date =  new Date(parseInt(`${this.selectedProduct.lastPurchaseDate}000`)) || ''
+      if (date === "")
+        return date;
+      const month = date.getMonth() >= 9 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`
+      const day = date.getDate() >= 10 ? date.getDate() : `0${date.getDate()}`
+      return `${date.getFullYear()}-${month}-${day}`
     },
     lastPriceOrdered() {
-      return this.selectedProduct.lastPriceOrdered || '';
+      return this.selectedProduct.lastPurchasePrice || '';
     },
     costPrice() {
       return this.selectedProduct.costPrice || '';

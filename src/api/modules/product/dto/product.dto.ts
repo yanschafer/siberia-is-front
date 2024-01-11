@@ -11,7 +11,7 @@ export default class ProductDto {
     public brand: BrandDto | null,
     public name: string,
     public description: string,
-    public purchasePrice: number,
+    public lastPurchasePrice: number,
     public cost: number | null,
     public lastPurchaseDate: number | null,
     public distributorPrice: number,
