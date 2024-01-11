@@ -82,6 +82,12 @@ const routes = [
         ]
       },
       {
+        path: '/storehouses/new',
+        name: 'New storehouse',
+        component: () => import('@/views/Storehouses/CreateStorehouse.vue'),
+        props: true
+      },
+      {
         path: '/roles',
         name: 'roles',
         component: () => import('@/views/Roles/RolesView.vue'),
@@ -103,6 +109,12 @@ const routes = [
         ]
       },
       {
+        path: '/roles/new',
+        name: 'New role',
+        component: () => import('@/views/Roles/CreateRole.vue'),
+        props: true
+      },
+      {
         path: '/users',
         name: 'users',
         component: () => import('@/views/Users/UsersView.vue'),
@@ -121,6 +133,12 @@ const routes = [
             },
           },
         ]
+      },
+      {
+        path: '/users/new',
+        name: 'New user',
+        component: () => import('@/views/Users/CreateUser.vue'),
+        props: true
       },
       {
         path: '/history',
