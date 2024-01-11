@@ -2,7 +2,7 @@
   <div>
     <SidebarComponent :sidebarItems="sidebar" />
     <div class="header-area">
-      <HeaderComponent :title="pageTitle" :breadcrumbs="navBreadcrumbs" />
+      <HeaderComponent :show-add-button="showAddBtn" :title="pageTitle" :breadcrumbs="navBreadcrumbs" />
     </div>
     <div class="container-bg">
       <Suspense>
@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { useRouter } from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
 import SidebarComponent from "@/components/Navigation/SidebarComponent.vue";
 import HeaderComponent from "@/components/Navigation/HeaderComponent.vue";
 import TokenUtil from "@/utils/token.util";
@@ -81,11 +81,13 @@ export default {
       ],
       router: useRouter(),
       pageTitle: '',
+      showAddBtn: true,
     };
   },
   setup() {
     return {
       router: useRouter(),
+      route: useRoute()
     }
   },
   watch: {
@@ -101,6 +103,7 @@ export default {
       } else {
         this.pageTitle = 'Dashboard';
       }
+      this.showAddBtn = this.route.meta.showAddBtn
     },
     logout() {
       this.router.push('/');
