@@ -40,14 +40,18 @@ const routes = [
         name: 'products',
         component: () => import('@/views/Products/ProductsView.vue'),
         meta: {
-          ruleId: appConf.rules.productsManaging
+          ruleId: appConf.rules.productsManaging,
+          showAddBtn: true
         },
         children: [
           {
             path: '/product/:id',
             name: 'Product details',
             component: () => import('@/views/Products/SingleProductView.vue'),
-            props: true
+            props: true,
+            meta: {
+              showAddBtn: false
+            },
           },
         ]
       },
@@ -56,14 +60,18 @@ const routes = [
         name: 'storehouses',
         component: () => import('@/views/Storehouses/StorehousesView.vue'),
         meta: {
-          ruleId: appConf.rules.stockManaging
+          ruleId: appConf.rules.stockManaging,
+          showAddBtn: true
         },
         children: [
           {
             path: '/storehouse/:id',
             name: 'Storehouse',
             component: () => import('@/views/Storehouses/SingleStorehouseView.vue'),
-            props: true
+            props: true,
+            meta: {
+              showAddBtn: false
+            },
           }
         ]
       },
@@ -73,7 +81,8 @@ const routes = [
         component: () => import('@/views/Roles/RolesView.vue'),
         props: true,
         meta: {
-          ruleId: appConf.rules.rbacManaging
+          ruleId: appConf.rules.rbacManaging,
+          showAddBtn: true
         },
         children: [
           {
@@ -81,6 +90,9 @@ const routes = [
             name: 'Role',
             component: () => import('@/views/Roles/SingleRoleView.vue'),
             props: true,
+            meta: {
+              showAddBtn: false
+            },
           }
         ]
       },
@@ -89,14 +101,18 @@ const routes = [
         name: 'users',
         component: () => import('@/views/Users/UsersView.vue'),
         meta: {
-          ruleId: appConf.rules.userManaging
+          ruleId: appConf.rules.userManaging,
+          showAddBtn: true
         },
         children: [
           {
             path: '/user/:id',
             name: 'User',
             component: () => import('@/views/Users/SingleUserView.vue'),
-            props: true
+            props: true,
+            meta: {
+              showAddBtn: false
+            },
           },
         ]
       },
@@ -105,7 +121,8 @@ const routes = [
         name: 'History',
         component: () => import('@/views/History/HistoryView.vue'),
         meta: {
-          ruleId: appConf.rules.checkLogs
+          ruleId: appConf.rules.checkLogs,
+          showAddBtn: false
         },
         children: [
           {
@@ -113,6 +130,9 @@ const routes = [
             name: 'Single history',
             component: () => import('@/views/History/SingleHistoryView.vue'),
             props: true,
+            meta: {
+              showAddBtn: false
+            },
           }
         ]
       },
@@ -120,6 +140,9 @@ const routes = [
         path: '/operations',
         name: 'Operations',
         component: () => import('@/views/Operations/OperationsView.vue'),
+        meta: {
+          showAddBtn: false
+        },
         children: [
           {
             path: '/operations/:id',
