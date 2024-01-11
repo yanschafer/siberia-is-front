@@ -1,6 +1,5 @@
 <template>
   <MDBTabs v-model="activeTabId4" vertical>
-    <!-- Tabs navs -->
     <MDBTabNav tabsClasses="mb-3 text-center">
       <MDBTabItem :wrap="false" tabId="ex4-1" href="ex4-1">Role 1</MDBTabItem>
       <MDBTabItem :wrap="false" tabId="ex4-2" href="ex4-2">Role 2</MDBTabItem>
@@ -17,7 +16,6 @@
         <RolesComponent />
       </MDBTabPane>
     </MDBTabContent>
-    <!-- Tabs content -->
   </MDBTabs>
 </template>
 
