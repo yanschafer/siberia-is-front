@@ -154,7 +154,7 @@ import CascadeSelect from "primevue/cascadeselect";
 import FilesResolverUtil from "@/utils/files-resolver.util";
 import { useProductsStore } from "@/stores/products.store";
 import { useCollectionStore } from "@/stores/collection.store";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useBrandStore } from "@/stores/brand.store";
 import { useCategoriesStore } from "@/stores/categories.store";
 import SelectComponent from "@/components/Elements/SelectComponent.vue";
@@ -190,6 +190,7 @@ export default {
     const collectionStore = useCollectionStore();
     const categoriesStore = useCategoriesStore();
     const route = useRoute();
+    const router = useRouter();
 
     await brandStore.loadBrandsList();
     await collectionStore.loadCollectionList();
@@ -201,6 +202,7 @@ export default {
       brandStore,
       categoriesStore,
       collectionStore,
+      router,
     };
   },
   data: () => ({
@@ -257,9 +259,18 @@ export default {
       );
       const creationResult = await this.productStore.create(newProductData);
       //TODO: Check for errors
-      if (creationResult.success) LoggerUtil.debug("SUCCESS");
+      if (creationResult.success) {
+        this.router.push({
+          name: "Product details",
+          params: { id: creationResult.getData().id.toString() },
+        });
+      }
     },
-    cancel() {},
+    cancel() {
+      this.router.push({
+        name: "products",
+      });
+    },
   },
   computed: {
     categoriesList() {
