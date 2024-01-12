@@ -1,5 +1,5 @@
 <template>
-  <Dropdown v-model="selectedItem" @change="handleChange" :options="items" filter optionLabel="name" :placeholder="placeholder" class="w-full md:w-14rem">
+  <Dropdown v-model="selectedItem" @change="handleChange" :options="items" :filter="filter" optionLabel="name" :placeholder="placeholder" class="w-full md:w-14rem">
   </Dropdown>
 </template>
 
@@ -16,6 +16,9 @@ export default {
     items: {
       type: Array,
       required: true,
+    },
+    filter: {
+      type: Boolean,
     },
     labelField: {
       type: String,
