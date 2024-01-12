@@ -4,6 +4,7 @@ import ProductSearchFilterDto from "@/api/modules/product/dto/product-search-fil
 import ProductUpdateDto from "@/api/modules/product/dto/product-update.dto";
 import ApiResponseDto from "@/api/dto/api-response.dto";
 import ProductDto from "@/api/modules/product/dto/product.dto";
+import ProductInputDto from "@/api/modules/product/dto/product-input.dto";
 
 
 export const useProductsStore = defineStore({
@@ -14,6 +15,7 @@ export const useProductsStore = defineStore({
     productColumns: [
       { field: 'name', header: 'NAME' },
       { field: 'vendorCode', header: 'SKU' },
+      //Price field = Default price (commonPrice on backend)
       { field: 'price', header: 'PRICE' },
     ],
     selectedProduct: {}
@@ -38,23 +40,26 @@ export const useProductsStore = defineStore({
         this.selectedProduct = product.getData()
       }
     },
-    async updateProduct(productId: number, productUpdateDto: ProductUpdateDto): ApiResponseDto<ProductDto> {
+    async updateProduct(productId: number, productUpdateDto: any): ApiResponseDto<ProductDto> {
       const productModel = new ProductModel()
       const saveResult = await productModel.update(productId, productUpdateDto)
       if (saveResult.success) {
-        if (productUpdateDto.name != null)
-          this.productRows = this.productRows.map(el => {
-            if (el.id == productId)
-              el.vendorCode = productUpdateDto.vendorCode
-            el.name = productUpdateDto.name
-            el.distributorPrice = productUpdateDto.distributorPrice
-            el.professionalPrice = productUpdateDto.professionalPrice
-            el.commonPrice = productUpdateDto.commonPrice
-            return el
-          })
+        const updatedProduct = saveResult.getData()
+        this.productRows = this.productRows.map(el => {
+          if (el.id == productId) {
+            el.vendorCode = updatedProduct.vendorCode
+            el.name = updatedProduct.name
+            el.price = updatedProduct.commonPrice
+          }
+          return el
+        })
         this.selectedProduct = Object.assign(this.selectedProduct, saveResult.getData())
       }
       return saveResult
+    },
+    async create(productCreateDto: ProductInputDto) {
+      const productModel = new ProductModel()
+      return await productModel.create(productCreateDto)
     }
   },
 });

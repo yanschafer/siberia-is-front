@@ -56,6 +56,7 @@ import {IconCloudUpload, IconMapPinFilled} from '@tabler/icons-vue';
 export default {
   name: 'FileUploadComponent',
   components: {IconMapPinFilled, IconCloudUpload},
+  emits: ["changed"],
   data() {
     return {
       isDragging: false,
@@ -65,6 +66,7 @@ export default {
   methods: {
     onChange() {
       this.files = [...this.$refs.file.files];
+      this.$emit("changed", this.files)
     },
 
     generateThumbnail(file) {
