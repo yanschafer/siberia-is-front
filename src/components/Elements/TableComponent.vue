@@ -9,9 +9,7 @@
       :value="paginatedRows"
       :paginator="true"
       :rows="6"
-      :currentPage="currentPage - 1"
       selectionMode="single"
-      @onPage="changePage"
       @row-select="handleRowClick"
       :pt="{
                 table: { style: 'min-width: 50rem' },

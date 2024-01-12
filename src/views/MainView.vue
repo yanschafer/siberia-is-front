@@ -4,14 +4,14 @@
     <div class="header-area">
       <HeaderComponent :show-add-button="showAddBtn" :title="pageTitle" :breadcrumbs="navBreadcrumbs" />
     </div>
-    <div class="container-bg">
+    <MDBContainer class="container-bg">
       <Suspense>
         <router-view />
       </Suspense>
       <Suspense>
         <router-view v-if="shouldDisplayRolesView" />
       </Suspense>
-    </div>
+    </MDBContainer>
   </div>
 </template>
 
@@ -21,11 +21,13 @@ import SidebarComponent from "@/components/Navigation/SidebarComponent.vue";
 import HeaderComponent from "@/components/Navigation/HeaderComponent.vue";
 import TokenUtil from "@/utils/token.util";
 import {appConf} from "@/api/conf/app.conf";
+import {MDBContainer} from "mdb-vue-ui-kit";
 export default {
   name: 'DashboardView',
   components: {
     HeaderComponent,
-    SidebarComponent
+    SidebarComponent,
+    MDBContainer
   },
   data() {
     return {
@@ -135,10 +137,7 @@ export default {
 <style scoped>
 .container-bg {
   position: relative;
-  left: 10vw;
-  padding: 1rem;
-  width: 100%;
-  overflow: hidden;
+  margin-left: 10vw;
 }
 .content-area {
   width: 100%;
