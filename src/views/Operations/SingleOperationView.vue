@@ -12,7 +12,7 @@
       </MDBCol>
       <MDBCol class="col-auto">
         <span class="user-roles-heading">STOREHOUSE</span>
-        <SelectComponent :placeholder="storehousesPlaceholder" :filter="false" :items="storehousesList" />
+        <SelectComponent :placeholder="storehousesPlaceholder" :filter="true" :items="storehousesList" />
       </MDBCol>
 <!--      <span class="username">{{ status }} ⌵</span>-->
       <template v-if="selectedOperation.availableStatuses">
