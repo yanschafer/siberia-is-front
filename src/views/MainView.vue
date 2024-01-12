@@ -2,7 +2,7 @@
   <div>
     <SidebarComponent :sidebarItems="sidebar" />
     <div class="header-area">
-      <HeaderComponent :show-add-button="showAddBtn" :title="pageTitle" :breadcrumbs="navBreadcrumbs" />
+      <HeaderComponent :add-btn-route="addBtnRoute" :show-add-button="showAddBtn" :title="pageTitle" :breadcrumbs="navBreadcrumbs" />
     </div>
     <div class="container-bg">
       <Suspense>
@@ -81,7 +81,8 @@ export default {
       ],
       router: useRouter(),
       pageTitle: '',
-      showAddBtn: true,
+      showAddBtn: false,
+      addBtnRoute: ""
     };
   },
   setup() {
@@ -104,6 +105,7 @@ export default {
         this.pageTitle = 'Dashboard';
       }
       this.showAddBtn = this.route.meta.showAddBtn
+      this.addBtnRoute = this.route.meta.addBtnRoute
     },
     logout() {
       this.router.push('/');
