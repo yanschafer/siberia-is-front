@@ -41,7 +41,8 @@ const routes = [
         component: () => import('@/views/Products/ProductsView.vue'),
         meta: {
           ruleId: appConf.rules.productsManaging,
-          showAddBtn: true
+          showAddBtn: true,
+          addBtnRoute: "New product"
         },
         children: [
           {
@@ -67,7 +68,8 @@ const routes = [
         component: () => import('@/views/Storehouses/StorehousesView.vue'),
         meta: {
           ruleId: appConf.rules.stockManaging,
-          showAddBtn: true
+          showAddBtn: true,
+          addBtnRoute: "New storehouse"
         },
         children: [
           {
@@ -76,7 +78,7 @@ const routes = [
             component: () => import('@/views/Storehouses/SingleStorehouseView.vue'),
             props: true,
             meta: {
-              showAddBtn: false
+              showAddBtn: false,
             },
           }
         ]
@@ -94,7 +96,8 @@ const routes = [
         props: true,
         meta: {
           ruleId: appConf.rules.rbacManaging,
-          showAddBtn: true
+          showAddBtn: true,
+          addBtnRoute: "New role"
         },
         children: [
           {
@@ -120,7 +123,8 @@ const routes = [
         component: () => import('@/views/Users/UsersView.vue'),
         meta: {
           ruleId: appConf.rules.userManaging,
-          showAddBtn: true
+          showAddBtn: true,
+          addBtnRoute: "New user"
         },
         children: [
           {

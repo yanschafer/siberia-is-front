@@ -3,7 +3,7 @@
     <MDBContainer class="bg-container d-flex flex-row align-items-center gap-3" fluid>
       <MDBContainer class="d-flex gap-2 flex-row align-items-center">
         <h1 :key="title" class="animate__animated animate__fadeInUp heading">{{ title }}</h1>
-        <MDBBtn v-if="showAddButton" class="animate__animated animate__fadeInUp utility-btn" outline="black">{{ addButtonLabel }}</MDBBtn>
+        <MDBBtn @click="navigate" v-if="showAddButton" class="animate__animated animate__fadeInUp utility-btn" outline="black">{{ addButtonLabel }}</MDBBtn>
       </MDBContainer>
       <MDBContainer class="d-flex gap-4 flex-row align-items-center justify-content-end">
         <MDBTooltip v-if="hasAccessToHistory" v-model="tooltip1" tag="a" direction="left">
@@ -69,6 +69,7 @@ import { ref } from 'vue';
 import NotificationsComponent from "@/components/Elements/NotificationsComponent.vue";
 import TokenUtil from "@/utils/token.util";
 import {appConf} from "@/api/conf/app.conf";
+import {useRouter} from "vue-router";
 
 export default defineComponent({
   name: 'HeaderComponent',
@@ -77,7 +78,11 @@ export default defineComponent({
     title: String,
     showAddButton: {
       type: Boolean,
-      default: true,
+      default: false,
+    },
+    addBtnRoute: {
+      type: String,
+      default: ""
     },
     addButtonLabel: {
       type: String,
@@ -97,6 +102,9 @@ export default defineComponent({
     },
   },
   methods: {
+    navigate() {
+      this.router.push({ name: this.addBtnRoute || "" })
+    },
     handleClickHistory() {
       this.$router.push({ name: 'History' });
     },
@@ -114,11 +122,13 @@ export default defineComponent({
     const tooltip2 = ref(false);
     const tooltip3 = ref(false);
     const dropdown24 = ref(false);
+    const router = useRouter()
     return {
       tooltip1,
       tooltip2,
       tooltip3,
-      dropdown24
+      dropdown24,
+      router
     }
   }
 });
