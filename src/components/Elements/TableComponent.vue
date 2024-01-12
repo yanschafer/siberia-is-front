@@ -11,6 +11,7 @@
       :rows="6"
       selectionMode="single"
       @row-select="handleRowClick"
+      @row-edit-save="handleRowSave"
       :pt="{
                 table: { style: 'min-width: 50rem' },
                 column: {
@@ -29,7 +30,7 @@
         sortable
     >
       <template #editor="{ data, field }">
-        <InputNumber size="small" class="animate__animated animate__fadeIn number w-auto"  v-if="isEditable(column.field)" mode="currency" currency="USD" locale="en-US" v-model="data[field]" />
+        <InputNumber size="small" class="animate__animated animate__fadeIn number w-auto"  v-if="isEditable(column.field)" mode="currency" currency="EUR" locale="en-US" v-model="data[field]" />
         <div class="animate__animated animate__fadeIn" v-else>{{ data[field] }}</div>
       </template>
     </Column>
@@ -48,6 +49,7 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Paginator from 'primevue/paginator';
 import InputNumber from "primevue/inputnumber";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export default defineComponent({
   components: {
@@ -64,7 +66,7 @@ export default defineComponent({
     showEditColumn: Boolean,
     editableColumns: Array,
   },
-  emits: ["rowClick"],
+  emits: ["rowClick", "rowEditSave"],
   data() {
     return {
       currentPage: 1,
@@ -89,6 +91,9 @@ export default defineComponent({
         const selectedRow = event.data;
         this.$emit('rowClick', selectedRow);
       }
+    },
+    handleRowSave({ newData }) {
+      this.$emit("rowEditSave", newData)
     },
     changePage(page: number) {
       this.currentPage = page;

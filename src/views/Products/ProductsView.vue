@@ -8,7 +8,15 @@
         <MDBCol class="col-auto">
           <MDBContainer class="table-container">
             <SearchComponent @search="handleSearch" />
-            <TableComponent :editableColumns="editableColumns" :showEditColumn=true :rows="productsStore.productRows" :columns="productsStore.productColumns" :searchTerm="productsStore.searchTerm" @rowClick="handleRowClick" />
+            <TableComponent
+              :editableColumns="editableColumns"
+              :showEditColumn=true
+              :rows="productsStore.productRows"
+              :columns="productsStore.productColumns"
+              :searchTerm="productsStore.searchTerm"
+              @rowClick="handleRowClick"
+              @row-edit-save="handleRowEdit"
+            />
           </MDBContainer>
           </MDBCol>
         </MDBContainer>
@@ -26,6 +34,7 @@ import {useRoute, useRouter} from "vue-router";
 import {MDBContainer, MDBCol} from "mdb-vue-ui-kit";
 import ProductSearchFilterDto from "@/api/modules/product/dto/product-search-filter.dto";
 import {ref} from "vue";
+import loggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: 'ProductsView',
@@ -78,6 +87,11 @@ export default {
       console.log('Clicked row with id:', row.id);
       this.router.push({ name: 'Product details', params: { id: row.id.toString() } });
     },
+    async handleRowEdit(row) {
+      //TODO: Check that price is not empty
+      const updated = await this.productsStore.updateProduct(row.id, { commonPrice: row.price })
+      //TODO: Check for errors
+    }
   },
 }
 </script>

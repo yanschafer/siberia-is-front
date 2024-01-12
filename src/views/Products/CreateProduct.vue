@@ -2,28 +2,58 @@
   <div class="animate__animated animate__fadeIn">
     <MDBContainer class="animate__animated animate__fadeIn" fluid>
       <MDBRow class="d-flex flex-row gap-5 header-row">
-        <MDBCol class="col-auto animate__animated animate__flipInX animate__faster">
+        <MDBCol
+          class="col-auto animate__animated animate__flipInX animate__faster"
+        >
           <div class="product-img">
-            <FileUploadComponent />
+            <FileUploadComponent @changed="fileChanged" />
           </div>
         </MDBCol>
         <MDBCol class="d-flex flex-column justify-content-center">
           <MDBRow>
-            <MDBCol class="d-flex gap-1 align-items-center mb-3 animate__animated animate__flipInX animate__faster">
+            <MDBCol
+              class="d-flex gap-1 align-items-center mb-3 animate__animated animate__flipInX animate__faster"
+            >
               <h5 class="field-heading">PRODUCT NAME</h5>
-              <MDBInput id="product-name-input" class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newProductName" />
+              <MDBInput
+                id="product-name-input"
+                class="input-wrapper animate__animated animate__fadeIn username-input"
+                type="text"
+                v-model="name"
+              />
             </MDBCol>
             <MDBCol class="animate__animated animate__flipInX animate__faster">
-              <MDBBtn @click="cancelCreating" class="utility-btn" outline="black">CANCEL</MDBBtn>
-              <MDBBtn @click="saveCreation" class="utility-btn" outline="black">SAVE</MDBBtn>
+              <MDBBtn @click="cancel" class="utility-btn" outline="black"
+                >CANCEL</MDBBtn
+              >
+              <MDBBtn @click="create" class="utility-btn" outline="black"
+                >SAVE</MDBBtn
+              >
             </MDBCol>
           </MDBRow>
           <MDBRow>
             <MDBCol class="d-flex flex-column gap-3 col-auto">
-              <h5 class="field-heading d-flex gap-1 align-items-center">SKU <MDBInput class="animate__animated animate__flipInX animate__faster input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newSku" /></h5>
-              <SelectComponent :placeholder="placeholderBrand" class="animate__animated animate__flipInX animate__faster" :items="brandList" />
-              <h5 class="field-heading d-flex gap-1 align-items-center">LINK
-                <MDBInput class="input-wrapper animate__animated animate__flipInX animate__faster username-input" type="text" v-model="newLink" />
+              <h5 class="field-heading d-flex gap-1 align-items-center">
+                SKU
+                <MDBInput
+                  class="animate__animated animate__flipInX animate__faster input-wrapper animate__animated animate__fadeIn username-input"
+                  type="text"
+                  v-model="vendorCode"
+                />
+              </h5>
+              <SelectComponent
+                :placeholder="placeholderBrand"
+                class="animate__animated animate__flipInX animate__faster"
+                :items="brandList"
+                v-model="brand"
+              />
+              <h5 class="field-heading d-flex gap-1 align-items-center">
+                LINK
+                <MDBInput
+                  class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+                  type="text"
+                  v-model="link"
+                />
               </h5>
             </MDBCol>
           </MDBRow>
@@ -31,32 +61,84 @@
       </MDBRow>
     </MDBContainer>
     <MDBContainer class="description-section" fluid>
-      <TreeDropdownComponent :placeholder="placeholderCategory" class="animate__animated animate__flipInX animate__faster" :nodes="categoriesList" />
-      <h1 class="product-heading d-flex gap-1 align-items-center">Product description
-        <SelectComponent :placeholder="placeholderCollection" class="animate__animated animate__flipInX animate__faster" :items="collectionList" />
-        <span class="field-heading separator">|</span> <h5 class="animate__animated animate__flipInX animate__faster field-heading d-flex gap-1 align-items-center mb-0">NEW COLOR NAME <MDBInput class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newColor" /></h5></h1>
-      <textarea class="animate__animated animate__flipInX animate__faster username-input" id="description" type="textarea" v-model="newDescription" />
+      <TreeDropdownComponent
+        :placeholder="placeholderCategory"
+        class="animate__animated animate__flipInX animate__faster"
+        :nodes="categoriesList"
+        v-model="category"
+      />
+      <h1 class="product-heading d-flex gap-1 align-items-center">
+        Product description
+        <SelectComponent
+          :placeholder="placeholderCollection"
+          class="animate__animated animate__flipInX animate__faster"
+          :items="collectionList"
+          v-model="collection"
+        />
+        <span class="field-heading separator">|</span>
+        <h5
+          class="animate__animated animate__flipInX animate__faster field-heading d-flex gap-1 align-items-center mb-0"
+        >
+          COLOR
+          <MDBInput
+            class="input-wrapper animate__animated animate__fadeIn username-input"
+            type="text"
+            v-model="color"
+          />
+        </h5>
+      </h1>
+      <textarea
+        class="animate__animated animate__flipInX animate__faster username-input"
+        id="description"
+        type="textarea"
+        v-model="description"
+      />
+      <MDBInput
+        class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+        type="text"
+        v-model="expirationDate"
+      />
     </MDBContainer>
     <MDBContainer class="footer-section" fluid>
       <MDBRow>
         <MDBCol>
-          <h5 class="field-heading">QUANTITY PER PACKAGE
-            <MDBInput class="input-wrapper animate__animated animate__flipInX animate__faster username-input" type="text" v-model="newQuantityPerPackage" />
+          <h5 class="field-heading">
+            QUANTITY PER PACKAGE
+            <MDBInput
+              class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+              type="text"
+              v-model="amountInBox"
+            />
           </h5>
         </MDBCol>
         <MDBCol>
-          <h5 class="field-heading">DISTRIBUTION PRICE
-            <MDBInput class="input-wrapper animate__animated animate__flipInX animate__faster username-input" type="text" v-model="newDistributionPrice" />
+          <h5 class="field-heading">
+            DISTRIBUTION PRICE
+            <MDBInput
+              class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+              type="text"
+              v-model="distributorPrice"
+            />
           </h5>
         </MDBCol>
         <MDBCol>
-          <h5 class="field-heading">PROFESSIONAL PRICE
-            <MDBInput class="input-wrapper animate__animated animate__flipInX animate__faster username-input" type="text" v-model="newProfessionalPrice" />
+          <h5 class="field-heading">
+            PROFESSIONAL PRICE
+            <MDBInput
+              class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+              type="text"
+              v-model="professionalPrice"
+            />
           </h5>
         </MDBCol>
         <MDBCol>
-          <h5 class="field-heading">DEFAULT PRICE
-            <MDBInput class="input-wrapper animate__animated animate__flipInX animate__faster username-input" type="text" v-model="newDefaultPrice" />
+          <h5 class="field-heading">
+            DEFAULT PRICE
+            <MDBInput
+              class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+              type="text"
+              v-model="commonPrice"
+            />
           </h5>
         </MDBCol>
       </MDBRow>
@@ -68,21 +150,34 @@
 import FileUpload from "primevue/fileupload";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput } from "mdb-vue-ui-kit";
 import FileUploadComponent from "@/components/Inputs/FileUploadComponent.vue";
-import CascadeSelect from 'primevue/cascadeselect';
+import CascadeSelect from "primevue/cascadeselect";
 import FilesResolverUtil from "@/utils/files-resolver.util";
 import { useProductsStore } from "@/stores/products.store";
-import {useCollectionStore} from "@/stores/collection.store";
+import { useCollectionStore } from "@/stores/collection.store";
 import { useRoute } from "vue-router";
 import { useBrandStore } from "@/stores/brand.store";
 import { useCategoriesStore } from "@/stores/categories.store";
 import SelectComponent from "@/components/Elements/SelectComponent.vue";
 import TreeDropdownComponent from "@/components/Elements/TreeDropdownComponent.vue";
 import ProductUpdateDto from "@/api/modules/product/dto/product-update.dto";
-
+import EncoderUtil from "@/utils/encoder.util";
+import LoggerUtil from "@/utils/logger/logger.util";
+import ProductInputDto from "@/api/modules/product/dto/product-input.dto";
 
 export default {
-  name: 'CreateProduct',
-  components: {FileUpload, TreeDropdownComponent, SelectComponent, CascadeSelect, MDBInput, FileUploadComponent, MDBContainer, MDBRow, MDBCol, MDBBtn },
+  name: "CreateProduct",
+  components: {
+    FileUpload,
+    TreeDropdownComponent,
+    SelectComponent,
+    CascadeSelect,
+    MDBInput,
+    FileUploadComponent,
+    MDBContainer,
+    MDBRow,
+    MDBCol,
+    MDBBtn,
+  },
   props: {
     id: {
       type: Number,
@@ -105,236 +200,79 @@ export default {
       productStore,
       brandStore,
       categoriesStore,
-      collectionStore
+      collectionStore,
     };
   },
   data: () => ({
     placeholderCategory: "Select a category",
     placeholderBrand: "Select a brand",
     placeholderCollection: "Select a collection",
-    editing: false,
-    originalImageSource: '',
-    newImageSource: '',
-    originalProductName: '',
-    newProductName: '',
-    originalSku: '',
-    newSku: '',
-    originalLink: '',
-    newLink: '',
-    originalQuantity: '',
-    newQuantity: '',
-    originalColor: '',
-    newColor: '',
-    originalProductDescription: '',
-    newDescription: '',
-    originalQuantityPerPackage: '',
-    newQuantityPerPackage: '',
-    originalDistributionPrice: '',
-    newDistributionPrice: '',
-    originalProfessionalPrice: '',
-    newProfessionalPrice: '',
-    originalDefaultPrice: '',
-    newDefaultPrice: '',
-    originalStatus: '',
-    newStatus: '',
-    originalBrand: '',
-    newBrand: '',
-    originalCategories: [],
-    newCategories: [],
-    originalLastTimeOrdered: '',
-    newLastTimeOrdered: '',
-    originalLastPriceOrdered: '',
-    newLastPriceOrdered: '',
-    originalCostPrice: '',
-    newCostPrice: '',
-
+    vendorCode: "",
+    brand: null,
+    name: "",
+    description: "",
+    distributorPrice: "",
+    professionalPrice: "",
+    commonPrice: "",
+    category: null,
+    collection: null,
+    color: "",
+    amountInBox: "",
+    expirationDate: "",
+    link: "",
+    photoBase64: "",
+    photoName: "",
   }),
   methods: {
-    async uploadImage() {
-      return new Promise<string>((resolve) => {
-        const fileUploadRef = this.$refs.fileUpload;
-
-        if (fileUploadRef) {
-          const input = fileUploadRef.$el.querySelector('input[type="file"]');
-          const file = input?.files?.[0];
-
-          if (file) {
-            const reader = new FileReader();
-
-            reader.onloadend = function () {
-              const base64data = reader.result as string;
-              resolve(base64data.split(',')[1]); // Извлечение строки base64 из data URL
-            };
-
-            reader.readAsDataURL(file);
-          } else {
-            resolve('');
-          }
-        } else {
-          resolve('');
-        }
-      });
+    async fileChanged(files: File[]) {
+      const file = files[0];
+      const encoded = await EncoderUtil.encode(file);
+      if (encoded == null) return;
+      this.photoBase64 = encoded;
+      this.photoName = file.name;
     },
-    customBase64Uploader(event) {
-      const processFile = async () => {
-        const file = event.files[0];
-        const reader = new FileReader();
-        let blob = await fetch(file.objectURL).then((r) => r.blob());
+    async create() {
+      const brandId = this.brand ? this.brand.id : null;
+      const collectionId = this.collection ? this.collection.id : null;
+      const categoryId = parseInt(String(this.category));
+      const expirationDate = parseInt(this.expirationDate) * 24 * 60 * 1000;
 
-        reader.readAsDataURL(blob);
-
-        reader.onloadend = function () {
-          const base64data = reader.result;
-        };
-      };
-      processFile();
-    },
-    startEditing() {
-      this.editing = true;
-      this.originalImageSource = this.imageSource;
-      this.newImageSource = this.imageSource;
-      this.originalProductName = this.productName;
-      this.newProductName = this.productName;
-      this.originalSku = this.sku;
-      this.newSku = this.sku;
-      this.originalColor = this.color;
-      this.newColor = this.color;
-      this.originalLink = this.link;
-      this.newLink = this.link;
-      this.originalQuantity = this.quantity;
-      this.newQuantity = this.quantity;
-      this.originalProductDescription = this.productDescription;
-      this.newDescription = this.productDescription;
-      this.originalQuantityPerPackage = this.quantityPerPackage;
-      this.newQuantityPerPackage = this.quantityPerPackage;
-      this.originalDistributionPrice = this.distributionPrice;
-      this.newDistributionPrice = this.distributionPrice;
-      this.originalProfessionalPrice = this.professionalPrice;
-      this.newProfessionalPrice = this.professionalPrice;
-      this.originalDefaultPrice = this.defaultPrice;
-      this.newDefaultPrice = this.defaultPrice;
-    },
-    async saveChanges() {
-      const base64Image = await this.uploadImage();
-      const result = await this.productStore.updateProduct(this.id, new ProductUpdateDto (
-          base64Image,
-          this.newImageSource,
-          this.newColor,
-          this.newProductName,
-          this.newSku,
-          this.newLink,
-          this.newQuantity,
-          this.newDescription,
-          this.newQuantityPerPackage,
-          this.newDistributionPrice,
-          this.newProfessionalPrice,
-          this.newDefaultPrice
-      ));
-      this.editing = !result.success
+      const newProductData = new ProductInputDto(
+        this.photoBase64,
+        this.photoName,
+        this.vendorCode,
+        "",
+        brandId,
+        this.name,
+        this.description,
+        parseFloat(this.distributorPrice),
+        parseFloat(this.professionalPrice),
+        parseFloat(this.commonPrice),
+        categoryId,
+        collectionId,
+        this.color,
+        parseInt(this.amountInBox),
+        expirationDate,
+        this.link,
+      );
+      const creationResult = await this.productStore.create(newProductData);
       //TODO: Check for errors
+      if (creationResult.success) LoggerUtil.debug("SUCCESS");
     },
+    cancel() {},
   },
   computed: {
-    async base64Image() {
-      return await this.uploadImage();
-    },
     categoriesList() {
-      return this.categoriesStore.getCategoriesList()
+      return this.categoriesStore.getCategoriesList();
     },
     brandList() {
-      return this.brandStore.getBrandList()
+      return this.brandStore.getBrandList();
     },
     collectionList() {
-      return this.collectionStore.getCollectionList()
+      return this.collectionStore.getCollectionList();
     },
-    selectedProduct() {
-      return this.productStore.getSelectedProduct || {}
-    },
-    imageSource() {
-      return FilesResolverUtil.getStreamUrl(this.selectedProduct.photo || '');
-    },
-    productName() {
-      return this.selectedProduct.name || '';
-    },
-    sku() {
-      return this.selectedProduct.vendorCode || '';
-    },
-    brand() {
-      return this.selectedProduct.brand.name || '';
-    },
-    link() {
-      return this.selectedProduct.link || '';
-    },
-    quantity() {
-      return this.selectedProduct.quantity || '0';
-    },
-    lastTimeOrdered() {
-      const date =  new Date(parseInt(`${this.selectedProduct.lastPurchaseDate}000`)) || ''
-      if (date === "")
-        return date;
-      const month = date.getMonth() >= 9 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`
-      const day = date.getDate() >= 10 ? date.getDate() : `0${date.getDate()}`
-      return `${date.getFullYear()}-${month}-${day}`
-    },
-    lastPriceOrdered() {
-      return this.selectedProduct.lastPurchasePrice || '';
-    },
-    costPrice() {
-      return this.selectedProduct.costPrice || '';
-    },
-    status() {
-      return this.selectedProduct.status || '';
-    },
-    category() {
-      return this.selectedProduct.category.name || '';
-    },
-    productDescription() {
-      return this.selectedProduct.description || '';
-    },
-    collectionName() {
-      return this.selectedProduct.collection.name || '';
-    },
-    color() {
-      return this.selectedProduct.color || '';
-    },
-    volume() {
-      return this.selectedProduct.volume || '';
-    },
-    size() {
-      return this.selectedProduct.size || '';
-    },
-    quantityPerPackage() {
-      return this.selectedProduct.amountInBox || '';
-    },
-    distributionPrice() {
-      return this.selectedProduct.distributorPrice || '';
-    },
-    distributionPriceWithoutVat() {
-      return this.selectedProduct.distributionPriceWithoutVat || '';
-    },
-    distributionMarkup() {
-      return this.selectedProduct.distributionMarkup || '';
-    },
-    professionalPrice() {
-      return this.selectedProduct.professionalPrice || '';
-    },
-    professionalPriceWithoutVat() {
-      return this.selectedProduct.professionalPriceWithoutVat || '';
-    },
-    professionalMarkup() {
-      return this.selectedProduct.professionalMarkup || '';
-    },
-    defaultPrice() {
-      return this.selectedProduct.commonPrice || '';
-    },
-    defaultPriceWithoutVat() {
-      return this.selectedProduct.defaultPriceWithoutVat || '';
-    },
-    defaultMarkup() {
-      return this.selectedProduct.defaultMarkup || '';
-    }
   },
-}
+};
 </script>
 <style scoped>
 .product-img {
@@ -360,7 +298,7 @@ export default {
 }
 .field-heading {
   font-size: 16px;
-  color: #4E4E4E;
+  color: #4e4e4e;
   font-weight: 500;
 }
 
@@ -375,7 +313,7 @@ export default {
   max-width: 75%;
 }
 .header-row {
-  border-bottom: 1px solid #EEE;
+  border-bottom: 1px solid #eee;
   padding-bottom: 2rem;
 }
 .description {
@@ -383,7 +321,7 @@ export default {
   max-width: 85vw;
 }
 .description-section {
-  border-bottom: 1px solid #EEE;
+  border-bottom: 1px solid #eee;
   padding-bottom: 0.2rem;
   padding-top: 1rem;
 }
@@ -405,7 +343,7 @@ export default {
   margin-top: 0.5rem;
 }
 .p-cascadeselect-panel .p-cascadeselect-items {
-  padding-left: 0!important;
+  padding-left: 0 !important;
 }
 .username-input {
   width: 100%;
@@ -417,21 +355,21 @@ export default {
   border: 0;
   border-bottom: 2px solid #565656;
   height: 2rem;
-  padding-top: 0!important;
+  padding-top: 0 !important;
 }
 :deep(.form-control) {
   padding-top: 0.1rem;
 }
 #description {
   width: 100%;
-  max-width: auto!important;
+  max-width: auto !important;
   background: #f8f8f8;
   border: 0;
   border-bottom: 2px solid #565656;
 }
 :deep(#product-name-input) {
   width: 100%;
-  max-width: 50vw!important;
+  max-width: 50vw !important;
 }
 :deep(.p-dropdown-label) {
   padding-right: 0.1rem;
