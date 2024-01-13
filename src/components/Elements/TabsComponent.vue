@@ -36,13 +36,18 @@ import {
   MDBTabPane,
 } from "mdb-vue-ui-kit";
 
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import Checkbox from "primevue/checkbox";
 import RolesComponent from "@/components/Elements/RolesComponent.vue";
 import RoleDto from "@/api/modules/rbac/dto/roles/role.dto";
 import loggerUtil from "@/utils/logger/logger.util";
+import { useUsersStore } from "@/stores/user.store";
+import { useRolesStore } from "@/stores/roles.store";
+import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.dto";
+import ApiResponseDto from "@/api/dto/api-response.dto";
+import LinkedRuleDto from "@/api/modules/rbac/dto/rules/linked-rule.dto";
 
 export default defineComponent({
   components: {
@@ -57,6 +62,7 @@ export default defineComponent({
     MDBTabPane,
   },
   props: {
+    userId: Number,
     roles: {
       type: Array,
       default: [],
@@ -67,15 +73,35 @@ export default defineComponent({
       this.activeTabId = String(this.roles?.[0].id);
     }
   },
+  setup() {
+    const userStore = useUsersStore();
+    const rolesStore = useRolesStore();
+
+    return { userStore, rolesStore };
+  },
   data: () => ({
     activeTabId: "",
   }),
   methods: {
-    ruleRemoved({ roleId, removedRule }) {
-      loggerUtil.debug("Rule removed", roleId, removedRule);
+    async ruleRemoved({ roleId, linkedRule }) {
+      let result: ApiResponseDto<any>;
+      if (roleId == 0)
+        result = await this.userStore.removeRule(this.userId || 0, linkedRule);
+      else result = await this.rolesStore.removeRule(roleId, linkedRule);
+
+      if (result.success) {
+        //TODO: Check for errors
+      }
     },
-    ruleSelected({ roleId, addedRule }) {
-      loggerUtil.debug("Rule selected", roleId, addedRule);
+    async ruleSelected({ roleId, linkedRule }) {
+      let result: ApiResponseDto<LinkedRuleDto[]>;
+      if (roleId == 0)
+        result = await this.userStore.appendRule(this.userId || 0, linkedRule);
+      else result = await this.rolesStore.appendRule(roleId, linkedRule);
+
+      if (result.success) {
+        //TODO: Check for errors
+      }
     },
   },
 });

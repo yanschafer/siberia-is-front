@@ -2,7 +2,7 @@
   <MDBAccordion v-model="activeItem" borderless>
     <MDBAccordionItem
       style="width: max-content; padding: 0.1rem !important"
-      headerTitle="Permission group 1"
+      headerTitle="Main group"
       collapseId="collapseOne"
     >
       <div
@@ -21,29 +21,56 @@
         <label :for="category.key">{{ category.name }}</label>
       </div>
     </MDBAccordionItem>
-    <MDBContainer class="d-flex flex-column">
-      <span>Storehouses</span>
-      <MultiSelect
-          v-model="storehousesList"
-          :options="storehousesOptions"
-          filter
-          optionLabel="name"
-          :placeholder="multiSelectPlaceholder"
-          class="w-full md:w-20rem" />
-    </MDBContainer>
+    <template v-for="category in categories">
+      <MDBAccordionItem
+        style="width: max-content; padding: 0.1rem !important"
+        :headerTitle="category.name"
+        :collapseId="`collapse${category.id}`"
+      >
+        <template v-for="item in categoryItems(category.id - 1)">
+          <MDBContainer class="d-flex flex-column">
+            <span>{{ item.name }}</span>
+            <MultiSelect
+              v-model="storehouseList[item.id]"
+              :options="storehouseOptions"
+              filter
+              optionLabel="name"
+              :placeholder="multiSelectPlaceholder"
+              class="w-full md:w-20rem"
+              @change="handleStorehouseRuleChange(category, item)"
+              :disabled="!canChange"
+            />
+          </MDBContainer>
+        </template>
+      </MDBAccordionItem>
+    </template>
   </MDBAccordion>
 </template>
 <script lang="ts">
 import Checkbox from "primevue/checkbox";
-import { MDBContainer, MDBAccordion, MDBAccordionItem, MDBCheckbox } from "mdb-vue-ui-kit";
+import {
+  MDBContainer,
+  MDBAccordion,
+  MDBAccordionItem,
+  MDBCheckbox,
+} from "mdb-vue-ui-kit";
 import { useRulesStore } from "@/stores/rules.store";
+import MultiSelect from "primevue/multiselect";
+import { useStorehousesStore } from "@/stores/storehouse.store";
 import loggerUtil from "@/utils/logger/logger.util";
-import MultiSelect from 'primevue/multiselect';
-import {useStorehousesStore} from "@/stores/storehouse.store";
+import { appConf } from "@/api/conf/app.conf";
+import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.dto";
 
 export default {
   name: "RolesComponent",
-  components: { MDBContainer, MDBAccordion, MDBAccordionItem, MDBCheckbox, Checkbox, MultiSelect },
+  components: {
+    MDBContainer,
+    MDBAccordion,
+    MDBAccordionItem,
+    MDBCheckbox,
+    Checkbox,
+    MultiSelect,
+  },
   props: {
     items: {
       type: Array,
@@ -60,34 +87,75 @@ export default {
     activeItem: "1",
     lastCheckboxSelected: [],
     selectedRules: [],
-    multiSelectPlaceholder: 'Select storehouse',
-    storehousesList: [],
+    selectedRulesWithStorehouses: {},
+    multiSelectPlaceholder: "Select storehouse",
+    storehouseList: {},
+    lastStorehouseList: {},
+    storehouseIdToObject: {},
   }),
   emits: ["newRuleSelected", "ruleRemoved"],
   async setup() {
     const rulesStore = useRulesStore();
     const storehousesStore = useStorehousesStore();
     await rulesStore.loadRulesList();
-    await storehousesStore.loadStorehouseList();
+    await storehousesStore.loadStorehousesForInput();
     return {
       rulesStore,
-      storehousesStore
+      storehousesStore,
     };
   },
   created() {
     this.selectedRules = this.role?.rules.map((el) => el.ruleId);
     this.lastCheckboxSelected = [...this.selectedRules];
+    this.storehouseOptions.forEach((el) => {
+      this.storehouseIdToObject[el.id] = { ...el };
+    });
+    const rulesToStock = {};
+    this.role.rules
+      .filter((el) => el.needStock)
+      .forEach((el) => {
+        if (rulesToStock[el.ruleId]) {
+          rulesToStock[el.ruleId].push({
+            ...this.storehouseIdToObject[el.stockId],
+          });
+        } else {
+          rulesToStock[el.ruleId] = [
+            { ...this.storehouseIdToObject[el.stockId] },
+          ];
+        }
+      });
+    Object.keys(appConf.rulesCategories).forEach((key) => {
+      const category = appConf.rulesCategories[key];
+      Object.values(category.items).forEach((el) => {
+        this.storehouseList[el.id] = [];
+        if (rulesToStock[el.id])
+          this.storehouseList[el.id] = rulesToStock[el.id];
+      });
+    });
+    this.lastStorehouseList = { ...this.storehouseList };
   },
   methods: {
+    emit(type, { roleId, rule, stockId }) {
+      let linkedRule: LinkedRuleInputDto[] = [];
+      if (typeof stockId == "object" && stockId != null)
+        linkedRule = stockId.map((el) => new LinkedRuleInputDto(rule, el.id));
+      else linkedRule = [new LinkedRuleInputDto(rule, stockId)];
+      const event = type == "add" ? "newRuleSelected" : "ruleRemoved";
+      this.$emit(event, {
+        roleId,
+        linkedRule,
+      });
+    },
     checkboxChanges() {
       if (this.lastCheckboxSelected.length > this.selectedRules.length) {
         const removedItem = this.lastCheckboxSelected.filter(
           (el) => !this.selectedRules.includes(el),
         );
         if (removedItem.length > 0) {
-          this.$emit("ruleRemoved", {
+          this.emit("remove", {
             roleId: this.role.id,
-            removedRule: removedItem[0],
+            rule: removedItem[0],
+            stockId: null,
           });
         }
       } else {
@@ -95,28 +163,58 @@ export default {
           (el) => !this.lastCheckboxSelected.includes(el),
         );
         if (addedItem.length > 0) {
-          this.$emit("newRuleSelected", {
+          this.emit("add", {
             roleId: this.role.id,
-            addedRule: addedItem[0],
+            rule: addedItem[0],
+            stockId: null,
           });
         }
       }
       this.lastCheckboxSelected = [...this.selectedRules];
     },
+    categoryItems(categoryIndex: number) {
+      const category =
+        appConf.rulesCategories[
+          Object.keys(appConf.rulesCategories)[categoryIndex]
+        ];
+      return category.items;
+    },
+    listContains(list, id) {
+      return list.filter((el) => el.id == id).length > 0;
+    },
+    handleStorehouseRuleChange(category, item, event) {
+      if (
+        this.lastStorehouseList[item.id].length >
+        this.storehouseList[item.id].length
+      ) {
+        const removedItem = this.lastStorehouseList[item.id].filter(
+          (el) => !this.listContains(this.storehouseList[item.id], el.id),
+        );
+        if (removedItem.length > 0) {
+          this.emit("remove", {
+            roleId: this.role.id,
+            rule: item.id,
+            stockId: removedItem,
+          });
+        }
+      } else {
+        const addedItem = this.storehouseList[item.id].filter(
+          (el) => !this.listContains(this.lastStorehouseList[item.id], el.id),
+        );
+        if (addedItem.length > 0) {
+          this.emit("add", {
+            roleId: this.role.id,
+            rule: item.id,
+            stockId: addedItem,
+          });
+        }
+      }
+      this.lastStorehouseList = { ...this.storehouseList };
+    },
   },
   computed: {
     rulesList() {
       return this.rulesStore.getRuleList;
-    },
-    storehousesOptions() {
-      return this.storehousesStore.getStorehouseList;
-    },
-    linkedRulesAsObject() {
-      const object = {};
-      this.role?.rules.forEach((el) => {
-        object[el.ruleId] = { ...el };
-      });
-      return object;
     },
     rulesCheckboxes() {
       return this.rulesList
@@ -125,6 +223,15 @@ export default {
           name: el.name,
           key: el.id,
         }));
+    },
+    storehouseOptions() {
+      return this.storehousesStore.getStorehouseListForInputs;
+    },
+    categories() {
+      return Object.values(appConf.rulesCategories).map((el) => ({
+        id: el.id,
+        name: el.name,
+      }));
     },
   },
 };

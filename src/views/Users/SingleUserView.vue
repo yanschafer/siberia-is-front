@@ -58,7 +58,7 @@
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="pt-4">
-    <TabsComponent :roles="roles" />
+    <TabsComponent :roles="roles" :user-id="selectedUser.id" />
   </MDBContainer>
 </template>
 

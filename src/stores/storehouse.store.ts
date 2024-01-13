@@ -16,6 +16,7 @@ export const useStorehousesStore = defineStore({
   state: () => ({
     searchTerm: "",
     storehousesRows: [],
+    storehouseListForInputs: [],
     storehousesColumns: [
       { field: "name", header: "NAME" },
       { field: "address", header: "ADDRESS" },
@@ -24,6 +25,7 @@ export const useStorehousesStore = defineStore({
   }),
   getters: {
     getStorehouseList: (state) => state.storehousesRows,
+    getStorehouseListForInputs: (state) => state.storehouseListForInputs,
     getSearchTerm: (state) => state.searchTerm,
     getSelectedStorehouse: (state) => state.selectedStore,
   },
@@ -33,6 +35,13 @@ export const useStorehousesStore = defineStore({
       const stockModel = new StockModel();
       const stockList = await stockModel.getList();
       if (stockList.success) this.storehousesRows = stockList.getData();
+    },
+    async loadStorehousesForInput() {
+      const stockModel = new StockModel();
+      const stockList = await stockModel.getInputList();
+      if (stockList.success) {
+        this.storehouseListForInputs = stockList.getData();
+      }
     },
     async loadSelectedStoreHouse(stockId: number) {
       const stockModel = new StockModel();
