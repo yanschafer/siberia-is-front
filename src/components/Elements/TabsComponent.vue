@@ -41,15 +41,13 @@ import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import Checkbox from "primevue/checkbox";
 import RolesComponent from "@/components/Elements/RolesComponent.vue";
-import RoleDto from "@/api/modules/rbac/dto/roles/role.dto";
-import loggerUtil from "@/utils/logger/logger.util";
 import { useUsersStore } from "@/stores/user.store";
 import { useRolesStore } from "@/stores/roles.store";
-import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.dto";
 import ApiResponseDto from "@/api/dto/api-response.dto";
 import LinkedRuleDto from "@/api/modules/rbac/dto/rules/linked-rule.dto";
 import { useRulesStore } from "@/stores/rules.store";
 import { useStorehousesStore } from "@/stores/storehouse.store";
+import loggerUtil from "@/utils/logger/logger.util";
 
 export default defineComponent({
   components: {
@@ -99,8 +97,9 @@ export default defineComponent({
   },
   methods: {
     async ruleRemoved({ roleId, linkedRule }) {
+      loggerUtil.debug("REMOVED", roleId, linkedRule);
       let result: ApiResponseDto<any>;
-      if (roleId == 0)
+      if (roleId == 0 && this.userId != null)
         result = await this.userStore.removeRule(this.userId || 0, linkedRule);
       else result = await this.rolesStore.removeRule(roleId, linkedRule);
 
@@ -109,8 +108,9 @@ export default defineComponent({
       }
     },
     async ruleSelected({ roleId, linkedRule }) {
+      loggerUtil.debug("SELECTED", roleId, linkedRule);
       let result: ApiResponseDto<LinkedRuleDto[]>;
-      if (roleId == 0)
+      if (roleId == 0 && this.userId != null)
         result = await this.userStore.appendRule(this.userId || 0, linkedRule);
       else result = await this.rolesStore.appendRule(roleId, linkedRule);
 

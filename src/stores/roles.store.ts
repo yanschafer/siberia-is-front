@@ -56,11 +56,11 @@ export const useRolesStore = defineStore({
     },
     async removeRule(roleId: number, linkedRule: LinkedRuleInputDto[]) {
       const roleModel = new RoleModel();
-      return await roleModel.appendRules(roleId, linkedRule);
+      return await roleModel.removeRules(roleId, linkedRule);
     },
     async appendRule(roleId: number, linkedRule: LinkedRuleInputDto[]) {
       const roleModel = new RoleModel();
-      return await roleModel.removeRules(roleId, linkedRule);
+      return await roleModel.appendRules(roleId, linkedRule);
     },
   },
 });
