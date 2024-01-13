@@ -22,7 +22,7 @@
 <script lang="ts">
 import {useRoute} from 'vue-router';
 import { MDBContainer, MDBCol } from "mdb-vue-ui-kit";
-import { IconPackages, IconLock, IconBuildingWarehouse, IconUsersGroup, IconLogout2, IconUser } from '@tabler/icons-vue';
+import { IconDashboard, IconPackages, IconLock, IconBuildingWarehouse, IconUsersGroup, IconLogout2, IconUser } from '@tabler/icons-vue';
 import TokenUtil from "@/utils/token.util";
 import Router from "@/router";
 
@@ -36,7 +36,8 @@ export default {
     IconBuildingWarehouse,
     IconUsersGroup,
     IconLogout2,
-    IconUser
+    IconUser,
+    IconDashboard
   },
   props: {
     sidebarItems: {

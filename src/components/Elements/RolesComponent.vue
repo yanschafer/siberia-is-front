@@ -21,18 +21,31 @@
         <label :for="category.key">{{ category.name }}</label>
       </div>
     </MDBAccordionItem>
+    <MultiSelect
+        v-model="storehousesList"
+        :options="storehousesOptions"
+        filter
+        optionLabel="name"
+        :placeholder="multiSelectPlaceholder"
+        class="w-full md:w-20rem" />
   </MDBAccordion>
+
 </template>
 <script lang="ts">
 import Checkbox from "primevue/checkbox";
 import { MDBAccordion, MDBAccordionItem, MDBCheckbox } from "mdb-vue-ui-kit";
 import { useRulesStore } from "@/stores/rules.store";
 import loggerUtil from "@/utils/logger/logger.util";
+import MultiSelect from 'primevue/multiselect';
+import {useStorehousesStore} from "@/stores/storehouse.store";
 
 export default {
   name: "RolesComponent",
-  components: { MDBAccordion, MDBAccordionItem, MDBCheckbox, Checkbox },
+  components: { MDBAccordion, MDBAccordionItem, MDBCheckbox, Checkbox, MultiSelect },
   props: {
+    items: {
+      type: Array,
+    },
     role: {
       type: Object,
     },
@@ -45,12 +58,19 @@ export default {
     activeItem: "1",
     lastCheckboxSelected: [],
     selectedRules: [],
+    multiSelectPlaceholder: 'Select storehouse',
+    storehousesList: [],
   }),
   emits: ["newRuleSelected", "ruleRemoved"],
   async setup() {
     const rulesStore = useRulesStore();
+    const storehousesStore = useStorehousesStore();
     await rulesStore.loadRulesList();
-    return { rulesStore };
+    await storehousesStore.loadStorehouseList();
+    return {
+      rulesStore,
+      storehousesStore
+    };
   },
   created() {
     this.selectedRules = this.role?.rules.map((el) => el.ruleId);
@@ -85,6 +105,9 @@ export default {
   computed: {
     rulesList() {
       return this.rulesStore.getRuleList;
+    },
+    storehousesOptions() {
+      return this.storehousesStore.getStorehouseList;
     },
     linkedRulesAsObject() {
       const object = {};

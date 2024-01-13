@@ -39,12 +39,12 @@ export default {
       sidebarItems: [
         {
           name: "Dashboard",
-          icon: "IconLock",
-          iconColor: "#E5E5E5",
+          icon: "IconDashboard",
+          iconColor: "#B8B8B8",
           iconSize: 32,
           strokeWidth: 1,
           disabled: false,
-          active: false,
+          active: true,
           route: "dashboard",
           rule: true,
         },

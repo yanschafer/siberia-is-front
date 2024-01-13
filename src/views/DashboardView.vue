@@ -1,16 +1,13 @@
 <template>
-  <div>
-    <SidebarComponent :sidebarItems="sidebarItems" />
-    <HeaderComponent />
-  </div>
+Вфывыфв
 </template>
 
 <script>
 import SidebarComponent from "@/components/Navigation/SidebarComponent.vue";
-import { useAuthStore } from "@/stores/auth.ts";
 import HeaderComponent from "@/components/Navigation/HeaderComponent.vue";
 
 export default {
+  name: "DashboardView",
   components: {
     HeaderComponent,
     SidebarComponent

@@ -27,14 +27,22 @@ const routes = [
     }
   },
   {
-    name: "dashboard",
-    path: '/dashboard',
+    name: "Syberia Panle",
+    path: '/',
     component: () => import('@/views/MainView.vue'),
     meta: {
       hideTitle: true,
       requireAuth: true
     },
     children: [
+      {
+        path: '/dashboard',
+        name: 'dashboard',
+        component: () => import('@/views/DashboardView.vue'),
+        meta: {
+          showAddBtn: false,
+        },
+      },
       {
         path: '/products',
         name: 'products',
