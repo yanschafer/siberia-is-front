@@ -16,58 +16,99 @@ export default class UserModel extends ApiModelUtil {
   }
 
   public async getCurrentUser(): Promise<ApiResponseDto<UserDto>> {
-    return this.authorizedRequest(new ApiRequestDto("", "GET"))
+    return this.authorizedRequest(new ApiRequestDto("", "GET"));
   }
-  
+
   public async getCurrentUserRules(): Promise<ApiResponseDto<LinkedRuleDto[]>> {
-    return this.authorizedRequest(new ApiRequestDto("/rules", "GET"))
+    return this.authorizedRequest(new ApiRequestDto("/rules", "GET"));
   }
 
   public async getCurrentUserRoles(): Promise<ApiResponseDto<number[]>> {
-    return this.authorizedRequest(new ApiRequestDto("/roles", "GET"))
+    return this.authorizedRequest(new ApiRequestDto("/roles", "GET"));
   }
 
-  public async getAll(userSearchFilterDto: UserSearchFilterDto | null = null): Promise<ApiResponseDto<UserDto[]>> {
-    return this.authorizedRequest(new ApiRequestDto("/all", "POST", userSearchFilterDto ? userSearchFilterDto : {}))
+  public async getAll(
+    userSearchFilterDto: UserSearchFilterDto | null = null,
+  ): Promise<ApiResponseDto<UserDto[]>> {
+    return this.authorizedRequest(
+      new ApiRequestDto(
+        "/all",
+        "POST",
+        userSearchFilterDto ? userSearchFilterDto : {},
+      ),
+    );
   }
 
   public async getOne(userId: number): Promise<ApiResponseDto<UserDto>> {
-    return this.authorizedRequest(new ApiRequestDto(`/${userId}`, "GET"))
+    return this.authorizedRequest(new ApiRequestDto(`/${userId}`, "GET"));
   }
 
-  public async create(createUserDto: CreateUserDto): Promise<ApiResponseDto<UserDto>> {
-    return this.authorizedRequest(new ApiRequestDto("", "POST", createUserDto))
+  public async create(
+    createUserDto: CreateUserDto,
+  ): Promise<ApiResponseDto<UserDto>> {
+    return this.authorizedRequest(new ApiRequestDto("", "POST", createUserDto));
   }
 
-  public async update(userId: number, updateUserDto: UpdateUserDto): Promise<ApiResponseDto<UserDto>> {
-    return this.authorizedRequest(new ApiRequestDto(`/${userId}`, "PATCH", updateUserDto))
+  public async update(
+    userId: number,
+    updateUserDto: UpdateUserDto,
+  ): Promise<ApiResponseDto<UserDto>> {
+    return this.authorizedRequest(
+      new ApiRequestDto(`/${userId}`, "PATCH", updateUserDto),
+    );
   }
 
-  public async remove(userId: number): Promise<ApiResponseDto<UserRemoveResultDto>> {
-    return this.authorizedRequest(new ApiRequestDto(`/${userId}`, "DELETE"))
+  public async remove(
+    userId: number,
+  ): Promise<ApiResponseDto<UserRemoveResultDto>> {
+    return this.authorizedRequest(new ApiRequestDto(`/${userId}`, "DELETE"));
   }
 
-  public async getUserRoles(userId: number): Promise<ApiResponseDto<RoleDto[]>> {
-    return this.authorizedRequest(new ApiRequestDto(`/${userId}/roles`, "GET"))
-  }
-  
-  public async getUserRules(userId: number): Promise<ApiResponseDto<LinkedRuleDto[]>> {
-    return this.authorizedRequest(new ApiRequestDto(`/${userId}/rules`, "GET"))
-  }
-  
-  public async appendRules(userId: number, linkedRules: LinkedRuleInputDto[]): Promise<ApiResponseDto<LinkedRuleDto[]>> {
-    return this.authorizedRequest(new ApiRequestDto(`/${userId}/rules`, "POST", linkedRules))
+  public async getUserRoles(
+    userId: number,
+  ): Promise<ApiResponseDto<RoleDto[]>> {
+    return this.authorizedRequest(new ApiRequestDto(`/${userId}/roles`, "GET"));
   }
 
-  public async appendRoles(userId: number, roles: number[]): Promise<ApiResponseDto<RoleDto[]>> {
-    return this.authorizedRequest(new ApiRequestDto(`/${userId}/rules`, "POST", roles))
+  public async getUserRules(
+    userId: number,
+  ): Promise<ApiResponseDto<LinkedRuleDto[]>> {
+    return this.authorizedRequest(new ApiRequestDto(`/${userId}/rules`, "GET"));
   }
 
-  public async removeRulesFromUser(userId: number, linkedRules: LinkedRuleInputDto[]): Promise<ApiResponseDto<any>> {
-    return this.authorizedRequest(new ApiRequestDto(`/${userId}/rules`, "DELETE", linkedRules))
+  public async appendRules(
+    userId: number,
+    linkedRules: LinkedRuleInputDto[],
+  ): Promise<ApiResponseDto<LinkedRuleDto[]>> {
+    return this.authorizedRequest(
+      new ApiRequestDto(`/${userId}/rules`, "POST", linkedRules),
+    );
   }
-  
-  public async removeRolesFromUser(userId: number, roles: number[]): Promise<ApiResponseDto<any>> {
-    return this.authorizedRequest(new ApiRequestDto(`/${userId}/roles`, "DELETE", roles))
+
+  public async appendRoles(
+    userId: number,
+    roles: number[],
+  ): Promise<ApiResponseDto<RoleDto[]>> {
+    return this.authorizedRequest(
+      new ApiRequestDto(`/${userId}/roles`, "POST", roles),
+    );
+  }
+
+  public async removeRulesFromUser(
+    userId: number,
+    linkedRules: LinkedRuleInputDto[],
+  ): Promise<ApiResponseDto<any>> {
+    return this.authorizedRequest(
+      new ApiRequestDto(`/${userId}/rules`, "DELETE", linkedRules),
+    );
+  }
+
+  public async removeRolesFromUser(
+    userId: number,
+    roles: number[],
+  ): Promise<ApiResponseDto<any>> {
+    return this.authorizedRequest(
+      new ApiRequestDto(`/${userId}/roles`, "DELETE", roles),
+    );
   }
 }

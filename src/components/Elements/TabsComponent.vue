@@ -13,14 +13,14 @@
     <MDBTabContent>
       <template v-for="role in roles">
         <MDBTabPane :tabId="String(role.id)">
-          <Suspense>
-            <RolesComponent
-              @new-rule-selected="ruleSelected"
-              @rule-removed="ruleRemoved"
-              :role="role"
-              :can-change="role.canChange"
-            />
-          </Suspense>
+          <RolesComponent
+            @new-rule-selected="ruleSelected"
+            @rule-removed="ruleRemoved"
+            :role="role"
+            :can-change="role.canChange"
+            :rules="rules"
+            :stocks="stocks"
+          />
         </MDBTabPane>
       </template>
     </MDBTabContent>
@@ -48,6 +48,8 @@ import { useRolesStore } from "@/stores/roles.store";
 import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.dto";
 import ApiResponseDto from "@/api/dto/api-response.dto";
 import LinkedRuleDto from "@/api/modules/rbac/dto/rules/linked-rule.dto";
+import { useRulesStore } from "@/stores/rules.store";
+import { useStorehousesStore } from "@/stores/storehouse.store";
 
 export default defineComponent({
   components: {
@@ -73,15 +75,28 @@ export default defineComponent({
       this.activeTabId = String(this.roles?.[0].id);
     }
   },
-  setup() {
+  async setup() {
     const userStore = useUsersStore();
     const rolesStore = useRolesStore();
+    const rulesStore = useRulesStore();
+    const storehousesStore = useStorehousesStore();
 
-    return { userStore, rolesStore };
+    await rulesStore.loadRulesList();
+    await storehousesStore.loadStorehousesForInput();
+
+    return { userStore, rolesStore, rulesStore, storehousesStore };
   },
   data: () => ({
     activeTabId: "",
   }),
+  computed: {
+    stocks() {
+      return this.storehousesStore.getStorehouseListForInputs;
+    },
+    rules() {
+      return this.rulesStore.getRuleList;
+    },
+  },
   methods: {
     async ruleRemoved({ roleId, linkedRule }) {
       let result: ApiResponseDto<any>;

@@ -54,10 +54,7 @@ import {
   MDBAccordionItem,
   MDBCheckbox,
 } from "mdb-vue-ui-kit";
-import { useRulesStore } from "@/stores/rules.store";
 import MultiSelect from "primevue/multiselect";
-import { useStorehousesStore } from "@/stores/storehouse.store";
-import loggerUtil from "@/utils/logger/logger.util";
 import { appConf } from "@/api/conf/app.conf";
 import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.dto";
 
@@ -72,6 +69,14 @@ export default {
     MultiSelect,
   },
   props: {
+    rules: {
+      type: Array,
+      default: [],
+    },
+    stocks: {
+      type: Array,
+      default: [],
+    },
     items: {
       type: Array,
     },
@@ -94,16 +99,6 @@ export default {
     storehouseIdToObject: {},
   }),
   emits: ["newRuleSelected", "ruleRemoved"],
-  async setup() {
-    const rulesStore = useRulesStore();
-    const storehousesStore = useStorehousesStore();
-    await rulesStore.loadRulesList();
-    await storehousesStore.loadStorehousesForInput();
-    return {
-      rulesStore,
-      storehousesStore,
-    };
-  },
   created() {
     this.selectedRules = this.role?.rules.map((el) => el.ruleId);
     this.lastCheckboxSelected = [...this.selectedRules];
@@ -214,7 +209,7 @@ export default {
   },
   computed: {
     rulesList() {
-      return this.rulesStore.getRuleList;
+      return this.rules;
     },
     rulesCheckboxes() {
       return this.rulesList
@@ -225,7 +220,7 @@ export default {
         }));
     },
     storehouseOptions() {
-      return this.storehousesStore.getStorehouseListForInputs;
+      return this.stocks;
     },
     categories() {
       return Object.values(appConf.rulesCategories).map((el) => ({

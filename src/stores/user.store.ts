@@ -75,15 +75,27 @@ export const useUsersStore = defineStore({
         }
       }
     },
-    async appendRule(userId: number, rule: LinkedRuleInputDto[]) {
+    async appendRule(userId: number, rules: LinkedRuleInputDto[]) {
       const userModel = new UserModel();
-      const res = await userModel.appendRules(userId, rule);
+      const res = await userModel.appendRules(userId, rules);
       await this.updateIfCurrent(userId);
       return res;
     },
-    async removeRule(userId: number, rule: LinkedRuleInputDto[]) {
+    async removeRule(userId: number, rules: LinkedRuleInputDto[]) {
       const userModel = new UserModel();
-      const res = await userModel.removeRulesFromUser(userId, rule);
+      const res = await userModel.removeRulesFromUser(userId, rules);
+      await this.updateIfCurrent(userId);
+      return res;
+    },
+    async removeRoles(userId: number, roles: number[]) {
+      const userModel = new UserModel();
+      const res = await userModel.removeRolesFromUser(userId, roles);
+      await this.updateIfCurrent(userId);
+      return res;
+    },
+    async appendRoles(userId: number, roles: number[]) {
+      const userModel = new UserModel();
+      const res = await userModel.appendRoles(userId, roles);
       await this.updateIfCurrent(userId);
       return res;
     },
