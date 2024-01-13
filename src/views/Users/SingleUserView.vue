@@ -58,7 +58,20 @@
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="pt-4">
-    <TabsComponent :roles="roles" />
+    <MultiSelect
+      v-model="rolesList"
+      :options="rolesOptions"
+      filter
+      optionLabel="name"
+      :placeholder="'Edit user roles'"
+      class="w-full md:w-20rem"
+      @change="handleRolesChange"
+    />
+  </MDBContainer>
+  <MDBContainer class="pt-4">
+    <Suspense>
+      <TabsComponent :roles="roles" :user-id="selectedUser.id" />
+    </Suspense>
   </MDBContainer>
 </template>
 
@@ -82,11 +95,14 @@ import { useRoute } from "vue-router";
 import UpdateUserDto from "@/api/modules/user/dto/update-user.dto";
 import { useUsersStore } from "@/stores/user.store";
 import InputText from "primevue/inputtext";
-import loggerUtil from "@/utils/logger/logger.util";
-import RoleDto from "@/api/modules/rbac/dto/roles/role.dto";
+import SelectComponent from "@/components/Elements/SelectComponent.vue";
+import { useRolesStore } from "@/stores/roles.store";
+import MultiSelect from "primevue/multiselect";
 export default {
   name: "SingleUserView",
   components: {
+    SelectComponent,
+    MultiSelect,
     MDBInput,
     InputText,
     TabsComponent,
@@ -110,14 +126,27 @@ export default {
     newUserUsername: "",
     originalUserPassword: "",
     newUserPassword: "",
+    rolesList: [],
+    lastRolesList: [],
   }),
   async setup() {
     const userStore = useUsersStore();
+    const rolesStore = useRolesStore();
     const route = useRoute();
+    await rolesStore.loadRolesList();
     await userStore.loadSelectedUser(parseInt(route.params.id.toString()));
     return {
       userStore,
+      rolesStore,
     };
+  },
+  created() {
+    this.rolesList = this.selectedUser.roles.map((el) => ({
+      id: el.id,
+      name: el.name,
+    }));
+    this.lastRolesList = [...this.rolesList];
+    console.log(this.rolesList, this.rolesOptions);
   },
   props: {
     id: {
@@ -142,7 +171,6 @@ export default {
       return this.selectedUser.roles.map((el) => el.name);
     },
     roles() {
-      loggerUtil.debug();
       const roles = [];
       roles.push({
         id: 0,
@@ -154,8 +182,38 @@ export default {
       });
       return roles.concat(this.selectedUser.roles);
     },
+    rolesOptions() {
+      return this.rolesStore.getRolesList.map((el) => {
+        return {
+          id: el.id,
+          name: el.name,
+        };
+      });
+    },
   },
   methods: {
+    listContains(list, item) {
+      return list.filter((el) => el.id == item).length > 0;
+    },
+    async handleRolesChange() {
+      if (this.lastRolesList.length > this.rolesList.length) {
+        const removedItems = this.lastRolesList
+          .filter((el) => !this.listContains(this.rolesList, el.id))
+          .map((el) => el.id);
+        if (removedItems.length > 0) {
+          await this.userStore.removeRoles(this.id, removedItems);
+        }
+      } else {
+        const addedItems = this.rolesList
+          .filter((el) => !this.listContains(this.lastRolesList, el.id))
+          .map((el) => el.id);
+        if (addedItems.length > 0) {
+          await this.userStore.appendRoles(this.id, addedItems);
+        }
+      }
+      await this.userStore.loadSelectedUser(parseInt(this.id.toString()));
+      this.lastRolesList = [...this.rolesList];
+    },
     startEditing() {
       this.editing = true;
       this.originalUserName = this.userName;
@@ -187,9 +245,6 @@ export default {
       this.originalUserName = "";
       this.originalUserUsername = "";
       this.originalUserPassword = "";
-    },
-    getUserTabs(user) {
-      return user.tabs || [];
     },
   },
 };

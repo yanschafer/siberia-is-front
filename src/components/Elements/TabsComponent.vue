@@ -13,14 +13,14 @@
     <MDBTabContent>
       <template v-for="role in roles">
         <MDBTabPane :tabId="String(role.id)">
-          <Suspense>
-            <RolesComponent
-              @new-rule-selected="ruleSelected"
-              @rule-removed="ruleRemoved"
-              :role="role"
-              :can-change="role.canChange"
-            />
-          </Suspense>
+          <RolesComponent
+            @new-rule-selected="ruleSelected"
+            @rule-removed="ruleRemoved"
+            :role="role"
+            :can-change="role.canChange"
+            :rules="rules"
+            :stocks="stocks"
+          />
         </MDBTabPane>
       </template>
     </MDBTabContent>
@@ -36,13 +36,20 @@ import {
   MDBTabPane,
 } from "mdb-vue-ui-kit";
 
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import Checkbox from "primevue/checkbox";
 import RolesComponent from "@/components/Elements/RolesComponent.vue";
 import RoleDto from "@/api/modules/rbac/dto/roles/role.dto";
 import loggerUtil from "@/utils/logger/logger.util";
+import { useUsersStore } from "@/stores/user.store";
+import { useRolesStore } from "@/stores/roles.store";
+import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.dto";
+import ApiResponseDto from "@/api/dto/api-response.dto";
+import LinkedRuleDto from "@/api/modules/rbac/dto/rules/linked-rule.dto";
+import { useRulesStore } from "@/stores/rules.store";
+import { useStorehousesStore } from "@/stores/storehouse.store";
 
 export default defineComponent({
   components: {
@@ -57,6 +64,7 @@ export default defineComponent({
     MDBTabPane,
   },
   props: {
+    userId: Number,
     roles: {
       type: Array,
       default: [],
@@ -67,15 +75,48 @@ export default defineComponent({
       this.activeTabId = String(this.roles?.[0].id);
     }
   },
+  async setup() {
+    const userStore = useUsersStore();
+    const rolesStore = useRolesStore();
+    const rulesStore = useRulesStore();
+    const storehousesStore = useStorehousesStore();
+
+    await rulesStore.loadRulesList();
+    await storehousesStore.loadStorehousesForInput();
+
+    return { userStore, rolesStore, rulesStore, storehousesStore };
+  },
   data: () => ({
     activeTabId: "",
   }),
-  methods: {
-    ruleRemoved({ roleId, removedRule }) {
-      loggerUtil.debug("Rule removed", roleId, removedRule);
+  computed: {
+    stocks() {
+      return this.storehousesStore.getStorehouseListForInputs;
     },
-    ruleSelected({ roleId, addedRule }) {
-      loggerUtil.debug("Rule selected", roleId, addedRule);
+    rules() {
+      return this.rulesStore.getRuleList;
+    },
+  },
+  methods: {
+    async ruleRemoved({ roleId, linkedRule }) {
+      let result: ApiResponseDto<any>;
+      if (roleId == 0)
+        result = await this.userStore.removeRule(this.userId || 0, linkedRule);
+      else result = await this.rolesStore.removeRule(roleId, linkedRule);
+
+      if (result.success) {
+        //TODO: Check for errors
+      }
+    },
+    async ruleSelected({ roleId, linkedRule }) {
+      let result: ApiResponseDto<LinkedRuleDto[]>;
+      if (roleId == 0)
+        result = await this.userStore.appendRule(this.userId || 0, linkedRule);
+      else result = await this.rolesStore.appendRule(roleId, linkedRule);
+
+      if (result.success) {
+        //TODO: Check for errors
+      }
     },
   },
 });
