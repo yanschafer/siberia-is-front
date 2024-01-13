@@ -1,5 +1,5 @@
 <template>
-Вфывыфв
+
 </template>
 
 <script>

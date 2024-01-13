@@ -21,19 +21,21 @@
         <label :for="category.key">{{ category.name }}</label>
       </div>
     </MDBAccordionItem>
-    <MultiSelect
-        v-model="storehousesList"
-        :options="storehousesOptions"
-        filter
-        optionLabel="name"
-        :placeholder="multiSelectPlaceholder"
-        class="w-full md:w-20rem" />
+    <MDBContainer class="d-flex flex-column">
+      <span>Storehouses</span>
+      <MultiSelect
+          v-model="storehousesList"
+          :options="storehousesOptions"
+          filter
+          optionLabel="name"
+          :placeholder="multiSelectPlaceholder"
+          class="w-full md:w-20rem" />
+    </MDBContainer>
   </MDBAccordion>
-
 </template>
 <script lang="ts">
 import Checkbox from "primevue/checkbox";
-import { MDBAccordion, MDBAccordionItem, MDBCheckbox } from "mdb-vue-ui-kit";
+import { MDBContainer, MDBAccordion, MDBAccordionItem, MDBCheckbox } from "mdb-vue-ui-kit";
 import { useRulesStore } from "@/stores/rules.store";
 import loggerUtil from "@/utils/logger/logger.util";
 import MultiSelect from 'primevue/multiselect';
@@ -41,7 +43,7 @@ import {useStorehousesStore} from "@/stores/storehouse.store";
 
 export default {
   name: "RolesComponent",
-  components: { MDBAccordion, MDBAccordionItem, MDBCheckbox, Checkbox, MultiSelect },
+  components: { MDBContainer, MDBAccordion, MDBAccordionItem, MDBCheckbox, Checkbox, MultiSelect },
   props: {
     items: {
       type: Array,
