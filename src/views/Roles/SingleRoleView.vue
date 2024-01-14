@@ -1,4 +1,5 @@
 <template>
+  <ModalComponent :disclaimerText="disclaimerText" :modalTitle="modalTitle" :modalText="modalText" v-if="showModal" @closeModal="closeModal" />
   <MDBContainer class="single-user-info d-flex flex-column gap-3">
     <MDBRow class="d-flex justify-content-around">
       <MDBRow class="w-auto">
@@ -39,9 +40,8 @@
         >
       </MDBCol>
       <MDBCol v-else class="d-flex justify-content-end">
-        <MDBBtn @click="cancelEditing" class="utility-btn" outline="black"
-          >CANCEL</MDBBtn
-        >
+        <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">DELETE</MDBBtn>
+        <MDBBtn @click="cancelEditing" class="utility-btn" outline="black">CANCEL</MDBBtn>
         <MDBBtn @click="saveChanges" class="utility-btn btn-black">SAVE</MDBBtn>
       </MDBCol>
     </MDBRow>
@@ -127,6 +127,10 @@ export default {
     };
   },
   data: () => ({
+    modalTitle: 'Confirm deletion',
+    modalText: ``,
+    disclaimerText: 'This action cannot be undone, this role data will be lost',
+    showModal: false,
     activeTabId4: "role1-1",
     editing: false,
     newRoleName: "",
@@ -135,6 +139,13 @@ export default {
     originalRoleDescription: "",
   }),
   methods: {
+    confirmDeletion() {
+      this.roleName = this.selectedRole.name || '';
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
+    },
     startEditing() {
       this.editing = true;
       this.originalRoleName = this.roleName;
@@ -177,6 +188,9 @@ export default {
     },
   },
   computed: {
+    modalText() {
+      return `Are you sure you want to delete user "${this.roleName}?"`;
+    },
     selectedRole() {
       return this.rolesStore.getSelectedRole || {};
     },

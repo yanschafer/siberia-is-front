@@ -1,4 +1,5 @@
 <template>
+  <ModalComponent :disclaimerText="disclaimerText" :modalTitle="modalTitle" :modalText="modalText" v-if="showModal" @closeModal="closeModal" />
   <div class="animate__animated animate__fadeIn">
     <MDBContainer class="animate__animated animate__fadeIn" fluid>
       <MDBRow class="d-flex flex-row gap-5 header-row">
@@ -42,6 +43,9 @@
               class="animate__animated animate__flipInX animate__faster"
               v-else
             >
+              <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger"
+              >DELETE</MDBBtn
+              >
               <MDBBtn @click="cancelEditing" class="utility-btn" outline="black"
                 >CANCEL</MDBBtn
               >
@@ -260,13 +264,16 @@ import ProductUpdateDto from "@/api/modules/product/dto/product-update.dto";
 import { useCollectionStore } from "@/stores/collection.store";
 import encoderUtil from "@/utils/encoder.util";
 import loggerUtil from "@/utils/logger/logger.util";
+import ModalComponent from "@/components/Elements/ModalComponent.vue";
 
 export default {
   name: "SingleProductView",
   components: {
     FileUpload,
+    ModalComponent,
     TreeDropdownComponent,
     SelectComponent,
+
     CascadeSelect,
     MDBInput,
     FileUploadComponent,
@@ -304,13 +311,16 @@ export default {
     };
   },
   data: () => ({
+    showModal: false,
+    modalTitle: 'Confirm product deletion',
+    modalText: `Are you sure you want to delete product {{ productName }}?`,
+    disclaimerText: 'This action cannot be undone, this product data will be lost',
     placeholderBrand: "Select a brand",
     placeholderCategory: "Select a category",
     placeholderCollection: "Select a collection",
     editing: false,
     photoBase64: null,
     photoName: null,
-
     newImageSource: null,
     newProductName: null,
     newSku: null,
@@ -355,6 +365,16 @@ export default {
       this.newDefaultPrice = this.defaultPrice;
       this.newExpirationDate = this.expirationDate;
     },
+    confirmDeletion() {
+      this.productName = this.selectedProduct.name || '';
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
+    },
+    cancelEditing() {
+      this.editing = false;
+    },
     async saveChanges() {
       const brandId = this.newBrand ? this.newBrand.id : null;
       const collectionId = this.newCollection ? this.newCollection.id : null;
@@ -386,6 +406,9 @@ export default {
     },
   },
   computed: {
+    modalText() {
+      return `Are you sure you want to delete product "${this.productName}?"`;
+    },
     categoriesList() {
       return this.categoriesStore.getCategoryList;
     },

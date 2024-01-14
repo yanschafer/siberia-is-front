@@ -1,4 +1,5 @@
 <template>
+  <ModalComponent :disclaimerText="disclaimerText" :modalTitle="modalTitle" :modalText="modalText" v-if="showModal" @closeModal="closeModal" />
   <MDBContainer class="single-user-info d-flex flex-column gap-3">
     <MDBRow class="d-flex justify-content-around">
       <MDBRow class="w-auto">
@@ -30,6 +31,7 @@
         >
       </MDBCol>
       <MDBCol v-else class="d-flex justify-content-end">
+        <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">DELETE</MDBBtn>
         <MDBBtn @click="cancelEditing" class="utility-btn" outline="black"
           >CANCEL</MDBBtn
         >
@@ -97,9 +99,11 @@ import InputText from "primevue/inputtext";
 import SelectComponent from "@/components/Elements/SelectComponent.vue";
 import { useRolesStore } from "@/stores/roles.store";
 import MultiSelectComponent from "@/components/Elements/MultiSelectComponent.vue";
+import ModalComponent from "@/components/Elements/ModalComponent.vue";
 export default {
   name: "SingleUserView",
   components: {
+    ModalComponent,
     MultiSelectComponent,
     SelectComponent,
     MDBInput,
@@ -118,8 +122,12 @@ export default {
   },
   data: () => ({
     editing: false,
+    showModal: false,
     searchTerm: "",
     originalUserName: "",
+    modalTitle: 'Confirm deletion',
+    modalText: ``,
+    disclaimerText: 'This action cannot be undone, this user data will be lost',
     newUserName: "",
     originalUserUsername: "",
     newUserUsername: "",
@@ -154,6 +162,9 @@ export default {
     },
   },
   computed: {
+    modalText() {
+      return `Are you sure you want to delete user "${this.userName}?"`;
+    },
     selectedUser(): UserFullDto {
       return this.userStore.getSelectedUser;
     },
@@ -191,6 +202,13 @@ export default {
     },
   },
   methods: {
+    confirmDeletion() {
+      this.userName = this.selectedUser.name || '';
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
+    },
     listContains(list, item) {
       return list.filter((el) => el.id == item).length > 0;
     },
