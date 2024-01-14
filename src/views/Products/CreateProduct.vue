@@ -67,6 +67,7 @@
         :nodes="categoriesList"
         v-model="category"
       />
+      <DialogComponent />
       <h1 class="product-heading d-flex gap-1 align-items-center">
         Product description
         <SelectComponent
@@ -163,10 +164,12 @@ import ProductUpdateDto from "@/api/modules/product/dto/product-update.dto";
 import EncoderUtil from "@/utils/encoder.util";
 import LoggerUtil from "@/utils/logger/logger.util";
 import ProductInputDto from "@/api/modules/product/dto/product-input.dto";
+import DialogComponent from "@/components/Elements/DialogComponent.vue";
 
 export default {
   name: "CreateProduct",
   components: {
+    DialogComponent,
     FileUpload,
     TreeDropdownComponent,
     SelectComponent,

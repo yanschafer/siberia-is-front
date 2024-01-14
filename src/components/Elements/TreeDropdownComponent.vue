@@ -26,7 +26,11 @@
 
 <script lang="ts">
 import TreeSelect from "primevue/treeselect";
+import Button from "primevue/button";
+import InputText from "primevue/inputtext";
+import OverlayPanel from 'primevue/overlaypanel';
 import loggerUtil from "@/utils/logger/logger.util";
+import { ref } from "vue";
 
 export default {
   name: "TreeDropdownComponent",
@@ -44,10 +48,13 @@ export default {
       selectedValue: this.nodes.label,
       searchText: "",
       expandedKeys: [],
+      addNew: null,
+      inputName: 'Create name for a collection'
     };
   },
   mounted() {
     this.selectedValue = { [this.modelValue]: true };
+    this.addNew = this.$refs.addNew;
   },
   computed: {
     filteredNodes() {
@@ -55,6 +62,9 @@ export default {
     },
   },
   methods: {
+    toggle(event) {
+      this.addNew.toggle(event);
+    },
     handleChange() {
       this.$emit("update:modelValue", Object.keys(this.selectedValue)[0]);
     },
@@ -80,3 +90,18 @@ export default {
   },
 };
 </script>
+<style scoped>
+.utility-btn {
+  height: auto;
+  width: 100%;
+  min-width: 4rem;
+  max-width: fit-content;
+  font-weight: 800;
+  max-height: 2rem;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 7px;
+}
+</style>
