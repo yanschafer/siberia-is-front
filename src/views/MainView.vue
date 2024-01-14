@@ -1,5 +1,6 @@
 <template>
   <div>
+    <DialogComponent />
     <SidebarComponent :sidebarItems="sidebar" />
     <div class="header-area">
       <HeaderComponent
@@ -24,6 +25,7 @@
 import { useRoute, useRouter } from "vue-router";
 import SidebarComponent from "@/components/Navigation/SidebarComponent.vue";
 import HeaderComponent from "@/components/Navigation/HeaderComponent.vue";
+import DialogComponent from "@/components/Elements/DialogComponent.vue";
 import TokenUtil from "@/utils/token.util";
 import { appConf } from "@/api/conf/app.conf";
 import { MDBContainer } from "mdb-vue-ui-kit";
@@ -32,6 +34,7 @@ export default {
   components: {
     HeaderComponent,
     SidebarComponent,
+    DialogComponent,
     MDBContainer,
   },
   data() {

@@ -47,6 +47,10 @@
                 :items="brandList"
                 v-model="brand"
               />
+              <DialogComponentTrigger
+                button-text="CREATE"
+                :init-object="initBrandDialog"
+              />
               <h5 class="field-heading d-flex gap-1 align-items-center">
                 LINK
                 <MDBInput
@@ -64,10 +68,13 @@
       <TreeDropdownComponent
         :placeholder="placeholderCategory"
         class="animate__animated animate__flipInX animate__faster"
-        :nodes="categoriesList"
+        :nodes="categoryList"
         v-model="category"
       />
-      <DialogComponent />
+      <DialogComponentTrigger
+        button-text="CREATE"
+        :init-object="initCategoryDialog"
+      />
       <h1 class="product-heading d-flex gap-1 align-items-center">
         Product description
         <SelectComponent
@@ -75,6 +82,10 @@
           class="animate__animated animate__flipInX animate__faster"
           :items="collectionList"
           v-model="collection"
+        />
+        <DialogComponentTrigger
+          button-text="CREATE"
+          :init-object="initCollectionDialog"
         />
         <span class="field-heading separator">|</span>
         <h5
@@ -152,7 +163,6 @@ import FileUpload from "primevue/fileupload";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput } from "mdb-vue-ui-kit";
 import FileUploadComponent from "@/components/Inputs/FileUploadComponent.vue";
 import CascadeSelect from "primevue/cascadeselect";
-import FilesResolverUtil from "@/utils/files-resolver.util";
 import { useProductsStore } from "@/stores/products.store";
 import { useCollectionStore } from "@/stores/collection.store";
 import { useRoute, useRouter } from "vue-router";
@@ -160,16 +170,18 @@ import { useBrandStore } from "@/stores/brand.store";
 import { useCategoriesStore } from "@/stores/categories.store";
 import SelectComponent from "@/components/Elements/SelectComponent.vue";
 import TreeDropdownComponent from "@/components/Elements/TreeDropdownComponent.vue";
-import ProductUpdateDto from "@/api/modules/product/dto/product-update.dto";
 import EncoderUtil from "@/utils/encoder.util";
-import LoggerUtil from "@/utils/logger/logger.util";
 import ProductInputDto from "@/api/modules/product/dto/product-input.dto";
-import DialogComponent from "@/components/Elements/DialogComponent.vue";
+import DialogComponentTrigger from "@/components/Elements/DialogComponentTrigger.vue";
+import loggerUtil from "@/utils/logger/logger.util";
+import BrandModel from "@/api/modules/brand/models/brand.model";
+import CategoryModel from "@/api/modules/category/models/category.model";
+import CollectionModel from "@/api/modules/collection/models/collection.model";
 
 export default {
   name: "CreateProduct",
   components: {
-    DialogComponent,
+    DialogComponentTrigger,
     FileUpload,
     TreeDropdownComponent,
     SelectComponent,
@@ -208,26 +220,55 @@ export default {
       router,
     };
   },
-  data: () => ({
-    placeholderCategory: "Select a category",
-    placeholderBrand: "Select a brand",
-    placeholderCollection: "Select a collection",
-    vendorCode: "",
-    brand: null,
-    name: "",
-    description: "",
-    distributorPrice: "",
-    professionalPrice: "",
-    commonPrice: "",
-    category: null,
-    collection: null,
-    color: "",
-    amountInBox: "",
-    expirationDate: "",
-    link: "",
-    photoBase64: "",
-    photoName: "",
-  }),
+  data() {
+    return {
+      placeholderCategory: "Select a category",
+      placeholderBrand: "Select a brand",
+      placeholderCollection: "Select a collection",
+      vendorCode: "",
+      brand: null,
+      name: "",
+      description: "",
+      distributorPrice: "",
+      professionalPrice: "",
+      commonPrice: "",
+      category: null,
+      collection: null,
+      color: "",
+      amountInBox: "",
+      expirationDate: "",
+      link: "",
+      photoBase64: "",
+      photoName: "",
+      initCategoryDialog: {
+        header: "Create a category",
+        showSelect: true,
+        selectItems: this.categoryList,
+        selectName: "Select parent category",
+        inputName: "Category name",
+        methodOnSave: this.handleCategoryUpdate,
+        methodOnClose: () => loggerUtil.debug("workds"),
+        model: new CategoryModel(),
+      },
+      initBrandDialog: {
+        header: "Create a brand",
+        inputName: "Brand name",
+        model: new BrandModel(),
+        methodOnSave: this.handleBrandUpdate,
+        methodOnClose: () => loggerUtil.debug("workds"),
+      },
+      initCollectionDialog: {
+        header: "Create a collection",
+        inputName: "Collection name",
+        methodOnSave: this.handleCollectionUpdate,
+        methodOnClose: () => loggerUtil.debug("workds"),
+        model: new CollectionModel(),
+      },
+    };
+  },
+  created() {
+    this.initCategoryDialog.selectItems = this.categoryList;
+  },
   methods: {
     async fileChanged(files: File[]) {
       const file = files[0];
@@ -235,6 +276,15 @@ export default {
       if (encoded == null) return;
       this.photoBase64 = encoded;
       this.photoName = file.name;
+    },
+    async handleCategoryUpdate() {
+      await this.categoriesStore.loadCategoriesList();
+    },
+    async handleBrandUpdate() {
+      await this.brandStore.loadBrandsList();
+    },
+    async handleCollectionUpdate() {
+      await this.collectionStore.loadCollectionList();
     },
     async create() {
       const brandId = this.brand ? this.brand.id : null;
@@ -276,7 +326,7 @@ export default {
     },
   },
   computed: {
-    categoriesList() {
+    categoryList() {
       return this.categoriesStore.getCategoryList;
     },
     brandList() {
