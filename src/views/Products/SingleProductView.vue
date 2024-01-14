@@ -1,4 +1,5 @@
 <template>
+  <ModalComponent :disclaimerText="disclaimerText" :modalTitle="modalTitle" :modalText="modalText" v-if="showModal" @closeModal="closeModal" />
   <div class="animate__animated animate__fadeIn">
     <MDBContainer class="animate__animated animate__fadeIn" fluid>
       <MDBRow class="d-flex flex-row gap-5 header-row">
@@ -42,6 +43,9 @@
               class="animate__animated animate__flipInX animate__faster"
               v-else
             >
+              <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger"
+              >DELETE</MDBBtn
+              >
               <MDBBtn @click="cancelEditing" class="utility-btn" outline="black"
                 >CANCEL</MDBBtn
               >
@@ -278,14 +282,17 @@ import CategoryModel from "@/api/modules/category/models/category.model";
 import BrandModel from "@/api/modules/brand/models/brand.model";
 import CollectionModel from "@/api/modules/collection/models/collection.model";
 import DialogComponentTrigger from "@/components/Elements/DialogComponentTrigger.vue";
+import ModalComponent from "@/components/Elements/ModalComponent.vue";
 
 export default {
   name: "SingleProductView",
   components: {
     DialogComponentTrigger,
     FileUpload,
+    ModalComponent,
     TreeDropdownComponent,
     SelectComponent,
+
     CascadeSelect,
     MDBInput,
     FileUploadComponent,
@@ -412,6 +419,16 @@ export default {
       this.newDefaultPrice = this.defaultPrice;
       this.newExpirationDate = this.expirationDate;
     },
+    confirmDeletion() {
+      this.productName = this.selectedProduct.name || '';
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
+    },
+    cancelEditing() {
+      this.editing = false;
+    },
     async saveChanges() {
       const brandId = this.newBrand ? this.newBrand.id : null;
       const collectionId = this.newCollection ? this.newCollection.id : null;
@@ -443,6 +460,9 @@ export default {
     },
   },
   computed: {
+    modalText() {
+      return `Are you sure you want to delete product "${this.productName}?"`;
+    },
     categoryList() {
       return this.categoriesStore.getCategoryList;
     },

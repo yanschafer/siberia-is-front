@@ -1,6 +1,6 @@
 <template>
   <Toast />
-  <ModalComponent v-if="showModal" @closeModal="closeModal" />
+  <ModalComponent :disclaimerText="disclaimerText" :modalTitle="modalTitle" :modalText="modalText" v-if="showModal" @closeModal="closeModal" />
   <MDBContainer class="storehouse-info d-flex flex-column gap-3">
     <h1 v-if="!editing" class="storehouse-heading">{{ storehouseName }}</h1>
     <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newStorehouseName" />
@@ -12,7 +12,7 @@
     <MDBBtn v-if="!editing" @click="startEditing" class="utility-btn" outline="black">Edit storehouse</MDBBtn>
     <MDBCol v-else class="d-flex justify-content-start">
       <MDBBtn @click="cancelEditing" class="utility-btn" outline="black">CANCEL</MDBBtn>
-      <MDBBtn @click="openDeleteModal" class="utility-btn btn-danger">DELETE STOREHOUSE</MDBBtn>
+      <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">DELETE STOREHOUSE</MDBBtn>
       <MDBBtn @click="saveChanges" class="utility-btn btn-black">SAVE</MDBBtn>
     </MDBCol>
   </MDBContainer>
@@ -77,6 +77,9 @@ export default {
   data: () => ({
     newArrival: false,
     newSale: false,
+    modalTitle: 'Confirm deletion',
+    modalText: ``,
+    disclaimerText: 'This action cannot be undone, this storehouse data will be lost',
     newRequest: false,
     editing: false,
     showModal: false,
@@ -110,6 +113,9 @@ export default {
     };
   },
   computed: {
+    modalText() {
+      return `Are you sure you want to delete storehouse named "${this.storehouseName}?"`;
+    },
     selectedStorehouse() {
       return this.storehouseStore.getSelectedStorehouse
     },
@@ -197,7 +203,8 @@ export default {
     handleSearch(searchTerm) {
       this.searchTerm = searchTerm;
     },
-    openDeleteModal() {
+    confirmDeletion() {
+      this.storehouseName = this.selectedStorehouse.name || '';
       this.showModal = true;
     },
     closeModal() {

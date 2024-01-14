@@ -12,10 +12,11 @@
         :class="{ 'animate__fadeInUp': showModal, 'animate__fadeOutDown': !showModal }"
     >
       <img class="animate__animated animate__headShake animate__delay-1s utility-icon" src="@/assets/icons/danger.svg">
-      <h3 class="modal-heading">Deletion confirmation</h3>
-      <p class="modal-text mb-0">Are you sure you want to delete? <span class="disclaimer">This action cannot be undone, this storehouse product list will be lost</span></p>
+      <h3 class="modal-heading">{{ modalTitle }}</h3>
+      <p class="modal-text mb-0">{{ modalText }} <span class="disclaimer">{{ disclaimerText }}</span></p>
       <MDBRow class="d-flex flex-row gap-5 mt-3">
         <MDBBtn @click="closeModal" class="utility-btn btn-black">CANCEL</MDBBtn>
+        <MDBBtn @click="closeModal" class="utility-btn btn-danger">DELETE</MDBBtn>
       </MDBRow>
     </MDBContainer>
   </MDBContainer>
@@ -28,6 +29,20 @@ import { MDBBtn, MDBCol, MDBContainer, MDBRow } from "mdb-vue-ui-kit";
 export default defineComponent({
   name: "ModalComponent",
   components: { MDBCol, MDBRow, MDBContainer, MDBBtn },
+  props: {
+    modalTitle: {
+      type: String,
+      required: true,
+    },
+    modalText: {
+      type: String,
+      required: true,
+    },
+    disclaimerText: {
+      type: String,
+      required: true,
+    }
+  },
   setup() {
     const isVisible = ref(true);
     const showModal = ref(true);

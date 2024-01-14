@@ -66,9 +66,7 @@ export default {
       ],
     };
   },
-  mounted() {
-    this.op = this.$refs.op;
-  },
+
   methods: {
     toggle(event) {
       this.op.toggle(event);
