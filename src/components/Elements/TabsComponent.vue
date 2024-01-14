@@ -6,8 +6,9 @@
           :wrap="false"
           :tabId="String(role.id)"
           :href="String(role.id)"
-          >{{ role.name }}</MDBTabItem
         >
+          {{ role.name }}
+        </MDBTabItem>
       </template>
     </MDBTabNav>
     <MDBTabContent>

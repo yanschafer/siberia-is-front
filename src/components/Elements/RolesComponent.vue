@@ -30,15 +30,14 @@
         <template v-for="item in categoryItems(category.id - 1)">
           <MDBContainer class="d-flex flex-column">
             <span>{{ item.name }}</span>
-            <MultiSelect
-              v-model="storehouseList[item.id]"
+            <MultiSelectComponent
+              :start-items="storehouseList[item.id]"
               :options="storehouseOptions"
-              filter
-              optionLabel="name"
-              :placeholder="multiSelectPlaceholder"
-              class="w-full md:w-20rem"
-              @change="handleStorehouseRuleChange(category, item)"
+              option-label="name"
+              :placeholder="'multiSelectPlaceholder'"
               :disabled="!canChange"
+              @items-added="storehouseAdded(item.id, $event)"
+              @items-removed="storehouseRemoved(item.id, $event)"
             />
           </MDBContainer>
         </template>
@@ -58,10 +57,12 @@ import MultiSelect from "primevue/multiselect";
 import { appConf } from "@/api/conf/app.conf";
 import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.dto";
 import loggerUtil from "@/utils/logger/logger.util";
+import MultiSelectComponent from "@/components/Elements/MultiSelectComponent.vue";
 
 export default {
   name: "RolesComponent",
   components: {
+    MultiSelectComponent,
     MDBContainer,
     MDBAccordion,
     MDBAccordionItem,
@@ -134,7 +135,7 @@ export default {
     emit(type, { roleId, rule, stockId }) {
       let linkedRule: LinkedRuleInputDto[] = [];
       if (typeof stockId == "object" && stockId != null)
-        linkedRule = stockId.map((el) => new LinkedRuleInputDto(rule, el.id));
+        linkedRule = stockId.map((el) => new LinkedRuleInputDto(rule, el));
       else linkedRule = [new LinkedRuleInputDto(rule, stockId)];
       const event = type == "add" ? "newRuleSelected" : "ruleRemoved";
       this.$emit(event, {
@@ -178,34 +179,19 @@ export default {
     listContains(list, id) {
       return list.filter((el) => el.id == id).length > 0;
     },
-    handleStorehouseRuleChange(category, item, event) {
-      if (
-        this.lastStorehouseList[item.id].length >
-        this.storehouseList[item.id].length
-      ) {
-        const removedItem = this.lastStorehouseList[item.id].filter(
-          (el) => !this.listContains(this.storehouseList[item.id], el.id),
-        );
-        if (removedItem.length > 0) {
-          this.emit("remove", {
-            roleId: this.role.id,
-            rule: item.id,
-            stockId: removedItem,
-          });
-        }
-      } else {
-        const addedItem = this.storehouseList[item.id].filter(
-          (el) => !this.listContains(this.lastStorehouseList[item.id], el.id),
-        );
-        if (addedItem.length > 0) {
-          this.emit("add", {
-            roleId: this.role.id,
-            rule: item.id,
-            stockId: addedItem,
-          });
-        }
-      }
-      this.lastStorehouseList = { ...this.storehouseList };
+    storehouseAdded(ruleId, addedItems) {
+      this.emit("add", {
+        roleId: this.role.id,
+        rule: ruleId,
+        stockId: addedItems,
+      });
+    },
+    storehouseRemoved(ruleId, removedItems) {
+      this.emit("remove", {
+        roleId: this.role.id,
+        rule: ruleId,
+        stockId: removedItems,
+      });
     },
   },
   computed: {
