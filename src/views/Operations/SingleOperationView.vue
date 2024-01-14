@@ -2,102 +2,193 @@
   <MDBContainer class="single-user-info d-flex flex-column gap-3">
     <MDBRow class="d-flex">
       <MDBRow class="w-auto">
-        <h1 class="username-heading">{{operation}} <template v-if="from !== ''">from "{{from}}"</template> <template v-if="to !== ''"> to "{{to}}"</template></h1>
+        <h1 class="username-heading">
+          {{ operation }}
+          <template v-if="from !== ''">from "{{ from }}"</template>
+          <template v-if="to !== ''"> to "{{ to }}"</template>
+        </h1>
       </MDBRow>
     </MDBRow>
     <MDBRow class="d-flex flex-nowrap">
       <MDBCol class="col-auto">
-        <span class="user-roles-heading">STATUS</span>
-        <SelectComponent :placeholder="statusPlaceholder" :filter="false" :items="selectedOperation.availableStatuses" />
+        <span class="user-roles-heading">STATUS: </span>
+        <span class="username">{{ status }}</span>
       </MDBCol>
-      <MDBCol class="col-auto">
-        <span class="user-roles-heading">STOREHOUSE</span>
-        <SelectComponent :placeholder="storehousesPlaceholder" :filter="true" :items="storehousesList" />
-      </MDBCol>
-<!--      <span class="username">{{ status }} ⌵</span>-->
-      <template v-if="selectedOperation.availableStatuses">
-        <MDBContainer>
-          <template v-for="item in selectedOperation.availableStatuses">
-            <template v-if="isInProgressStatus(item.id)">
-            </template>
-            <template v-else>
-                <MDBRow><p class="cursor-pointer" @click="changeToStatus(item.id)">{{item.name}}</p></MDBRow>
-            </template>
-          </template>
-        </MDBContainer>
+      <template v-if="haveAvailableStatuses">
+        <MDBCol class="col-auto">
+          <MDBBtn class="utility-btn" @click="toggleStatusChange">
+            {{ changeStatusTitle }}
+          </MDBBtn>
+        </MDBCol>
+        <template v-if="isStatusOnSelect">
+          <MDBCol class="col-auto">
+            <span class="user-roles-heading">STATUS</span>
+            <SelectComponent
+              v-model="selectedStatus"
+              @change="handleStatusChange"
+              :placeholder="statusPlaceholder"
+              :filter="false"
+              :items="selectedOperation.availableStatuses"
+            />
+          </MDBCol>
+          <MDBCol class="col-auto" v-if="selectedStatusNeedStock">
+            <span class="user-roles-heading">STOREHOUSE</span>
+            <SelectComponent
+              v-model="selectedStorehouse"
+              @click="handleStorehouseChange"
+              :placeholder="storehousesPlaceholder"
+              :filter="true"
+              :items="storehousesList"
+            />
+          </MDBCol>
+          <MDBBtn class="utility-btn" @click="saveStatus"> Save </MDBBtn>
+        </template>
       </template>
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="mt-4">
     <MDBRow class="w-auto">
-      <h1 class="username-heading mb-2">Products in {{operation}}</h1>
+      <h1 class="username-heading mb-2">Products in {{ operation }}</h1>
     </MDBRow>
     <SearchComponent />
-    <TableComponent :rows="products" :columns="productColumns" :search-term="searchTerm" />
+    <TableComponent
+      :rows="products"
+      :columns="productColumns"
+      :search-term="searchTerm"
+    />
   </MDBContainer>
 </template>
 <script lang="ts">
-import {MDBContainer, MDBRow, MDBCol} from "mdb-vue-ui-kit";
+import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdb-vue-ui-kit";
 import TableComponent from "@/components/Elements/TableComponent.vue";
 import SearchComponent from "@/components/Elements/SearchComponent.vue";
-import {useOperationStore} from "@/stores/operation.store";
-import {useRoute} from "vue-router";
-import {TransactionStatus, TransactionType} from "@/api/conf/app.conf";
+import { useOperationStore } from "@/stores/operation.store";
+import { useRoute } from "vue-router";
+import {
+  appConf,
+  TransactionStatus,
+  TransactionType,
+} from "@/api/conf/app.conf";
 import LoggerUtil from "@/utils/logger/logger.util";
 import SelectComponent from "@/components/Elements/SelectComponent.vue";
-import {useStorehousesStore} from "@/stores/storehouse.store";
+import { useStorehousesStore } from "@/stores/storehouse.store";
+import loggerUtil from "@/utils/logger/logger.util";
+import TransactionSimpleDto from "@/api/modules/transaction/dto/transaction-simple.dto";
+import ApiResponseDto from "@/api/dto/api-response.dto";
 
 export default {
-  name: 'SingleOperationView',
-  components: {SelectComponent, SearchComponent, TableComponent, MDBRow, MDBContainer, MDBCol},
+  name: "SingleOperationView",
+  components: {
+    SelectComponent,
+    SearchComponent,
+    TableComponent,
+    MDBRow,
+    MDBContainer,
+    MDBCol,
+    MDBBtn,
+  },
   props: {
     id: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   data: () => ({
     typeMapper: {
       [TransactionType.INCOME]: "Arrival",
       [TransactionType.OUTCOME]: "Sale",
-      [TransactionType.TRANSFER]: "Request"
+      [TransactionType.TRANSFER]: "Request",
     },
     productColumns: [
-      { field: 'name', header: 'NAME' },
-      { field: 'vendorCode', header: 'SKU' },
-      { field: 'amount', header: 'QUANTITY' },
+      { field: "name", header: "NAME" },
+      { field: "vendorCode", header: "SKU" },
+      { field: "amount", header: "QUANTITY" },
     ],
     searchTerm: "",
-    storehousesPlaceholder: "Select storehouse"
+    storehousesPlaceholder: "Select storehouse",
+    selectedStatus: null,
+    selectedStorehouse: null,
+    isStatusOnSelect: false,
   }),
   created() {
     if (this.selectedOperation.type.id != TransactionType.TRANSFER)
-      this.productColumns.push({ field: 'price', header: 'PRICE' })
-    
+      this.productColumns.push({ field: "price", header: "PRICE" });
   },
   async setup() {
-    const operationStore = useOperationStore()
+    const operationStore = useOperationStore();
     const storehousesStore = useStorehousesStore();
-    const route = useRoute()
-    
-    await operationStore.loadSelectedOperation(parseInt(route.params.id.toString()))
-    await storehousesStore.loadStorehouseList()
+    const route = useRoute();
+
+    await operationStore.loadSelectedOperation(
+      parseInt(route.params.id.toString()),
+    );
+    await storehousesStore.loadStorehouseList();
 
     return {
       operationStore,
-      storehousesStore
-    }
+      storehousesStore,
+    };
   },
   methods: {
     isInProgressStatus(statusId: number) {
-      return statusId == TransactionStatus.IN_PROGRESS
+      return statusId == TransactionStatus.IN_PROGRESS;
     },
-    changeToStatus(statusId: number) {
-      LoggerUtil.debug(statusId)
-      this.operationStore.changeStatus(this.id, statusId)
-    }
+    async changeToStatus(statusId: number) {
+      return await this.operationStore.changeStatus(this.id, statusId);
+    },
+    async changeToStatusWithStock(statusId: number, stockId: number) {
+      return await this.operationStore.changeStatus(this.id, statusId, stockId);
+    },
+    toggleStatusChange() {
+      this.isStatusOnSelect = !this.isStatusOnSelect;
+    },
+    handleStatusChange() {
+      loggerUtil.debug(this.selectedStatus);
+    },
+    handleStorehouseChange() {},
+
+    async saveStatus() {
+      if (this.selectedStatusNeedStock && !this.selectedStorehouse) {
+        //TODO: Show error (must select storehouse)
+        return;
+      }
+
+      loggerUtil.debug(this.selectedStatusNeedStock);
+
+      if (this.selectedStatus) {
+        let changed: ApiResponseDto<TransactionSimpleDto> | null = null;
+        if (!this.selectedStatusNeedStock)
+          changed = await this.changeToStatus(this.selectedStatus.id);
+        else if (this.selectedStorehouse)
+          changed = await this.changeToStatusWithStock(
+            this.selectedStatus.id,
+            this.selectedStorehouse.id,
+          );
+
+        if (changed == null) {
+          //TODO: Show error
+        }
+
+        if (changed?.success) {
+          this.selectedStatus = null;
+          this.selectedStorehouse = null;
+          this.toggleStatusChange();
+        } else {
+          //TODO: Check for errors
+        }
+      } else {
+        //TODO: Show error
+      }
+    },
   },
   computed: {
+    changeStatusTitle() {
+      return this.isStatusOnSelect ? "Cancel" : "Change status";
+    },
+    selectedStatusNeedStock() {
+      if (!this.selectedStatus) return false;
+      return this.selectedStatus.id == appConf.transferInProgressStatus;
+    },
     statusPlaceholder() {
       return this.status;
     },
@@ -107,29 +198,32 @@ export default {
     selectedOperation() {
       return this.operationStore.getSelectedOperation;
     },
+    haveAvailableStatuses() {
+      return this.selectedOperation.availableStatuses;
+    },
     operation() {
-      return this.typeMapper[this.selectedOperation.type.id] || '';
+      return this.typeMapper[this.selectedOperation.type.id] || "";
     },
     from() {
-      return this.selectedOperation.from?.name || '';
+      return this.selectedOperation.from?.name || "";
     },
     to() {
-      return this.selectedOperation.to?.name || '';
+      return this.selectedOperation.to?.name || "";
     },
     status() {
-      return this.selectedOperation.status.name || '';
+      return this.selectedOperation.status.name || "";
     },
     products() {
-      return this.selectedOperation.products.map(el => ({
+      return this.selectedOperation.products.map((el) => ({
         id: el.product.id,
         name: el.product.name,
         amount: el.amount,
         vendorCode: el.product.vendorCode,
-        price: el.price
-      }))
-    }
-  }
-}
+        price: el.price,
+      }));
+    },
+  },
+};
 </script>
 <style scoped>
 .username-heading {
@@ -161,14 +255,14 @@ export default {
   font-weight: 600;
 }
 .single-user-info {
-  border-bottom: 1px solid #EEEEEE;
+  border-bottom: 1px solid #eeeeee;
   padding-bottom: 2rem;
 }
 
 .tab-item {
-  font-weight: 800!important;
+  font-weight: 800 !important;
 }
 :deep(.nav-link) {
-  font-weight: 600!important;
+  font-weight: 600 !important;
 }
 </style>

@@ -14,56 +14,53 @@
       <span class="username">{{ dateTime }}</span>
     </MDBRow>
   </MDBContainer>
-  <MDBContainer class="pt-4">
-
-  </MDBContainer>
+  <MDBContainer class="pt-4"> {{ description }} </MDBContainer>
 </template>
 <script lang="ts">
-import {MDBBadge, MDBBtn, MDBCol, MDBContainer, MDBRow} from "mdb-vue-ui-kit";
+import { MDBBadge, MDBBtn, MDBCol, MDBContainer, MDBRow } from "mdb-vue-ui-kit";
 import TabsComponent from "@/components/Elements/TabsComponent.vue";
-import {useHistoryStore} from "@/stores/history.store";
-import {useRoute} from "vue-router";
+import { useHistoryStore } from "@/stores/history.store";
+import { useRoute } from "vue-router";
 
 export default {
-  name: 'SingleHistoryView',
-  components: {MDBCol, TabsComponent, MDBRow, MDBContainer, MDBBadge, MDBBtn},
+  name: "SingleHistoryView",
+  components: { MDBCol, TabsComponent, MDBRow, MDBContainer, MDBBadge, MDBBtn },
   props: {
-    historyData: {
-      type: Array,
-      required: true
-    },
     id: {
-      type: String,
+      type: Number,
       required: true,
     },
   },
   async setup() {
-    const historyStore = useHistoryStore()
-    const route = useRoute()
-    await historyStore.loadItem(parseInt(route.params.id.toString()))
+    const historyStore = useHistoryStore();
+    const route = useRoute();
+    await historyStore.loadItem(parseInt(route.params.id.toString()));
     return {
-      historyStore
-    }
+      historyStore,
+    };
   },
   computed: {
     selectedHistory() {
-      return this.historyStore.selectedItem
+      return this.historyStore.selectedItem;
     },
     targetName() {
-      return this.selectedHistory.eventObjectName || '';
+      return this.selectedHistory.eventObjectName || "";
     },
     type() {
-      const selectedType = this.selectedHistory.eventType || '';
+      const selectedType = this.selectedHistory.eventType || "";
       return selectedType.toLowerCase() + "d";
     },
     dateTime() {
-      return this.selectedHistory.timestamp || '';
+      return this.selectedHistory.timestamp || "";
     },
     author() {
-      return this.selectedHistory.author || '';
+      return this.selectedHistory.author || "";
     },
-  }
-}
+    description() {
+      return this.selectedHistory.eventDescription;
+    },
+  },
+};
 </script>
 <style scoped>
 .username-heading {
@@ -95,14 +92,14 @@ export default {
   font-weight: 600;
 }
 .single-user-info {
-  border-bottom: 1px solid #EEEEEE;
+  border-bottom: 1px solid #eeeeee;
   padding-bottom: 2rem;
 }
 
 .tab-item {
-  font-weight: 800!important;
+  font-weight: 800 !important;
 }
 :deep(.nav-link) {
-  font-weight: 600!important;
+  font-weight: 600 !important;
 }
 </style>
