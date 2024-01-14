@@ -57,6 +57,7 @@ import {
 import MultiSelect from "primevue/multiselect";
 import { appConf } from "@/api/conf/app.conf";
 import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.dto";
+import loggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "RolesComponent",

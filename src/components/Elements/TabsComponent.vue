@@ -62,7 +62,14 @@ export default defineComponent({
     MDBTabPane,
   },
   props: {
-    userId: Number,
+    userId: {
+      type: Number,
+      default: null,
+    },
+    creationMode: {
+      type: Boolean,
+      default: false,
+    },
     roles: {
       type: Array,
       default: [],
@@ -86,6 +93,7 @@ export default defineComponent({
   },
   data: () => ({
     activeTabId: "",
+    currentRules: [],
   }),
   computed: {
     stocks() {
@@ -98,6 +106,15 @@ export default defineComponent({
   methods: {
     async ruleRemoved({ roleId, linkedRule }) {
       loggerUtil.debug("REMOVED", roleId, linkedRule);
+      if (this.creationMode) {
+        linkedRule.forEach((rule) => {
+          this.currentRules = this.currentRules.filter(
+            (el) => el.ruleId != rule.ruleId,
+          );
+        });
+        this.rolesStore.roleOnCreate = { rules: [...this.currentRules] };
+        return;
+      }
       let result: ApiResponseDto<any>;
       if (roleId == 0 && this.userId != null)
         result = await this.userStore.removeRule(this.userId || 0, linkedRule);
@@ -109,6 +126,11 @@ export default defineComponent({
     },
     async ruleSelected({ roleId, linkedRule }) {
       loggerUtil.debug("SELECTED", roleId, linkedRule);
+      if (this.creationMode) {
+        this.currentRules = this.currentRules.concat(linkedRule);
+        this.rolesStore.roleOnCreate = { rules: [...this.currentRules] };
+        return;
+      }
       let result: ApiResponseDto<LinkedRuleDto[]>;
       if (roleId == 0 && this.userId != null)
         result = await this.userStore.appendRule(this.userId || 0, linkedRule);

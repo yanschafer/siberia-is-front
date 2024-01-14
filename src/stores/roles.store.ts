@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import RoleModel from "@/api/modules/rbac/models/role.model";
 import UpdateRoleDto from "@/api/modules/rbac/dto/roles/update-role.dto";
 import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.dto";
+import RoleInputDto from "@/api/modules/rbac/dto/roles/role-input.dto";
 
 export const useRolesStore = defineStore({
   id: "roles",
@@ -13,6 +14,7 @@ export const useRolesStore = defineStore({
       { field: "name", header: "ROLE NAME" },
       { field: "relatedUsersCount", header: "USERS PER ROLE" },
     ],
+    roleOnCreate: {},
   }),
   getters: {
     getSearchTerm: (state) => state.searchTerm,
@@ -61,6 +63,15 @@ export const useRolesStore = defineStore({
     async appendRule(roleId: number, linkedRule: LinkedRuleInputDto[]) {
       const roleModel = new RoleModel();
       return await roleModel.appendRules(roleId, linkedRule);
+    },
+    async create(name: string, description: string) {
+      const roleModel = new RoleModel();
+      const newRoleDto = new RoleInputDto(
+        name,
+        description,
+        this.roleOnCreate.rules,
+      );
+      return await roleModel.create(newRoleDto);
     },
   },
 });

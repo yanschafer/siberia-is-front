@@ -43,12 +43,12 @@ class TokenUtil {
   }
 
   loadTokens() {
-    if (localStorage.getItem("access")) {
-      this.accessToken = localStorage.getItem("access");
+    if (localStorage.getItem(this.accessTokenKey)) {
+      this.accessToken = localStorage.getItem(this.accessTokenKey);
     }
 
-    if (localStorage.getItem("refresh")) {
-      this.refreshToken = localStorage.getItem("refresh");
+    if (localStorage.getItem(this.refreshTokenKey)) {
+      this.refreshToken = localStorage.getItem(this.refreshTokenKey);
     }
 
     this.authorizedUserDto = JSON.parse(
