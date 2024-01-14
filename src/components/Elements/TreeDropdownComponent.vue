@@ -6,6 +6,7 @@
     :filter="true"
     :filterBy="['label']"
     class="md:w-20rem w-full"
+    :selectionMode="selectionMode"
     @change="handleChange"
   >
     <template #header>
@@ -35,6 +36,10 @@ export default {
     nodes: {
       type: Array,
     },
+    multiselect: {
+      type: Boolean,
+      default: false,
+    },
     modelValue: {
       type: String,
     },
@@ -53,10 +58,22 @@ export default {
     filteredNodes() {
       return this.filterNodes(this.nodes, this.searchText.toLowerCase(), true);
     },
+    selectionMode() {
+      return this.multiselect ? "multiple" : "single";
+    },
   },
   methods: {
     handleChange() {
-      this.$emit("update:modelValue", Object.keys(this.selectedValue)[0]);
+      this.$emit(
+        "update:modelValue",
+        this.multiselect
+          ? Object.keys(this.selectedValue)
+              .filter((el) => el != "")
+              .map((el) => ({
+                id: parseInt(el),
+              }))
+          : Object.keys(this.selectedValue)[0],
+      );
     },
     filterNodes(nodes, searchText, parentMatch) {
       return nodes.reduce((result, node) => {

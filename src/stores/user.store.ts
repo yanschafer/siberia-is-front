@@ -6,6 +6,7 @@ import UserDto from "@/api/modules/user/dto/user.dto";
 import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.dto";
 import TokenUtil from "@/utils/token.util";
 import ApiModelUtil from "@/utils/api-model.util";
+import UserSearchFilterDto from "@/api/modules/user/dto/user-search-filter.dto";
 
 export const useUsersStore = defineStore({
   id: "users",
@@ -37,7 +38,9 @@ export const useUsersStore = defineStore({
         }
       }
     },
-    async loadUsersList() {
+    async loadUsersList(
+      filters: UserSearchFilterDto = new UserSearchFilterDto(),
+    ) {
       const userModel = new UserModel();
       const getUsers = await userModel.getAll();
       if (getUsers.success) {

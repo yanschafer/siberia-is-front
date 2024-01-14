@@ -274,13 +274,13 @@ export default {
   },
   computed: {
     categoriesList() {
-      return this.categoriesStore.getCategoriesList();
+      return this.categoriesStore.getCategoryList;
     },
     brandList() {
-      return this.brandStore.getBrandList();
+      return this.brandStore.getBrandList;
     },
     collectionList() {
-      return this.collectionStore.getCollectionList();
+      return this.collectionStore.getCollectionList;
     },
   },
 };

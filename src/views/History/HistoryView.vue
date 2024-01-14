@@ -2,36 +2,78 @@
   <template v-if="!isIdProvided">
     <MDBContainer class="d-flex container-content">
       <MDBCol class="col-auto">
-        <FiltersSidebarComponent />
+        <FiltersSidebarComponent
+          :filters-input="filtersInput"
+          @start-search="handleSearchStart"
+        />
       </MDBCol>
       <MDBCol class="col-auto">
         <TableComponent
-            :rows="filteredHistory"
-            :columns="historyStore.historyColumns"
-            :searchTerm="historyStore.searchTerm"
-            @rowClick="handleRowClick"
+          :rows="filteredHistory"
+          :columns="historyStore.historyColumns"
+          :searchTerm="historyStore.searchTerm"
+          @rowClick="handleRowClick"
         />
       </MDBCol>
     </MDBContainer>
   </template>
   <router-view v-if="isIdProvided" :id="routeIdParam" />
 </template>
-<script>
+<script lang="ts">
 import TableComponent from "@/components/Elements/TableComponent.vue";
 import SearchComponent from "@/components/Elements/SearchComponent.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useHistoryStore } from "@/stores/history.store";
-import {MDBContainer, MDBCol} from "mdb-vue-ui-kit";
-import FiltersSidebarComponent from "@/components/Elements/FiltersSidebarComponent.vue";
+import { MDBContainer, MDBCol } from "mdb-vue-ui-kit";
+import { FilterType } from "@/api/conf/app.conf";
+import FiltersSidebarComponent from "@/components/Elements/Filter/FiltersSidebarComponent.vue";
+import loggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "HistoryView",
-  components: { SearchComponent, TableComponent, MDBContainer, MDBCol, FiltersSidebarComponent },
+  components: {
+    SearchComponent,
+    TableComponent,
+    MDBContainer,
+    MDBCol,
+    FiltersSidebarComponent,
+  },
+  data() {
+    return {
+      filtersInput: {
+        author: {
+          title: "Author",
+          type: FilterType.TEXT,
+          value: null,
+        },
+        range: {
+          title: "Date range",
+          type: FilterType.DATE,
+          value: { min: null, max: null },
+        },
+        eventTypeId: {
+          title: "Event type",
+          type: FilterType.SELECT,
+          items: this.historyStore.getEventTypes,
+        },
+        eventObjectTypeId: {
+          title: "Event object type",
+          type: FilterType.SELECT,
+          items: this.historyStore.getEventObjectTypes,
+        },
+      },
+    };
+  },
+  created() {
+    loggerUtil.debug(this.filtersInput);
+  },
   async setup() {
     const historyStore = useHistoryStore();
     const route = useRoute();
     const router = useRouter();
     await historyStore.loadHistoryList();
+    await historyStore.loadEventObjectTypes();
+    await historyStore.loadEventTypes();
     return {
       historyStore,
       route,
@@ -78,6 +120,9 @@ export default {
         name: "Single history",
         params: { id: row.id },
       });
+    },
+    handleSearchStart(filters) {
+      this.historyStore.loadHistoryList(filters);
     },
   },
 };
