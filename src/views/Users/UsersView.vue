@@ -1,8 +1,15 @@
 <template>
   <div class="container-fluid" style="padding: 0;">
     <template v-if="!isIdProvided">
-      <SearchComponent @search="handleSearch" />
-      <TableComponent :rows="filteredUsers" :columns="usersStore.usersColumns" :searchTerm="usersStore.searchTerm" @rowClick="handleRowClick" />
+      <MDBContainer class="d-flex container-content">
+        <MDBCol class="col-auto">
+          <FiltersSidebarComponent />
+        </MDBCol>
+        <MDBCol class="col-auto">
+          <SearchComponent @search="handleSearch" />
+          <TableComponent :rows="filteredUsers" :columns="usersStore.usersColumns" :searchTerm="usersStore.searchTerm" @rowClick="handleRowClick" />
+        </MDBCol>
+      </MDBContainer>
     </template>
   </div>
   <Suspense>
@@ -15,11 +22,13 @@ import TableComponent from "@/components/Elements/TableComponent.vue";
 import SearchComponent from "@/components/Elements/SearchComponent.vue";
 import {useRoute, useRouter} from "vue-router";
 import {useUsersStore} from "@/stores/user.store";
+import {MDBCol, MDBContainer} from "mdb-vue-ui-kit";
+import FiltersSidebarComponent from "@/components/Elements/FiltersSidebarComponent.vue";
 
 
 export default {
   name: 'UsersView',
-  components: { SearchComponent, TableComponent },
+  components: {MDBCol, FiltersSidebarComponent, MDBContainer, SearchComponent, TableComponent },
   async setup() {
     const usersStore = useUsersStore()
     const route = useRoute()

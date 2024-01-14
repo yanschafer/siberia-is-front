@@ -3,7 +3,10 @@
     <button @click="toggleSidebar" class="toggle-btn">
       <IconAdjustmentsHorizontal color="#121212" :size="24" stroke-width="1" />
     </button>
-    <div class="content d-flex flex-column" v-show="!collapsed">
+    <div v-if="collapsed">
+      sadsadasd
+    </div>
+    <div class="animate__animated animate__fadeIn animate__delay-0.5s d-flex flex-column" v-else="!collapsed">
       <span class="filtername">Vendor code</span>
       <InputText type="text" v-model="value" />
       <span class="filtername">Brand</span>
@@ -20,45 +23,11 @@
         </MDBCol>
       </MDBRow>
     </div>
+
   </div>
 </template>
-<!--<template>-->
-<!--  <div :class="{ 'sidebar-collapsed': collapsed }" class="sidebar">-->
-<!--    <button @click="toggleSidebar" class="toggle-btn">-->
-<!--      <IconAdjustmentsHorizontal color="#121212" :size="24" stroke-width="1" />-->
-<!--    </button>-->
-<!--    <div class="content d-flex flex-column" v-show="!collapsed">-->
-<!--      <div v-if="filters">-->
-<!--        <div v-for="(value, key) in filters" :key="key">-->
-<!--          <span class="filtername">{{ key }}</span>-->
-<!--          <template v-if="Array.isArray(value)">-->
-<!--            &lt;!&ndash; Селект для массива &ndash;&gt;-->
-<!--            <SelectComponent v-if="Array.isArray(value)" :options="value" v-model="selectedFilters[key]" />-->
-<!--          </template>-->
-<!--          <template v-else-if="typeof value === 'string'">-->
-<!--            &lt;!&ndash; InputText для строки &ndash;&gt;-->
-<!--            <InputText type="text" v-model="selectedFilters[key]" />-->
-<!--          </template>-->
-<!--          <template v-else-if="typeof value === 'object' && value !== null && value.hasOwnProperty('min') && value.hasOwnProperty('max')">-->
-<!--            &lt;!&ndash; Два InputNumber для Number &ndash;&gt;-->
-<!--            <MDBRow class="d-flex flex-row flex-nowrap">-->
-<!--              <MDBCol class="col-auto d-flex flex-column">-->
-<!--                <span class="filtername">min</span>-->
-<!--                <InputNumber style="width: 4rem!important" v-model="selectedFilters[key].min" inputId="withoutgrouping" :useGrouping="false" />-->
-<!--              </MDBCol>-->
-<!--              <MDBCol class="col-auto d-flex flex-column">-->
-<!--                <span class="filtername">max</span>-->
-<!--                <InputNumber style="width: 4rem!important" v-model="selectedFilters[key].max" inputId="withoutgrouping" :useGrouping="false" />-->
-<!--              </MDBCol>-->
-<!--            </MDBRow>-->
-<!--          </template>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</template>-->
 
-<script>
+<script lang="ts">
 import {IconAdjustmentsHorizontal} from "@tabler/icons-vue";
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';

@@ -1,23 +1,32 @@
 <template>
   <template v-if="!isIdProvided">
-    <TableComponent
-      :rows="filteredHistory"
-      :columns="historyStore.historyColumns"
-      :searchTerm="historyStore.searchTerm"
-      @rowClick="handleRowClick"
-    />
+    <MDBContainer class="d-flex container-content">
+      <MDBCol class="col-auto">
+        <FiltersSidebarComponent />
+      </MDBCol>
+      <MDBCol class="col-auto">
+        <TableComponent
+            :rows="filteredHistory"
+            :columns="historyStore.historyColumns"
+            :searchTerm="historyStore.searchTerm"
+            @rowClick="handleRowClick"
+        />
+      </MDBCol>
+    </MDBContainer>
   </template>
   <router-view v-if="isIdProvided" :id="routeIdParam" />
 </template>
-<script lang="ts">
+<script>
 import TableComponent from "@/components/Elements/TableComponent.vue";
 import SearchComponent from "@/components/Elements/SearchComponent.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useHistoryStore } from "@/stores/history.store";
+import {MDBContainer, MDBCol} from "mdb-vue-ui-kit";
+import FiltersSidebarComponent from "@/components/Elements/FiltersSidebarComponent.vue";
 
 export default {
   name: "HistoryView",
-  components: { SearchComponent, TableComponent },
+  components: { SearchComponent, TableComponent, MDBContainer, MDBCol, FiltersSidebarComponent },
   async setup() {
     const historyStore = useHistoryStore();
     const route = useRoute();
@@ -74,4 +83,3 @@ export default {
 };
 </script>
 <style scoped></style>
-<script setup lang="ts"></script>

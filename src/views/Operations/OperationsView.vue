@@ -1,7 +1,18 @@
 <template>
   <template v-if="!isIdProvided">
-    <TableComponent :rows="filteredOperations" :columns="operationStore.operationColumns" :searchTerm="''" @rowClick="handleRowClick" />
-  </template>
+    <MDBContainer class="d-flex container-content">
+      <MDBCol class="col-auto">
+        <FiltersSidebarComponent />
+      </MDBCol>
+      <MDBCol class="col-auto">
+        <TableComponent
+            :rows="filteredOperations"
+            :columns="operationStore.operationColumns"
+            :searchTerm="''"
+            @rowClick="handleRowClick" />
+      </MDBCol>
+    </MDBContainer>
+   </template>
   <router-view v-if="isIdProvided" :id="routeIdParam" />
 </template>
 
@@ -12,11 +23,16 @@ import {useOperationStore} from "@/stores/operation.store";
 import {useRoute, useRouter} from "vue-router";
 import {TransactionType} from "@/api/conf/app.conf";
 import LoggerUtil from "@/utils/logger/logger.util";
+import {MDBContainer, MDBCol} from "mdb-vue-ui-kit";
+import FiltersSidebarComponent from "@/components/Elements/FiltersSidebarComponent.vue";
 export default {
   name: 'OperationsView',
   components: {
+    FiltersSidebarComponent,
     TableComponent,
     SearchComponent,
+    MDBContainer,
+    MDBCol
   },
   data: () => ({
     typeMapper: {
