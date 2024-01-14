@@ -102,5 +102,9 @@ export const useUsersStore = defineStore({
       await this.updateIfCurrent(userId);
       return res;
     },
+    async remove(userId: number) {
+      const userModel = new UserModel();
+      return await userModel.remove(userId);
+    },
   },
 });

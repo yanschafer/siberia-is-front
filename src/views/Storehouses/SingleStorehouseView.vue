@@ -1,40 +1,91 @@
 <template>
   <Toast />
-  <ModalComponent :disclaimerText="disclaimerText" :modalTitle="modalTitle" :modalText="modalText" v-if="showModal" @closeModal="closeModal" />
+  <ModalComponent
+    v-if="modalStore.getIsVisible"
+    @approved="removeAndCloseModal"
+    @close="closeModal"
+  />
   <MDBContainer class="storehouse-info d-flex flex-column gap-3">
     <h1 v-if="!editing" class="storehouse-heading">{{ storehouseName }}</h1>
-    <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newStorehouseName" />
+    <MDBInput
+      v-else
+      class="input-wrapper animate__animated animate__fadeIn username-input"
+      type="text"
+      v-model="newStorehouseName"
+    />
     <span v-if="!editing" class="storehouse-adress">
-    <IconMapPinFilled color="#4E4E4E" :size="24" stroke-width="1" />
+      <IconMapPinFilled color="#4E4E4E" :size="24" stroke-width="1" />
       {{ storehouseAddress }}
     </span>
-    <MDBInput v-else class="input-wrapper animate__animated animate__fadeIn username-input" type="text" v-model="newStorehouseAdress" />
-    <MDBBtn v-if="!editing" @click="startEditing" class="utility-btn" outline="black">Edit storehouse</MDBBtn>
+    <MDBInput
+      v-else
+      class="input-wrapper animate__animated animate__fadeIn username-input"
+      type="text"
+      v-model="newStorehouseAdress"
+    />
+    <MDBBtn
+      v-if="!editing"
+      @click="startEditing"
+      class="utility-btn"
+      outline="black"
+      >Edit storehouse</MDBBtn
+    >
     <MDBCol v-else class="d-flex justify-content-start">
-      <MDBBtn @click="cancelEditing" class="utility-btn" outline="black">CANCEL</MDBBtn>
-      <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">DELETE STOREHOUSE</MDBBtn>
+      <MDBBtn @click="cancelEditing" class="utility-btn" outline="black"
+        >CANCEL</MDBBtn
+      >
+      <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger"
+        >DELETE STOREHOUSE</MDBBtn
+      >
       <MDBBtn @click="saveChanges" class="utility-btn btn-black">SAVE</MDBBtn>
     </MDBCol>
   </MDBContainer>
   <MDBContainer class="d-flex flex-column gap-3">
-    <MDBRow class="d-flex flex-row w-100 align-items-center align-self-center gap-3 pt-4">
+    <MDBRow
+      class="d-flex flex-row w-100 align-items-center align-self-center gap-3 pt-4"
+    >
       <h1 class="storehouse-heading">Products in stock</h1>
       <template v-if="!newArrival && !newSale && !newRequest">
-        <MDBBtn @click="addNewArrival" class="utility-btn" outline="black">+ NEW ARRIVAL</MDBBtn>
-        <MDBBtn @click="addNewSale" class="utility-btn" outline="black">+ NEW SALE</MDBBtn>
-        <MDBBtn @click="addNewRequest" class="utility-btn" outline="black">+ NEW REQUEST</MDBBtn>
+        <MDBBtn @click="addNewArrival" class="utility-btn" outline="black"
+          >+ NEW ARRIVAL</MDBBtn
+        >
+        <MDBBtn @click="addNewSale" class="utility-btn" outline="black"
+          >+ NEW SALE</MDBBtn
+        >
+        <MDBBtn @click="addNewRequest" class="utility-btn" outline="black"
+          >+ NEW REQUEST</MDBBtn
+        >
         <SearchComponent class="search" @search="handleSearch" />
-        <TableComponent :rows="productRows" :columns="productColumns" :searchTerm="searchTerm" />
+        <TableComponent
+          :rows="productRows"
+          :columns="productColumns"
+          :searchTerm="searchTerm"
+        />
       </template>
       <template v-else>
         <template v-if="newArrival">
-          <StorehouseOperation title="New Arrival Registration" @cancel="newArrival = false" @save="saveNewArrival"></StorehouseOperation>
+          <StorehouseOperation
+            title="New Arrival Registration"
+            @cancel="newArrival = false"
+            @save="saveNewArrival"
+          ></StorehouseOperation>
         </template>
         <template v-else-if="newSale">
-          <StorehouseOperation title="New Sale Registration" :need-validation="true" :amount-validation="productListValidateObject" @cancel="newSale = false" @save="saveNewSale"></StorehouseOperation>
-          </template>
+          <StorehouseOperation
+            title="New Sale Registration"
+            :need-validation="true"
+            :amount-validation="productListValidateObject"
+            @cancel="newSale = false"
+            @save="saveNewSale"
+          ></StorehouseOperation>
+        </template>
         <template v-else-if="newRequest">
-          <StorehouseOperation title="New Request Registration" :show-price="false" @cancel="newRequest = false" @save="saveNewRequest"></StorehouseOperation>
+          <StorehouseOperation
+            title="New Request Registration"
+            :show-price="false"
+            @cancel="newRequest = false"
+            @save="saveNewRequest"
+          ></StorehouseOperation>
         </template>
       </template>
     </MDBRow>
@@ -42,21 +93,22 @@
 </template>
 
 <script lang="ts">
-import { IconMapPinFilled, IconRoute } from '@tabler/icons-vue';
-import {MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow} from "mdb-vue-ui-kit";
+import { IconMapPinFilled, IconRoute } from "@tabler/icons-vue";
+import { MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow } from "mdb-vue-ui-kit";
 import TableComponent from "@/components/Elements/TableComponent.vue";
 import SearchComponent from "@/components/Elements/SearchComponent.vue";
 import ModalComponent from "@/components/Elements/ModalComponent.vue";
-import {useRoute} from "vue-router";
-import {useStorehousesStore} from "@/stores/storehouse.store";
+import { useRoute, useRouter } from "vue-router";
+import { useStorehousesStore } from "@/stores/storehouse.store";
 import StockUpdateDto from "@/api/modules/stock/dto/stock-update.dto";
 import { useToast } from "primevue/usetoast";
 import SelectComponent from "@/components/Elements/SelectComponent.vue";
-import {useProductsStore} from "@/stores/products.store";
+import { useProductsStore } from "@/stores/products.store";
 import StorehouseOperation from "@/views/Storehouses/StorehouseOperation.vue";
 import ProductListItemDto from "@/api/modules/product/dto/product-list-item.dto";
 import Toast from "primevue/toast";
 import PrintUtil from "@/utils/localization/print.util";
+import { useModalStore } from "@/stores/modal.store";
 
 export default {
   name: "SingleStorehouseView",
@@ -64,9 +116,16 @@ export default {
     StorehouseOperation,
     SelectComponent,
     MDBCol,
-    MDBInput, SearchComponent, TableComponent, IconRoute, IconMapPinFilled, MDBBtn, MDBContainer, MDBRow,
+    MDBInput,
+    SearchComponent,
+    TableComponent,
+    IconRoute,
+    IconMapPinFilled,
+    MDBBtn,
+    MDBContainer,
+    MDBRow,
     ModalComponent,
-    Toast
+    Toast,
   },
   props: {
     id: {
@@ -77,39 +136,44 @@ export default {
   data: () => ({
     newArrival: false,
     newSale: false,
-    modalTitle: 'Confirm deletion',
-    modalText: ``,
-    disclaimerText: 'This action cannot be undone, this storehouse data will be lost',
+    modalTitle: "Confirm deletion",
+    disclaimerText:
+      "This action cannot be undone, this storehouse data will be lost",
     newRequest: false,
     editing: false,
-    showModal: false,
-    searchTerm: '',
-    newStorehouseName: '',
-    originalStorehouseName: '',
-    newStorehouseAdress: '',
-    originalStorehouseAdress: '',
+    searchTerm: "",
+    newStorehouseName: "",
+    originalStorehouseName: "",
+    newStorehouseAdress: "",
+    originalStorehouseAdress: "",
     productColumns: [
-      { field: 'name', header: 'NAME' },
-      { field: 'vendorCode', header: 'SKU' },
-      { field: 'quantity', header: 'QUANTITY' },
-      { field: 'price', header: 'PRICE' },
+      { field: "name", header: "NAME" },
+      { field: "vendorCode", header: "SKU" },
+      { field: "quantity", header: "QUANTITY" },
+      { field: "price", header: "PRICE" },
     ],
-    error: '',
+    error: "",
   }),
   async setup() {
     const productStore = useProductsStore();
 
     // await productStore.loadProductList()
     const storehouseStore = useStorehousesStore();
+    const modalStore = useModalStore();
     const route = useRoute();
+    const router = useRouter();
 
     await productStore.loadProductList();
 
-    await storehouseStore.loadSelectedStoreHouse(parseInt(route.params.id.toString()));
+    await storehouseStore.loadSelectedStoreHouse(
+      parseInt(route.params.id.toString()),
+    );
 
     return {
       storehouseStore,
       productStore,
+      modalStore,
+      router,
     };
   },
   computed: {
@@ -117,44 +181,61 @@ export default {
       return `Are you sure you want to delete storehouse named "${this.storehouseName}?"`;
     },
     selectedStorehouse() {
-      return this.storehouseStore.getSelectedStorehouse
+      return this.storehouseStore.getSelectedStorehouse;
     },
     storehouseName() {
-      return this.selectedStorehouse.name || '';
+      return this.selectedStorehouse.name || "";
     },
     storehouseAddress() {
-      return this.selectedStorehouse.address || '';
+      return this.selectedStorehouse.address || "";
     },
     productRows() {
-      return this.selectedStorehouse.products || []
+      return this.selectedStorehouse.products || [];
     },
     productListValidateObject() {
-      const obj = {}
-      this.productRows.forEach(el => {
-        obj[el.id] = el.quantity
-      })
-      return obj
-    }
+      const obj = {};
+      this.productRows.forEach((el) => {
+        obj[el.id] = el.quantity;
+      });
+      return obj;
+    },
   },
   methods: {
     showSuccessToast() {
-      this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Changes were saved', life: 3000 });
+      this.$toast.add({
+        severity: "success",
+        summary: "Success",
+        detail: "Changes were saved",
+        life: 3000,
+      });
     },
     async showErrorToast() {
-      const errorMessage = await PrintUtil.localize("wrong_data_type", "storehousesSave");
+      const errorMessage = await PrintUtil.localize(
+        "wrong_data_type",
+        "storehousesSave",
+      );
       const errorDetail = `Something went wrong, provide this error code to administrator.
     <p style="font-weight: 600; text-decoration: underline; cursor: pointer;">${errorMessage}</p>`;
-      this.$toast.add({ severity: 'error', summary: 'Error occurred', detail: errorDetail, life: 10000 });
+      this.$toast.add({
+        severity: "error",
+        summary: "Error occurred",
+        detail: errorDetail,
+        life: 10000,
+      });
 
       this.$nextTick(() => {
-        const toastElement = document.querySelector('.p-toast-detail');
+        const toastElement = document.querySelector(".p-toast-detail");
         if (toastElement) {
           toastElement.innerHTML = errorDetail;
 
-          const errorMessageElement = toastElement.querySelector('p');
-          errorMessageElement.addEventListener('click', () => {
+          const errorMessageElement = toastElement.querySelector("p");
+          errorMessageElement.addEventListener("click", () => {
             navigator.clipboard.writeText(errorMessage);
-            this.$toast.add({ severity: 'success', summary: 'Error message copied to clipboard', life: 2000 });
+            this.$toast.add({
+              severity: "success",
+              summary: "Error message copied to clipboard",
+              life: 2000,
+            });
           });
         }
       });
@@ -165,7 +246,7 @@ export default {
       this.newRequest = false;
     },
     async saveNewArrival(arrivalData: ProductListItemDto[]) {
-      const res = await this.storehouseStore.newArrival(this.id, arrivalData)
+      const res = await this.storehouseStore.newArrival(this.id, arrivalData);
       if (res.success) {
         this.newArrival = false;
       } else {
@@ -178,13 +259,12 @@ export default {
       this.newRequest = false;
     },
     async saveNewSale(saleData: ProductListItemDto[]) {
-      const res = await this.storehouseStore.newSale(this.id, saleData)
+      const res = await this.storehouseStore.newSale(this.id, saleData);
       if (res.success) {
         this.newSale = false;
       } else {
         //TODO: Check for errors
       }
-    
     },
     addNewRequest() {
       this.newArrival = false;
@@ -192,24 +272,33 @@ export default {
       this.newRequest = true;
     },
     async saveNewRequest(requestData: ProductListItemDto[]) {
-      const res = await this.storehouseStore.newRequest(this.id, requestData)
+      const res = await this.storehouseStore.newRequest(this.id, requestData);
       if (res.success) {
         this.newRequest = false;
       } else {
         //TODO: Check for errors
       }
-    
     },
     handleSearch(searchTerm) {
       this.searchTerm = searchTerm;
     },
     confirmDeletion() {
-      this.storehouseName = this.selectedStorehouse.name || '';
-      this.showModal = true;
+      this.modalStore.show({
+        title: this.modalTitle,
+        text: this.modalText,
+        disclaimer: this.disclaimerText,
+      });
     },
     closeModal() {
-      console.log('closeModal called');
-      this.showModal = false;
+      this.modalStore.hide();
+    },
+    async removeAndCloseModal() {
+      const removed = await this.storehouseStore.remove(this.id);
+      if (removed.success) {
+        this.modalStore.hide();
+        await this.storehouseStore.loadStorehouseList();
+        this.router.push({ name: "storehouses" });
+      }
     },
     startEditing() {
       this.editing = true;
@@ -220,22 +309,26 @@ export default {
     },
     async saveChanges() {
       this.editing = false;
-      const result = await this.storehouseStore.updateStorehouse(this.id, new StockUpdateDto(
-          this.newStorehouseName, this.newStorehouseAdress
-      ));
+      const result = await this.storehouseStore.updateStorehouse(
+        this.id,
+        new StockUpdateDto(this.newStorehouseName, this.newStorehouseAdress),
+      );
       if (result && result.success) {
         this.showSuccessToast();
         this.editing = !result.success;
       } else {
         this.showErrorToast();
-        this.error = await PrintUtil.localize("wrong_data_type", "storehousesSave");
+        this.error = await PrintUtil.localize(
+          "wrong_data_type",
+          "storehousesSave",
+        );
       }
     },
     cancelEditing() {
       this.editing = false;
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
@@ -266,7 +359,7 @@ export default {
   border-radius: 7px;
 }
 .storehouse-info {
-  border-bottom: 1px solid #EEEEEE;
+  border-bottom: 1px solid #eeeeee;
   padding-bottom: 2rem;
 }
 .search {
@@ -281,9 +374,9 @@ export default {
 }
 :deep(.p-toast) {
   position: relative;
-  z-index: 99999999999999999999999999999999999!important;
+  z-index: 99999999999999999999999999999999999 !important;
 }
 .error-message {
-  font-weight: 800!important;
+  font-weight: 800 !important;
 }
 </style>

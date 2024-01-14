@@ -1,5 +1,9 @@
 <template>
-  <ModalComponent :disclaimerText="disclaimerText" :modalTitle="modalTitle" :modalText="modalText" v-if="showModal" @closeModal="closeModal" />
+  <ModalComponent
+    v-if="modalStore.getIsVisible"
+    @approved="removeAndCloseModal"
+    @close="closeModal"
+  />
   <div class="animate__animated animate__fadeIn">
     <MDBContainer class="animate__animated animate__fadeIn" fluid>
       <MDBRow class="d-flex flex-row gap-5 header-row">
@@ -44,7 +48,7 @@
               v-else
             >
               <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger"
-              >DELETE</MDBBtn
+                >DELETE</MDBBtn
               >
               <MDBBtn @click="cancelEditing" class="utility-btn" outline="black"
                 >CANCEL</MDBBtn
@@ -269,7 +273,7 @@ import FileUploadComponent from "@/components/Inputs/FileUploadComponent.vue";
 import CascadeSelect from "primevue/cascadeselect";
 import FilesResolverUtil from "@/utils/files-resolver.util";
 import { useProductsStore } from "@/stores/products.store";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useBrandStore } from "@/stores/brand.store";
 import { useCategoriesStore } from "@/stores/categories.store";
 import SelectComponent from "@/components/Elements/SelectComponent.vue";
@@ -283,6 +287,7 @@ import BrandModel from "@/api/modules/brand/models/brand.model";
 import CollectionModel from "@/api/modules/collection/models/collection.model";
 import DialogComponentTrigger from "@/components/Elements/DialogComponentTrigger.vue";
 import ModalComponent from "@/components/Elements/ModalComponent.vue";
+import { useModalStore } from "@/stores/modal.store";
 
 export default {
   name: "SingleProductView",
@@ -312,7 +317,9 @@ export default {
     const brandStore = useBrandStore();
     const collectionStore = useCollectionStore();
     const categoriesStore = useCategoriesStore();
+    const modalStore = useModalStore();
     const route = useRoute();
+    const router = useRouter();
 
     await brandStore.loadBrandsList();
     await categoriesStore.loadCategoriesList();
@@ -327,6 +334,8 @@ export default {
       brandStore,
       categoriesStore,
       collectionStore,
+      modalStore,
+      router,
     };
   },
   data() {
@@ -387,6 +396,25 @@ export default {
     this.initCategoryDialog.selectItems = this.categoryList;
   },
   methods: {
+    confirmDeletion() {
+      this.modalStore.show({
+        title: "Confirm deletion",
+        text: this.modalText,
+        disclaimer:
+          "This action cannot be undone, this product data will be lost",
+      });
+    },
+    closeModal() {
+      this.modalStore.hide();
+    },
+    async removeAndCloseModal() {
+      const removed = await this.productStore.remove(this.id);
+      if (removed.success) {
+        this.modalStore.hide();
+        await this.productStore.loadProductList();
+        this.router.push({ name: "products" });
+      }
+    },
     async handleCategoryUpdate() {
       await this.categoriesStore.loadCategoriesList();
     },
@@ -418,13 +446,6 @@ export default {
       this.newProfessionalPrice = this.professionalPrice;
       this.newDefaultPrice = this.defaultPrice;
       this.newExpirationDate = this.expirationDate;
-    },
-    confirmDeletion() {
-      this.productName = this.selectedProduct.name || '';
-      this.showModal = true;
-    },
-    closeModal() {
-      this.showModal = false;
     },
     cancelEditing() {
       this.editing = false;

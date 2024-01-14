@@ -68,5 +68,9 @@ export const useProductsStore = defineStore({
       const productModel = new ProductModel();
       return await productModel.create(productCreateDto);
     },
+    async remove(productId: number) {
+      const productModel = new ProductModel();
+      return await productModel.remove(productId);
+    },
   },
 });
