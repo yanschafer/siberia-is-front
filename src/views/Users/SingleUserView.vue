@@ -1,5 +1,9 @@
 <template>
-  <ModalComponent :disclaimerText="disclaimerText" :modalTitle="modalTitle" :modalText="modalText" v-if="showModal" @closeModal="closeModal" />
+  <ModalComponent
+    v-if="modalStore.getIsVisible"
+    @approved="removeAndCloseModal"
+    @close="closeModal"
+  />
   <MDBContainer class="single-user-info d-flex flex-column gap-3">
     <MDBRow class="d-flex justify-content-around">
       <MDBRow class="w-auto">
@@ -31,7 +35,9 @@
         >
       </MDBCol>
       <MDBCol v-else class="d-flex justify-content-end">
-        <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">DELETE</MDBBtn>
+        <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger"
+          >DELETE</MDBBtn
+        >
         <MDBBtn @click="cancelEditing" class="utility-btn" outline="black"
           >CANCEL</MDBBtn
         >
@@ -92,7 +98,7 @@ import {
 } from "mdb-vue-ui-kit";
 import TabsComponent from "@/components/Elements/TabsComponent.vue";
 import UserFullDto from "@/api/modules/user/dto/user-full.dto";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import UpdateUserDto from "@/api/modules/user/dto/update-user.dto";
 import { useUsersStore } from "@/stores/user.store";
 import InputText from "primevue/inputtext";
@@ -100,6 +106,7 @@ import SelectComponent from "@/components/Elements/SelectComponent.vue";
 import { useRolesStore } from "@/stores/roles.store";
 import MultiSelectComponent from "@/components/Elements/MultiSelectComponent.vue";
 import ModalComponent from "@/components/Elements/ModalComponent.vue";
+import { useModalStore } from "@/stores/modal.store";
 export default {
   name: "SingleUserView",
   components: {
@@ -125,9 +132,8 @@ export default {
     showModal: false,
     searchTerm: "",
     originalUserName: "",
-    modalTitle: 'Confirm deletion',
-    modalText: ``,
-    disclaimerText: 'This action cannot be undone, this user data will be lost',
+    modalTitle: "Confirm deletion",
+    disclaimerText: "This action cannot be undone, this user data will be lost",
     newUserName: "",
     originalUserUsername: "",
     newUserUsername: "",
@@ -139,12 +145,16 @@ export default {
   async setup() {
     const userStore = useUsersStore();
     const rolesStore = useRolesStore();
+    const modalStore = useModalStore();
     const route = useRoute();
+    const router = useRouter();
     await rolesStore.loadRolesList();
     await userStore.loadSelectedUser(parseInt(route.params.id.toString()));
     return {
       userStore,
       rolesStore,
+      modalStore,
+      router,
     };
   },
   created() {
@@ -203,11 +213,22 @@ export default {
   },
   methods: {
     confirmDeletion() {
-      this.userName = this.selectedUser.name || '';
-      this.showModal = true;
+      this.modalStore.show({
+        title: this.modalTitle,
+        text: this.modalText,
+        disclaimer: this.disclaimerText,
+      });
     },
     closeModal() {
-      this.showModal = false;
+      this.modalStore.hide();
+    },
+    async removeAndCloseModal() {
+      const removed = await this.userStore.remove(this.id);
+      if (removed.success) {
+        this.modalStore.hide();
+        await this.userStore.loadUsersList();
+        this.router.push({ name: "users" });
+      }
     },
     listContains(list, item) {
       return list.filter((el) => el.id == item).length > 0;

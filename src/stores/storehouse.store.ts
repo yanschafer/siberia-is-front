@@ -146,5 +146,9 @@ export const useStorehousesStore = defineStore({
       const stockModel = new StockModel();
       return await stockModel.create(storehouseInputDto);
     },
+    async remove(storehouseId: number) {
+      const stockModel = new StockModel();
+      return await stockModel.remove(storehouseId);
+    },
   },
 });

@@ -1,22 +1,30 @@
 <template>
   <MDBContainer
-      v-if="showModal"
-      @click.self="closeModal"
-      :class="{'animate__fadeIn': showModal, 'animate__fadeOut': !showModal}"
-      class="animate__animated animate__faster d-flex flex-column justify-center align-items-center modal-bg"
-      fluid
+    :class="{ animate__fadeIn: isVisible, animate__fadeOut: !isVisible }"
+    class="animate__animated animate__faster d-flex flex-column justify-center align-items-center modal-bg"
+    fluid
   >
     <MDBContainer
-        @click.stop
-        class="animate__animated modal-body d-flex flex-column align-items-center justify-content-center w-100"
-        :class="{ 'animate__fadeInUp': showModal, 'animate__fadeOutDown': !showModal }"
+      @click.stop
+      class="animate__animated modal-body d-flex flex-column align-items-center justify-content-center w-100"
+      :class="{
+        animate__fadeInUp: isVisible,
+        animate__fadeOutDown: !isVisible,
+      }"
     >
-      <img class="animate__animated animate__headShake animate__delay-1s utility-icon" src="@/assets/icons/danger.svg">
-      <h3 class="modal-heading">{{ modalTitle }}</h3>
-      <p class="modal-text mb-0">{{ modalText }} <span class="disclaimer">{{ disclaimerText }}</span></p>
+      <img
+        class="animate__animated animate__headShake animate__delay-1s utility-icon"
+        src="@/assets/icons/danger.svg"
+      />
+      <h3 class="modal-heading">{{ title }}</h3>
+      <p class="modal-text mb-0">
+        {{ text }} <span class="disclaimer">{{ disclaimer }}</span>
+      </p>
       <MDBRow class="d-flex flex-row gap-5 mt-3">
-        <MDBBtn @click="closeModal" class="utility-btn btn-black">CANCEL</MDBBtn>
-        <MDBBtn @click="closeModal" class="utility-btn btn-danger">DELETE</MDBBtn>
+        <MDBBtn @click="close" class="utility-btn btn-black">CANCEL</MDBBtn>
+        <MDBBtn @click="closeAndApprove" class="utility-btn btn-danger"
+          >DELETE</MDBBtn
+        >
       </MDBRow>
     </MDBContainer>
   </MDBContainer>
@@ -25,45 +33,38 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { MDBBtn, MDBCol, MDBContainer, MDBRow } from "mdb-vue-ui-kit";
+import { useModalStore } from "@/stores/modal.store";
 
 export default defineComponent({
   name: "ModalComponent",
   components: { MDBCol, MDBRow, MDBContainer, MDBBtn },
-  props: {
-    modalTitle: {
-      type: String,
-      required: true,
+  emits: ["close", "approved"],
+  data: () => ({
+    store: useModalStore(),
+  }),
+  computed: {
+    isVisible() {
+      return this.store.getIsVisible;
     },
-    modalText: {
-      type: String,
-      required: true,
+    title() {
+      return this.store.title;
     },
-    disclaimerText: {
-      type: String,
-      required: true,
-    }
+    text() {
+      return this.store.text;
+    },
+    disclaimer() {
+      return this.store.disclaimer;
+    },
   },
-  setup() {
-    const isVisible = ref(true);
-    const showModal = ref(true);
-
-    const openModal = () => {
-      showModal.value = true;
-    };
-
-    const closeModal = () => {
-      console.log('closeModal called');
-      setTimeout(() => {
-        showModal.value = false;
-      }, 500);
-    };
-
-    return {
-      isVisible,
-      showModal,
-      openModal,
-      closeModal,
-    };
+  methods: {
+    close() {
+      this.store.hide();
+      this.$emit("close");
+    },
+    closeAndApprove() {
+      this.store.hide();
+      this.$emit("approved");
+    },
   },
 });
 </script>
@@ -87,8 +88,8 @@ export default defineComponent({
   max-width: 500px;
   max-height: 60vh;
   border-radius: 29px;
-  border: 2px solid #EEE;
-  background: #FFF;
+  border: 2px solid #eee;
+  background: #fff;
   padding: 3rem;
   box-shadow: 0px 4px 28.3px 4px rgba(0, 0, 0, 0.06);
 }
