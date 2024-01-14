@@ -47,6 +47,18 @@
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="pt-4">
+    <span class="username">RELATED USERS: </span>
+    <MultiSelectComponent
+      :start-items="relatedUsers"
+      :options="usersOptions"
+      option-label="name"
+      placeholder="Edit related users"
+      :disabled="!canEditUsers"
+      @items-added="usersAdded"
+      @items-removed="usersRemoved"
+    />
+  </MDBContainer>
+  <MDBContainer class="pt-4">
     <TabsComponent :roles="roles" :user-id="null" />
   </MDBContainer>
 </template>
@@ -71,9 +83,16 @@ import ModalComponent from "@/components/Elements/ModalComponent.vue";
 import { useRolesStore } from "@/stores/roles.store";
 import { useRoute } from "vue-router";
 import UpdateRoleDto from "@/api/modules/rbac/dto/roles/update-role.dto";
+import TokenUtil from "@/utils/token.util";
+import { appConf } from "@/api/conf/app.conf";
+import MultiSelectComponent from "@/components/Elements/MultiSelectComponent.vue";
+import { useUsersStore } from "@/stores/user.store";
+import loggerUtil from "@/utils/logger/logger.util";
+
 export default {
   name: "SingleRoleView",
   components: {
+    MultiSelectComponent,
     ModalComponent,
     TabsComponent,
     MDBBtn,
@@ -96,9 +115,14 @@ export default {
   },
   async setup() {
     const rolesStore = useRolesStore();
+    const usersStore = useUsersStore();
+
     const route = useRoute();
     await rolesStore.loadSelectedRole(parseInt(route.params.id.toString()));
+    await usersStore.loadUsersList();
+
     return {
+      usersStore,
       rolesStore,
     };
   },
@@ -131,6 +155,26 @@ export default {
       this.newRoleName = this.originalRoleName; // Возвращаем оригинальное имя при отмене
       this.originalRoleName = ""; // Сбрасываем оригинальное имя
     },
+    async usersAdded(addedUsers) {
+      const result = await Promise.all(
+        addedUsers.map(
+          async (el) => await this.usersStore.appendRoles(el, [this.id]),
+        ),
+      );
+      //TODO: Show notify
+      if (result.filter((el) => el.success).length != result.length)
+        loggerUtil.debug(result); //TODO: Check for errors
+    },
+    async usersRemoved(removedUsers) {
+      const result = await Promise.all(
+        removedUsers.map(
+          async (el) => await this.usersStore.removeRoles(el, [this.id]),
+        ),
+      );
+      //TODO: Show notify
+      if (result.filter((el) => el.success).length != result.length)
+        loggerUtil.debug(result); //TODO: Check for errors
+    },
   },
   computed: {
     selectedRole() {
@@ -144,6 +188,21 @@ export default {
     },
     roles() {
       return [{ ...this.selectedRole, canChange: true }];
+    },
+    relatedUsers() {
+      return this.selectedRole.relatedUsers.map((el) => ({
+        id: el.first,
+        name: el.second,
+      }));
+    },
+    usersOptions() {
+      return this.usersStore.getUserList.map((el) => ({
+        id: el.id,
+        name: el.name,
+      }));
+    },
+    canEditUsers() {
+      return TokenUtil.hasAccessTo(appConf.rules.userManaging);
     },
   },
 };
