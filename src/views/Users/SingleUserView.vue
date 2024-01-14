@@ -35,7 +35,10 @@
         >
       </MDBCol>
       <MDBCol v-else class="d-flex justify-content-end">
-        <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger"
+        <MDBBtn
+          v-if="!isMySelf"
+          @click="confirmDeletion"
+          class="utility-btn btn-danger"
           >DELETE</MDBBtn
         >
         <MDBBtn @click="cancelEditing" class="utility-btn" outline="black"
@@ -107,6 +110,7 @@ import { useRolesStore } from "@/stores/roles.store";
 import MultiSelectComponent from "@/components/Elements/MultiSelectComponent.vue";
 import ModalComponent from "@/components/Elements/ModalComponent.vue";
 import { useModalStore } from "@/stores/modal.store";
+import TokenUtil from "@/utils/token.util";
 export default {
   name: "SingleUserView",
   components: {
@@ -174,6 +178,9 @@ export default {
   computed: {
     modalText() {
       return `Are you sure you want to delete user "${this.userName}?"`;
+    },
+    isMySelf() {
+      return TokenUtil.getAuthorizedId() == this.id;
     },
     selectedUser(): UserFullDto {
       return this.userStore.getSelectedUser;

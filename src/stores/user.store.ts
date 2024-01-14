@@ -7,6 +7,7 @@ import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.d
 import TokenUtil from "@/utils/token.util";
 import ApiModelUtil from "@/utils/api-model.util";
 import UserSearchFilterDto from "@/api/modules/user/dto/user-search-filter.dto";
+import CreateUserDto from "@/api/modules/user/dto/create-user.dto";
 
 export const useUsersStore = defineStore({
   id: "users",
@@ -15,6 +16,7 @@ export const useUsersStore = defineStore({
     usersRows: [],
     usersColumns: [{ field: "name", header: "NAME" }],
     selectedUser: {},
+    userOnCreate: {},
   }),
   getters: {
     getSelectedUser: (state) => state.selectedUser,
@@ -69,6 +71,14 @@ export const useUsersStore = defineStore({
       }
       return saveResult;
     },
+    async remove(userId: number) {
+      const userModel = new UserModel();
+      return await userModel.remove(userId);
+    },
+    async create(createUserDto: CreateUserDto) {
+      const userModel = new UserModel();
+      return await userModel.create(createUserDto);
+    },
     async updateIfCurrent(userId: number) {
       const apiModelUtil = new ApiModelUtil("");
       if (userId == TokenUtil.getAuthorizedId()) {
@@ -101,10 +111,6 @@ export const useUsersStore = defineStore({
       const res = await userModel.appendRoles(userId, roles);
       await this.updateIfCurrent(userId);
       return res;
-    },
-    async remove(userId: number) {
-      const userModel = new UserModel();
-      return await userModel.remove(userId);
     },
   },
 });
