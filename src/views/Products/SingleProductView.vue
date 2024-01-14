@@ -387,13 +387,13 @@ export default {
   },
   computed: {
     categoriesList() {
-      return this.categoriesStore.getCategoriesList();
+      return this.categoriesStore.getCategoryList;
     },
     collectionList() {
-      return this.collectionStore.getCollectionList();
+      return this.collectionStore.getCollectionList;
     },
     brandList() {
-      return this.brandStore.getBrandList();
+      return this.brandStore.getBrandList;
     },
     selectedProduct() {
       return this.productStore.getSelectedProduct || {};

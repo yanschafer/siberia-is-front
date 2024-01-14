@@ -25,7 +25,7 @@ export default {
     placeholder: String,
     disabled: Boolean,
   },
-  emits: ["itemsAdded", "itemsRemoved"],
+  emits: ["itemsAdded", "itemsRemoved", "itemsChanged"],
   created() {
     this.items = [...this.startItems];
     this.lastItems = [...this.startItems];
@@ -50,6 +50,7 @@ export default {
           this.$emit("itemsAdded", addedItems);
         }
       }
+      this.$emit("itemsChanged", this.items);
       this.lastItems = [...this.items];
     },
   },

@@ -1,13 +1,21 @@
 <template>
-  <div class="container-fluid" style="padding: 0;">
+  <div class="container-fluid" style="padding: 0">
     <template v-if="!isIdProvided">
       <MDBContainer class="d-flex container-content">
         <MDBCol class="col-auto">
-          <FiltersSidebarComponent />
+          <FiltersSidebarComponent
+            :filters-input="filtersInput"
+            @start-search="handleFiltersSearch"
+          />
         </MDBCol>
         <MDBCol class="col-auto">
           <SearchComponent @search="handleSearch" />
-          <TableComponent :rows="filteredUsers" :columns="usersStore.usersColumns" :searchTerm="usersStore.searchTerm" @rowClick="handleRowClick" />
+          <TableComponent
+            :rows="filteredUsers"
+            :columns="usersStore.usersColumns"
+            :searchTerm="usersStore.searchTerm"
+            @rowClick="handleRowClick"
+          />
         </MDBCol>
       </MDBContainer>
     </template>
@@ -20,24 +28,44 @@
 <script lang="ts">
 import TableComponent from "@/components/Elements/TableComponent.vue";
 import SearchComponent from "@/components/Elements/SearchComponent.vue";
-import {useRoute, useRouter} from "vue-router";
-import {useUsersStore} from "@/stores/user.store";
-import {MDBCol, MDBContainer} from "mdb-vue-ui-kit";
-import FiltersSidebarComponent from "@/components/Elements/FiltersSidebarComponent.vue";
-
+import { useRoute, useRouter } from "vue-router";
+import { useUsersStore } from "@/stores/user.store";
+import { MDBCol, MDBContainer } from "mdb-vue-ui-kit";
+import FiltersSidebarComponent from "@/components/Elements/Filter/FiltersSidebarComponent.vue";
+import { FilterType } from "@/api/conf/app.conf";
 
 export default {
-  name: 'UsersView',
-  components: {MDBCol, FiltersSidebarComponent, MDBContainer, SearchComponent, TableComponent },
+  name: "UsersView",
+  components: {
+    MDBCol,
+    FiltersSidebarComponent,
+    MDBContainer,
+    SearchComponent,
+    TableComponent,
+  },
+  data: () => ({
+    filtersInput: {
+      name: {
+        title: "Name",
+        type: FilterType.TEXT,
+        value: null,
+      },
+      login: {
+        title: "Login",
+        type: FilterType.TEXT,
+        value: null,
+      },
+    },
+  }),
   async setup() {
-    const usersStore = useUsersStore()
-    const route = useRoute()
-    const router = useRouter()
-    await usersStore.loadUsersList()
+    const usersStore = useUsersStore();
+    const route = useRoute();
+    const router = useRouter();
+    await usersStore.loadUsersList();
     return {
       usersStore,
       router,
-      route
+      route,
     };
   },
   computed: {
@@ -48,30 +76,31 @@ export default {
       } else {
         return this.usersStore.getUserList.filter((row) =>
           Object.values(row).some((value) =>
-            String(value).toLowerCase().includes(searchTerm.toLowerCase())
-          )
+            String(value).toLowerCase().includes(searchTerm.toLowerCase()),
+          ),
         );
       }
     },
     routeIdParam() {
-      return parseInt(this.route.params.id.toString())
+      return parseInt(this.route.params.id.toString());
     },
     isIdProvided() {
-      return !!this.route.params.id
-    }
+      return !!this.route.params.id;
+    },
   },
   methods: {
     handleSearch(searchTerm) {
       this.usersStore.searchTerm = searchTerm;
     },
+    handleFiltersSearch(filter) {
+      this.usersStore.loadUsersList(filter);
+    },
     handleRowClick(row) {
-      console.log('Clicked row with id:', row.id);
-      this.router.push({ name: 'User', params: { id: row.id.toString() } });
+      console.log("Clicked row with id:", row.id);
+      this.router.push({ name: "User", params: { id: row.id.toString() } });
     },
   },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
