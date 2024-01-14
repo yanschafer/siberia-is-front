@@ -68,13 +68,18 @@
               <h5 v-if="!editing" class="field-heading">
                 BRAND <span class="field-value copy-on">{{ brand }}</span>
               </h5>
-              <SelectComponent
-                v-else
-                :placeholder="placeholderBrand"
-                class="animate__animated animate__flipInX animate__faster"
-                :items="brandList"
-                v-model="newBrand"
-              />
+              <template v-else>
+                <SelectComponent
+                  :placeholder="placeholderBrand"
+                  class="animate__animated animate__flipInX animate__faster"
+                  :items="brandList"
+                  v-model="newBrand"
+                />
+                <DialogComponentTrigger
+                  button-text="CREATE"
+                  :init-object="initBrandDialog"
+                />
+              </template>
               <h5 class="field-heading d-flex gap-1 align-items-center">
                 LINK
                 <a
@@ -113,27 +118,36 @@
     </MDBContainer>
     <MDBContainer class="description-section" fluid>
       <h5 v-if="!editing" class="field-heading">{{ category }}</h5>
-      <TreeDropdownComponent
-        :placeholder="placeholderCategory"
-        v-else
-        class="animate__animated animate__flipInX animate__faster"
-        :nodes="categoriesList"
-        v-model="newCategory"
-      />
+      <template v-else>
+        <TreeDropdownComponent
+          :placeholder="placeholderCategory"
+          class="animate__animated animate__flipInX animate__faster"
+          :nodes="categoryList"
+          v-model="newCategory"
+        />
+        <DialogComponentTrigger
+          button-text="CREATE"
+          :init-object="initCategoryDialog"
+        />
+      </template>
 
       <h1 class="product-heading d-flex gap-1 align-items-center">
         Product description
         <span v-if="!editing" class="field-heading collection-name">{{
           collectionName
         }}</span>
-
-        <SelectComponent
-          :placeholder="placeholderCollection"
-          class="animate__animated animate__flipInX animate__faster"
-          v-else
-          :items="collectionList"
-          v-model="newCollection"
-        />
+        <template v-else>
+          <SelectComponent
+            :placeholder="placeholderCollection"
+            class="animate__animated animate__flipInX animate__faster"
+            :items="collectionList"
+            v-model="newCollection"
+          />
+          <DialogComponentTrigger
+            button-text="CREATE"
+            :init-object="initCollectionDialog"
+          />
+        </template>
 
         <span class="field-heading separator">|</span>
         <span v-if="!editing" class="field-heading color-name">{{
@@ -260,10 +274,15 @@ import ProductUpdateDto from "@/api/modules/product/dto/product-update.dto";
 import { useCollectionStore } from "@/stores/collection.store";
 import encoderUtil from "@/utils/encoder.util";
 import loggerUtil from "@/utils/logger/logger.util";
+import CategoryModel from "@/api/modules/category/models/category.model";
+import BrandModel from "@/api/modules/brand/models/brand.model";
+import CollectionModel from "@/api/modules/collection/models/collection.model";
+import DialogComponentTrigger from "@/components/Elements/DialogComponentTrigger.vue";
 
 export default {
   name: "SingleProductView",
   components: {
+    DialogComponentTrigger,
     FileUpload,
     TreeDropdownComponent,
     SelectComponent,
@@ -303,35 +322,73 @@ export default {
       collectionStore,
     };
   },
-  data: () => ({
-    placeholderBrand: "Select a brand",
-    placeholderCategory: "Select a category",
-    placeholderCollection: "Select a collection",
-    editing: false,
-    photoBase64: null,
-    photoName: null,
+  data() {
+    return {
+      placeholderBrand: "Select a brand",
+      placeholderCategory: "Select a category",
+      placeholderCollection: "Select a collection",
+      editing: false,
+      photoBase64: null,
+      photoName: null,
 
-    newImageSource: null,
-    newProductName: null,
-    newSku: null,
-    newLink: null,
-    newQuantity: null,
-    newColor: null,
-    newDescription: null,
-    newAmountInBox: null,
-    newDistributionPrice: null,
-    newProfessionalPrice: null,
-    newDefaultPrice: null,
-    newStatus: null,
-    newBrand: null,
-    newCategory: null,
-    newCollection: null,
-    newLastTimeOrdered: null,
-    newLastPriceOrdered: null,
-    newCostPrice: null,
-    newExpirationDate: null,
-  }),
+      newImageSource: null,
+      newProductName: null,
+      newSku: null,
+      newLink: null,
+      newQuantity: null,
+      newColor: null,
+      newDescription: null,
+      newAmountInBox: null,
+      newDistributionPrice: null,
+      newProfessionalPrice: null,
+      newDefaultPrice: null,
+      newStatus: null,
+      newBrand: null,
+      newCategory: null,
+      newCollection: null,
+      newLastTimeOrdered: null,
+      newLastPriceOrdered: null,
+      newCostPrice: null,
+      newExpirationDate: null,
+      initCategoryDialog: {
+        header: "Create a category",
+        showSelect: true,
+        selectItems: this.categoryList,
+        selectName: "Select parent category",
+        inputName: "Category name",
+        methodOnSave: this.handleCategoryUpdate,
+        methodOnClose: () => loggerUtil.debug("workds"),
+        model: new CategoryModel(),
+      },
+      initBrandDialog: {
+        header: "Create a brand",
+        inputName: "Brand name",
+        model: new BrandModel(),
+        methodOnSave: this.handleBrandUpdate,
+        methodOnClose: () => loggerUtil.debug("workds"),
+      },
+      initCollectionDialog: {
+        header: "Create a collection",
+        inputName: "Collection name",
+        methodOnSave: this.handleCollectionUpdate,
+        methodOnClose: () => loggerUtil.debug("workds"),
+        model: new CollectionModel(),
+      },
+    };
+  },
+  created() {
+    this.initCategoryDialog.selectItems = this.categoryList;
+  },
   methods: {
+    async handleCategoryUpdate() {
+      await this.categoriesStore.loadCategoriesList();
+    },
+    async handleBrandUpdate() {
+      await this.brandStore.loadBrandsList();
+    },
+    async handleCollectionUpdate() {
+      await this.collectionStore.loadCollectionList();
+    },
     async fileUploaded(files: File[]) {
       const file = files[0];
       const encoded = await encoderUtil.encode(file);
@@ -386,7 +443,7 @@ export default {
     },
   },
   computed: {
-    categoriesList() {
+    categoryList() {
       return this.categoriesStore.getCategoryList;
     },
     collectionList() {
