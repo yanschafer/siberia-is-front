@@ -9,10 +9,12 @@
             class="animate__animated animate__fadeIn"
             :editableColumns="editableColumns"
             :showEditColumn="true"
+            :enableDelete="true"
             v-if="tab.title === 'Categories'"
             :nodes="transformCategoryList(categoryList)" />
         <TableComponent
             v-if="tab.title === 'Brands'"
+            :enableDelete="true"
             :rows="brandList"
             :editableColumns="editableColumns"
             :showEditColumn="true"
@@ -21,6 +23,7 @@
             v-if="tab.title === 'Collections'"
             :editableColumns="editableColumns"
             :showEditColumn="true"
+            :enableDelete="true"
             :rows="collectionList"
             :columns="brandColumns"/>
       </TabPanel>

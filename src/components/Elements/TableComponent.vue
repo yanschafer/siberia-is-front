@@ -44,7 +44,7 @@
           :rowEditor="true"
           style="width: 5rem; min-width: 8rem"
           bodyStyle="text-align:center"></Column>
-      <Column headerStyle="width: 10rem">
+      <Column v-if="enableDelete" headerStyle="width: 10rem">
         <template #body>
           <div class="flex flex-wrap gap-2">
             <MDBBtn type="button" class="utility-btn btn-danger">DELETE</MDBBtn>
@@ -85,6 +85,7 @@ export default defineComponent({
     searchTerm: String,
     showEditColumn: Boolean,
     editableColumns: Array,
+    enableDelete: Boolean,
   },
   async setup () {
     const modalStore = useModalStore();

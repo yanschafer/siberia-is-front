@@ -19,7 +19,7 @@
             style="width: 5rem; min-width: 8rem"
             bodyStyle="text-align:center">
         </Column>
-        <Column headerStyle="width: 10rem">
+        <Column v-if="enableDelete" headerStyle="width: 10rem">
           <template #body>
             <div class="flex flex-wrap gap-2">
               <MDBBtn @click="confirmDeletion" type="button" class="utility-btn btn-danger">DELETE</MDBBtn>
@@ -50,6 +50,7 @@ export default {
   props: {
     nodes: Array,
     showEditColumn: Boolean,
+    enableDelete: Boolean,
   },
   async setup () {
     const modalStore = useModalStore();
