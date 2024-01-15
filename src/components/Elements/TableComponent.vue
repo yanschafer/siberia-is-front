@@ -1,82 +1,103 @@
 <!-- TableComponent.vue -->
 <template>
-  <ModalComponent
-      v-if="modalStore.getIsVisible"
-  />
   <DataTable
-      class="animate__animated animate__fadeIn"
-      v-if="paginatedRows.length > 0"
-      v-model:editingRows="editingRows"
-      editMode="row"
-      paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink JumpToPageInput"
-      :value="paginatedRows"
-      :paginator="true"
-      :rows="5"
-      selectionMode="single"
-      @row-select="handleRowClick"
-      @row-edit-save="handleRowSave"
-      :pt="{
-                table: { style: 'min-width: 50rem' },
-                column: {
-                    bodycell: ({ state }) => ({
-                        style:  state['d_editing'] && 'padding-top: 0.6rem; padding-bottom: 0.6rem'
-                    })
-                }
-            }"
+    class="animate__animated animate__fadeIn"
+    v-if="paginatedRows.length > 0"
+    v-model:editingRows="editingRows"
+    editMode="row"
+    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink JumpToPageInput"
+    :value="paginatedRows"
+    :paginator="true"
+    :rows="5"
+    selectionMode="single"
+    @row-select="handleRowClick"
+    @row-edit-save="handleRowSave"
+    :pt="{
+      table: { style: 'min-width: 50rem' },
+      column: {
+        bodycell: ({ state }) => ({
+          style:
+            state['d_editing'] && 'padding-top: 0.6rem; padding-bottom: 0.6rem',
+        }),
+      },
+    }"
   >
     <Column
-        class="animate__animated animate__fadeIn"
-        v-for="column in columns"
-        :key="column.field"
-        :field="column.field"
-        :header="column.header"
-        sortable
+      class="animate__animated animate__fadeIn"
+      v-for="column in columns"
+      :key="column.field"
+      :field="column.field"
+      :header="column.header"
+      sortable
     >
       <template #editor="{ data, field }">
-        <InputNumber size="small" class="animate__animated animate__fadeIn number w-auto"  v-if="isEditable(column.field)" mode="currency" currency="EUR" locale="en-US" v-model="data[field]" />
-        <div class="animate__animated animate__fadeIn" v-else>{{ data[field] }}</div>
+        <template v-if="isEditable(column.field) && editInputType == 'num'">
+          <InputNumber
+            size="small"
+            class="animate__animated animate__fadeIn number w-auto"
+            mode="currency"
+            currency="EUR"
+            locale="en-US"
+            v-model="data[field]"
+          />
+        </template>
+        <template
+          v-else-if="isEditable(column.field) && editInputType == 'str'"
+        >
+          <InputText
+            size="small"
+            class="animate__animated animate__fadeIn number w-auto"
+            locale="en-US"
+            v-model="data[field]"
+          />
+        </template>
+        <div class="animate__animated animate__fadeIn" v-else>
+          {{ data[field] }}
+        </div>
       </template>
     </Column>
-    <div @row-select.stop="handleRowClick" class="container-fluid">
+    <div class="container-fluid">
       <Column
-          v-if="showEditColumn"
-          class="animate__animated animate__fadeIn utility-col"
-          :rowEditor="true"
-          style="width: 5rem; min-width: 8rem"
-          bodyStyle="text-align:center"></Column>
+        v-if="showEditColumn"
+        class="animate__animated animate__fadeIn utility-col"
+        :rowEditor="true"
+        style="width: 5rem; min-width: 8rem"
+        bodyStyle="text-align:center"
+      ></Column>
       <Column v-if="enableDelete" headerStyle="width: 10rem">
         <template #body>
           <div class="flex flex-wrap gap-2">
-            <MDBBtn type="button" class="utility-btn btn-danger">DELETE</MDBBtn>
+            <MDBBtn
+              type="button"
+              class="utility-btn btn-danger"
+              @click="emitDelete"
+              >DELETE</MDBBtn
+            >
           </div>
         </template>
       </Column>
     </div>
   </DataTable>
-  <div v-else>
-    Nothing was found, try to classify search query.
-  </div>
+  <div v-else>Nothing was found, try to classify search query.</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import Paginator from 'primevue/paginator';
+import { defineComponent } from "vue";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import Paginator from "primevue/paginator";
 import InputNumber from "primevue/inputnumber";
-import LoggerUtil from "@/utils/logger/logger.util";
-import {MDBBtn} from "mdb-vue-ui-kit";
-import ModalComponent from "@/App.vue";
-import {useModalStore} from "@/stores/modal.store";
+import InputText from "primevue/inputtext";
+import { MDBBtn } from "mdb-vue-ui-kit";
 
 export default defineComponent({
   components: {
-    ModalComponent,
     MDBBtn,
     DataTable,
     Column,
     Paginator,
-    InputNumber
+    InputNumber,
+    InputText,
   },
 
   props: {
@@ -86,19 +107,18 @@ export default defineComponent({
     showEditColumn: Boolean,
     editableColumns: Array,
     enableDelete: Boolean,
+    editInputType: {
+      type: String,
+      default: "num",
+    },
   },
-  async setup () {
-    const modalStore = useModalStore();
-    return {
-      modalStore,
-    }
-  },
-  emits: ["rowClick", "rowEditSave"],
+  emits: ["rowClick", "rowEditSave", "rowDelete"],
   data() {
     return {
       currentPage: 1,
       itemsPerPage: 7,
       editingRows: [],
+      deleteClick: false,
     };
   },
   computed: {
@@ -114,13 +134,22 @@ export default defineComponent({
       return this.editableColumns && this.editableColumns.includes(columnField);
     },
     handleRowClick(event) {
-      if (!event.originalEvent.target.classList.contains('utility-col')) {
+      if (this.deleteClick) {
+        this.$emit("rowDelete", event.data);
+        this.deleteClick = false;
+        return;
+      }
+      if (!event.originalEvent.target.classList.contains("utility-col")) {
         const selectedRow = event.data;
-        this.$emit('rowClick', selectedRow);
+        this.$emit("rowClick", selectedRow);
       }
     },
+    emitDelete(event) {
+      this.deleteClick = true;
+      event.target.parentElement.parentElement.parentElement.click();
+    },
     handleRowSave({ newData }) {
-      this.$emit("rowEditSave", newData)
+      this.$emit("rowEditSave", newData);
     },
     changePage(page: number) {
       this.currentPage = page;
@@ -128,9 +157,11 @@ export default defineComponent({
     filterDataBySearchTerm() {
       if (this.searchTerm) {
         return this.rows?.filter((row) =>
-            Object.values(row).some((value) =>
-                String(value).toLowerCase().includes(<string>this.searchTerm?.toLowerCase())
-            )
+          Object.values(row).some((value) =>
+            String(value)
+              .toLowerCase()
+              .includes(<string>this.searchTerm?.toLowerCase()),
+          ),
         );
       } else {
         return this.rows;
@@ -182,11 +213,11 @@ export default defineComponent({
   transition: all 0.3s ease-in-out;
 }
 :deep(.p-paginator-page.p-highlight) {
-  background: black!important;
+  background: black !important;
   color: white;
 }
 :deep(td.p-editable-column) {
-  height: 75px!important;
+  height: 75px !important;
 }
 .number {
   width: 10rem;

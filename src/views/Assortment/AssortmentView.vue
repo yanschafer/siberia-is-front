@@ -1,127 +1,180 @@
 <template>
+  <ModalComponent
+    v-if="modalStore.getIsVisible"
+    @approved="removeAndCloseModal"
+    @close="closeModal"
+  />
   <div class="card">
     <TabView>
-      <TabPanel
-          v-for="tab in tabs"
-          :key="tab.title"
-          :header="tab.title">
+      <TabPanel v-for="tab in tabs" :key="tab.title" :header="tab.title">
         <TreeTableComponent
-            class="animate__animated animate__fadeIn"
-            :editableColumns="editableColumns"
-            :showEditColumn="true"
-            :enableDelete="true"
-            v-if="tab.title === 'Categories'"
-            :nodes="transformCategoryList(categoryList)" />
+          :editableColumns="editableColumns"
+          :showEditColumn="true"
+          :enableDelete="true"
+          v-if="tab.id === 3"
+          :nodes="transformCategoryList(categoryList)"
+          @row-delete="deleteCategory"
+        />
         <TableComponent
-            v-if="tab.title === 'Brands'"
-            :enableDelete="true"
-            :rows="brandList"
-            :editableColumns="editableColumns"
-            :showEditColumn="true"
-            :columns="brandColumns"/>
+          v-if="tab.id === 1"
+          :enableDelete="true"
+          :rows="brandList"
+          :editableColumns="editableColumns"
+          :showEditColumn="true"
+          :columns="brandColumns"
+          edit-input-type="str"
+          @row-delete="deleteBrand"
+          @row-edit-save="editBrand"
+        />
         <TableComponent
-            v-if="tab.title === 'Collections'"
-            :editableColumns="editableColumns"
-            :showEditColumn="true"
-            :enableDelete="true"
-            :rows="collectionList"
-            :columns="brandColumns"/>
+          v-if="tab.id === 2"
+          :editableColumns="editableColumns"
+          :showEditColumn="true"
+          :enableDelete="true"
+          :rows="collectionList"
+          :columns="brandColumns"
+          edit-input-type="str"
+          @row-delete="deleteCollection"
+          @row-edit-save="editCollection"
+        />
       </TabPanel>
     </TabView>
   </div>
 </template>
 
 <script lang="ts">
-import TabView from 'primevue/tabview';
-import TabPanel from 'primevue/tabpanel';
+import TabView from "primevue/tabview";
+import TabPanel from "primevue/tabpanel";
 import TreeTableComponent from "@/components/Elements/TreeTableComponent.vue";
-import {useProductsStore} from "@/stores/products.store";
-import {useBrandStore} from "@/stores/brand.store";
-import {useCollectionStore} from "@/stores/collection.store";
-import {useCategoriesStore} from "@/stores/categories.store";
-import {useRoute, useRouter} from "vue-router";
+import { useBrandStore } from "@/stores/brand.store";
+import { useCollectionStore } from "@/stores/collection.store";
+import { useCategoriesStore } from "@/stores/categories.store";
 import TableComponent from "@/components/Elements/TableComponent.vue";
+import loggerUtil from "@/utils/logger/logger.util";
+import { useModalStore } from "@/stores/modal.store";
+import ModalComponent from "@/components/Elements/ModalComponent.vue";
+import ApiResponseDto from "@/api/dto/api-response.dto";
 
 export default {
-  name: 'AssortmentVue',
+  name: "AssortmentVue",
   components: {
+    ModalComponent,
     TableComponent,
     TreeTableComponent,
     TabView,
-    TabPanel
+    TabPanel,
   },
   data() {
     return {
       editableColumns: ["name"],
-      brandColumns: [
-        { field: "name", header: "NAME" },
-      ],
+      brandColumns: [{ field: "name", header: "NAME" }],
       tabs: [
-        { title: 'Brands', content: 'Tab 1 Content' },
-        { title: 'Collections', content: 'Tab 2 Content' },
-        { title: 'Categories', content: 'Tab 3 Content' }
+        { id: 1, title: "Brands", content: "Tab 1 Content" },
+        { id: 2, title: "Collections", content: "Tab 2 Content" },
+        { id: 3, title: "Categories", content: "Tab 3 Content" },
       ],
-      nodes: [
-        {
-          key: '0',
-          data: {
-            label: 'Hueta',
-            data: 'Documents',
-            icon: 'pi pi-fw pi-inbox',
-          },
-          children: [
-            {
-              key: '0-0',
-              name: 'Work',
-              data: {
-                label: 'Work',
-                data: 'Work Folder',
-              },
-              children: [
-                { key: '0-0-0',
-                  data: {
-                    label: 'Expenses.doc',
-                    icon: 'pi pi-fw pi-file',
-                    data: 'Expenses Document'
-                  }
-                },
-              ]
-            },
-          ]
-        },
-      ]
+      onDelete: {
+        remove(modelId: number): Promise<ApiResponseDto<any>> {},
+        loadList() {},
+      },
+      idOnDelete: 0,
     };
   },
   async setup() {
     const brandStore = useBrandStore();
     const collectionStore = useCollectionStore();
-    const categoriesStore = useCategoriesStore();
+    const categoryStore = useCategoriesStore();
+    const modalStore = useModalStore();
     await brandStore.loadBrandsList();
     await collectionStore.loadCollectionList();
-    await categoriesStore.loadCategoriesList();
+    await categoryStore.loadCategoriesList();
 
     // await productStore.loadSelectedProduct(parseInt(route.params.id.toString()));
     return {
       brandStore,
-      categoriesStore,
+      categoryStore,
       collectionStore,
+      modalStore,
     };
   },
   methods: {
+    showModal(type, name) {
+      this.modalStore.show({
+        title: "Confirm deletion",
+        text: `Are you sure you want to delete ${type} ${name}`,
+        disclaimer: `This action cannot be undone, this ${type} data will be lost`,
+      });
+    },
+    closeModal() {
+      this.modalStore.hide();
+    },
+    async removeAndCloseModal() {
+      const removed = await this.onDelete.remove(this.idOnDelete);
+      if (removed.success) {
+        this.modalStore.hide();
+        await this.onDelete.loadList();
+      }
+    },
+    deleteCategory(categoryRow) {
+      loggerUtil.debug("Category delete", categoryRow);
+      this.onDelete = this.categoryStore;
+      this.idOnDelete = categoryRow.key;
+      this.showModal("category", categoryRow.label);
+    },
+    deleteCollection(collectionRow) {
+      loggerUtil.debug("Collection delete", collectionRow);
+      this.onDelete = this.collectionStore;
+      this.idOnDelete = collectionRow.id;
+      this.showModal("collection", collectionRow.name);
+    },
+    deleteBrand(brandRow) {
+      loggerUtil.debug("Brand delete", brandRow);
+      this.onDelete = this.brandStore;
+      this.idOnDelete = brandRow.id;
+      this.showModal("brand", brandRow.name);
+    },
+    async editBrand(data) {
+      if (data.name == "") {
+        //TODO: Show error
+        return;
+      }
+      const updated = await this.brandStore.update(data.id, data);
+      if (updated.success) {
+        await this.brandStore.loadBrandsList();
+      } else {
+        //TODO: Check errors
+      }
+    },
+    async editCollection(data) {
+      if (data.name == "") {
+        //TODO: Show error
+        return;
+      }
+      const updated = await this.collectionStore.update(data.id, data);
+      if (updated.success) {
+        await this.collectionStore.loadCollectionList();
+      } else {
+        //TODO: Check errors
+      }
+    },
     transformCategoryList(categoryList) {
       if (!categoryList || categoryList.length === 0) {
         return [];
       }
 
-      return categoryList.map((category, index) => {
+      const list = categoryList.map((category, index) => {
+        loggerUtil.debug(category);
         return {
-          key: index.toString(),
+          key: category.key,
           data: {
-            label: category.name || '',
+            label: category.label || "",
+            isEditable: "",
           },
           children: this.transformChildren(category.children),
         };
       });
+      loggerUtil.debug(list);
+      return list;
     },
 
     transformChildren(children) {
@@ -131,12 +184,13 @@ export default {
 
       return children.map((child, index) => {
         return {
-          key: `${index}`,
-          name: child.name || '',
+          key: child.key,
+          name: child.label || "",
           data: {
-            label: child.name || '',
-            data: child.name || '',
-            icon: 'pi pi-fw pi-folder-open', // You might want to customize the icon
+            label: child.label || "",
+            data: child.label || "",
+            icon: child.icon,
+            isEditable: "",
           },
           children: this.transformChildren(child.children),
         };
@@ -146,7 +200,7 @@ export default {
 
   computed: {
     categoryList() {
-      return this.categoriesStore.getCategoryList;
+      return this.categoryStore.getCategoryList;
     },
     brandList() {
       return this.brandStore.getBrandList;
@@ -155,9 +209,8 @@ export default {
       return this.collectionStore.getCollectionList;
     },
   },
-}
+};
 </script>
-
 
 <style scoped>
 /* Add any necessary styles here */

@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import CategoryModel from "@/api/modules/category/models/category.model";
+import CategoryRemoveDto from "@/api/modules/category/dto/category-remove.dto";
 
 export const useCategoriesStore = defineStore({
   id: "categories",
@@ -11,6 +12,9 @@ export const useCategoriesStore = defineStore({
     getCategoryList: (state) => state.categoryItems,
   },
   actions: {
+    async loadList() {
+      await this.loadCategoriesList();
+    },
     async loadCategoriesList() {
       const categoriesModel = new CategoryModel();
       try {
@@ -56,6 +60,11 @@ export const useCategoriesStore = defineStore({
       } else {
         return "pi pi-fw pi-star-fill";
       }
+    },
+
+    async remove(categoryId: number, deleteConfig: CategoryRemoveDto) {
+      const categoryModel = new CategoryModel();
+      return await categoryModel.remove(categoryId, deleteConfig);
     },
   },
 });
