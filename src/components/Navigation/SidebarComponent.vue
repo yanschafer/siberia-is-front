@@ -104,8 +104,8 @@ export default {
 .item-icon {
   border-radius: 50%;
   border: 2px solid #B8B8B8;
-  height: 60px;
-  width: 60px;
+  height: 50px;
+  width: 50px;
   display: flex;
   align-items: center;
   justify-content: center;

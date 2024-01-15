@@ -1,5 +1,8 @@
 <!-- TableComponent.vue -->
 <template>
+  <ModalComponent
+      v-if="modalStore.getIsVisible"
+  />
   <DataTable
       class="animate__animated animate__fadeIn"
       v-if="paginatedRows.length > 0"
@@ -8,7 +11,7 @@
       paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink JumpToPageInput"
       :value="paginatedRows"
       :paginator="true"
-      :rows="6"
+      :rows="5"
       selectionMode="single"
       @row-select="handleRowClick"
       @row-edit-save="handleRowSave"
@@ -35,7 +38,19 @@
       </template>
     </Column>
     <div @row-select.stop="handleRowClick" class="container-fluid">
-      <Column v-if="showEditColumn" class="animate__animated animate__fadeIn utility-col" :rowEditor="true" style="width: 5rem; min-width: 8rem" bodyStyle="text-align:center"></Column>
+      <Column
+          v-if="showEditColumn"
+          class="animate__animated animate__fadeIn utility-col"
+          :rowEditor="true"
+          style="width: 5rem; min-width: 8rem"
+          bodyStyle="text-align:center"></Column>
+      <Column headerStyle="width: 10rem">
+        <template #body>
+          <div class="flex flex-wrap gap-2">
+            <MDBBtn type="button" class="utility-btn btn-danger">DELETE</MDBBtn>
+          </div>
+        </template>
+      </Column>
     </div>
   </DataTable>
   <div v-else>
@@ -50,9 +65,14 @@ import Column from 'primevue/column';
 import Paginator from 'primevue/paginator';
 import InputNumber from "primevue/inputnumber";
 import LoggerUtil from "@/utils/logger/logger.util";
+import {MDBBtn} from "mdb-vue-ui-kit";
+import ModalComponent from "@/App.vue";
+import {useModalStore} from "@/stores/modal.store";
 
 export default defineComponent({
   components: {
+    ModalComponent,
+    MDBBtn,
     DataTable,
     Column,
     Paginator,
@@ -65,6 +85,12 @@ export default defineComponent({
     searchTerm: String,
     showEditColumn: Boolean,
     editableColumns: Array,
+  },
+  async setup () {
+    const modalStore = useModalStore();
+    return {
+      modalStore,
+    }
   },
   emits: ["rowClick", "rowEditSave"],
   data() {

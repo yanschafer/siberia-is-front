@@ -44,6 +44,14 @@ const routes = [
         },
       },
       {
+        path: "/assortment",
+        name: "assortment",
+        component: () => import("@/views/Assortment/AssortmentView.vue"),
+        meta: {
+          showAddBtn: false,
+        },
+      },
+      {
         path: "/products",
         name: "products",
         component: () => import("@/views/Products/ProductsView.vue"),
