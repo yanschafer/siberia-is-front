@@ -79,7 +79,12 @@
       </Column>
     </div>
   </DataTable>
-  <div v-else>Nothing was found, try to classify search query.</div>
+  <div v-else>
+    <MDBContainer>
+
+    </MDBContainer>
+    Nothing was found, try to classify search query.
+  </div>
 </template>
 
 <script lang="ts">
@@ -89,11 +94,12 @@ import Column from "primevue/column";
 import Paginator from "primevue/paginator";
 import InputNumber from "primevue/inputnumber";
 import InputText from "primevue/inputtext";
-import { MDBBtn } from "mdb-vue-ui-kit";
+import { MDBBtn, MDBContainer } from "mdb-vue-ui-kit";
 
 export default defineComponent({
   components: {
     MDBBtn,
+    MDBContainer,
     DataTable,
     Column,
     Paginator,

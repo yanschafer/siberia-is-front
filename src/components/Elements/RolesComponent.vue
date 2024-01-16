@@ -8,7 +8,7 @@
       <div
         v-for="category of rulesCheckboxes"
         :key="category.key"
-        class="flex align-items-center"
+        class="flex align-items-center mb-2"
       >
         <Checkbox
           v-model="selectedRules"
@@ -18,7 +18,7 @@
           :value="category.key"
           @change="checkboxChanges"
         />
-        <label :for="category.key">{{ category.name }}</label>
+        <label class="label" :for="category.key">{{ category.name }}</label>
       </div>
     </MDBAccordionItem>
     <template v-for="category in categories">
@@ -230,5 +230,9 @@ export default {
 :deep(.accordion-button:not(.collapsed)::after) {
   filter: invert(0%) sepia(6%) saturate(0%) hue-rotate(93deg) brightness(106%)
     contrast(106%) !important;
+}
+.label {
+  margin-left: .5rem!important;
+  font-weight: 500;
 }
 </style>

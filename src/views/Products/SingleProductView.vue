@@ -49,7 +49,7 @@
           </MDBCol>
           <MDBRow>
             <MDBCol class="product-name-col" v-if="!editing">
-              <h1 class="product-heading ">{{ productName }}</h1>
+              <h1 class="product-heading">{{ productName }}</h1>
             </MDBCol>
             <MDBCol
               class="d-flex gap-1 align-items-center mb-3 animate__animated animate__flipInX animate__faster"
@@ -147,6 +147,7 @@
         <MDBRow>
           <MDBCol class="col-auto">
             <TreeDropdownComponent
+              v-if="updateDropdown"
               :placeholder="placeholderCategory"
               class="animate__animated animate__flipInX animate__faster"
               :class="{ 'p-invalid': !validate.category }"
@@ -188,7 +189,9 @@
           v-else
           class="animate__animated animate__flipInX animate__faster field-heading d-flex gap-1 align-items-center mb-0"
         >
-          <span class="bottom-numbers">{{ localize("newColorNameCapslock") }}</span>
+          <span class="bottom-numbers">{{
+            localize("newColorNameCapslock")
+          }}</span>
           <InputText
             class="input-wrapper animate__animated animate__fadeIn username-input"
             :class="{ 'p-invalid': !validate.color }"
@@ -212,7 +215,9 @@
         <MDBCol>
           <!--          <h5 class="field-heading">VOLUME <span class="field-value">{{ volume }}</span></h5>-->
           <!--          <h5 class="field-heading">SIZE <span class="field-value">{{ size }}</span></h5>-->
-          <h5 class="bottom-numbers d-flex flex-column justify-content-start gap-2">
+          <h5
+            class="bottom-numbers d-flex flex-column justify-content-start gap-2"
+          >
             {{ localize("quantityPerPackageCapslock") }}
             <span v-if="!editing" class="field-value">{{
               quantityPerPackage
@@ -227,7 +232,9 @@
           </h5>
         </MDBCol>
         <MDBCol>
-          <h5 class="bottom-numbers d-flex flex-column justify-content-start gap-2">
+          <h5
+            class="bottom-numbers d-flex flex-column justify-content-start gap-2"
+          >
             {{ localize("distributionPriceCapslock") }}
             <span v-if="!editing" class="field-value">{{
               distributionPrice
@@ -244,7 +251,9 @@
           <!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ distributionMarkup }}</span></h5>-->
         </MDBCol>
         <MDBCol>
-          <h5 class="bottom-numbers d-flex flex-column justify-content-start gap-2">
+          <h5
+            class="bottom-numbers d-flex flex-column justify-content-start gap-2"
+          >
             {{ localize("professionalPriceCapslock") }}
             <span v-if="!editing" class="field-value">{{
               professionalPrice
@@ -261,7 +270,9 @@
           <!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ professionalMarkup }}</span></h5>-->
         </MDBCol>
         <MDBCol>
-          <h5 class="bottom-numbers d-flex flex-column justify-content-start gap-2">
+          <h5
+            class="bottom-numbers d-flex flex-column justify-content-start gap-2"
+          >
             {{ localize("defaultPriceCapslock") }}
             <span v-if="!editing" class="field-value">{{ defaultPrice }}</span>
             <InputText
@@ -276,7 +287,9 @@
           <!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ defaultMarkup }}</span></h5>-->
         </MDBCol>
         <MDBCol>
-          <h5 class="bottom-numbers d-flex flex-column justify-content-start gap-2">
+          <h5
+            class="bottom-numbers d-flex flex-column justify-content-start gap-2"
+          >
             {{ localize("expirationDateCapslock") }}
             <span v-if="!editing" class="field-value">{{
               expirationDate
@@ -322,7 +335,7 @@ import PrintUtil from "@/utils/localization/print.util";
 import InputText from "primevue/inputtext";
 import ValidatorUtil from "@/utils/validator/validator.util";
 import ValidateRule from "@/utils/validator/validate-rule";
-import Panel from 'primevue/panel';
+import Panel from "primevue/panel";
 export default {
   name: "SingleProductView",
   components: {
@@ -349,6 +362,7 @@ export default {
   },
   data() {
     return {
+      updateDropdown: true,
       createButtonText: this.localize("createCapslock", "default"),
       placeholderBrand: this.localize("selectABrand"),
       placeholderCategory: this.localize("selectACategory"),
@@ -377,28 +391,49 @@ export default {
       newCostPrice: null,
       newExpirationDate: null,
       initCategoryDialog: {
-        header: this.localize("createACategory"),
+        header: "Create a category",
         showSelect: true,
         selectItems: this.categoryList,
-        selectName: this.localize("selectParentCategory"),
-        inputName: this.localize("categoryName"),
-        methodOnSave: this.handleCategoryUpdate,
+        selectName: "Select parent category",
+        inputName: "Category name",
+        methodOnSave: async (category) => {
+          const loadRes = await this.categoriesStore.loadCategoriesList();
+          loadRes.toastIfError(this.$toast, this.$nextTick);
+          this.initCategoryDialog.selectItems = this.categoryList;
+          this.$nextTick(() => {
+            this.newCategory = category.id;
+          });
+        },
         methodOnClose: () => loggerUtil.debug("workds"),
         model: new CategoryModel(),
+        toastSuccessText: "Category is created",
+        toastErrorText: "Category creation failed",
       },
       initBrandDialog: {
-        header: this.localize("createABrand"),
-        inputName: this.localize("brandName"),
+        header: "Create a brand",
+        inputName: "Brand name",
         model: new BrandModel(),
-        methodOnSave: this.handleBrandUpdate,
+        methodOnSave: async (brand) => {
+          const loadRes = await this.brandStore.loadBrandsList();
+          loadRes.toastIfError(this.$toast, this.$nextTick);
+          this.newBrand = brand;
+        },
         methodOnClose: () => loggerUtil.debug("workds"),
+        toastSuccessText: "Brand is created",
+        toastErrorText: "Brand creation failed",
       },
       initCollectionDialog: {
-        header: this.localize("createACollection"),
-        inputName: this.localize("collectionName"),
-        methodOnSave: this.handleCollectionUpdate,
+        header: "Create a collection",
+        inputName: "Collection name",
+        methodOnSave: async (collection) => {
+          const loadRes = await this.collectionStore.loadCollectionList();
+          loadRes.toastIfError(this.$toast, this.$nextTick);
+          this.newCollection = collection;
+        },
         methodOnClose: () => loggerUtil.debug("workds"),
         model: new CollectionModel(),
+        toastSuccessText: "Collection is created",
+        toastErrorText: "Collection creation failed",
       },
       validate: {
         vendorCode: true,
@@ -513,9 +548,17 @@ export default {
     async removeAndCloseModal() {
       const removed = await this.productStore.remove(this.id);
       if (removed.success) {
+        this.$toast.add({
+          severity: "success",
+          summary: "Success",
+          detail: "Product is removed",
+          life: 3000,
+        });
         this.modalStore.hide();
         await this.productStore.loadProductList();
         this.router.push({ name: "products" });
+      } else {
+        removed.toastIfError(this.$toast, this.$nextTick);
       }
     },
     async handleCategoryUpdate() {

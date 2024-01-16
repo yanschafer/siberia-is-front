@@ -19,6 +19,8 @@ const defaultValues = {
   checkboxValues: {},
   remove: null,
   showInput: true,
+  toastSuccessText: "",
+  toastErrorText: "",
 };
 
 export const useDialogStore = defineStore({
@@ -40,6 +42,8 @@ export const useDialogStore = defineStore({
     showCheckbox: false,
     checkboxValues: {},
     showInput: true,
+    toastSuccessText: "",
+    toastErrorText: "",
   }),
   getters: {
     getIsVisible: (state) => state.visible,
@@ -58,6 +62,8 @@ export const useDialogStore = defineStore({
         model,
         methodOnSave,
         methodOnClose,
+        toastSuccessText = "",
+        toastErrorText = "",
       },
       update = null,
       transformMethod = (state) => ({}),
@@ -67,6 +73,8 @@ export const useDialogStore = defineStore({
       checkboxValues = {},
     ) {
       this.cancelAndClose();
+      this.toastSuccessText = toastSuccessText;
+      this.toastErrorText = toastErrorText;
       this.showInput = showInput;
       if (update) {
         this.update = update;
@@ -85,12 +93,11 @@ export const useDialogStore = defineStore({
         this.showSelect = showSelect;
         this.selectItems = selectItems;
         this.selectName = selectName;
-        loggerUtil.debug(this.showSelect, this.selectItems, this.selectName);
       }
       this.inputName = inputName;
       this.methodOnSave = methodOnSave;
     },
-    async saveAndClose() {
+    async saveAndClose(toast, nextTick) {
       let res: ApiResponseDto<any>;
       if (this.update) {
         const data = this.transformMethod(this.$state);
@@ -104,9 +111,17 @@ export const useDialogStore = defineStore({
 
       if (res.success) {
         this.visible = false;
-        this.methodOnSave(this.value);
+        this.methodOnSave(res.getData());
         this.methodOnClose();
+        toast.add({
+          severity: "success",
+          summary: "Success",
+          detail: this.toastSuccessText,
+          life: 3000,
+        });
         this.$state = { ...defaultValues };
+      } else {
+        res.toastIfError(toast, nextTick);
       }
 
       return res;

@@ -11,10 +11,18 @@
     <MDBContainer class="d-flex gap-2 flex-column">
       <template v-if="showInput">
         <span>{{ inputName }}</span>
-        <InputText :placeholder="inputName" v-model="inputValue" />
+        <InputText
+          :placeholder="inputName"
+          v-model="inputValue"
+          :class="{ 'p-invalid': inputError }"
+          @input="inputError = false"
+        />
       </template>
       <template v-if="showCheckbox">
-        <p class="text-center">Would you like to remove the category along with its child subcategories, or relocate them to another parent group?</p>
+        <p class="text-center">
+          Would you like to remove the category along with its child
+          subcategories, or relocate them to another parent group?
+        </p>
         <MDBBtn outline="black" @click="checkboxValue = !checkboxValue">
           {{ checkboxValues[checkboxValue] }}
         </MDBBtn>
@@ -28,8 +36,12 @@
           v-model="selectedDropdownItem"
         />
       </template>
-      <MDBRow class="btn-row d-flex flex-row align-items-center justify-content-center">
-        <MDBBtn class="btn-black save-btn" @click="save">{{ saveButtonText }}</MDBBtn>
+      <MDBRow
+        class="btn-row d-flex flex-row align-items-center justify-content-center"
+      >
+        <MDBBtn class="btn-black save-btn" @click="save">{{
+          saveButtonText
+        }}</MDBBtn>
       </MDBRow>
     </MDBContainer>
   </Dialog>
@@ -68,6 +80,7 @@ export default {
       saveButtonText: "Save",
       isVisible: false,
       checkboxValue: false,
+      inputError: false,
     };
   },
   created() {
@@ -75,6 +88,7 @@ export default {
       loggerUtil.debug(this.checkboxValue);
     });
     this.$watch("isVisible", () => {
+      this.inputError = false;
       if (this.dialogStore.update) {
         this.inputValue = this.dialogStore.update.input;
         this.selectedDropdownItem = this.dialogStore.update.selected;
@@ -97,12 +111,24 @@ export default {
         parent: this.selectedDropdownItem,
         checkbox: this.checkboxValue,
       };
-      const res = await this.dialogStore.saveAndClose();
+
+      if (this.showInput && this.inputValue == "") {
+        this.$toast.add({
+          severity: "warning",
+          summary: "Validate error",
+          detail: "Check data provided",
+          life: 3000,
+        });
+        this.inputError = true;
+        return;
+      }
+
+      const res = await this.dialogStore.saveAndClose(
+        this.$toast,
+        this.$nextTick,
+      );
       if (!res) return;
-      if (!res.success) {
-        loggerUtil.debug("error", res.getError());
-        //TODO: Show errors
-      } else {
+      if (res.success) {
         this.inputValue = "";
         this.selectedDropdownItem = null;
       }

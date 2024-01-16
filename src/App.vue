@@ -58,7 +58,7 @@ ul {
   border-bottom: 2px solid black;
 }
 .p-multiselect:hover {
-  border: 1px solid #858585;
+  border-bottom: 2px solid black;
 }
 .p-highlight {
   background-color: #ececec;
@@ -236,6 +236,36 @@ ul {
 
 .p-dropdown-label {
   color: black;
+}
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+  color: #f9f9f9;
+  border-color: white;
+  background-color: black;
+  transition: all 0.6s ease-in-out;
+}
+.accordion.accordion-borderless {
+  padding-left: 0;
+}
+.accordion-borderless .accordion-item .accordion-button {
+  padding: 0.6rem;
+}
+.accordion-button::after {
+  margin: 0;
+}
+.accordion-button {
+  width: 100%;
+  transition: all 1s ease-in-out;
+  max-width: max-content;
+}
+.p-scrollpanel .p-scrollpanel-bar {
+  background: #dcdcdc;
+}
+.nav-link {
+  text-align: left;
+}
+.accordion-item {
+  width: 100%!important;
+  border-bottom: 2px solid rgba(227, 227, 227, 0.49) !important;
 }
 </style>
 

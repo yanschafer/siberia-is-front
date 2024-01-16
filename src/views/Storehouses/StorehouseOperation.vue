@@ -43,6 +43,7 @@
     :enable-delete="true"
     :columns="addedColumns"
     :searchTerm="addedSearchTerm"
+    @row-delete="handleRowDelete"
   />
 </template>
 <script lang="ts">
@@ -86,7 +87,7 @@ export default {
   emits: ["cancel", "save"],
   data() {
     return {
-      selectedProduct: {},
+      selectedProduct: null,
       quantity: null,
       price: null,
       addedSearchTerm: "",
@@ -121,6 +122,9 @@ export default {
     });
   },
   methods: {
+    handleRowDelete(data) {
+      this.addedList = this.addedList.filter((el) => el.id != data.id);
+    },
     handleAddedSearch(searchTerm) {
       this.addedSearchTerm = searchTerm;
     },
@@ -129,7 +133,7 @@ export default {
     },
     showErrorToast(detail) {
       loggerUtil.debug(detail);
-      this.toast.add({
+      this.$toast.add({
         severity: "error",
         summary: "Failed",
         detail,
@@ -187,7 +191,8 @@ export default {
       this.$emit("cancel");
     },
     save() {
-      this.$emit("save", this.addedList);
+      if (this.addedList.length) this.$emit("save", this.addedList);
+      else this.cancel();
     },
   },
 };
