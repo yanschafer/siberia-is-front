@@ -1,14 +1,15 @@
 <template>
   <span class="filtername">{{ title }}</span>
-  <span class="filtername">min</span>
+  <span class="filtername">{{ localize("min") }}</span>
   <input type="datetime-local" v-model="min" @change="handleChange" />
-  <span class="filtername">max</span>
+  <span class="filtername">{{ localize("max") }}</span>
   <input type="datetime-local" v-model="max" @change="handleChange" />
   <hr class="hr" />
 </template>
 
 <script lang="ts">
 import loggerUtil from "@/utils/logger/logger.util.js";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "MinMaxDateFilter",
@@ -21,6 +22,9 @@ export default {
   },
   emits: ["change"],
   methods: {
+    localize(key, module = "filters") {
+          return PrintUtil.localize(key, module);
+    },
     handleChange() {
       let minTimestamp = new Date(this.min).getTime();
       let maxTimestamp = new Date(this.max).getTime();
