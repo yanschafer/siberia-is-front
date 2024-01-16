@@ -79,5 +79,9 @@ export const useRolesStore = defineStore({
       );
       return await roleModel.create(newRoleDto);
     },
+    async remove(id: number) {
+      const roleModel = new RoleModel();
+      return await roleModel.remove(id);
+    },
   },
 });

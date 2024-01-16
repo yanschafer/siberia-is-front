@@ -550,9 +550,17 @@ export default {
     async removeAndCloseModal() {
       const removed = await this.productStore.remove(this.id);
       if (removed.success) {
+        this.$toast.add({
+          severity: "success",
+          summary: "Success",
+          detail: "Product is removed",
+          life: 3000,
+        });
         this.modalStore.hide();
         await this.productStore.loadProductList();
         this.router.push({ name: "products" });
+      } else {
+        removed.toastIfError(this.$toast, this.$nextTick);
       }
     },
     async handleCategoryUpdate() {

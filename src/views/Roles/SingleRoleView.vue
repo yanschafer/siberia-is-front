@@ -1,10 +1,8 @@
 <template>
   <ModalComponent
-    :disclaimerText="disclaimerText"
-    :modalTitle="modalTitle"
-    :modalText="modalText"
-    v-if="showModal"
-    @closeModal="closeModal"
+    v-if="modalStore.getIsVisible"
+    @approved="approveRoleRemove"
+    @close="closeModal"
   />
   <MDBContainer class="single-user-info d-flex flex-column gap-3">
     <MDBRow class="d-flex justify-content-around">
@@ -97,7 +95,7 @@ import {
 import TabsComponent from "@/components/Elements/TabsComponent.vue";
 import ModalComponent from "@/components/Elements/ModalComponent.vue";
 import { useRolesStore } from "@/stores/roles.store";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import UpdateRoleDto from "@/api/modules/rbac/dto/roles/update-role.dto";
 import TokenUtil from "@/utils/token.util";
 import { appConf } from "@/api/conf/app.conf";
@@ -107,6 +105,7 @@ import loggerUtil from "@/utils/logger/logger.util";
 import PrintUtil from "@/utils/localization/print.util";
 import ValidatorUtil from "@/utils/validator/validator.util";
 import ValidateRule from "@/utils/validator/validate-rule";
+import { useModalStore } from "@/stores/modal.store";
 
 export default {
   name: "SingleRoleView",
@@ -135,7 +134,8 @@ export default {
   async setup() {
     const rolesStore = useRolesStore();
     const usersStore = useUsersStore();
-
+    const modalStore = useModalStore();
+    const router = useRouter();
     const route = useRoute();
 
     return {
@@ -145,6 +145,8 @@ export default {
         parseInt(route.params.id.toString()),
       ),
       usersLoadRes: await usersStore.loadUsersList(),
+      modalStore,
+      router,
     };
   },
   data: () => ({
@@ -187,11 +189,30 @@ export default {
       });
     },
     confirmDeletion() {
-      this.roleName = this.selectedRole.name || "";
-      this.showModal = true;
+      this.modalStore.show({
+        title: this.modalTitle,
+        text: this.modalText,
+        disclaimer: this.disclaimerText,
+      });
+    },
+    async approveRoleRemove() {
+      const removed = await this.rolesStore.remove(this.id);
+      if (removed.success) {
+        this.$toast.add({
+          severity: "success",
+          summary: "Success",
+          detail: "Role is removed",
+          life: 3000,
+        });
+        this.modalStore.hide();
+        await this.rolesStore.loadRolesList();
+        this.router.push({ name: "roles" });
+      } else {
+        removed.toastIfError(this.$toast, this.$nextTick);
+      }
     },
     closeModal() {
-      this.showModal = false;
+      this.modalStore.hide();
     },
     startEditing() {
       this.editing = true;
