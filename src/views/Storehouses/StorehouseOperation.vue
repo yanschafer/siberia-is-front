@@ -5,10 +5,10 @@
       <SelectComponent :placeholder="placeholder" :items="productList" v-model="selectedProduct" />
     </MDBCol>
     <MDBCol class="col-auto">
-      <MDBInput class="input-wrapper animate__animated animate__fadeIn username-input" type="text" placeholder="Quantity" v-model="quantity" />
+      <InputText class="input-wrapper animate__animated animate__fadeIn username-input" type="text" placeholder="Quantity" v-model="quantity" />
     </MDBCol>
     <MDBCol v-if="showPrice" class=col-auto>
-      <MDBInput class="input-wrapper animate__animated animate__fadeIn username-input" type="text" placeholder="Price" v-model="price" />
+      <InputText class="input-wrapper animate__animated animate__fadeIn username-input" type="text" placeholder="Price" v-model="price" />
     </MDBCol>
     <MDBCol class="col-auto">
       <MDBBtn class="utility-btn btn-black" @click="add">+</MDBBtn>
@@ -18,7 +18,14 @@
       <MDBBtn class="utility-btn btn-success" @click="save">{{ localize("saveCapslock", "default") }}</MDBBtn>
     </MDBCol>
   </MDBRow>
-  <TableComponent :rows="addedList" :columns="addedColumns" :searchTerm="addedSearchTerm" />
+  <SearchComponent @search="handleAddedSearch" />
+  <TableComponent
+       :rowsPerPage="6"
+       :rows="addedList"
+       :enable-delete="true"
+       :columns="addedColumns"
+       :searchTerm="addedSearchTerm"
+  />
 </template>
 <script lang="ts">
 import {MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow} from "mdb-vue-ui-kit";
@@ -27,11 +34,15 @@ import TableComponent from "@/components/Elements/TableComponent.vue";
 import {useProductsStore} from "@/stores/products.store.js";
 import {useStorehousesStore} from "@/stores/storehouse.store";
 import PrintUtil from "@/utils/localization/print.util";
+import InputText from "primevue/inputtext";
+import SearchComponent from "@/components/Elements/SearchComponent.vue";
+
 
 export default {
   name: "StorehouseOperation",
   components: {
-    MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow, SelectComponent, TableComponent
+    SearchComponent,
+    MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow, SelectComponent, TableComponent, InputText
   },
   props: {
     title: String,
@@ -50,6 +61,7 @@ export default {
   ],
   data (){
       return{
+          searchTerm: "",
           selectedProduct: {},
           quantity: null,
           price: null,
@@ -80,6 +92,9 @@ export default {
     })
   },
   methods: {
+    handleAddedSearch(searchTerm) {
+      this.addedSearchTerm = searchTerm;
+    },
     localize(key, module = "storehouses") {
           return PrintUtil.localize(key, module);
     },
@@ -135,6 +150,7 @@ export default {
   height: auto;
   width: 100%;
   min-width: 4rem;
+  margin-top: 0;
   max-width: fit-content;
   font-weight: 800;
   max-height: 2rem;
@@ -161,5 +177,9 @@ export default {
 :deep(.p-toast) {
   position: relative;
   z-index: 99999999999999999999999999999999999!important;
+}
+:deep(td.p-editable-column) {
+  height: 40px !important;
+  padding: 8px;
 }
 </style>

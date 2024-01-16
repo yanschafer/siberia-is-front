@@ -110,7 +110,6 @@ ul {
   padding-top: 2px;
   padding-bottom: 2px;
   border-radius: 7px;
-  margin-top: 0.5rem;
 }
 .p-component-overlay {
   background-color: rgba(255, 255, 255, 0.7)!important;

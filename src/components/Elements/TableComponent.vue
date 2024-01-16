@@ -8,7 +8,7 @@
     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink JumpToPageInput"
     :value="paginatedRows"
     :paginator="true"
-    :rows="5"
+    :rows="rowsPerPage"
     selectionMode="single"
     @row-select="handleRowClick"
     @row-edit-save="handleRowSave"
@@ -112,6 +112,10 @@ export default defineComponent({
       type: String,
       default: "num",
     },
+    rowsPerPage: {
+      type: Number,
+      default: 6
+    }
   },
   emits: ["rowClick", "rowEditSave", "rowDelete"],
   data() {
