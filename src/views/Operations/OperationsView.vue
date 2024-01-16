@@ -80,16 +80,20 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
-    await operationStore.loadOperationList();
-    await stockStore.loadStorehouseList();
-    await operationStore.loadStatusesList();
-
     return {
       operationStore,
       stockStore,
       route,
       router,
+      loadOperationsRes: await operationStore.loadOperationList(),
+      loadStocksRes: await stockStore.loadStorehouseList(),
+      loadStatusesRes: await operationStore.loadStatusesList(),
     };
+  },
+  created() {
+    this.loadOperationsRes.toastIfError(this.$toast, this.$nextTick);
+    this.loadStocksRes.toastIfError(this.$toast, this.$nextTick);
+    this.loadStatusesRes.toastIfError(this.$toast, this.$nextTick);
   },
   computed: {
     filteredOperations() {
@@ -121,7 +125,6 @@ export default {
   },
   methods: {
     handleRowClick(row) {
-      console.log("Clicked row with id:", row.id);
       this.router.push({
         name: "Single operation",
         params: { id: row.id.toString() },

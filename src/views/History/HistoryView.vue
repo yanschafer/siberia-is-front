@@ -64,21 +64,24 @@ export default {
       },
     };
   },
-  created() {
-    loggerUtil.debug(this.filtersInput);
-  },
   async setup() {
     const historyStore = useHistoryStore();
     const route = useRoute();
     const router = useRouter();
-    await historyStore.loadHistoryList();
-    await historyStore.loadEventObjectTypes();
-    await historyStore.loadEventTypes();
+
     return {
       historyStore,
       route,
       router,
+      loadListRes: await historyStore.loadHistoryList(),
+      loadEventObjectsRes: await historyStore.loadEventObjectTypes(),
+      loadEventTypesRes: await historyStore.loadEventTypes(),
     };
+  },
+  created() {
+    this.loadListRes.toastIfError(this.$toast, this.$nextTick);
+    this.loadEventTypesRes.toastIfError(this.$toast, this.$nextTick);
+    this.loadEventObjectsRes.toastIfError(this.$toast, this.$nextTick);
   },
   computed: {
     filteredHistory() {
@@ -121,8 +124,9 @@ export default {
         params: { id: row.id },
       });
     },
-    handleSearchStart(filters) {
-      this.historyStore.loadHistoryList(filters);
+    async handleSearchStart(filters) {
+      const res = await this.historyStore.loadHistoryList(filters);
+      res.toastIfError(this.$toast, this.$nextTick);
     },
   },
 };

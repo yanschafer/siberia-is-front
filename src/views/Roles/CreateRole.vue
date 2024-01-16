@@ -6,6 +6,7 @@
         <InputText
           :placeholder="namePlaceholder"
           class="input-wrapper animate__animated animate__fadeIn username-input"
+          :class="{ 'p-invalid': !validate.name }"
           type="text"
           v-model="name"
         />
@@ -18,6 +19,7 @@
         <Textarea
           :placeholder="descriptionPlaceholder"
           class="input-wrapper animate__animated animate__fadeIn username-input"
+          :class="{ 'p-invalid': !validate.description }"
           type="text"
           v-model="description"
         />
@@ -47,6 +49,8 @@ import { useRolesStore } from "@/stores/roles.store";
 import { useRoute, useRouter } from "vue-router";
 import UserFullDto from "@/api/modules/user/dto/user-full.dto";
 import PrintUtil from "@/utils/localization/print.util";
+import ValidatorUtil from "@/utils/validator/validator.util";
+import ValidateRule from "@/utils/validator/validate-rule";
 
 export default defineComponent({
   name: "CreateRole",
@@ -73,6 +77,12 @@ export default defineComponent({
         rules: [],
         canChange: true,
       },
+      //true => no errors
+      validate: {
+        name: true,
+        description: true,
+      },
+      validator: new ValidatorUtil(),
     };
   },
   async setup() {
@@ -84,11 +94,36 @@ export default defineComponent({
       router,
     };
   },
+  created() {
+    const nameValidateRule = new ValidateRule().required();
+    const descriptionValidateRule = new ValidateRule().required();
+    this.validator = this.validator
+      .addRule("name", nameValidateRule)
+      .addRule("description", descriptionValidateRule);
+  },
   methods: {
+    showSuccessToast() {
+      this.$toast.add({
+        severity: "success",
+        summary: "Success",
+        detail: "Role is created",
+        life: 3000,
+      });
+    },
     localize(key, module = "default") {
       return PrintUtil.localize(key, module);
     },
     async saveCreation() {
+      const data = {
+        name: this.name,
+        description: this.description,
+      };
+      const validateRes = this.validator.validate(data);
+      if (validateRes !== true) {
+        this.validator.showErrorToast(this.$toast);
+        this.validate = validateRes;
+        return;
+      }
       const created = await this.rolesStore.create(this.name, this.description);
       if (created.success)
         this.router.push({

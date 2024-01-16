@@ -222,16 +222,22 @@ export default {
     const modalStore = useModalStore();
     const route = useRoute();
     const router = useRouter();
-    await rolesStore.loadRolesList();
-    await userStore.loadSelectedUser(parseInt(route.params.id.toString()));
+
     return {
       userStore,
       rolesStore,
       modalStore,
       router,
+      userLoadRes: await userStore.loadSelectedUser(
+        parseInt(route.params.id.toString()),
+      ),
+      rolesLoadRes: await rolesStore.loadRolesList(),
     };
   },
   created() {
+    this.userLoadRes.toastIfError(this.$toast, this.$nextTick);
+    this.rolesLoadRes.toastIfError(this.$toast, this.$nextTick);
+
     this.rolesList = this.selectedUser.roles.map((el) => ({
       id: el.id,
       name: el.name,
@@ -285,13 +291,25 @@ export default {
       const res = await this.userStore.appendRoles(this.id, addedItems);
       if (!res.success)
         res.getError().showServerErrorToast(this.$toast, this.$nextTick);
-      await this.userStore.loadSelectedUser(parseInt(this.id.toString()));
+      else {
+        this.showSuccessToast();
+        const userLoad = await this.userStore.loadSelectedUser(
+          parseInt(this.id.toString()),
+        );
+        userLoad.toastIfError(this.$toast, this.$nextTick);
+      }
     },
     async rolesRemoved(removedItems) {
       const res = await this.userStore.removeRoles(this.id, removedItems);
       if (!res.success)
         res.getError().showServerErrorToast(this.$toast, this.$nextTick);
-      await this.userStore.loadSelectedUser(parseInt(this.id.toString()));
+      else {
+        this.showSuccessToast();
+        const userLoad = await this.userStore.loadSelectedUser(
+          parseInt(this.id.toString()),
+        );
+        userLoad.toastIfError(this.$toast, this.$nextTick);
+      }
     },
     startEditing() {
       this.editing = true;
@@ -327,6 +345,14 @@ export default {
         if (error.httpStatusCode == 415) {
           this.validator.showErrorToast(this.$toast);
           return;
+        } else if (error.httpStatusCode == 404) {
+          this.$toast.add({
+            severity: "error",
+            summary: "Deletion failed",
+            detail: "User not found",
+            life: 3000,
+          });
+          this.$router.push({ name: "users" });
         } else {
           error.showServerErrorToast(this.$toast, this.$nextTick);
         }

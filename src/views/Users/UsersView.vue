@@ -33,6 +33,8 @@ import { useUsersStore } from "@/stores/user.store";
 import { MDBCol, MDBContainer } from "mdb-vue-ui-kit";
 import FiltersSidebarComponent from "@/components/Elements/Filter/FiltersSidebarComponent.vue";
 import { FilterType } from "@/api/conf/app.conf";
+import { useToast } from "primevue/usetoast";
+import loggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "UsersView",
@@ -61,12 +63,17 @@ export default {
     const usersStore = useUsersStore();
     const route = useRoute();
     const router = useRouter();
-    await usersStore.loadUsersList();
+
+    const loadRes = await usersStore.loadUsersList();
     return {
       usersStore,
       router,
       route,
+      loadRes,
     };
+  },
+  mounted() {
+    this.loadRes.toastIfError(this.$toast, this.$nextTick);
   },
   computed: {
     filteredUsers() {
@@ -92,11 +99,11 @@ export default {
     handleSearch(searchTerm) {
       this.usersStore.searchTerm = searchTerm;
     },
-    handleFiltersSearch(filter) {
-      this.usersStore.loadUsersList(filter);
+    async handleFiltersSearch(filter) {
+      const res = await this.usersStore.loadUsersList(filter);
+      res.toastIfError(this.$toast, this.$nextTick);
     },
     handleRowClick(row) {
-      console.log("Clicked row with id:", row.id);
       this.router.push({ name: "User", params: { id: row.id.toString() } });
     },
   },
