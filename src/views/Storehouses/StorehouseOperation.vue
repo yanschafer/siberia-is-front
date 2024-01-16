@@ -38,11 +38,11 @@
   </MDBRow>
   <SearchComponent @search="handleAddedSearch" />
   <TableComponent
-       :rowsPerPage="6"
-       :rows="addedList"
-       :enable-delete="true"
-       :columns="addedColumns"
-       :searchTerm="addedSearchTerm"
+    :rowsPerPage="6"
+    :rows="addedList"
+    :enable-delete="true"
+    :columns="addedColumns"
+    :searchTerm="addedSearchTerm"
   />
 </template>
 <script lang="ts">
@@ -69,7 +69,7 @@ export default {
     SelectComponent,
     TableComponent,
     SearchComponent,
-    MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow, SelectComponent, TableComponent, InputText
+    InputText,
   },
   props: {
     title: String,
