@@ -9,7 +9,8 @@
       <TabPanel v-for="tab in tabs" :key="tab.title" :header="tab.title">
         <template v-if="tab.id === 1">
           <DialogComponentTrigger
-            button-text="CREATE"
+            button-text="CREATE +"
+            class="mb-2"
             :init-object="initBrandDialog"
           />
           <TableComponent
@@ -25,7 +26,7 @@
         </template>
         <template v-if="tab.id === 2">
           <DialogComponentTrigger
-            button-text="CREATE"
+            button-text="CREATE +"
             :init-object="initCollectionDialog"
           />
           <TableComponent
@@ -41,7 +42,7 @@
         </template>
         <template v-if="tab.id === 3">
           <DialogComponentTrigger
-            button-text="CREATE"
+            button-text="CREATE +"
             :init-object="initCategoryDialog"
           />
           <TreeTableComponent

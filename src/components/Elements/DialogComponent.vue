@@ -8,15 +8,16 @@
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
     @change="handleDialogClose"
   >
-    <MDBContainer class="d-flex flex-column">
+    <MDBContainer class="d-flex gap-2 flex-column">
       <template v-if="showInput">
         <span>{{ inputName }}</span>
         <InputText :placeholder="inputName" v-model="inputValue" />
       </template>
       <template v-if="showCheckbox">
-        <button @click="checkboxValue = !checkboxValue">
+        <p class="text-center">Would you like to remove the category along with its child subcategories, or relocate them to another parent group?</p>
+        <MDBBtn outline="black" @click="checkboxValue = !checkboxValue">
           {{ checkboxValues[checkboxValue] }}
-        </button>
+        </MDBBtn>
       </template>
       <template v-if="selectorVisible">
         <span>{{ selectorName }}</span>
@@ -27,8 +28,8 @@
           v-model="selectedDropdownItem"
         />
       </template>
-      <MDBRow>
-        <Button @click="save">{{ saveButtonText }}</Button>
+      <MDBRow class="btn-row d-flex flex-row align-items-center justify-content-center">
+        <MDBBtn class="btn-black save-btn" @click="save">{{ saveButtonText }}</MDBBtn>
       </MDBRow>
     </MDBContainer>
   </Dialog>
@@ -38,7 +39,7 @@ import TreeDropdownComponent from "@/components/Elements/TreeDropdownComponent.v
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Dialog from "primevue/dialog";
-import { MDBContainer, MDBRow } from "mdb-vue-ui-kit";
+import { MDBContainer, MDBRow, MDBBtn } from "mdb-vue-ui-kit";
 import { useDialogStore } from "@/stores/dialog.store";
 import loggerUtil from "@/utils/logger/logger.util";
 
@@ -49,6 +50,7 @@ export default {
     MDBRow,
     TreeDropdownComponent,
     Button,
+    MDBBtn,
     InputText,
     Dialog,
   },
@@ -140,4 +142,12 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.save-btn {
+  width: 90%;
+}
+.btn-row {
+  width: 105%;
+  margin-top: 2rem;
+}
+</style>

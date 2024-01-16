@@ -53,9 +53,9 @@ ul {
   transition: all 0.3s ease-in-out;
 }
 .p-inputtext:focus {
-  box-shadow: 0 0 0 0.1rem #1c1c1c;
+  box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0);
   transition: all 0.3s ease-in-out;
-  border: 0;
+  border-bottom: 2px solid black;
 }
 .p-multiselect:hover {
   border: 1px solid #858585;
@@ -111,6 +111,64 @@ ul {
   padding-bottom: 2px;
   border-radius: 7px;
   margin-top: 0.5rem;
+}
+.p-component-overlay {
+  background-color: rgba(255, 255, 255, 0.7)!important;
+  backdrop-filter: blur(10px);
+}
+.p-dialog {
+  border-radius: 29px!important;
+  border: 2px solid #eee!important;
+  background: #fff!important;
+  width: 100%!important;
+  max-width: 35rem!important;
+  box-shadow: 0px 4px 28.3px 4px rgba(0, 0, 0, 0.06)!important;
+}
+.p-dialog-header {
+  border-top-left-radius: 29px;
+  border-top-right-radius: 29px;
+}
+.p-dialog-content {
+  border-bottom-left-radius: 29px;
+  border-bottom-right-radius: 29px;
+}
+.zalupa {
+  width: 100%;
+  max-width: 5rem;
+}
+.table-header {
+  width: max-content!important;
+  max-width: 6rem;
+  display: flex;
+}
+.p-tabview-title {
+  color: black;
+}
+.p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  border-color: black;
+  background-color: #f6f6f6;
+}
+.p-treetable .p-treetable-tbody > tr.p-highlight .p-treetable-toggler {
+  color: #121212;
+}
+.p-treeselect:not(.p-disabled):hover {
+  border-color: #9a9a9a;
+}
+.p-treeselect {
+  border: 0;
+  border-radius: 0;
+  background-color: #f8f8f8;
+  border-bottom: 2px solid #cecece;
+}
+.p-treeselect:focus {
+  box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0);
+  transition: all 0.3s ease-in-out;
+  border-bottom: 2px solid black;
+}
+.p-treeselect:focus-within {
+  box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0);
+  transition: all 0.3s ease-in-out;
+  border-bottom: 2px solid black;
 }
 </style>
 

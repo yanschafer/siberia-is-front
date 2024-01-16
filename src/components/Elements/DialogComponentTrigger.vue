@@ -1,16 +1,18 @@
 <template>
-  <Button class="btn-outlined-black utility-btn" @click="handleBtn">
+  <MDBBtn outline="black" class="btn-outlined-black utility-btn" @click="handleBtn">
     {{ buttonText }}
-  </Button>
+  </MDBBtn>
 </template>
 
 <script lang="ts">
 import Button from "primevue/button";
+import {MDBBtn} from "mdb-vue-ui-kit";
 import { useDialogStore } from "@/stores/dialog.store";
 export default {
   name: "DialogComponentTrigger",
   components: {
     Button,
+    MDBBtn
   },
   props: {
     buttonText: String,
@@ -27,4 +29,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

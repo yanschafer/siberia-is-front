@@ -63,8 +63,9 @@
         :rowEditor="true"
         style="width: 5rem; min-width: 8rem"
         bodyStyle="text-align:center"
+        headerStyle="width: 3rem"
       ></Column>
-      <Column v-if="enableDelete" headerStyle="width: 10rem">
+      <Column v-if="enableDelete" headerStyle="width: 5rem">
         <template #body>
           <div class="flex flex-wrap gap-2">
             <MDBBtn

@@ -1,6 +1,6 @@
 <template>
-  <div class="card">
     <TreeTable
+      class="animate__animated animate__fadeIn"
       :value="nodes"
       :paginator="true"
       :rows="6"
@@ -9,35 +9,32 @@
       selectionMode="single"
       v-model:selectionKeys="selectedKey"
     >
-      <Column field="label" header="NAME" expander></Column>
-      <div class="container-fluid">
-        <Column v-if="showEditColumn" bodyStyle="text-align:center">
+      <Column class="name-col" field="label" header="NAME" expander></Column>
+      <Column style="justify-content: center" class="table-header" v-if="showEditColumn">
           <template #body>
             <div class="flex flex-wrap gap-2">
               <MDBBtn
                 @click="emitEdit"
                 type="button"
-                class="utility-btn btn-info"
+                class="utility-btn"
+                outline="black"
                 >EDIT</MDBBtn
               >
             </div>
           </template>
         </Column>
-        <Column v-if="enableDelete" headerStyle="width: 10rem">
+      <Column v-if="enableDelete" class="table-header">
           <template #body>
             <div class="flex flex-wrap gap-2">
               <MDBBtn
-                @click="emitDelete"
-                type="button"
-                class="utility-btn btn-danger"
-                >DELETE</MDBBtn
-              >
+                  @click="emitDelete"
+                  type="button"
+                  class="utility-btn btn-danger"
+              >DELETE</MDBBtn>
             </div>
           </template>
         </Column>
-      </div>
     </TreeTable>
-  </div>
 </template>
 
 <script lang="ts">
@@ -135,4 +132,12 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.table-header {
+width: 1rem!important;
+}
+.zalupa {
+  width: 100%;
+  max-width: 5rem;
+}
+</style>
