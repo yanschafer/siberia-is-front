@@ -14,7 +14,7 @@
             <MDBCol
               class="d-flex gap-1 align-items-center mb-3 animate__animated animate__flipInX animate__faster"
             >
-              <h5 class="field-heading">PRODUCT NAME</h5>
+              <h5 class="field-heading">{{ localize("productNameCapslock") }}</h5>
               <MDBInput
                 id="product-name-input"
                 class="input-wrapper animate__animated animate__fadeIn username-input"
@@ -24,17 +24,17 @@
             </MDBCol>
             <MDBCol class="animate__animated animate__flipInX animate__faster">
               <MDBBtn @click="cancel" class="utility-btn" outline="black"
-                >CANCEL</MDBBtn
+                >{{ localize("cancelCapslock", "default") }}</MDBBtn
               >
               <MDBBtn @click="create" class="utility-btn" outline="black"
-                >SAVE</MDBBtn
+                >{{ localize("saveCapslock", "default") }}</MDBBtn
               >
             </MDBCol>
           </MDBRow>
           <MDBRow>
             <MDBCol class="d-flex flex-column gap-3 col-auto">
               <h5 class="field-heading d-flex gap-1 align-items-center">
-                SKU
+                  {{ localize("skuCapslock") }}
                 <MDBInput
                   class="animate__animated animate__flipInX animate__faster input-wrapper animate__animated animate__fadeIn username-input"
                   type="text"
@@ -48,11 +48,11 @@
                 v-model="brand"
               />
               <DialogComponentTrigger
-                button-text="CREATE"
+                :button-text="createButtonText"
                 :init-object="initBrandDialog"
               />
               <h5 class="field-heading d-flex gap-1 align-items-center">
-                LINK
+                  {{ localize("linkCapslock") }}
                 <MDBInput
                   class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
                   type="text"
@@ -72,7 +72,7 @@
         v-model="category"
       />
       <DialogComponentTrigger
-        button-text="CREATE"
+        :button-text="createButtonText"
         :init-object="initCategoryDialog"
       />
       <h1 class="product-heading d-flex gap-1 align-items-center">
@@ -84,14 +84,14 @@
           v-model="collection"
         />
         <DialogComponentTrigger
-          button-text="CREATE"
+          :button-text="createButtonText"
           :init-object="initCollectionDialog"
         />
         <span class="field-heading separator">|</span>
         <h5
           class="animate__animated animate__flipInX animate__faster field-heading d-flex gap-1 align-items-center mb-0"
         >
-          COLOR
+            {{ localize("colorCapslock") }}
           <MDBInput
             class="input-wrapper animate__animated animate__fadeIn username-input"
             type="text"
@@ -115,7 +115,7 @@
       <MDBRow>
         <MDBCol>
           <h5 class="field-heading">
-            QUANTITY PER PACKAGE
+              {{ localize("quantityPerPackageCapslock") }}
             <MDBInput
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
               type="text"
@@ -125,7 +125,7 @@
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-            DISTRIBUTION PRICE
+              {{ localize("distributionPriceCapslock") }}
             <MDBInput
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
               type="text"
@@ -135,7 +135,7 @@
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-            PROFESSIONAL PRICE
+            {{ localize("professionalPriceCapslock") }}
             <MDBInput
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
               type="text"
@@ -145,7 +145,7 @@
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-            DEFAULT PRICE
+            {{ localize("defaultPriceCapslock") }}
             <MDBInput
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
               type="text"
@@ -177,6 +177,8 @@ import loggerUtil from "@/utils/logger/logger.util";
 import BrandModel from "@/api/modules/brand/models/brand.model";
 import CategoryModel from "@/api/modules/category/models/category.model";
 import CollectionModel from "@/api/modules/collection/models/collection.model";
+import PrintUtil from "@/utils/localization/print.util";
+import {th} from "vuetify/locale";
 
 export default {
   name: "CreateProduct",
@@ -222,9 +224,10 @@ export default {
   },
   data() {
     return {
-      placeholderCategory: "Select a category",
-      placeholderBrand: "Select a brand",
-      placeholderCollection: "Select a collection",
+      createButtonText: this.localize("createCapslock", "default"),
+      placeholderCategory: this.localize("selectACategory"),
+      placeholderBrand: this.localize("selectABrand"),
+      placeholderCollection: this.localize("selectACollection"),
       vendorCode: "",
       brand: null,
       name: "",
@@ -241,25 +244,25 @@ export default {
       photoBase64: "",
       photoName: "",
       initCategoryDialog: {
-        header: "Create a category",
+        header: this.localize("createACategory"),
         showSelect: true,
         selectItems: this.categoryList,
-        selectName: "Select parent category",
-        inputName: "Category name",
+        selectName: this.localize("selectParentCategory"),
+        inputName: this.localize("categoryName"),
         methodOnSave: this.handleCategoryUpdate,
         methodOnClose: () => loggerUtil.debug("workds"),
         model: new CategoryModel(),
       },
       initBrandDialog: {
-        header: "Create a brand",
-        inputName: "Brand name",
+        header: this.localize("createABrand"),
+        inputName: this.localize("brandName"),
         model: new BrandModel(),
         methodOnSave: this.handleBrandUpdate,
         methodOnClose: () => loggerUtil.debug("workds"),
       },
       initCollectionDialog: {
-        header: "Create a collection",
-        inputName: "Collection name",
+        header: this.localize("createACollection"),
+        inputName: this.localize("collectionName"),
         methodOnSave: this.handleCollectionUpdate,
         methodOnClose: () => loggerUtil.debug("workds"),
         model: new CollectionModel(),
@@ -270,6 +273,9 @@ export default {
     this.initCategoryDialog.selectItems = this.categoryList;
   },
   methods: {
+    localize(key, module = "products") {
+          return PrintUtil.localize(key, module);
+    },
     async fileChanged(files: File[]) {
       const file = files[0];
       const encoded = await EncoderUtil.encode(file);
@@ -451,5 +457,5 @@ export default {
   padding-top: 0.1rem;
   padding-bottom: 0.1rem;
 }
-.p-multiselect-label .p-placeholder }
+.p-multiselect-label .p-placeholder{ }
 </style>

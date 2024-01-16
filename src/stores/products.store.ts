@@ -5,6 +5,7 @@ import ProductUpdateDto from "@/api/modules/product/dto/product-update.dto";
 import ApiResponseDto from "@/api/dto/api-response.dto";
 import ProductDto from "@/api/modules/product/dto/product.dto";
 import ProductInputDto from "@/api/modules/product/dto/product-input.dto";
+import PrintUtil from "@/utils/localization/print.util";
 
 export const useProductsStore = defineStore({
   id: "products",
@@ -12,10 +13,10 @@ export const useProductsStore = defineStore({
     searchTerm: "",
     productRows: [],
     productColumns: [
-      { field: "name", header: "NAME" },
-      { field: "vendorCode", header: "SKU" },
+      { field: "name", header: PrintUtil.localize("nameCapslock", "default") },
+      { field: "vendorCode", header: PrintUtil.localize("skuCapslock", "products") },
       //Price field = Default price (commonPrice on backend)
-      { field: "price", header: "PRICE" },
+      { field: "price", header: PrintUtil.localize("priceCapslock", "products") },
     ],
     selectedProduct: {},
   }),

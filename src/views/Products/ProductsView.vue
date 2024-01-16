@@ -43,6 +43,7 @@ import { useCollectionStore } from "@/stores/collection.store";
 import { FilterType } from "@/api/conf/app.conf";
 import loggerUtil from "@/utils/logger/logger.util";
 import FieldSearchWrapperDto from "@/utils/crud/dto/field-search-wrapper.dto";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "ProductsView",
@@ -58,63 +59,63 @@ export default {
       editableColumns: ["price"],
       sidebarFilter: {
         vendorCode: {
-          title: "Vendor Code",
+          title: this.localize("vendorCode"),
           type: FilterType.TEXT,
           value: null,
         },
         name: {
-          title: "Name",
+          title: this.localize("name"),
           type: FilterType.TEXT,
           value: null,
         },
         description: {
-          title: "Description",
+          title: this.localize("description"),
           type: FilterType.TEXT,
           value: null,
         },
         color: {
-          title: "Color",
+          title: this.localize("color"),
           type: FilterType.TEXT,
           value: null,
         },
         purchasePrice: {
-          title: "Purchase Price",
+          title: this.localize("purchasePrice"),
           type: FilterType.NUMBER,
           value: { min: null, max: null },
         },
         distributorPrice: {
-          title: "Distributor Price",
+          title: this.localize("distributorPrice"),
           type: FilterType.NUMBER,
           value: { min: null, max: null },
         },
         professionalPrice: {
-          title: "Professional Price",
+          title: this.localize("professionalPrice"),
           type: FilterType.NUMBER,
           value: { min: null, max: null },
         },
         commonPrice: {
-          title: "Common Price",
+          title: this.localize("commonPrice"),
           type: FilterType.NUMBER,
           value: { min: null, max: null },
         },
         amountInBox: {
-          title: "Amount in box",
+          title: this.localize("amountInBox"),
           type: FilterType.NUMBER,
           value: { min: null, max: null },
         },
         brand: {
-          title: "Brand",
+          title: this.localize("brand"),
           items: this.brandStore.getBrandList,
           type: FilterType.SELECT,
           value: null,
         },
         collection: {
-          title: "Collection",
+          title: this.localize("collection"),
           items: this.collectionStore.getCollectionList,
           type: FilterType.SELECT,
         },
         category: {
-          title: "Category",
+          title: this.localize("category"),
           items: this.categoryStore.getCategoryList,
           tree: true,
           type: FilterType.SELECT,
@@ -122,6 +123,7 @@ export default {
       },
     };
   },
+
   async setup() {
     const productsStore = useProductsStore();
     const brandStore = useBrandStore();
@@ -172,6 +174,9 @@ export default {
     },
   },
   methods: {
+    localize(key, module = "products") {
+          return PrintUtil.localize(key, module);
+    },
     handleSearch(searchTerm) {
       this.productsStore.searchTerm = searchTerm;
     },
