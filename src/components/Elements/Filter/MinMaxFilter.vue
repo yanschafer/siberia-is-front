@@ -3,7 +3,7 @@
     <span class="filtername">{{ title }}</span>
     <MDBRow class="d-flex flex-row flex-nowrap">
       <MDBCol class="col-auto d-flex flex-column">
-        <span class="filtername">min</span>
+        <span class="filtername">{{ localize("min") }}</span>
         <InputText
             type="number"
             style="width: 4rem !important"
@@ -14,7 +14,7 @@
         />
       </MDBCol>
       <MDBCol class="col-auto d-flex flex-column">
-        <span class="filtername">max</span>
+        <span class="filtername">{{ localize("max") }}</span>
         <InputText
             type="number"
             style="width: 4rem !important"
@@ -34,6 +34,7 @@ import { MDBRow, MDBCol } from "mdb-vue-ui-kit";
 import InputNumber from "primevue/inputnumber";
 import InputText from "primevue/inputtext";
 import loggerUtil from "@/utils/logger/logger.util.js";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   components: { MDBCol, MDBRow, InputNumber, InputText },
@@ -47,6 +48,9 @@ export default {
     max: null,
   }),
   methods: {
+    localize(key, module = "filters") {
+          return PrintUtil.localize(key, module);
+    },
     handleChange() {
       this.$emit("change", { min: this.min, max: this.max });
     },
