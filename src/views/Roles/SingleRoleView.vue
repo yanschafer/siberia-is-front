@@ -19,6 +19,7 @@
           <MDBInput
             v-else
             class="input-wrapper animate__animated animate__fadeIn username-input"
+            :class="{ 'p-invalid': !validate.name }"
             type="text"
             v-model="newRoleName"
           />
@@ -35,6 +36,7 @@
           <MDBInput
             v-else
             class="input-wrapper animate__animated animate__fadeIn username-input"
+            :class="{ 'p-invalid': !validate.description }"
             type="text"
             v-model="newRoleDescription"
           />
@@ -103,6 +105,8 @@ import MultiSelectComponent from "@/components/Elements/MultiSelectComponent.vue
 import { useUsersStore } from "@/stores/user.store";
 import loggerUtil from "@/utils/logger/logger.util";
 import PrintUtil from "@/utils/localization/print.util";
+import ValidatorUtil from "@/utils/validator/validator.util";
+import ValidateRule from "@/utils/validator/validate-rule";
 
 export default {
   name: "SingleRoleView",
@@ -143,7 +147,6 @@ export default {
   },
   data: () => ({
     modalTitle: PrintUtil.localize("confirmDeletion"),
-    modalText: ``,
     disclaimerText: PrintUtil.localize("deleteDisclaimer", "role"),
     showModal: false,
     activeTabId4: "role1-1",
@@ -152,10 +155,31 @@ export default {
     originalRoleName: "",
     newRoleDescription: "",
     originalRoleDescription: "",
+    //true => no errors
+    validate: {
+      name: true,
+      description: true,
+    },
+    validator: new ValidatorUtil(),
   }),
+  created() {
+    const nameValidateRule = new ValidateRule().skipIfNull().required();
+    const descriptionValidateRule = new ValidateRule().skipIfNull().required();
+    this.validator = this.validator
+      .addRule("name", nameValidateRule)
+      .addRule("description", descriptionValidateRule);
+  },
   methods: {
     localize(key, module) {
       return PrintUtil.localize(key, module);
+    },
+    showSuccessToast() {
+      this.$toast.add({
+        severity: "success",
+        summary: "Success",
+        detail: "Role is updated",
+        life: 3000,
+      });
     },
     confirmDeletion() {
       this.roleName = this.selectedRole.name || "";
@@ -172,12 +196,41 @@ export default {
       this.newRoleDescription = this.roleDescription;
     },
     async saveChanges() {
-      const updateResult = await this.rolesStore.updateRole(
-        this.id,
-        new UpdateRoleDto(this.newRoleName, this.newRoleDescription),
-      );
+      const name = this.newRoleName == this.roleName ? null : this.newRoleName;
+      const description =
+        this.newRoleDescription == this.roleDescription
+          ? null
+          : this.newRoleDescription;
+      const data = new UpdateRoleDto(name, description);
+
+      const validateRes = this.validator.validate(data);
+      if (validateRes !== true) {
+        this.validate = validateRes;
+        this.validator.showErrorToast(this.$toast);
+        return;
+      }
+
+      const updateResult = await this.rolesStore.updateRole(this.id, data);
       this.editing = !updateResult.success;
-      //TODO: Check for errors
+      if (!updateResult.success) {
+        const error = updateResult.getError();
+        if (error.httpStatusCode == 415) {
+          this.validator.showErrorToast(this.$toast);
+          return;
+        } else if (error.httpStatusCode == 404) {
+          this.$toast.add({
+            severity: "error",
+            summary: "Deletion failed",
+            detail: "Role not found",
+            life: 3000,
+          });
+          this.$router.push({ name: "roles" });
+        } else {
+          error.showServerErrorToast(this.$toast, this.$nextTick);
+        }
+      } else {
+        this.showSuccessToast();
+      }
     },
     cancelEditing() {
       this.editing = false;
@@ -190,9 +243,13 @@ export default {
           async (el) => await this.usersStore.appendRoles(el, [this.id]),
         ),
       );
-      //TODO: Show notify
-      if (result.filter((el) => el.success).length != result.length)
-        loggerUtil.debug(result); //TODO: Check for errors
+      if (result.filter((el) => el.success).length != result.length) {
+        result.forEach((el) => {
+          if (!el.success) {
+            el.getError().showServerErrorToast(this.$toast, this.$nextTick);
+          }
+        });
+      } else this.showSuccessToast();
     },
     async usersRemoved(removedUsers) {
       const result = await Promise.all(
@@ -200,9 +257,13 @@ export default {
           async (el) => await this.usersStore.removeRoles(el, [this.id]),
         ),
       );
-      //TODO: Show notify
-      if (result.filter((el) => el.success).length != result.length)
-        loggerUtil.debug(result); //TODO: Check for errors
+      if (result.filter((el) => el.success).length != result.length) {
+        result.forEach((el) => {
+          if (!el.success) {
+            el.getError().showServerErrorToast(this.$toast, this.$nextTick);
+          }
+        });
+      } else this.showSuccessToast();
     },
   },
   computed: {
@@ -219,7 +280,9 @@ export default {
       return this.selectedRole.description || "";
     },
     roles() {
-      return [{ ...this.selectedRole, canChange: true }];
+      if (this.selectedRole.rules)
+        return [{ ...this.selectedRole, canChange: true }];
+      else return [{ ...this.selectedRole, rules: [], canChange: true }];
     },
     relatedUsers() {
       return this.selectedRole.relatedUsers.map((el) => ({

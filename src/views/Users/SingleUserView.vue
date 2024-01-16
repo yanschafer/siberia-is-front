@@ -327,6 +327,14 @@ export default {
         if (error.httpStatusCode == 415) {
           this.validator.showErrorToast(this.$toast);
           return;
+        } else if (error.httpStatusCode == 404) {
+          this.$toast.add({
+            severity: "error",
+            summary: "Deletion failed",
+            detail: "User not found",
+            life: 3000,
+          });
+          this.$router.push({ name: "users" });
         } else {
           error.showServerErrorToast(this.$toast, this.$nextTick);
         }

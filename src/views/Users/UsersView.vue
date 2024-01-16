@@ -33,6 +33,8 @@ import { useUsersStore } from "@/stores/user.store";
 import { MDBCol, MDBContainer } from "mdb-vue-ui-kit";
 import FiltersSidebarComponent from "@/components/Elements/Filter/FiltersSidebarComponent.vue";
 import { FilterType } from "@/api/conf/app.conf";
+import { useToast } from "primevue/usetoast";
+import loggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "UsersView",
@@ -61,12 +63,18 @@ export default {
     const usersStore = useUsersStore();
     const route = useRoute();
     const router = useRouter();
-    await usersStore.loadUsersList();
+
+    const loadRes = await usersStore.loadUsersList();
     return {
       usersStore,
       router,
       route,
+      loadRes,
     };
+  },
+  mounted() {
+    if (!this.loadRes.success)
+      this.loadRes.getError().showServerErrorToast(this.$toast, this.$nextTick);
   },
   computed: {
     filteredUsers() {
