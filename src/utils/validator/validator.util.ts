@@ -24,11 +24,16 @@ export default class ValidatorUtil {
   }
 
   showErrorToast(toast) {
+    loggerUtil.debug("SHOW ERROR TOAST");
     toast.add({
       severity: "warning",
       summary: "Validate error",
       detail: "Check data provided",
       life: 3000,
     });
+  }
+
+  static getNullIfNoChange(newValue, oldValue) {
+    return newValue == oldValue ? null : newValue;
   }
 }

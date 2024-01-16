@@ -57,19 +57,20 @@ export default class ApiModelUtil {
       .catch((err: AxiosError) =>
         this.processFailedResponse<TokenPairDto>(null, false, err),
       );
-    if (res.success) TokenUtil.login(res.getData());
+    if (res.success) {
+      TokenUtil.login(res.getData());
+      const authorizedUserDto = await this.authorizedRequest<AuthorizedUserDto>(
+        new ApiRequestDto("/auth/authorized", "GET"),
+      );
+      TokenUtil.setAuthorized(authorizedUserDto.getData());
+      LoggerUtil.debugPrefixed("API_MODEL", "Refresh succeed.");
+    }
     return res;
   }
 
   private async refreshAccessAndExecute<T>(): Promise<ApiResponseDto<T>> {
     const refreshResult = await this.refresh();
     if (refreshResult && refreshResult.success && this.onRefresh) {
-      TokenUtil.login(refreshResult.getData());
-      const authorizedUserDto = await this.authorizedRequest<AuthorizedUserDto>(
-        new ApiRequestDto("/auth/authorized", "GET"),
-      );
-      TokenUtil.setAuthorized(authorizedUserDto.getData());
-      LoggerUtil.debugPrefixed("API_MODEL", "Refresh succeed.");
       this.baseEndpoint = this.baseEndpointBuffer;
       const afterRefresh = await this.authorizedRequest(this.onRefresh);
       this.onRefresh = null;

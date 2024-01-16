@@ -20,7 +20,10 @@ export const useStorehousesStore = defineStore({
     storehouseListForInputs: [],
     storehousesColumns: [
       { field: "name", header: PrintUtil.localize("nameCapslock", "default") },
-      { field: "address", header: PrintUtil.localize("addressCapslock", "storehouses") },
+      {
+        field: "address",
+        header: PrintUtil.localize("addressCapslock", "storehouses"),
+      },
     ],
     selectedStore: {},
   }),
@@ -99,7 +102,9 @@ export const useStorehousesStore = defineStore({
         this.operationSucceed();
         const transactionData = res.getData();
         if (transactionData.status == TransactionStatus.PROCESSED) {
-          await this.loadSelectedStoreHouse(storehouseId);
+          const loadRes = await this.loadSelectedStoreHouse(storehouseId);
+          if (!loadRes.success) return loadRes;
+          else return res;
         }
       }
       return res;
@@ -121,7 +126,9 @@ export const useStorehousesStore = defineStore({
       );
       if (res.success) {
         this.operationSucceed();
-        await this.loadSelectedStoreHouse(storehouseId);
+        const loadRes = await this.loadSelectedStoreHouse(storehouseId);
+        if (!loadRes.success) return loadRes;
+        else return res;
       }
       return res;
     },
@@ -142,7 +149,9 @@ export const useStorehousesStore = defineStore({
       );
       if (res.success) {
         this.operationSucceed();
-        await this.loadSelectedStoreHouse(storehouseId);
+        const loadRes = await this.loadSelectedStoreHouse(storehouseId);
+        if (!loadRes.success) return loadRes;
+        else return res;
       }
       return res;
     },

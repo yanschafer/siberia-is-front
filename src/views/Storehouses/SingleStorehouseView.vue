@@ -1,5 +1,4 @@
 <template>
-  <Toast />
   <ModalComponent
     v-if="modalStore.getIsVisible"
     @approved="removeAndCloseModal"
@@ -29,33 +28,47 @@
           @click="startEditing"
           class="utility-btn"
           outline="black"
-      >{{ localize("editStorehouse") }}</MDBBtn
+          >{{ localize("editStorehouse") }}</MDBBtn
       >
-      <MDBCol v-else class="d-flex justify-content-start">
-        <MDBBtn @click="cancelEditing" class="utility-btn" outline="black"
-        >{{ localize("cancelCapslock", "default") }}</MDBBtn
-        >
-        <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger"
-        >{{ localize("deleteStorehouseCapslock") }}</MDBBtn
-        >
-        <MDBBtn @click="saveChanges" class="utility-btn btn-black">{{ localize("saveCapslock", "default") }}</MDBBtn>
-      </MDBCol>
-    </MDBContainer>
-    <MDBContainer class="d-flex flex-column gap-3">
-      <MDBRow
-          class="d-flex flex-row w-100 align-items-center align-self-center gap-3 pt-4"
-      >
-        <h1 class="storehouse-heading">Products in stock</h1>
-        <template v-if="!newArrival && !newSale && !newRequest">
-          <MDBBtn @click="addNewArrival" class="utility-btn" outline="black"
+    <MDBCol v-else class="d-flex justify-content-start">
+      <MDBBtn @click="cancelEditing" class="utility-btn" outline="black">{{
+        localize("cancelCapslock", "default")
+      }}</MDBBtn>
+      <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
+        localize("deleteStorehouseCapslock")
+      }}</MDBBtn>
+      <MDBBtn @click="saveChanges" class="utility-btn btn-black">{{
+        localize("saveCapslock", "default")
+      }}</MDBBtn>
+    </MDBCol>
+  </MDBContainer>
+  <MDBContainer class="d-flex flex-column gap-3">
+    <MDBRow
+      class="d-flex flex-row w-100 align-items-center align-self-center gap-3 pt-4"
+    >
+      <h1 class="storehouse-heading">Products in stock</h1>
+      <template v-if="!newArrival && !newSale && !newRequest">
+        <MDBBtn
+          v-if="arrivalAvailable"
+          @click="addNewArrival"
+          class="utility-btn"
+          outline="black"
           >{{ localize("newArrivalCapslock") }}</MDBBtn
-          >
-          <MDBBtn @click="addNewSale" class="utility-btn" outline="black"
+        >
+        <MDBBtn
+          v-if="saleAvailable"
+          @click="addNewSale"
+          class="utility-btn"
+          outline="black"
           >{{ localize("newSaleCapslock") }}</MDBBtn
-          >
-          <MDBBtn @click="addNewRequest" class="utility-btn" outline="black"
+        >
+        <MDBBtn
+          v-if="requestAvailable"
+          @click="addNewRequest"
+          class="utility-btn"
+          outline="black"
           >{{ localize("newRequestCapslock") }}</MDBBtn
-          >
+        >
           <SearchComponent class="search" @search="handleSearch" />
           <TableComponent
               :rows="productRows"
@@ -111,6 +124,11 @@ import ProductListItemDto from "@/api/modules/product/dto/product-list-item.dto"
 import Toast from "primevue/toast";
 import PrintUtil from "@/utils/localization/print.util";
 import { useModalStore } from "@/stores/modal.store";
+import ValidatorUtil from "@/utils/validator/validator.util";
+import ValidateRule from "@/utils/validator/validate-rule";
+import { appConf, TransactionStatus } from "@/api/conf/app.conf";
+import TokenUtil from "@/utils/token.util";
+import loggerUtil from "@/utils/logger/logger.util";
 import InputText from "primevue/inputtext";
 
 export default {
@@ -137,50 +155,67 @@ export default {
       required: true,
     },
   },
-  data () {
-      return{
-          newArrival: false,
-          newSale: false,
-          modalTitle: this.localize("confirmDeletion"),
-          disclaimerText:
-                  this.localize("deleteWarn"),
-          newRequest: false,
-          editing: false,
-          searchTerm: "",
-          newStorehouseName: "",
-          originalStorehouseName: "",
-          newStorehouseAdress: "",
-          originalStorehouseAdress: "",
-          productColumns: [
-              { field: "name", header: this.localize("nameCapslock", "default") },
-              { field: "vendorCode", header: this.localize("skuCapslock", "products") },
-              { field: "quantity", header: this.localize("quantityCapslock", "products") },
-              { field: "price", header: this.localize("priceCapslock", "products") },
-          ],
-          error: "",
-      }
+  data() {
+    return {
+      newArrival: false,
+      newSale: false,
+      modalTitle: this.localize("confirmDeletion"),
+      disclaimerText: this.localize("deleteWarn"),
+      newRequest: false,
+      editing: false,
+      searchTerm: "",
+      newStorehouseName: "",
+      originalStorehouseName: "",
+      newStorehouseAdress: "",
+      originalStorehouseAdress: "",
+      productColumns: [
+        { field: "name", header: this.localize("nameCapslock", "default") },
+        {
+          field: "vendorCode",
+          header: this.localize("skuCapslock", "products"),
+        },
+        {
+          field: "quantity",
+          header: this.localize("quantityCapslock", "products"),
+        },
+        { field: "price", header: this.localize("priceCapslock", "products") },
+      ],
+      error: "",
+      validate: {
+        name: true,
+        address: true,
+      },
+      validator: new ValidatorUtil(),
+    };
   },
   async setup() {
     const productStore = useProductsStore();
-
-    // await productStore.loadProductList()
     const storehouseStore = useStorehousesStore();
     const modalStore = useModalStore();
     const route = useRoute();
     const router = useRouter();
-
-    await productStore.loadProductList();
-
-    await storehouseStore.loadSelectedStoreHouse(
-      parseInt(route.params.id.toString()),
-    );
 
     return {
       storehouseStore,
       productStore,
       modalStore,
       router,
+      loadProductListRes: await productStore.loadProductList(),
+      loadSelectedStorehouse: await storehouseStore.loadSelectedStoreHouse(
+        parseInt(route.params.id.toString()),
+      ),
     };
+  },
+  created() {
+    this.loadProductListRes.toastIfError(this.$toast, this.$nextTick);
+    this.loadSelectedStorehouse.toastIfError(this.$toast, this.$nextTick);
+
+    const nameValidateRule = new ValidateRule().skipIfNull().required();
+    const addressValidateRule = new ValidateRule().skipIfNull().required();
+
+    this.validator = this.validator
+      .addRule("name", nameValidateRule)
+      .addRule("address", addressValidateRule);
   },
   computed: {
     modalText() {
@@ -205,10 +240,19 @@ export default {
       });
       return obj;
     },
+    arrivalAvailable() {
+      return TokenUtil.hasAccessToStock(appConf.rules.arrivalCreation, this.id);
+    },
+    saleAvailable() {
+      return TokenUtil.hasAccessToStock(appConf.rules.saleCreation, this.id);
+    },
+    requestAvailable() {
+      return TokenUtil.hasAccessToStock(appConf.rules.requestCreation, this.id);
+    },
   },
   methods: {
     localize(key, module = "storehouses") {
-          return PrintUtil.localize(key, module);
+      return PrintUtil.localize(key, module);
     },
     showSuccessToast() {
       this.$toast.add({
@@ -218,36 +262,21 @@ export default {
         life: 3000,
       });
     },
-    async showErrorToast() {
-      const errorMessage = await PrintUtil.localize(
-        "wrong_data_type",
-        "storehousesSave",
-      );
-      const errorDetail = `Something went wrong, provide this error code to administrator.
-    <p style="font-weight: 600; text-decoration: underline; cursor: pointer;">${errorMessage}</p>`;
+    showSuccessTransactionCreation(type, autoApproved) {
       this.$toast.add({
-        severity: "error",
-        summary: "Error occurred",
-        detail: errorDetail,
-        life: 10000,
+        severity: "success",
+        summary: "Success",
+        detail: `${type} created`,
+        life: 3000,
       });
-
-      this.$nextTick(() => {
-        const toastElement = document.querySelector(".p-toast-detail");
-        if (toastElement) {
-          toastElement.innerHTML = errorDetail;
-
-          const errorMessageElement = toastElement.querySelector("p");
-          errorMessageElement.addEventListener("click", () => {
-            navigator.clipboard.writeText(errorMessage);
-            this.$toast.add({
-              severity: "success",
-              summary: this.localize("errorMessageCopiedToClipboard", "default"),
-              life: 2000,
-            });
-          });
-        }
-      });
+      if (autoApproved) {
+        this.$toast.add({
+          severity: "success",
+          summary: "Success",
+          detail: `${type} auto-approved`,
+          life: 3000,
+        });
+      }
     },
     addNewArrival() {
       this.newArrival = true;
@@ -258,8 +287,13 @@ export default {
       const res = await this.storehouseStore.newArrival(this.id, arrivalData);
       if (res.success) {
         this.newArrival = false;
+        const data = res.getData();
+        this.showSuccessTransactionCreation(
+          "Arrival",
+          data.status == TransactionStatus.PROCESSED,
+        );
       } else {
-        //TODO: Check for errors
+        res.toastIfError(this.$toast, this.$nextTick);
       }
     },
     addNewSale() {
@@ -270,9 +304,23 @@ export default {
     async saveNewSale(saleData: ProductListItemDto[]) {
       const res = await this.storehouseStore.newSale(this.id, saleData);
       if (res.success) {
+        const data = res.getData();
+        this.showSuccessTransactionCreation(
+          "Sale",
+          data.status == TransactionStatus.PROCESSED,
+        );
         this.newSale = false;
       } else {
-        //TODO: Check for errors
+        const error = res.getError();
+        if (error.httpStatusCode == 400 && error.data?.includes("enough")) {
+          this.$toast.add({
+            severity: "error",
+            summary: "Failed",
+            detail: `Not enough products for sale`,
+            life: 3000,
+          });
+        }
+        res.toastIfError(this.$toast, this.$nextTick);
       }
     },
     addNewRequest() {
@@ -283,9 +331,14 @@ export default {
     async saveNewRequest(requestData: ProductListItemDto[]) {
       const res = await this.storehouseStore.newRequest(this.id, requestData);
       if (res.success) {
+        const data = res.getData();
+        this.showSuccessTransactionCreation(
+          "Request",
+          data.status == TransactionStatus.OPEN,
+        );
         this.newRequest = false;
       } else {
-        //TODO: Check for errors
+        res.toastIfError(this.$toast, this.$nextTick);
       }
     },
     handleSearch(searchTerm) {
@@ -306,7 +359,25 @@ export default {
       if (removed.success) {
         this.modalStore.hide();
         await this.storehouseStore.loadStorehouseList();
+        this.$toast.add({
+          severity: "success",
+          summary: "Success",
+          detail: "Storehouse is removed",
+          life: 3000,
+        });
         this.router.push({ name: "storehouses" });
+      } else {
+        const error = removed.getError();
+        if (error.httpStatusCode == 404) {
+          this.$toast.add({
+            severity: "error",
+            summary: "Failed",
+            detail: "Storehouse not found",
+            life: 3000,
+          });
+          return;
+        }
+        removed.toastIfError(this.$toast, this.$nextTick);
       }
     },
     startEditing() {
@@ -317,20 +388,32 @@ export default {
       this.newStorehouseAdress = this.storehouseAddress;
     },
     async saveChanges() {
-      this.editing = false;
-      const result = await this.storehouseStore.updateStorehouse(
-        this.id,
-        new StockUpdateDto(this.newStorehouseName, this.newStorehouseAdress),
+      const data = new StockUpdateDto(
+        ValidatorUtil.getNullIfNoChange(
+          this.newStorehouseName,
+          this.storehouseName,
+        ),
+        ValidatorUtil.getNullIfNoChange(
+          this.newStorehouseAdress,
+          this.storehouseAddress,
+        ),
       );
+
+      const validateRes = this.validator.validate(data);
+      if (validateRes !== true) {
+        loggerUtil.debug(validateRes);
+        this.validate = validateRes;
+        this.validator.showErrorToast(this.$toast);
+        return;
+      }
+
+      this.editing = false;
+      const result = await this.storehouseStore.updateStorehouse(this.id, data);
       if (result && result.success) {
         this.showSuccessToast();
         this.editing = !result.success;
       } else {
-        this.showErrorToast();
-        this.error = await PrintUtil.localize(
-          "wrong_data_type",
-          "storehousesSave",
-        );
+        result.toastIfError(this.$toast, this.$nextTick);
       }
     },
     cancelEditing() {
