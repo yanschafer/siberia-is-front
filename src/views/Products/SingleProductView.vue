@@ -162,10 +162,8 @@
         </MDBRow>
       </template>
 
-      <h1
-        class="product-heading d-flex gap-1 align-items-center mb-3 mt-3 gap-2"
-      >
-        Product description
+      <h1 class="product-heading d-flex gap-1 align-items-center mb-3 mt-3 gap-2">
+          {{ localize("productDescription") }}
         <span v-if="!editing" class="field-heading collection-name">{{
           collectionName
         }}</span>
