@@ -35,6 +35,6 @@ export default {
 </script>
 <style scoped>
 .p-inputtext {
-  width: 88vw;
+  width: 86vw;
 }
 </style>

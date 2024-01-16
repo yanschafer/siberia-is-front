@@ -12,6 +12,7 @@
           <MDBContainer class="table-container">
             <SearchComponent @search="handleSearch" />
             <TableComponent
+                :info-message="noDataMessage"
               :editableColumns="editableColumns"
               :showEditColumn="true"
               :rows="getFilteredProducts"
@@ -56,6 +57,11 @@ export default {
   },
   data() {
     return {
+      noDataMessage: {
+        icon: "IconSearchOff",
+        title: "Nothing was found",
+        text: "Please clarify your search query",
+      },
       editableColumns: ["price"],
       sidebarFilter: {
         vendorCode: {

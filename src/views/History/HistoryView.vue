@@ -7,8 +7,9 @@
           @start-search="handleSearchStart"
         />
       </MDBCol>
-      <MDBCol class="col-auto">
+      <MDBCol class="content-col">
         <TableComponent
+            :infoMessage="noDataMessage"
           :rows="filteredHistory"
           :columns="historyStore.historyColumns"
           :searchTerm="historyStore.searchTerm"
@@ -28,6 +29,7 @@ import { MDBContainer, MDBCol } from "mdb-vue-ui-kit";
 import { FilterType } from "@/api/conf/app.conf";
 import FiltersSidebarComponent from "@/components/Elements/Filter/FiltersSidebarComponent.vue";
 import loggerUtil from "@/utils/logger/logger.util";
+import {IconSearchOff} from "@tabler/icons-vue";
 
 export default {
   name: "HistoryView",
@@ -40,6 +42,11 @@ export default {
   },
   data() {
     return {
+      noDataMessage: {
+        icon: "IconSearchOff",
+        title: "Nothing was found",
+        text: "Please clarify your search query",
+      },
       filtersInput: {
         author: {
           title: "Author",
@@ -131,4 +138,8 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.content-col {
+  width: 80vw;
+}
+</style>

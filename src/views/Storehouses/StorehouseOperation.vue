@@ -38,7 +38,9 @@
   </MDBRow>
   <SearchComponent @search="handleAddedSearch" />
   <TableComponent
+      :info-message="noDataMessage"
     :rowsPerPage="6"
+    :infoMessage="noDataMessage"
     :rows="addedList"
     :enable-delete="true"
     :columns="addedColumns"
@@ -87,6 +89,11 @@ export default {
   emits: ["cancel", "save"],
   data() {
     return {
+      noDataMessage: {
+        icon: "IconInfoCircle",
+        title: "No product yet in the list",
+        text: "Please add one first",
+      },
       selectedProduct: null,
       quantity: null,
       price: null,

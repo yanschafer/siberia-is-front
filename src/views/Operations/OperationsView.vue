@@ -7,8 +7,9 @@
           @start-search="handleFiltersSearch"
         />
       </MDBCol>
-      <MDBCol class="col-auto">
+      <MDBCol class="content-col">
         <TableComponent
+            :infoMessage="noDataMessage"
           :rows="filteredOperations"
           :columns="operationStore.operationColumns"
           :searchTerm="''"
@@ -41,6 +42,11 @@ export default {
   },
   data() {
     return {
+      noDataMessage: {
+        icon: "IconSearchOff",
+        title: "Nothing was found",
+        text: "Please clarify your search query",
+      },
       typeMapper: {
         [TransactionType.INCOME]: "Arrival",
         [TransactionType.OUTCOME]: "Sale",
@@ -137,4 +143,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.content-col {
+  width: 75vw!important;
+}
+</style>

@@ -4,7 +4,7 @@
     @approved="removeAndCloseModal"
     @close="closeModal"
   />
-  <div class="card">
+  <div class="card card-body">
     <TabView>
       <TabPanel v-for="tab in tabs" :key="tab.title" :header="tab.title">
         <template v-if="tab.id === 1">
@@ -378,5 +378,7 @@ export default {
 </script>
 
 <style scoped>
-/* Add any necessary styles here */
+.card-body {
+  width: 86vw;
+}
 </style>

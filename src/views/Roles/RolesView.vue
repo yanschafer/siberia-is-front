@@ -2,6 +2,7 @@
   <template v-if="!isIdProvided">
     <SearchComponent @search="handleSearch" />
     <TableComponent
+        :info-message="noDataMessage"
       :rows="filteredRoles"
       :columns="rolesStore.rolesColumns"
       :searchTerm="rolesStore.searchTerm"
@@ -22,6 +23,15 @@ export default {
   components: { SearchComponent, TableComponent },
   props: {
     id: String,
+  },
+  data() {
+    return {
+      noDataMessage: {
+        icon: "IconSearchOff",
+        title: "Nothing was found",
+        text: "Please clarify your search query",
+      },
+    }
   },
   async setup() {
     const rolesStore = useRolesStore();

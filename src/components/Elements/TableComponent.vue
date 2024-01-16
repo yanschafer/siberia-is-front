@@ -80,10 +80,11 @@
     </div>
   </DataTable>
   <div v-else>
-    <MDBContainer>
-
-    </MDBContainer>
-    Nothing was found, try to classify search query.
+    <InfoMessageComponent
+      :infoIcon="infoMessage.icon"
+      :infoTitle="infoMessage.title"
+      :infoText="infoMessage.text"
+  />
   </div>
 </template>
 
@@ -95,9 +96,14 @@ import Paginator from "primevue/paginator";
 import InputNumber from "primevue/inputnumber";
 import InputText from "primevue/inputtext";
 import { MDBBtn, MDBContainer } from "mdb-vue-ui-kit";
+import {IconSearchOff, IconInfoCircle} from "@tabler/icons-vue";
+import InfoMessageComponent from "@/components/Elements/InfoMessageComponent.vue";
 
 export default defineComponent({
   components: {
+    InfoMessageComponent,
+    IconSearchOff,
+    IconInfoCircle,
     MDBBtn,
     MDBContainer,
     DataTable,
@@ -121,7 +127,8 @@ export default defineComponent({
     rowsPerPage: {
       type: Number,
       default: 6
-    }
+    },
+    infoMessage: Object,
   },
   emits: ["rowClick", "rowEditSave", "rowDelete"],
   data() {
@@ -130,6 +137,9 @@ export default defineComponent({
       itemsPerPage: 7,
       editingRows: [],
       deleteClick: false,
+      noSearchResultIcon: 'IconSearchOff',
+      noSearchResultTitle: 'Nothing was found',
+      noSearchResultText: 'Please clarify your search query."'
     };
   },
   computed: {
@@ -232,5 +242,11 @@ export default defineComponent({
 }
 .number {
   width: 10rem;
+}
+.message-heading {
+  color: #B8B8B8;
+}
+.message-container {
+  height: 50vh;
 }
 </style>

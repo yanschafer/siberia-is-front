@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid" style="padding: 0">
+  <div class="container-fluid" style="padding: 0; width: 86vw;">
     <template v-if="!isIdProvided">
       <SearchComponent
         v-model="storehousesStore.searchTerm"
@@ -7,6 +7,7 @@
       />
       <TableComponent
         :rows="filteredStorehouses"
+        :infoMessage="noDataMessage"
         :columns="storehousesStore.storehousesColumns"
         :searchTerm="storehousesStore.searchTerm"
         @rowClick="handleRowClick"
@@ -39,6 +40,15 @@ export default {
   },
   created() {
     this.loadStockListRes.toastIfError(this.$toast, this.$nextTick);
+  },
+  data() {
+    return {
+      noDataMessage: {
+        icon: "IconInfoCircle",
+        title: "No products added to the list yet",
+        text: "Start with registering one",
+      },
+    }
   },
   computed: {
     filteredStorehouses() {

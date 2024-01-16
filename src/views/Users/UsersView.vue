@@ -11,6 +11,7 @@
         <MDBCol class="col-auto">
           <SearchComponent @search="handleSearch" />
           <TableComponent
+              :infoMessage="noDataMessage"
             :rows="filteredUsers"
             :columns="usersStore.usersColumns"
             :searchTerm="usersStore.searchTerm"
@@ -46,6 +47,11 @@ export default {
     TableComponent,
   },
   data: () => ({
+    noDataMessage: {
+      icon: "IconSearchOff",
+      title: "Nothing was found",
+      text: "Please clarify your search query",
+    },
     filtersInput: {
       name: {
         title: "Name",
