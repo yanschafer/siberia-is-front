@@ -7,37 +7,52 @@
   <div class="card">
     <TabView>
       <TabPanel v-for="tab in tabs" :key="tab.title" :header="tab.title">
-        <TreeTableComponent
-          :editableColumns="editableColumns"
-          :showEditColumn="true"
-          :enableDelete="true"
-          v-if="tab.id === 3"
-          :nodes="transformCategoryList(categoryList)"
-          @row-delete="startRemoveCategory"
-          @row-edit="startEditCategory"
-        />
-        <TableComponent
-          v-if="tab.id === 1"
-          :enableDelete="true"
-          :rows="brandList"
-          :editableColumns="editableColumns"
-          :showEditColumn="true"
-          :columns="brandColumns"
-          edit-input-type="str"
-          @row-delete="deleteBrand"
-          @row-edit-save="editBrand"
-        />
-        <TableComponent
-          v-if="tab.id === 2"
-          :editableColumns="editableColumns"
-          :showEditColumn="true"
-          :enableDelete="true"
-          :rows="collectionList"
-          :columns="brandColumns"
-          edit-input-type="str"
-          @row-delete="deleteCollection"
-          @row-edit-save="editCollection"
-        />
+        <template v-if="tab.id === 1">
+          <DialogComponentTrigger
+            button-text="CREATE"
+            :init-object="initBrandDialog"
+          />
+          <TableComponent
+            :enableDelete="true"
+            :rows="brandList"
+            :editableColumns="editableColumns"
+            :showEditColumn="true"
+            :columns="brandColumns"
+            edit-input-type="str"
+            @row-delete="deleteBrand"
+            @row-edit-save="editBrand"
+          />
+        </template>
+        <template v-if="tab.id === 2">
+          <DialogComponentTrigger
+            button-text="CREATE"
+            :init-object="initCollectionDialog"
+          />
+          <TableComponent
+            :editableColumns="editableColumns"
+            :showEditColumn="true"
+            :enableDelete="true"
+            :rows="collectionList"
+            :columns="brandColumns"
+            edit-input-type="str"
+            @row-delete="deleteCollection"
+            @row-edit-save="editCollection"
+          />
+        </template>
+        <template v-if="tab.id === 3">
+          <DialogComponentTrigger
+            button-text="CREATE"
+            :init-object="initCategoryDialog"
+          />
+          <TreeTableComponent
+            :editableColumns="editableColumns"
+            :showEditColumn="true"
+            :enableDelete="true"
+            :nodes="transformCategoryList(categoryList)"
+            @row-delete="startRemoveCategory"
+            @row-edit="startEditCategory"
+          />
+        </template>
       </TabPanel>
     </TabView>
   </div>
@@ -57,6 +72,9 @@ import ModalComponent from "@/components/Elements/ModalComponent.vue";
 import ApiResponseDto from "@/api/dto/api-response.dto";
 import { useDialogStore } from "@/stores/dialog.store";
 import CategoryModel from "@/api/modules/category/models/category.model";
+import BrandModel from "@/api/modules/brand/models/brand.model";
+import CollectionModel from "@/api/modules/collection/models/collection.model";
+import DialogComponentTrigger from "@/components/Elements/DialogComponentTrigger.vue";
 
 export default {
   name: "AssortmentVue",
@@ -64,6 +82,7 @@ export default {
     ModalComponent,
     TableComponent,
     TreeTableComponent,
+    DialogComponentTrigger,
     TabView,
     TabPanel,
   },
@@ -81,6 +100,30 @@ export default {
         loadList() {},
       },
       idOnDelete: 0,
+      initCategoryDialog: {
+        header: "Create a category",
+        showSelect: true,
+        selectItems: this.categoryList,
+        selectName: "Select parent category",
+        inputName: "Category name",
+        methodOnSave: () => this.categoryStore.loadCategoriesList(),
+        methodOnClose: () => loggerUtil.debug("workds"),
+        model: new CategoryModel(),
+      },
+      initBrandDialog: {
+        header: "Create a brand",
+        inputName: "Brand name",
+        model: new BrandModel(),
+        methodOnSave: () => this.brandStore.loadBrandsList(),
+        methodOnClose: () => loggerUtil.debug("workds"),
+      },
+      initCollectionDialog: {
+        header: "Create a collection",
+        inputName: "Collection name",
+        methodOnSave: () => this.collectionStore.loadCollectionList(),
+        methodOnClose: () => loggerUtil.debug("workds"),
+        model: new CollectionModel(),
+      },
     };
   },
   async setup() {
@@ -101,6 +144,9 @@ export default {
       modalStore,
       dialogStore,
     };
+  },
+  created() {
+    this.initCategoryDialog.selectItems = this.categoryList;
   },
   methods: {
     showModal(type, name) {

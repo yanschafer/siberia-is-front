@@ -15,7 +15,7 @@ const defaultValues = {
   value: {},
   update: null,
   transformMethod: (state) => ({}),
-  showCheckbox: true,
+  showCheckbox: false,
   checkboxValues: {},
   remove: null,
   showInput: true,
@@ -66,6 +66,7 @@ export const useDialogStore = defineStore({
       showCheckbox = false,
       checkboxValues = {},
     ) {
+      this.cancelAndClose();
       this.showInput = showInput;
       if (update) {
         this.update = update;
