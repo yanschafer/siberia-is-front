@@ -32,6 +32,7 @@ export const useRolesStore = defineStore({
       if (getRoles.success) {
         this.rolesRows = getRoles.getData();
       }
+      return getRoles;
     },
 
     async loadSelectedRole(roleId: number) {
@@ -40,6 +41,7 @@ export const useRolesStore = defineStore({
       if (role.success) {
         this.selectedRole = role.getData();
       }
+      return role;
     },
 
     async updateRole(roleId: number, roleUpdateDto: UpdateRoleDto) {

@@ -42,6 +42,7 @@ export const useUsersStore = defineStore({
           };
         }
       }
+      return getUser;
     },
     async loadUsersList(
       filters: UserSearchFilterDto = new UserSearchFilterDto(),
@@ -53,6 +54,7 @@ export const useUsersStore = defineStore({
       } else {
         this.usersRows = [];
       }
+      return getUsers;
     },
     async updateUser(
       userId: number,

@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import HistoryModel from "@/api/modules/history/models/history.model";
 import HistorySearchFilterDto from "@/api/modules/history/dto/history-search-filter.dto";
-import loggerUtil from "@/utils/logger/logger.util";
 
 export const useHistoryStore = defineStore({
   id: "history",
@@ -36,6 +35,7 @@ export const useHistoryStore = defineStore({
       if (getHistory.success) {
         this.historyRows = getHistory.getData();
       }
+      return getHistory;
     },
     async loadItem(itemId: number) {
       this.selectedItem = this.historyRows.filter((el) => el.id == itemId);
@@ -47,11 +47,13 @@ export const useHistoryStore = defineStore({
       const historyModel = new HistoryModel();
       const selected = await historyModel.getAllTypes();
       if (selected.success) this.eventTypes = selected.getData();
+      return selected;
     },
     async loadEventObjectTypes() {
       const historyModel = new HistoryModel();
       const selected = await historyModel.getAllObjectTypes();
       if (selected.success) this.eventObjectTypes = selected.getData();
+      return selected;
     },
   },
 });

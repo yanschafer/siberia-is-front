@@ -105,6 +105,14 @@ export default defineComponent({
     },
   },
   methods: {
+    showSuccessToast(type) {
+      this.$toast.add({
+        severity: "success",
+        summary: "Success",
+        detail: `Rules ${type}`,
+        life: 3000,
+      });
+    },
     async ruleRemoved({ roleId, linkedRule }) {
       if (this.creationMode) {
         linkedRule.forEach((rule) => {
@@ -122,6 +130,8 @@ export default defineComponent({
 
       if (!result.success) {
         result.getError().showServerErrorToast(this.$toast, this.$nextTick);
+      } else {
+        this.showSuccessToast("removed");
       }
     },
     async ruleSelected({ roleId, linkedRule }) {
@@ -138,6 +148,8 @@ export default defineComponent({
 
       if (!result.success) {
         result.getError().showServerErrorToast(this.$toast, this.$nextTick);
+      } else {
+        this.showSuccessToast("added");
       }
     },
   },
