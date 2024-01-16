@@ -63,7 +63,7 @@ const routes = [
           ruleId: appConf.rules.productsManaging,
           showAddBtn: true,
           addBtnRoute: "New product",
-          meta: PrintUtil.localize("products", "router"),
+          name: PrintUtil.localize("products", "router"),
         },
         children: [
           {
