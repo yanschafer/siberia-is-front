@@ -16,30 +16,50 @@
           >
             {{ roleName }}
           </h1>
-          <MDBInput
-            v-else
-            class="input-wrapper animate__animated animate__fadeIn username-input"
-            :class="{ 'p-invalid': !validate.name }"
-            type="text"
-            v-model="newRoleName"
-          />
+          <MDBRow v-else>
+            <MDBCol class="col-auto">
+              <p
+                  class="animate__animated animate__fadeIn label">
+                ROLE NAME
+              </p>
+            </MDBCol>
+            <MDBCol class="col-auto">
+              <InputText
+                  class="input-wrapper animate__animated animate__fadeIn username-input"
+                  :class="{ 'p-invalid': !validate.name }"
+                  type="text"
+                  v-model="newRoleName"
+              />
+            </MDBCol>
+
+          </MDBRow>
+
+          <p
+              v-if="!editing"
+              class="animate__animated animate__fadeIn">
+            {{ roleDescription }}
+          </p>
+          <MDBRow v-else>
+            <MDBCol class="col-auto">
+              <span
+                  class="animate__animated animate__fadeIn">
+                ROLE DESCRIPTION
+              </span>
+            </MDBCol>
+            <MDBCol class="col-auto">
+              <InputText
+                  class="input-wrapper animate__animated animate__fadeIn username-input"
+                  :class="{ 'p-invalid': !validate.description }"
+                  type="text"
+                  v-model="newRoleDescription"
+              />
+            </MDBCol>
+          </MDBRow>
+
         </MDBCol>
       </MDBRow>
       <MDBRow class="w-auto">
         <MDBCol class="col-auto">
-          <h1
-            v-if="!editing"
-            class="animate__animated animate__fadeIn username-heading"
-          >
-            {{ roleDescription }}
-          </h1>
-          <MDBInput
-            v-else
-            class="input-wrapper animate__animated animate__fadeIn username-input"
-            :class="{ 'p-invalid': !validate.description }"
-            type="text"
-            v-model="newRoleDescription"
-          />
         </MDBCol>
       </MDBRow>
       <MDBCol v-if="!editing" class="d-flex justify-content-end">
@@ -61,8 +81,8 @@
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="pt-4">
-    <span class="username"
-      >{{ localize("relatedUsersCapslock", "role") }}:
+    <span class="span"
+      >{{ localize("relatedUsersCapslock", "role") }}
     </span>
     <MultiSelectComponent
       :start-items="relatedUsers"
@@ -75,7 +95,9 @@
     />
   </MDBContainer>
   <MDBContainer class="pt-4">
-    <TabsComponent :roles="roles" :user-id="null" />
+    <Panel  header="Role permissions">
+      <TabsComponent :roles="roles" :user-id="null" />
+    </Panel>
   </MDBContainer>
 </template>
 
@@ -94,6 +116,8 @@ import {
   MDBTabItem,
   MDBTabPane,
 } from "mdb-vue-ui-kit";
+import Panel from "primevue/panel";
+import InputText from "primevue/inputtext";
 import TabsComponent from "@/components/Elements/TabsComponent.vue";
 import ModalComponent from "@/components/Elements/ModalComponent.vue";
 import { useRolesStore } from "@/stores/roles.store";
@@ -125,6 +149,8 @@ export default {
     MDBTabItem,
     MDBTabPane,
     MDBInput,
+    Panel,
+    InputText
   },
   props: {
     id: {
@@ -346,5 +372,12 @@ export default {
 }
 :deep(.nav-link) {
   font-weight: 600 !important;
+}
+:deep(.p-panel-content) {
+  padding: 0;
+}
+.span {
+  color: #6c6c6c;
+  margin-right: 1rem;
 }
 </style>

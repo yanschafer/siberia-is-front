@@ -1,6 +1,6 @@
 <template>
   <MDBTabs v-model="activeTabId" vertical>
-    <MDBTabNav tabsClasses="mb-3 text-center">
+    <MDBTabNav tabsClasses="mb-3 text-center" class="tabs">
       <template v-for="role in roles">
         <MDBTabItem
           :wrap="false"
@@ -11,10 +11,12 @@
         </MDBTabItem>
       </template>
     </MDBTabNav>
-    <MDBTabContent>
+    <MDBTabContent class="content">
+      <ScrollPanel
+          style="width: 100%; height: 40vh;">
       <template v-for="role in roles">
-        <MDBTabPane :tabId="String(role.id)">
-          <RolesComponent
+          <MDBTabPane class="content" :tabId="String(role.id)">
+            <RolesComponent
             @new-rule-selected="ruleSelected"
             @rule-removed="ruleRemoved"
             :role="role"
@@ -22,8 +24,9 @@
             :rules="rules"
             :stocks="stocks"
           />
-        </MDBTabPane>
+          </MDBTabPane>
       </template>
+      </ScrollPanel>
     </MDBTabContent>
   </MDBTabs>
 </template>
@@ -36,7 +39,7 @@ import {
   MDBTabContent,
   MDBTabPane,
 } from "mdb-vue-ui-kit";
-
+import ScrollPanel from 'primevue/scrollpanel';
 import { defineComponent } from "vue";
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
@@ -61,6 +64,7 @@ export default defineComponent({
     MDBTabItem,
     MDBTabContent,
     MDBTabPane,
+    ScrollPanel
   },
   props: {
     userId: {
@@ -157,5 +161,14 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* Здесь вы можете добавить стили для вашего компонента */
+.tabs {
+  padding-right: 0!important;
+}
+.content {
+  padding: 0!important;
+}
+:deep(.col-9) {
+  padding-left: 0!important;
+  border-left: 2px solid #e3e3e3 !important;
+}
 </style>

@@ -17,7 +17,7 @@
             v-model="newUserName"
           />
         </MDBCol>
-        <MDBCol class="align-self-center">
+        <MDBCol class="align-self-center p-0">
           <MDBRow class="d-flex flex-row flex-nowrap align-self-center">
             <span class="user-roles-heading">{{
               localize("userRolesCapslock", "user")
@@ -80,6 +80,7 @@
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="pt-4">
+    <span class="span">ROLE</span>
     <MultiSelectComponent
       :start-items="rolesList"
       :options="rolesOptions"
@@ -91,7 +92,9 @@
   </MDBContainer>
   <MDBContainer class="pt-4">
     <Suspense>
-      <TabsComponent :roles="roles" :user-id="selectedUser.id" />
+      <Panel  header="Role permissions">
+        <TabsComponent :roles="roles" :user-id="selectedUser.id" />
+      </Panel>
     </Suspense>
   </MDBContainer>
 </template>
@@ -110,6 +113,7 @@ import {
   MDBTabPane,
   MDBInput,
 } from "mdb-vue-ui-kit";
+import Panel from "primevue/panel";
 import TabsComponent from "@/components/Elements/TabsComponent.vue";
 import UserFullDto from "@/api/modules/user/dto/user-full.dto";
 import { useRoute, useRouter } from "vue-router";
@@ -144,6 +148,7 @@ export default {
     MDBTabContent,
     MDBTabItem,
     MDBTabPane,
+    Panel
   },
   data: () => ({
     editing: false,
@@ -414,8 +419,11 @@ export default {
   width: 100%;
   max-width: 20rem !important;
 }
-:deep(.form-outline) {
-  width: 100%;
-  max-width: 20rem !important;
+:deep(.p-panel-content) {
+  padding: 0;
+}
+.span {
+  color: #6c6c6c;
+  margin-right: 1rem;
 }
 </style>
