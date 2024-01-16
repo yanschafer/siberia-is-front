@@ -20,17 +20,11 @@ export const useCollectionStore = defineStore({
     },
     async loadCollectionList() {
       const collectionModel = new CollectionModel();
-      try {
-        const collectionList = await collectionModel.getAll();
-        if (collectionList.success) {
-          this.collectionItems = collectionList.getData();
-          LoggerUtil.debug(this.collectionItems);
-        } else {
-          console.error("Failed to load brand list");
-        }
-      } catch (error) {
-        console.error("An error occurred while loading brand list:", error);
+      const collectionList = await collectionModel.getAll();
+      if (collectionList.success) {
+        this.collectionItems = collectionList.getData();
       }
+      return collectionList;
     },
     async remove(collectionId: number) {
       const collectionModel = new CollectionModel();

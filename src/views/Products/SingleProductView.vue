@@ -12,7 +12,7 @@
         </MDBCol>
         <MDBCol
           v-else
-          style="padding-left: 12px;"
+          style="padding-left: 12px"
           class="col-auto animate__animated animate__flipInX animate__faster"
         >
           <div class="product-img">
@@ -21,28 +21,31 @@
         </MDBCol>
         <MDBCol class="d-flex flex-column justify-content-center">
           <MDBRow
-              style="padding-left: 12px; margin-bottom: 1rem;"
-              v-if="!editing"
-              class="d-flex d-flex justify-content-end"
+            style="padding-left: 12px; margin-bottom: 1rem"
+            v-if="!editing"
+            class="d-flex d-flex justify-content-end"
           >
-            <MDBBtn @click="startEditing" class="utility-btn" outline="black"
-            >{{ localize("editCapslock", "default") }}</MDBBtn
-            >
+            <MDBBtn @click="startEditing" class="utility-btn" outline="black">{{
+              localize("editCapslock", "default")
+            }}</MDBBtn>
           </MDBRow>
           <MDBCol
-              style="margin-bottom: 1rem;"
-              class="animate__animated animate__flipInX animate__faster gap-3 d-flex justify-content-end"
-              v-else
+            style="margin-bottom: 1rem"
+            class="animate__animated animate__flipInX animate__faster gap-3 d-flex justify-content-end"
+            v-else
           >
-            <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger"
-            >{{ localize("deleteCapslock", "default") }}</MDBBtn
+            <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
+              localize("deleteCapslock", "default")
+            }}</MDBBtn>
+            <MDBBtn
+              @click="cancelEditing"
+              class="utility-btn"
+              outline="black"
+              >{{ localize("cancelCapslock", "default") }}</MDBBtn
             >
-            <MDBBtn @click="cancelEditing" class="utility-btn" outline="black"
-            >{{ localize("cancelCapslock", "default") }}</MDBBtn
-            >
-            <MDBBtn @click="saveChanges" class="utility-btn" outline="black"
-            >{{ localize("saveCapslock", "default") }}</MDBBtn
-            >
+            <MDBBtn @click="saveChanges" class="utility-btn" outline="black">{{
+              localize("saveCapslock", "default")
+            }}</MDBBtn>
           </MDBCol>
           <MDBRow>
             <MDBCol class="product-name-col" v-if="!editing">
@@ -52,10 +55,13 @@
               class="d-flex gap-1 align-items-center mb-3 animate__animated animate__flipInX animate__faster"
               v-else
             >
-              <h5 class="field-heading mb-0">{{ localize("productNameCapslock") }}</h5>
+              <h5 class="field-heading mb-0">
+                {{ localize("productNameCapslock") }}
+              </h5>
               <InputText
                 id="product-name-input"
                 class="input-wrapper animate__animated animate__fadeIn username-input"
+                :class="{ 'p-invalid': !validate.name }"
                 type="text"
                 v-model="newProductName"
               />
@@ -64,20 +70,22 @@
           <MDBRow>
             <MDBCol class="d-flex flex-column gap-3 col-auto">
               <h5 class="field-heading d-flex gap-1 align-items-center">
-                  {{ localize("skuCapslock") }}
+                {{ localize("skuCapslock") }}
                 <span v-if="!editing" class="field-value copy-on">{{
                   sku
                 }}</span>
                 <MDBInput
                   v-else
                   class="animate__animated animate__flipInX animate__faster input-wrapper animate__animated animate__fadeIn username-input"
+                  :class="{ 'p-invalid': !validate.vendorCode }"
                   type="text"
                   v-model="newSku"
                 />
               </h5>
               <!--              <img class="sku-img" :src="barcodeImage" alt="Barcode">-->
               <h5 v-if="!editing" class="field-heading">
-                  {{ localize("brandCapslock") }} <span class="field-value copy-on">{{ brand }}</span>
+                {{ localize("brandCapslock") }}
+                <span class="field-value copy-on">{{ brand }}</span>
               </h5>
               <template v-else>
                 <h5 class="field-heading">
@@ -85,18 +93,18 @@
                   <SelectComponent
                     :placeholder="placeholderBrand"
                     class="animate__animated animate__flipInX animate__faster"
+                    :class="{ 'p-invalid': !validate.brand }"
                     :items="brandList"
                     v-model="newBrand"
-                />
+                  />
                   <DialogComponentTrigger
-                      :button-text="createButtonText"
-                      :init-object="initBrandDialog"
+                    :button-text="createButtonText"
+                    :init-object="initBrandDialog"
                   />
                 </h5>
-
               </template>
               <h5 class="field-heading d-flex gap-1 align-items-center">
-                  {{ localize("linkCapslock") }}
+                {{ localize("linkCapslock") }}
                 <a
                   v-if="!editing"
                   target="_blank"
@@ -107,6 +115,7 @@
                 <InputText
                   v-else
                   class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+                  :class="{ 'p-invalid': !validate.link }"
                   type="text"
                   v-model="newLink"
                 />
@@ -114,14 +123,15 @@
             </MDBCol>
             <MDBCol class="d-flex flex-column gap-3">
               <h5 class="field-heading d-flex gap-1 align-items-center">
-                  {{ localize("quantityCapslock") }} <span class="field-value">{{ quantity }}</span>
+                {{ localize("quantityCapslock") }}
+                <span class="field-value">{{ quantity }}</span>
               </h5>
               <h5 class="field-heading d-flex gap-1 align-items-center">
-                  {{ localize("lastTimeOrderedCapslock") }}
+                {{ localize("lastTimeOrderedCapslock") }}
                 <span class="field-value">{{ lastTimeOrdered }}</span>
               </h5>
               <h5 class="field-heading d-flex gap-1 align-items-center">
-                  {{ localize("lastPriceOrderedCapslock") }}
+                {{ localize("lastPriceOrderedCapslock") }}
                 <span class="field-value">{{ lastPriceOrdered }}</span>
               </h5>
               <!--              <h5 class="field-heading">COST PRICE <span class="field-value">{{ costPrice }}</span></h5>-->
@@ -137,15 +147,16 @@
         <MDBRow>
           <MDBCol class="col-auto">
             <TreeDropdownComponent
-                :placeholder="placeholderCategory"
-                class="animate__animated animate__flipInX animate__faster"
-                :nodes="categoryList"
-                v-model="newCategory"
+              :placeholder="placeholderCategory"
+              class="animate__animated animate__flipInX animate__faster"
+              :class="{ 'p-invalid': !validate.category }"
+              :nodes="categoryList"
+              v-model="newCategory"
             />
           </MDBCol>
           <DialogComponentTrigger
-              :button-text="createButtonText"
-              :init-object="initCategoryDialog"
+            :button-text="createButtonText"
+            :init-object="initCategoryDialog"
           />
         </MDBRow>
       </template>
@@ -159,6 +170,7 @@
           <SelectComponent
             :placeholder="placeholderCollection"
             class="animate__animated animate__flipInX animate__faster"
+            :class="{ 'p-invalid': !validate.collection }"
             :items="collectionList"
             v-model="newCollection"
           />
@@ -176,9 +188,10 @@
           v-else
           class="animate__animated animate__flipInX animate__faster field-heading d-flex gap-1 align-items-center mb-0"
         >
-            {{ localize("newColorNameCapslock") }}
+          {{ localize("newColorNameCapslock") }}
           <InputText
             class="input-wrapper animate__animated animate__fadeIn username-input"
+            :class="{ 'p-invalid': !validate.color }"
             type="text"
             v-model="newColor"
           />
@@ -188,6 +201,7 @@
       <textarea
         v-else
         class="animate__animated animate__flipInX animate__faster username-input"
+        :class="{ 'p-invalid': !validate.description }"
         id="description"
         type="textarea"
         v-model="newDescription"
@@ -199,13 +213,14 @@
           <!--          <h5 class="field-heading">VOLUME <span class="field-value">{{ volume }}</span></h5>-->
           <!--          <h5 class="field-heading">SIZE <span class="field-value">{{ size }}</span></h5>-->
           <h5 class="field-heading">
-              {{ localize("quantityPerPackageCapslock") }}
+            {{ localize("quantityPerPackageCapslock") }}
             <span v-if="!editing" class="field-value">{{
               quantityPerPackage
             }}</span>
             <InputText
               v-else
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+              :class="{ 'p-invalid': !validate.amountInBox }"
               type="text"
               v-model="newAmountInBox"
             />
@@ -213,13 +228,14 @@
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-              {{ localize("distributionPriceCapslock") }}
+            {{ localize("distributionPriceCapslock") }}
             <span v-if="!editing" class="field-value">{{
               distributionPrice
             }}</span>
             <InputText
               v-else
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+              :class="{ 'p-invalid': !validate.distributorPrice }"
               type="text"
               v-model="newDistributionPrice"
             />
@@ -229,13 +245,14 @@
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-              {{ localize("professionalPriceCapslock") }}
+            {{ localize("professionalPriceCapslock") }}
             <span v-if="!editing" class="field-value">{{
               professionalPrice
             }}</span>
             <InputText
               v-else
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+              :class="{ 'p-invalid': !validate.professionalPrice }"
               type="text"
               v-model="newProfessionalPrice"
             />
@@ -245,11 +262,12 @@
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-              {{ localize("defaultPriceCapslock") }}
+            {{ localize("defaultPriceCapslock") }}
             <span v-if="!editing" class="field-value">{{ defaultPrice }}</span>
             <InputText
               v-else
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+              :class="{ 'p-invalid': !validate.commonPrice }"
               type="text"
               v-model="newDefaultPrice"
             />
@@ -259,13 +277,14 @@
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-              {{ localize("expirationDateCapslock") }}
+            {{ localize("expirationDateCapslock") }}
             <span v-if="!editing" class="field-value">{{
               expirationDate
             }}</span>
             <InputText
               v-else
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+              :class="{ 'p-invalid': !validate.expirationDate }"
               type="text"
               v-model="newExpirationDate"
             />
@@ -301,6 +320,8 @@ import ModalComponent from "@/components/Elements/ModalComponent.vue";
 import { useModalStore } from "@/stores/modal.store";
 import PrintUtil from "@/utils/localization/print.util";
 import InputText from "primevue/inputtext";
+import ValidatorUtil from "@/utils/validator/validator.util";
+import ValidateRule from "@/utils/validator/validate-rule";
 
 export default {
   name: "SingleProductView",
@@ -325,32 +346,6 @@ export default {
       type: Number,
       required: true,
     },
-  },
-  async setup() {
-    const productStore = useProductsStore();
-    const brandStore = useBrandStore();
-    const collectionStore = useCollectionStore();
-    const categoriesStore = useCategoriesStore();
-    const modalStore = useModalStore();
-    const route = useRoute();
-    const router = useRouter();
-
-    await brandStore.loadBrandsList();
-    await categoriesStore.loadCategoriesList();
-    await collectionStore.loadCollectionList();
-
-    await productStore.loadSelectedProduct(
-      parseInt(route.params.id.toString()),
-    );
-
-    return {
-      productStore,
-      brandStore,
-      categoriesStore,
-      collectionStore,
-      modalStore,
-      router,
-    };
   },
   data() {
     return {
@@ -405,21 +400,111 @@ export default {
         methodOnClose: () => loggerUtil.debug("workds"),
         model: new CollectionModel(),
       },
+      validate: {
+        vendorCode: true,
+        brand: true,
+        name: true,
+        description: true,
+        distributorPrice: true,
+        professionalPrice: true,
+        commonPrice: true,
+        category: true,
+        collection: true,
+        color: true,
+        amountInBox: true,
+        expirationDate: true,
+        link: true,
+      },
+      validator: new ValidatorUtil(),
+    };
+  },
+  async setup() {
+    const productStore = useProductsStore();
+    const brandStore = useBrandStore();
+    const collectionStore = useCollectionStore();
+    const categoriesStore = useCategoriesStore();
+    const modalStore = useModalStore();
+    const route = useRoute();
+    const router = useRouter();
+
+    return {
+      productStore,
+      brandStore,
+      categoriesStore,
+      collectionStore,
+      modalStore,
+      router,
+      loadBrandListRes: await brandStore.loadBrandsList(),
+      loadCollectionListRes: await collectionStore.loadCollectionList(),
+      loadCategoryListRes: await categoriesStore.loadCategoriesList(),
+      loadSelectedRes: await productStore.loadSelectedProduct(
+        parseInt(route.params.id.toString()),
+      ),
     };
   },
   created() {
+    this.loadSelectedRes.toastIfError(this.$toast, this.$nextTick);
+    this.loadBrandListRes.toastIfError(this.$toast, this.$nextTick);
+    this.loadCollectionListRes.toastIfError(this.$toast, this.$nextTick);
+    this.loadCategoryListRes.toastIfError(this.$toast, this.$nextTick);
+
+    const vendorCodeValidateRule = new ValidateRule().skipIfNull().required();
+    const brandValidateRule = new ValidateRule().skipIfNull().required();
+    const nameValidateRule = new ValidateRule().skipIfNull().required();
+    const descriptionValidateRule = new ValidateRule().skipIfNull().required();
+    const distributorPriceValidateRule = new ValidateRule()
+      .skipIfNull()
+      .required()
+      .setMin(0);
+    const professionalPriceValidateRule = new ValidateRule()
+      .skipIfNull()
+      .required()
+      .setMin(0);
+    const commonPriceValidateRule = new ValidateRule()
+      .skipIfNull()
+      .required()
+      .setMin(0);
+    const categoryValidateRule = new ValidateRule().skipIfNull().required();
+    const collectionValidateRule = new ValidateRule().skipIfNull().required();
+    const colorValidateRule = new ValidateRule().skipIfNull().required();
+    const amountInBoxValidateRule = new ValidateRule()
+      .skipIfNull()
+      .required()
+      .setMin(0);
+    const expirationDateValidateRule = new ValidateRule()
+      .skipIfNull()
+      .required()
+      .setMin(0);
+    const linkValidateRule = new ValidateRule().skipIfNull().required();
+
+    this.validator = this.validator
+      .addRule("vendorCode", vendorCodeValidateRule)
+      .addRule("brand", brandValidateRule)
+      .addRule("name", nameValidateRule)
+      .addRule("description", descriptionValidateRule)
+      .addRule("commonPrice", commonPriceValidateRule)
+      .addRule("distributorPrice", distributorPriceValidateRule)
+      .addRule("professionalPrice", professionalPriceValidateRule)
+      .addRule("category", categoryValidateRule)
+      .addRule("collection", collectionValidateRule)
+      .addRule("color", colorValidateRule)
+      .addRule("amountInBox", amountInBoxValidateRule)
+      .addRule("expirationDate", expirationDateValidateRule)
+      .addRule("link", linkValidateRule);
+
     this.initCategoryDialog.selectItems = this.categoryList;
   },
   methods: {
     localize(key, module = "products") {
-          return PrintUtil.localize(key, module);
+      return PrintUtil.localize(key, module);
     },
     confirmDeletion() {
       this.modalStore.show({
         title: "Confirm deletion",
         text: this.modalText,
-        disclaimer:
-          this.localize("thisActionCannotBeUndoneThisProductDataWillBeLost"),
+        disclaimer: this.localize(
+          "thisActionCannotBeUndoneThisProductDataWillBeLost",
+        ),
       });
     },
     closeModal() {
@@ -434,17 +519,29 @@ export default {
       }
     },
     async handleCategoryUpdate() {
-      await this.categoriesStore.loadCategoriesList();
+      const loadRes = await this.categoriesStore.loadCategoriesList();
+      loadRes.toastIfError(this.$toast, this.$nextTick);
     },
     async handleBrandUpdate() {
-      await this.brandStore.loadBrandsList();
+      const loadRes = await this.brandStore.loadBrandsList();
+      loadRes.toastIfError(this.$toast, this.$nextTick);
     },
     async handleCollectionUpdate() {
-      await this.collectionStore.loadCollectionList();
+      const loadRes = await this.collectionStore.loadCollectionList();
+      loadRes.toastIfError(this.$toast, this.$nextTick);
     },
     async fileUploaded(files: File[]) {
       const file = files[0];
       const encoded = await encoderUtil.encode(file);
+      if (encoded == null) {
+        this.$toast.add({
+          severity: "error",
+          summary: "Failed upload",
+          detail: "Photo uploading failed",
+          life: 3000,
+        });
+        return;
+      }
       this.photoBase64 = encoded || "";
       this.photoName = file.name;
     },
@@ -468,32 +565,48 @@ export default {
     cancelEditing() {
       this.editing = false;
     },
+    getNullIfNoChange(newValue, originalValue) {
+      return newValue == originalValue ? null : newValue;
+    },
     async saveChanges() {
       const brandId = this.newBrand ? this.newBrand.id : null;
       const collectionId = this.newCollection ? this.newCollection.id : null;
       const categoryId = parseInt(String(this.newCategory));
       const expirationDate = parseInt(this.newExpirationDate) * 24 * 60 * 1000;
-
-      const result = await this.productStore.updateProduct(
-        this.id,
-        new ProductUpdateDto(
-          this.photoBase64,
-          this.photoName,
-          this.newSku,
-          brandId,
-          this.newProductName,
-          this.newDescription,
+      const data = new ProductUpdateDto(
+        this.photoBase64,
+        this.photoName,
+        this.getNullIfNoChange(this.newSku, this.sku),
+        this.getNullIfNoChange(brandId, this.brandId),
+        this.getNullIfNoChange(this.newProductName, this.productName),
+        this.getNullIfNoChange(this.newDescription, this.productDescription),
+        this.getNullIfNoChange(
           this.newDistributionPrice,
-          this.newProfessionalPrice,
-          this.newDefaultPrice,
-          categoryId,
-          collectionId,
-          this.newColor,
-          this.newAmountInBox,
-          expirationDate,
-          this.newLink,
+          this.distributionPrice,
         ),
+        this.getNullIfNoChange(
+          this.newProfessionalPrice,
+          this.professionalPrice,
+        ),
+        this.getNullIfNoChange(this.newDefaultPrice, this.defaultPrice),
+        this.getNullIfNoChange(categoryId, this.categoryId),
+        this.getNullIfNoChange(collectionId, this.collectionId),
+        this.getNullIfNoChange(this.newColor, this.color),
+        this.getNullIfNoChange(this.newAmountInBox, this.quantityPerPackage),
+        this.getNullIfNoChange(expirationDate, this.expirationDate),
+        this.getNullIfNoChange(this.newLink, this.link),
       );
+      loggerUtil.debug(data);
+      const validateRes = this.validator.validate(data);
+      if (validateRes !== true) {
+        loggerUtil.debug(validateRes);
+        this.validate = validateRes;
+        this.validator.showErrorToast(this.$toast);
+        return;
+      }
+
+      const result = await this.productStore.updateProduct(this.id, data);
+
       this.editing = !result.success;
       //TODO: Check for errors
     },
@@ -528,6 +641,11 @@ export default {
         return this.selectedProduct.brand.name || this.localize("noBrand");
       else return this.localize("noBrand");
     },
+    brandId() {
+      if (this.selectedProduct.brand)
+        return this.selectedProduct.brand.id || null;
+      else return null;
+    },
     link() {
       return this.selectedProduct.link || "";
     },
@@ -541,7 +659,8 @@ export default {
       return this.selectedProduct.expirationDate || 0;
     },
     lastTimeOrdered() {
-      if (!this.selectedProduct.lastPurchaseDate) return this.localize("noInformation");
+      if (!this.selectedProduct.lastPurchaseDate)
+        return this.localize("noInformation");
       const date =
         new Date(parseInt(`${this.selectedProduct.lastPurchaseDate}000`)) || "";
       if (date === "") return date;
@@ -551,7 +670,9 @@ export default {
       return `${date.getFullYear()}-${month}-${day}`;
     },
     lastPriceOrdered() {
-      return this.selectedProduct.lastPurchasePrice || this.localize("noInformation");
+      return (
+        this.selectedProduct.lastPurchasePrice || this.localize("noInformation")
+      );
     },
     costPrice() {
       return this.selectedProduct.costPrice || "";
@@ -574,8 +695,15 @@ export default {
     },
     collectionName() {
       if (this.selectedProduct.collection)
-        return this.selectedProduct.collection.name || this.localize("noCollection");
+        return (
+          this.selectedProduct.collection.name || this.localize("noCollection")
+        );
       else return this.localize("noCollection");
+    },
+    collectionId() {
+      if (this.selectedProduct.collection)
+        return this.selectedProduct.collection.id || null;
+      else return null;
     },
     color() {
       return this.selectedProduct.color || "";
@@ -684,7 +812,7 @@ export default {
   max-width: 4.5rem;
   font-weight: 800;
   max-height: 2rem;
-  margin-top: 0!important;
+  margin-top: 0 !important;
   padding-left: 2px;
   padding-right: 3px;
   padding-top: 2px;

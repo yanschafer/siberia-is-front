@@ -14,7 +14,6 @@ export default class ValidatorUtil {
   validate(data: any): Record<string, boolean>[] | boolean {
     let res = {};
     Object.keys(data).forEach((el) => {
-      loggerUtil.debug(this.rules, el, this.rules[el]);
       const rule = this.rules[el];
       if (!rule) return;
       const checkRes = this.rules[el].check(data[el]);

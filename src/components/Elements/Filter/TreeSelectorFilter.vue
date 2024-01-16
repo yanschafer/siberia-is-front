@@ -2,11 +2,11 @@
   <div class="container d-flex flex-column m-0 p-1">
     <span class="filtername">{{ title }}</span>
     <TreeDropdownComponent
-        :placeholder="title"
-        :nodes="items"
-        v-model="value"
-        :multiselect="true"
-        @change="handleChange"
+      :placeholder="title"
+      :nodes="items"
+      v-model="value"
+      :multiselect="true"
+      @change="handleChange"
     />
     <hr class="hr" />
   </div>
