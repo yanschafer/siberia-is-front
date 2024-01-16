@@ -1,8 +1,16 @@
 <template>
-  <div class="container-fluid" style="padding: 0;">
+  <div class="container-fluid" style="padding: 0">
     <template v-if="!isIdProvided">
-      <SearchComponent v-model="storehousesStore.searchTerm" @search="handleSearch" />
-      <TableComponent :rows="filteredStorehouses" :columns="storehousesStore.storehousesColumns" :searchTerm="storehousesStore.searchTerm" @rowClick="handleRowClick" />
+      <SearchComponent
+        v-model="storehousesStore.searchTerm"
+        @search="handleSearch"
+      />
+      <TableComponent
+        :rows="filteredStorehouses"
+        :columns="storehousesStore.storehousesColumns"
+        :searchTerm="storehousesStore.searchTerm"
+        @rowClick="handleRowClick"
+      />
     </template>
     <router-view v-if="isIdProvided" :id="routeIdParam" />
   </div>
@@ -11,23 +19,26 @@
 <script lang="ts">
 import TableComponent from "@/components/Elements/TableComponent.vue";
 import SearchComponent from "@/components/Elements/SearchComponent.vue";
-import { useStorehousesStore } from '@/stores/storehouse.store';
-import {useRoute, useRouter} from "vue-router";
+import { useStorehousesStore } from "@/stores/storehouse.store";
+import { useRoute, useRouter } from "vue-router";
 
-export default  {
-  name: 'StorehousesView',
-  components: {SearchComponent, TableComponent },
+export default {
+  name: "StorehousesView",
+  components: { SearchComponent, TableComponent },
   async setup() {
     const storehousesStore = useStorehousesStore();
-    const route = useRoute()
-    const router = useRouter()
-    await storehousesStore.loadStorehouseList()
-    
+    const route = useRoute();
+    const router = useRouter();
+
     return {
       storehousesStore,
       route,
       router,
+      loadStockListRes: await storehousesStore.loadStorehouseList(),
     };
+  },
+  created() {
+    this.loadStockListRes.toastIfError(this.$toast, this.$nextTick);
   },
   computed: {
     filteredStorehouses() {
@@ -37,30 +48,27 @@ export default  {
       } else {
         return this.storehousesStore.getStorehouseList.filter((row) =>
           Object.values(row).some((value) =>
-            String(value).toLowerCase().includes(searchTerm.toLowerCase())
-          )
+            String(value).toLowerCase().includes(searchTerm.toLowerCase()),
+          ),
         );
       }
     },
     routeIdParam() {
-      return parseInt(this.route.params.id.toString())
+      return parseInt(this.route.params.id.toString());
     },
     isIdProvided() {
-      return !!this.route.params.id
-    }
+      return !!this.route.params.id;
+    },
   },
   methods: {
     handleSearch(searchTerm) {
       this.storehousesStore.searchTerm = searchTerm;
     },
     handleRowClick(row) {
-      console.log('Clicked row with id:', row.id);
-      this.router.push({ name: 'Storehouse', params: { id: row.id } });
+      this.router.push({ name: "Storehouse", params: { id: row.id } });
     },
   },
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

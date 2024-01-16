@@ -4,6 +4,7 @@
     <InputText
       :placeholder="namePlaceholder"
       class="input-wrapper animate__animated animate__fadeIn username-input"
+      :class="{ 'p-invalid': !validate.name }"
       type="text"
       v-model="name"
     />
@@ -11,14 +12,17 @@
     <InputText
       :placeholder="addressPlaceholder"
       class="input-wrapper animate__animated animate__fadeIn username-input"
+      :class="{ 'p-invalid': !validate.address }"
       type="text"
       v-model="address"
     />
     <MDBCol class="d-flex justify-content-start">
-      <MDBBtn @click="cancelCreation" class="utility-btn" outline="black"
-        >{{ localize("cancelCapslock", "default") }}</MDBBtn
-      >
-      <MDBBtn @click="saveCreation" class="utility-btn btn-black">{{ localize("saveCapslock", "default") }}</MDBBtn>
+      <MDBBtn @click="cancelCreation" class="utility-btn" outline="black">{{
+        localize("cancelCapslock", "default")
+      }}</MDBBtn>
+      <MDBBtn @click="saveCreation" class="utility-btn btn-black">{{
+        localize("saveCapslock", "default")
+      }}</MDBBtn>
     </MDBCol>
   </MDBContainer>
 </template>
@@ -29,6 +33,8 @@ import InputText from "primevue/inputtext";
 import { useRouter } from "vue-router";
 import { useStorehousesStore } from "@/stores/storehouse.store";
 import PrintUtil from "@/utils/localization/print.util";
+import ValidatorUtil from "@/utils/validator/validator.util";
+import ValidateRule from "@/utils/validator/validate-rule";
 
 export default {
   name: "CreateStorehouse",
@@ -40,31 +46,63 @@ export default {
     MDBBtn,
     InputText,
   },
+  data() {
+    return {
+      namePlaceholder: this.localize("enterStorehouseName"),
+      addressPlaceholder: this.localize("enterStorehouseAddress"),
+      name: "",
+      address: "",
+      validate: {
+        name: true,
+        address: true,
+      },
+      validator: new ValidatorUtil(),
+    };
+  },
   setup() {
     const router = useRouter();
     const storehouseStore = useStorehousesStore();
     return { router, storehouseStore };
   },
-  data(){
-      return{
-          namePlaceholder: this.localize("enterStorehouseName"),
-          addressPlaceholder: this.localize("enterStorehouseAddress"),
-          name: "",
-          address: "",
-      }
+  created() {
+    const nameValidateRule = new ValidateRule().required();
+    const addressValidateRule = new ValidateRule().required();
+
+    this.validator = this.validator
+      .addRule("name", nameValidateRule)
+      .addRule("address", addressValidateRule);
   },
   methods: {
     localize(key, module = "storehouses") {
-          return PrintUtil.localize(key, module);
+      return PrintUtil.localize(key, module);
+    },
+    showSuccessToast() {
+      this.$toast.add({
+        severity: "success",
+        summary: "Success",
+        detail: "Storehouse creation success",
+        life: 3000,
+      });
     },
     async saveCreation() {
       const newStorehouse = {
         name: this.name,
         address: this.address,
       };
+
+      const validateRes = this.validator.validate(newStorehouse);
+      if (validateRes !== true) {
+        this.validate = validateRes;
+        this.validator.showErrorToast(this.$toast);
+        return;
+      }
+
       const created = await this.storehouseStore.create(newStorehouse);
       if (created.success) {
+        this.showSuccessToast();
         this.router.push({ name: "storehouses" });
+      } else {
+        created.toastIfError(this.$toast, this.$nextTick);
       }
     },
     cancelCreation() {
