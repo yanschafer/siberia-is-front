@@ -137,12 +137,14 @@ export default {
     const usersStore = useUsersStore();
 
     const route = useRoute();
-    await rolesStore.loadSelectedRole(parseInt(route.params.id.toString()));
-    await usersStore.loadUsersList();
 
     return {
       usersStore,
       rolesStore,
+      roleLoadRes: await rolesStore.loadSelectedRole(
+        parseInt(route.params.id.toString()),
+      ),
+      usersLoadRes: await usersStore.loadUsersList(),
     };
   },
   data: () => ({
@@ -168,6 +170,17 @@ export default {
     this.validator = this.validator
       .addRule("name", nameValidateRule)
       .addRule("description", descriptionValidateRule);
+
+    if (!this.roleLoadRes.success) {
+      this.roleLoadRes
+        .getError()
+        .showServerErrorToast(this.$toast, this.$nextTick);
+    }
+    if (!this.usersLoadRes.success) {
+      this.usersLoadRes
+        .getError()
+        .showServerErrorToast(this.$toast, this.$nextTick);
+    }
   },
   methods: {
     localize(key, module) {

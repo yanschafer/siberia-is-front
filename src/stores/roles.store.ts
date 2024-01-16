@@ -41,6 +41,7 @@ export const useRolesStore = defineStore({
       if (role.success) {
         this.selectedRole = role.getData();
       }
+      return role;
     },
 
     async updateRole(roleId: number, roleUpdateDto: UpdateRoleDto) {

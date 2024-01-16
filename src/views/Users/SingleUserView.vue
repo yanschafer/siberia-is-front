@@ -222,16 +222,30 @@ export default {
     const modalStore = useModalStore();
     const route = useRoute();
     const router = useRouter();
-    await rolesStore.loadRolesList();
-    await userStore.loadSelectedUser(parseInt(route.params.id.toString()));
+
     return {
       userStore,
       rolesStore,
       modalStore,
       router,
+      userLoadRes: await userStore.loadSelectedUser(
+        parseInt(route.params.id.toString()),
+      ),
+      rolesLoadRes: await rolesStore.loadRolesList(),
     };
   },
   created() {
+    if (!this.userLoadRes.success) {
+      this.userLoadRes
+        .getError()
+        .showServerErrorToast(this.$toast, this.$nextTick);
+    }
+    if (!this.rolesLoadRes.success) {
+      this.rolesLoadRes
+        .getError()
+        .showServerErrorToast(this.$toast, this.$nextTick);
+    }
+
     this.rolesList = this.selectedUser.roles.map((el) => ({
       id: el.id,
       name: el.name,
