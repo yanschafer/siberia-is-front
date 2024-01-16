@@ -213,6 +213,7 @@ export default defineComponent({
   max-width: 4.5rem;
   font-weight: 800;
   max-height: 2rem;
+  margin: 0;
   padding-left: 2px;
   padding-right: 3px;
   padding-top: 2px;

@@ -28,7 +28,7 @@
               v-else
             >
               <h5 class="field-heading">{{ localize("productNameCapslock") }}</h5>
-              <MDBInput
+              <InputText
                 id="product-name-input"
                 class="input-wrapper animate__animated animate__fadeIn username-input"
                 type="text"
@@ -289,6 +289,7 @@ import DialogComponentTrigger from "@/components/Elements/DialogComponentTrigger
 import ModalComponent from "@/components/Elements/ModalComponent.vue";
 import { useModalStore } from "@/stores/modal.store";
 import PrintUtil from "@/utils/localization/print.util";
+import InputText from "primevue/inputtext";
 
 export default {
   name: "SingleProductView",
@@ -298,6 +299,7 @@ export default {
     ModalComponent,
     TreeDropdownComponent,
     SelectComponent,
+    InputText,
 
     CascadeSelect,
     MDBInput,

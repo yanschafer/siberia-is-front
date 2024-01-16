@@ -165,10 +165,54 @@ ul {
   transition: all 0.3s ease-in-out;
   border-bottom: 2px solid black;
 }
-.p-treeselect:focus-within {
+.p-multiselect {
+  border: 0;
+  border-radius: 0;
+  background-color: #f8f8f8;
+  border-bottom: 2px solid #cecece;
+}
+.p-multiselect:focus-within {
   box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0);
   transition: all 0.3s ease-in-out;
   border-bottom: 2px solid black;
+}
+.p-multiselect:focus {
+  box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0);
+  transition: all 0.3s ease-in-out;
+  border-bottom: 2px solid black;
+}
+.p-multiselect:focus-within {
+  box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0);
+  transition: all 0.3s ease-in-out;
+  border-bottom: 2px solid black;
+}
+.p-multiselect-label {
+  color: black;
+}
+
+.p-dropdown {
+  border: 0;
+  border-radius: 0;
+  background-color: #f8f8f8;
+  border-bottom: 2px solid #cecece;
+}
+.p-dropdown:focus-within {
+  box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0);
+  transition: all 0.3s ease-in-out;
+  border-bottom: 2px solid black;
+}
+.p-dropdown:focus {
+  box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0);
+  transition: all 0.3s ease-in-out;
+  border-bottom: 2px solid black;
+}
+.p-dropdown:focus-within {
+  box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0);
+  transition: all 0.3s ease-in-out;
+  border-bottom: 2px solid black;
+}
+.p-dropdown-label {
+  color: black;
 }
 </style>
 
