@@ -5,7 +5,7 @@
     @close="closeModal"
   />
   <div class="animate__animated animate__fadeIn">
-    <MDBContainer class="animate__animated animate__fadeIn" fluid>
+    <Panel class="animate__animated animate__fadeIn">
       <MDBRow class="d-flex flex-row gap-5 header-row">
         <MDBCol v-if="!editing" class="col-auto">
           <img class="product-img" :src="imageSource" :alt="productName" />
@@ -49,7 +49,7 @@
           </MDBCol>
           <MDBRow>
             <MDBCol class="product-name-col" v-if="!editing">
-              <h1 class="product-heading mb-0">{{ productName }}</h1>
+              <h1 class="product-heading ">{{ productName }}</h1>
             </MDBCol>
             <MDBCol
               class="d-flex gap-1 align-items-center mb-3 animate__animated animate__flipInX animate__faster"
@@ -74,7 +74,7 @@
                 <span v-if="!editing" class="field-value copy-on">{{
                   sku
                 }}</span>
-                <MDBInput
+                <InputText
                   v-else
                   class="animate__animated animate__flipInX animate__faster input-wrapper animate__animated animate__fadeIn username-input"
                   :class="{ 'p-invalid': !validate.vendorCode }"
@@ -121,7 +121,7 @@
                 />
               </h5>
             </MDBCol>
-            <MDBCol class="d-flex flex-column gap-3">
+            <MDBCol v-if="!editing" class="d-flex flex-column gap-3">
               <h5 class="field-heading d-flex gap-1 align-items-center">
                 {{ localize("quantityCapslock") }}
                 <span class="field-value">{{ quantity }}</span>
@@ -140,7 +140,7 @@
           </MDBRow>
         </MDBCol>
       </MDBRow>
-    </MDBContainer>
+    </Panel>
     <MDBContainer class="description-section" fluid>
       <h5 v-if="!editing" class="field-heading">{{ category }}</h5>
       <template v-else>
@@ -161,7 +161,7 @@
         </MDBRow>
       </template>
 
-      <h1 class="product-heading d-flex gap-1 align-items-center">
+      <h1 class="product-heading d-flex gap-1 align-items-center mb-3 mt-3 gap-2">
         Product description
         <span v-if="!editing" class="field-heading collection-name">{{
           collectionName
@@ -188,7 +188,7 @@
           v-else
           class="animate__animated animate__flipInX animate__faster field-heading d-flex gap-1 align-items-center mb-0"
         >
-          {{ localize("newColorNameCapslock") }}
+          <span class="bottom-numbers">{{ localize("newColorNameCapslock") }}</span>
           <InputText
             class="input-wrapper animate__animated animate__fadeIn username-input"
             :class="{ 'p-invalid': !validate.color }"
@@ -200,7 +200,7 @@
       <p v-if="!editing" class="description">{{ productDescription }}</p>
       <textarea
         v-else
-        class="animate__animated animate__flipInX animate__faster username-input"
+        class="animate__animated animate__flipInX animate__faster text-area"
         :class="{ 'p-invalid': !validate.description }"
         id="description"
         type="textarea"
@@ -212,7 +212,7 @@
         <MDBCol>
           <!--          <h5 class="field-heading">VOLUME <span class="field-value">{{ volume }}</span></h5>-->
           <!--          <h5 class="field-heading">SIZE <span class="field-value">{{ size }}</span></h5>-->
-          <h5 class="field-heading">
+          <h5 class="bottom-numbers d-flex flex-column justify-content-start gap-2">
             {{ localize("quantityPerPackageCapslock") }}
             <span v-if="!editing" class="field-value">{{
               quantityPerPackage
@@ -227,7 +227,7 @@
           </h5>
         </MDBCol>
         <MDBCol>
-          <h5 class="field-heading">
+          <h5 class="bottom-numbers d-flex flex-column justify-content-start gap-2">
             {{ localize("distributionPriceCapslock") }}
             <span v-if="!editing" class="field-value">{{
               distributionPrice
@@ -244,7 +244,7 @@
           <!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ distributionMarkup }}</span></h5>-->
         </MDBCol>
         <MDBCol>
-          <h5 class="field-heading">
+          <h5 class="bottom-numbers d-flex flex-column justify-content-start gap-2">
             {{ localize("professionalPriceCapslock") }}
             <span v-if="!editing" class="field-value">{{
               professionalPrice
@@ -261,7 +261,7 @@
           <!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ professionalMarkup }}</span></h5>-->
         </MDBCol>
         <MDBCol>
-          <h5 class="field-heading">
+          <h5 class="bottom-numbers d-flex flex-column justify-content-start gap-2">
             {{ localize("defaultPriceCapslock") }}
             <span v-if="!editing" class="field-value">{{ defaultPrice }}</span>
             <InputText
@@ -276,7 +276,7 @@
           <!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ defaultMarkup }}</span></h5>-->
         </MDBCol>
         <MDBCol>
-          <h5 class="field-heading">
+          <h5 class="bottom-numbers d-flex flex-column justify-content-start gap-2">
             {{ localize("expirationDateCapslock") }}
             <span v-if="!editing" class="field-value">{{
               expirationDate
@@ -322,7 +322,7 @@ import PrintUtil from "@/utils/localization/print.util";
 import InputText from "primevue/inputtext";
 import ValidatorUtil from "@/utils/validator/validator.util";
 import ValidateRule from "@/utils/validator/validate-rule";
-
+import Panel from 'primevue/panel';
 export default {
   name: "SingleProductView",
   components: {
@@ -332,7 +332,7 @@ export default {
     TreeDropdownComponent,
     SelectComponent,
     InputText,
-
+    Panel,
     CascadeSelect,
     MDBInput,
     FileUploadComponent,
@@ -766,7 +766,7 @@ export default {
   font-weight: 600;
   color: #121212;
   width: 100%;
-  margin-bottom: 0;
+  margin-bottom: 2rem;
   font-size: 32px;
 }
 .field-heading {
@@ -778,7 +778,10 @@ export default {
   min-width: max-content;
   align-items: center;
 }
-
+.bottom-numbers {
+  font-size: 16px;
+  width: 100%;
+}
 .copy-on {
   text-decoration: underline;
 }
@@ -788,10 +791,6 @@ export default {
 .sku-img {
   width: 100%;
   max-width: 75%;
-}
-.header-row {
-  border-bottom: 1px solid #eee;
-  padding-bottom: 2rem;
 }
 .description {
   width: 100%;
@@ -864,5 +863,11 @@ export default {
   padding-right: 0.1rem;
   padding-top: 0.1rem;
   padding-bottom: 0.1rem;
+}
+:deep(.p-panel-header) {
+  display: none;
+}
+:deep(.p-panel) {
+  border-top: 1px solid #e5e7eb;
 }
 </style>
