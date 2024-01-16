@@ -12,6 +12,7 @@
           <InputText
             v-else
             class="input-wrapper animate__animated animate__fadeIn username-input"
+            :class="{ 'p-invalid': validate.name }"
             type="text"
             v-model="newUserName"
           />
@@ -59,6 +60,7 @@
       <InputText
         v-else
         class="input-wrapper animate__animated animate__fadeIn username-input"
+        :class="{ 'p-invalid': validate.login }"
         type="text"
         v-model="newUserUsername"
       />
@@ -71,6 +73,7 @@
       <InputText
         v-else
         class="input-wrapper animate__animated animate__fadeIn username-input"
+        :class="{ 'p-invalid': validate.password }"
         type="text"
         v-model="newUserPassword"
       />
@@ -120,6 +123,8 @@ import ModalComponent from "@/components/Elements/ModalComponent.vue";
 import { useModalStore } from "@/stores/modal.store";
 import TokenUtil from "@/utils/token.util";
 import PrintUtil from "@/utils/localization/print.util";
+import ValidateRule from "@/utils/validator/validate-rule";
+import ValidatorUtil from "@/utils/validator/validator.util";
 export default {
   name: "SingleUserView",
   components: {
@@ -154,30 +159,14 @@ export default {
     newUserPassword: "",
     rolesList: [],
     lastRolesList: [],
+    //true => no errors
+    validate: {
+      name: true,
+      login: true,
+      password: true,
+    },
+    validator: new ValidatorUtil(),
   }),
-  async setup() {
-    const userStore = useUsersStore();
-    const rolesStore = useRolesStore();
-    const modalStore = useModalStore();
-    const route = useRoute();
-    const router = useRouter();
-    await rolesStore.loadRolesList();
-    await userStore.loadSelectedUser(parseInt(route.params.id.toString()));
-    return {
-      userStore,
-      rolesStore,
-      modalStore,
-      router,
-    };
-  },
-  created() {
-    this.rolesList = this.selectedUser.roles.map((el) => ({
-      id: el.id,
-      name: el.name,
-    }));
-    this.lastRolesList = [...this.rolesList];
-    console.log(this.rolesList, this.rolesOptions);
-  },
   props: {
     id: {
       type: Number,
@@ -227,7 +216,45 @@ export default {
       });
     },
   },
+  async setup() {
+    const userStore = useUsersStore();
+    const rolesStore = useRolesStore();
+    const modalStore = useModalStore();
+    const route = useRoute();
+    const router = useRouter();
+    await rolesStore.loadRolesList();
+    await userStore.loadSelectedUser(parseInt(route.params.id.toString()));
+    return {
+      userStore,
+      rolesStore,
+      modalStore,
+      router,
+    };
+  },
+  created() {
+    this.rolesList = this.selectedUser.roles.map((el) => ({
+      id: el.id,
+      name: el.name,
+    }));
+    this.lastRolesList = [...this.rolesList];
+
+    const userNameValidateRule = new ValidateRule().skipIfNull().required();
+    const loginValidateRule = new ValidateRule().skipIfNull().required();
+    const passwordRule = new ValidateRule().skipIfNull().required();
+    this.validator = this.validator
+      .addRule("name", userNameValidateRule)
+      .addRule("login", loginValidateRule)
+      .addRule("password", passwordRule);
+  },
   methods: {
+    showSuccessToast() {
+      this.$toast.add({
+        severity: "success",
+        summary: "Success",
+        detail: "User is updated",
+        life: 3000,
+      });
+    },
     localize(key, module = "default") {
       return PrintUtil.localize(key, module);
     },
@@ -247,17 +274,23 @@ export default {
         this.modalStore.hide();
         await this.userStore.loadUsersList();
         this.router.push({ name: "users" });
+      } else {
+        removed.getError().showServerErrorToast(this.$toast, this.$nextTick);
       }
     },
     listContains(list, item) {
       return list.filter((el) => el.id == item).length > 0;
     },
     async rolesAdded(addedItems) {
-      await this.userStore.appendRoles(this.id, addedItems);
+      const res = await this.userStore.appendRoles(this.id, addedItems);
+      if (!res.success)
+        res.getError().showServerErrorToast(this.$toast, this.$nextTick);
       await this.userStore.loadSelectedUser(parseInt(this.id.toString()));
     },
     async rolesRemoved(removedItems) {
-      await this.userStore.removeRoles(this.id, removedItems);
+      const res = await this.userStore.removeRoles(this.id, removedItems);
+      if (!res.success)
+        res.getError().showServerErrorToast(this.$toast, this.$nextTick);
       await this.userStore.loadSelectedUser(parseInt(this.id.toString()));
     },
     startEditing() {
@@ -278,10 +311,26 @@ export default {
           : this.newUserUsername;
       const newPassword =
         this.newUserPassword == "" ? null : this.newUserPassword;
+
       const userUpdateDto = new UpdateUserDto(newName, newLogin, newPassword);
+      const validateRes = this.validator.validate(userUpdateDto);
+      if (validateRes !== true) {
+        this.validate = validateRes;
+        this.validator.showErrorToast(this.$toast);
+        return;
+      }
       const result = await this.userStore.updateUser(this.id, userUpdateDto);
       this.editing = !result.success;
-      //TODO: Check for errors
+      if (result.success) this.showSuccessToast();
+      else {
+        const error = result.getError();
+        if (error.httpStatusCode == 415) {
+          this.validator.showErrorToast(this.$toast);
+          return;
+        } else {
+          error.showServerErrorToast(this.$toast, this.$nextTick);
+        }
+      }
     },
     cancelEditing() {
       this.editing = false;

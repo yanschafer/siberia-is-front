@@ -6,6 +6,7 @@
         <InputText
           :placeholder="namePlaceholder"
           class="input-wrapper animate__animated animate__fadeIn username-input"
+          :class="{ 'p-invalid': !validate.name }"
           type="text"
           v-model="name"
         />
@@ -13,6 +14,7 @@
         <InputText
           :placeholder="loginPlaceholder"
           class="input-wrapper animate__animated animate__fadeIn username-input"
+          :class="{ 'p-invalid': !validate.login }"
           type="text"
           v-model="login"
         />
@@ -22,6 +24,7 @@
         <InputText
           :placeholder="passwordPlaceholder"
           class="input-wrapper animate__animated animate__fadeIn username-input"
+          :class="{ 'p-invalid': !validate.password }"
           type="text"
           v-model="password"
         />
@@ -53,6 +56,9 @@ import { useUsersStore } from "@/stores/user.store";
 import CreateUserDto from "@/api/modules/user/dto/create-user.dto";
 import { useRouter } from "vue-router";
 import PrintUtil from "@/utils/localization/print.util";
+import ValidatorUtil from "@/utils/validator/validator.util";
+import ValidateRule from "@/utils/validator/validate-rule";
+import loggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "CreateUser",
@@ -70,9 +76,16 @@ export default {
     namePlaceholder: PrintUtil.localize("namePlaceholder", "user"),
     loginPlaceholder: PrintUtil.localize("loginPlaceholder", "user"),
     passwordPlaceholder: PrintUtil.localize("passwordPlaceholder", "user"),
+    //true => no errors
+    validate: {
+      name: true,
+      login: true,
+      password: true,
+    },
     name: "",
     login: "",
     password: "",
+    validator: new ValidatorUtil(),
   }),
   async setup() {
     const userStore = useUsersStore();
@@ -82,7 +95,24 @@ export default {
       router,
     };
   },
+  created() {
+    const userNameValidateRule = new ValidateRule().required();
+    const loginValidateRule = new ValidateRule().required();
+    const passwordRule = new ValidateRule().required();
+    this.validator = this.validator
+      .addRule("name", userNameValidateRule)
+      .addRule("login", loginValidateRule)
+      .addRule("password", passwordRule);
+  },
   methods: {
+    showSuccessToast() {
+      this.$toast.add({
+        severity: "success",
+        summary: "Success",
+        detail: "User is created",
+        life: 3000,
+      });
+    },
     localize(key, module = "default") {
       return PrintUtil.localize(key, module);
     },
@@ -90,24 +120,37 @@ export default {
       this.router.push({ name: "users" });
     },
     async saveCreation() {
-      const created = await this.userStore.create(
-        new CreateUserDto(
-          {
-            name: this.name,
-            login: this.login,
-            password: this.password,
-          },
-          [],
-          [],
-        ),
+      const createDto = new CreateUserDto(
+        {
+          name: this.name,
+          login: this.login,
+          password: this.password,
+        },
+        [],
+        [],
       );
+      const validateRes = this.validator.validate(createDto.params);
+      if (validateRes !== true) {
+        this.validate = validateRes;
+        loggerUtil.debug(this.validate);
+        this.validator.showErrorToast(this.$toast);
+        return;
+      }
+      const created = await this.userStore.create(createDto);
       if (created.success) {
+        this.showSuccessToast();
         this.router.push({
           name: "User",
           params: { id: created.getData().id.toString() },
         });
       } else {
-        //TODO: Check for errors
+        const error = created.getError();
+        if (error.httpStatusCode == 415) {
+          this.validator.showErrorToast(this.$toast);
+          return;
+        } else {
+          error.showServerErrorToast(this.$toast, this.$nextTick);
+        }
       }
     },
   },
