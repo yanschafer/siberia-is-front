@@ -10,6 +10,7 @@ import loggerUtil from "@/utils/logger/logger.util";
 import OutcomeTransactionModel from "@/api/modules/transaction/models/outcome-transaction.model";
 import TransferTransactionModel from "@/api/modules/transaction/models/transfer-transaction.model";
 import StockInputDto from "@/api/modules/stock/dto/stock-input.dto";
+import PrintUtil from "@/utils/localization/print.util";
 
 export const useStorehousesStore = defineStore({
   id: "storehouses",
@@ -18,8 +19,8 @@ export const useStorehousesStore = defineStore({
     storehousesRows: [],
     storehouseListForInputs: [],
     storehousesColumns: [
-      { field: "name", header: "NAME" },
-      { field: "address", header: "ADDRESS" },
+      { field: "name", header: PrintUtil.localize("nameCapslock", "default") },
+      { field: "address", header: PrintUtil.localize("addressCapslock", "storehouses") },
     ],
     selectedStore: {},
   }),

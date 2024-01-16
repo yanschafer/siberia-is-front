@@ -1,3 +1,5 @@
+import PrintUtil from "@/utils/localization/print.util";
+
 export default class ApiErrorDto {
   constructor(
     public httpStatusCode: number,
@@ -7,11 +9,11 @@ export default class ApiErrorDto {
 
   public showServerErrorToast(toast, nextTick) {
     const errorMessage = String(this.data);
-    const errorDetail = `Something went wrong, provide this error code to administrator.
+    const errorDetail = `${PrintUtil.localize("somethingWrong", "default")}
     <p style="font-weight: 600; text-decoration: underline; cursor: pointer;">${errorMessage}</p>`;
     toast.add({
       severity: "error",
-      summary: "Error occurred",
+      summary: PrintUtil.localize("errorOccurred", "default"),
       detail: errorDetail,
       life: 10000,
     });
@@ -26,7 +28,7 @@ export default class ApiErrorDto {
           navigator.clipboard.writeText(errorMessage);
           toast.add({
             severity: "success",
-            summary: "Error message copied to clipboard",
+            summary: PrintUtil.localize("errorMessageCopiedToClipboard", "default"),
             life: 2000,
           });
         });

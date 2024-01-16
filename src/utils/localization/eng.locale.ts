@@ -6,6 +6,9 @@ export default {
       password: "Password",
       something_wrong: "Something went wrong. Please, contact administrator.",
       confirmDeletion: "Confirm deletion",
+      errorMessageCopiedToClipboard: "Error message copied to clipboard",
+      errorOccurred: "Error occurred",
+      somethingWrong: "Something went wrong, provide this error code to administrator.",
 
       cancelCapslock: "CANCEL",
       editCapslock: "EDIT",
@@ -146,6 +149,38 @@ export default {
       noCategory: "No category",
       noCollection: "No collection",
       thisActionCannotBeUndoneThisProductDataWillBeLost: "This action cannot be undone, this product data will be lost",
+    },
+    storehouses:{
+      //CreateStorehouse.vue
+      storehouseName: "Storehouse name",
+      storehouseAddress: "Storehouse address",
+      enterStorehouseName: "Enter storehouse name",
+      enterStorehouseAddress: "Enter storehouse address",
+
+      //SingleStorehouseView.vue
+      editStorehouse: "Edit storehouse",
+      deleteStorehouseCapslock: "DELETE STOREHOUSE",
+      newArrivalCapslock: "+ NEW ARRIVAL",
+      newSaleCapslock: "+ NEW SALE",
+      newRequestCapslock: "+ NEW REQUEST",
+      newArrivalRegistration: "New Arrival Registration",
+      newSaleRegistration: "New Sale Registration",
+      newRequestRegistration: "New Request Registration",
+      confirmDeletion: "Confirm deletion",
+      deleteWarn: "This action cannot be undone, this storehouse data will be lost",
+      messageForUser: "Are you sure you want to delete storehouse named",
+      changesWereSaved: "Changes were saved",
+      success: "Success",
+
+      //storehouse.store.ts
+      addressCapslock: "ADDRESS",
+
+      //StorehouseOperation.vue
+      selectAProduct: "Select a product",
+
+
+
+
     },
     storehousesSave: {
       token_is_dead: "Expired token. Please, relogin",

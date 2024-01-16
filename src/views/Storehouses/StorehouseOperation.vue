@@ -14,8 +14,8 @@
       <MDBBtn class="utility-btn btn-black" @click="add">+</MDBBtn>
     </MDBCol>
     <MDBCol>
-      <MDBBtn class="utility-btn btn-black" @click="cancel">CANCEL</MDBBtn>
-      <MDBBtn class="utility-btn btn-success" @click="save">SAVE</MDBBtn>
+      <MDBBtn class="utility-btn btn-black" @click="cancel">{{ localize("cancelCapslock", "default") }}</MDBBtn>
+      <MDBBtn class="utility-btn btn-success" @click="save">{{ localize("saveCapslock", "default") }}</MDBBtn>
     </MDBCol>
   </MDBRow>
   <TableComponent :rows="addedList" :columns="addedColumns" :searchTerm="addedSearchTerm" />
@@ -26,6 +26,7 @@ import SelectComponent from "@/components/Elements/SelectComponent.vue";
 import TableComponent from "@/components/Elements/TableComponent.vue";
 import {useProductsStore} from "@/stores/products.store.js";
 import {useStorehousesStore} from "@/stores/storehouse.store";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "StorehouseOperation",
@@ -47,19 +48,21 @@ export default {
   emits: [
     "cancel", "save"
   ],
-  data: () => ({
-    selectedProduct: {},
-    quantity: null,
-    price: null,
-    addedSearchTerm: "",
-    addedList: [],
-    placeholder: "Select a product",
-    addedColumns: [
-      { field: 'name', header: 'NAME' },
-      { field: 'sku', header: 'SKU' },
-      { field: 'quantity', header: 'QUANTITY' },
-    ]
-  }),
+  data (){
+      return{
+          selectedProduct: {},
+          quantity: null,
+          price: null,
+          addedSearchTerm: "",
+          addedList: [],
+          placeholder: this.localize("selectAProduct"),
+          addedColumns: [
+              { field: 'name', header: this.localize("nameCapslock", "default") },
+              { field: 'sku', header: this.localize("skuCapslock", "products") },
+              { field: 'quantity', header: this.localize("quantityCapslock", "products") },
+          ]
+      }
+  },
   async setup() {
     const productStore = useProductsStore()
     const storehouseStore = useStorehousesStore()
@@ -70,13 +73,16 @@ export default {
   },
   created() {
     if (this.showPrice)
-      this.addedColumns.push({ field: 'price', header: 'PRICE' })
+      this.addedColumns.push({ field: 'price', header: this.localize("priceCapslock", "products") })
     this.storehouseStore.$onAction(({name}) => {
       if (name == "operationSucceed")
         this.addedList = []
     })
   },
   methods: {
+    localize(key, module = "storehouses") {
+          return PrintUtil.localize(key, module);
+    },
     add() {
       if (!this.selectedProduct || !this.quantity)
         return

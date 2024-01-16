@@ -28,16 +28,16 @@
       @click="startEditing"
       class="utility-btn"
       outline="black"
-      >Edit storehouse</MDBBtn
+      >{{ localize("editStorehouse") }}</MDBBtn
     >
     <MDBCol v-else class="d-flex justify-content-start">
       <MDBBtn @click="cancelEditing" class="utility-btn" outline="black"
-        >CANCEL</MDBBtn
+        >{{ localize("cancelCapslock", "default") }}</MDBBtn
       >
       <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger"
-        >DELETE STOREHOUSE</MDBBtn
+        >{{ localize("deleteStorehouseCapslock") }}</MDBBtn
       >
-      <MDBBtn @click="saveChanges" class="utility-btn btn-black">SAVE</MDBBtn>
+      <MDBBtn @click="saveChanges" class="utility-btn btn-black">{{ localize("saveCapslock", "default") }}</MDBBtn>
     </MDBCol>
   </MDBContainer>
   <MDBContainer class="d-flex flex-column gap-3">
@@ -47,13 +47,13 @@
       <h1 class="storehouse-heading">Products in stock</h1>
       <template v-if="!newArrival && !newSale && !newRequest">
         <MDBBtn @click="addNewArrival" class="utility-btn" outline="black"
-          >+ NEW ARRIVAL</MDBBtn
+          >{{ localize("newArrivalCapslock") }}</MDBBtn
         >
         <MDBBtn @click="addNewSale" class="utility-btn" outline="black"
-          >+ NEW SALE</MDBBtn
+          >{{ localize("newSaleCapslock") }}</MDBBtn
         >
         <MDBBtn @click="addNewRequest" class="utility-btn" outline="black"
-          >+ NEW REQUEST</MDBBtn
+          >{{ localize("newRequestCapslock") }}</MDBBtn
         >
         <SearchComponent class="search" @search="handleSearch" />
         <TableComponent
@@ -65,14 +65,14 @@
       <template v-else>
         <template v-if="newArrival">
           <StorehouseOperation
-            title="New Arrival Registration"
+            :title="localize('newArrivalRegistration')"
             @cancel="newArrival = false"
             @save="saveNewArrival"
           ></StorehouseOperation>
         </template>
         <template v-else-if="newSale">
           <StorehouseOperation
-            title="New Sale Registration"
+            :title="localize('newSaleRegistration')"
             :need-validation="true"
             :amount-validation="productListValidateObject"
             @cancel="newSale = false"
@@ -81,7 +81,7 @@
         </template>
         <template v-else-if="newRequest">
           <StorehouseOperation
-            title="New Request Registration"
+            :title="localize('newRequestRegistration')"
             :show-price="false"
             @cancel="newRequest = false"
             @save="saveNewRequest"
@@ -133,27 +133,29 @@ export default {
       required: true,
     },
   },
-  data: () => ({
-    newArrival: false,
-    newSale: false,
-    modalTitle: "Confirm deletion",
-    disclaimerText:
-      "This action cannot be undone, this storehouse data will be lost",
-    newRequest: false,
-    editing: false,
-    searchTerm: "",
-    newStorehouseName: "",
-    originalStorehouseName: "",
-    newStorehouseAdress: "",
-    originalStorehouseAdress: "",
-    productColumns: [
-      { field: "name", header: "NAME" },
-      { field: "vendorCode", header: "SKU" },
-      { field: "quantity", header: "QUANTITY" },
-      { field: "price", header: "PRICE" },
-    ],
-    error: "",
-  }),
+  data () {
+      return{
+          newArrival: false,
+          newSale: false,
+          modalTitle: this.localize("confirmDeletion"),
+          disclaimerText:
+                  this.localize("deleteWarn"),
+          newRequest: false,
+          editing: false,
+          searchTerm: "",
+          newStorehouseName: "",
+          originalStorehouseName: "",
+          newStorehouseAdress: "",
+          originalStorehouseAdress: "",
+          productColumns: [
+              { field: "name", header: this.localize("nameCapslock", "default") },
+              { field: "vendorCode", header: this.localize("skuCapslock", "products") },
+              { field: "quantity", header: this.localize("quantityCapslock", "products") },
+              { field: "price", header: this.localize("priceCapslock", "products") },
+          ],
+          error: "",
+      }
+  },
   async setup() {
     const productStore = useProductsStore();
 
@@ -178,7 +180,7 @@ export default {
   },
   computed: {
     modalText() {
-      return `Are you sure you want to delete storehouse named "${this.storehouseName}?"`;
+      return `${this.localize("messageForUser")} "${this.storehouseName}?"`;
     },
     selectedStorehouse() {
       return this.storehouseStore.getSelectedStorehouse;
@@ -201,11 +203,14 @@ export default {
     },
   },
   methods: {
+    localize(key, module = "storehouses") {
+          return PrintUtil.localize(key, module);
+    },
     showSuccessToast() {
       this.$toast.add({
         severity: "success",
-        summary: "Success",
-        detail: "Changes were saved",
+        summary: this.localize("success"),
+        detail: this.localize("changesWereSaved"),
         life: 3000,
       });
     },
@@ -233,7 +238,7 @@ export default {
             navigator.clipboard.writeText(errorMessage);
             this.$toast.add({
               severity: "success",
-              summary: "Error message copied to clipboard",
+              summary: this.localize("errorMessageCopiedToClipboard", "default"),
               life: 2000,
             });
           });
