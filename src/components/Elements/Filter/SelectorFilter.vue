@@ -1,13 +1,18 @@
 <template>
-  <span class="filtername">{{ title }}</span>
-  <MultiSelectComponent
-    :start-items="[]"
-    :options="items"
-    option-label="name"
-    :placeholder="title"
-    :disabled="false"
-    @items-changed="handleChange"
-  />
+  <div class="container d-flex flex-column m-0 p-1">
+    <span class="filtername">{{ title }}</span>
+    <MultiSelectComponent
+        :start-items="[]"
+        :options="items"
+        option-label="name"
+        :placeholder="title"
+        :disabled="false"
+        @items-changed="handleChange"
+    />
+    <hr class="hr" />
+  </div>
+
+
 </template>
 
 <script lang="ts">
@@ -42,5 +47,8 @@ export default {
 }
 :deep(.p-inputnumber-input) {
   width: 4rem;
+}
+.hr {
+  border: 1px solid #ececec;
 }
 </style>

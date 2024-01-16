@@ -1,6 +1,9 @@
 <template>
-  <span class="filtername">{{ title }}</span>
-  <InputText @change="handleOnchange" type="text" v-model="value" />
+  <div class="container d-flex flex-column m-0 p-1">
+    <span class="filtername">{{ title }}</span>
+    <InputText @change="handleOnchange" type="text" v-model="value" />
+    <hr class="hr">
+  </div>
 </template>
 
 <script lang="ts">
@@ -33,5 +36,8 @@ export default {
 }
 :deep(.p-inputnumber-input) {
   width: 4rem;
+}
+.hr {
+  border: 1px solid #ececec;
 }
 </style>

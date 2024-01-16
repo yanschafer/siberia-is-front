@@ -1,44 +1,47 @@
 <template>
-  <div :class="{ 'sidebar-collapsed': collapsed }" class="sidebar">
+  <div :class="{ 'sidebar-collapsed': collapsed }">
     <button @click="toggleSidebar" class="toggle-btn">
       <IconAdjustmentsHorizontal color="#121212" :size="24" stroke-width="1" />
     </button>
     <div v-if="collapsed"></div>
-    <div
-      class="animate__animated animate__fadeIn animate__delay-0.5s d-flex flex-column"
-      v-else="!collapsed"
-    >
-      <template v-for="filter in filters">
-        <TextFilter
-          v-if="isText(filter)"
-          :title="filter.title"
-          @change="handleFilterChange(filter, $event)"
-        />
-        <selector-filter
-          v-if="isSelect(filter)"
-          :title="filter.title"
-          :items="filter.items"
-          @change="handleFilterChange(filter, $event)"
-        />
-        <tree-selector-filter
-          v-if="isTreeSelect(filter)"
-          :title="filter.title"
-          :items="filter.items"
-          @change="handleFilterChange(filter, $event)"
-        />
-        <min-max-filter
-          v-if="isNumber(filter)"
-          :title="filter.title"
-          @change="handleFilterChange(filter, $event)"
-        />
-        <min-max-date-filter
-          v-if="isDate(filter)"
-          :title="filter.title"
-          @change="handleFilterChange(filter, $event)"
-        />
-      </template>
-      <MDBBtn @click="search">Search</MDBBtn>
+    <div class="sidebar" v-else>
+      <ScrollPanel class="sidebar animate__animated animate__fadeIn">
+        <div class="top-gradient-overlay">
+        </div>
+        <template v-for="filter in filters">
+          <TextFilter
+              v-if="isText(filter)"
+              :title="filter.title"
+              @change="handleFilterChange(filter, $event)"
+          />
+          <selector-filter
+              v-if="isSelect(filter)"
+              :title="filter.title"
+              :items="filter.items"
+              @change="handleFilterChange(filter, $event)"
+          />
+          <tree-selector-filter
+              v-if="isTreeSelect(filter)"
+              :title="filter.title"
+              :items="filter.items"
+              @change="handleFilterChange(filter, $event)"
+          />
+          <min-max-filter
+              v-if="isNumber(filter)"
+              :title="filter.title"
+              @change="handleFilterChange(filter, $event)"
+          />
+          <min-max-date-filter
+              v-if="isDate(filter)"
+              :title="filter.title"
+              @change="handleFilterChange(filter, $event)"
+          />
+        </template>
+        <MDBBtn class="utility-btn btn-black" @click="search">Search</MDBBtn>
+        <div class="bottom-gradient-overlay"></div>
+      </ScrollPanel>
     </div>
+
   </div>
 </template>
 
@@ -58,6 +61,7 @@ import ProductSearchFilterDto from "@/api/modules/product/dto/product-search-fil
 import FieldSearchWrapperDto from "@/utils/crud/dto/field-search-wrapper.dto";
 import MinMaxDateFilter from "@/components/Elements/Filter/MinMaxDateFilter.vue";
 import TreeSelectorFilter from "@/components/Elements/Filter/TreeSelectorFilter.vue";
+import ScrollPanel from 'primevue/scrollpanel';
 
 export default {
   name: "FiltersSidebarComponent",
@@ -71,6 +75,7 @@ export default {
     IconAdjustmentsHorizontal,
     InputText,
     InputNumber,
+    ScrollPanel,
     MDBRow,
     MDBCol,
     MDBBtn,
@@ -156,12 +161,13 @@ export default {
 
 <style scoped>
 .sidebar {
-  width: 200px;
-  height: 100vh;
+  width: 240px;
+  height: 70vh;
   background-color: #ffffff;
   color: white;
   transition: width 0.5s ease;
   border-right: 2px solid #efefef;
+  padding-right: 1rem;
 }
 
 .sidebar-collapsed {
@@ -187,4 +193,8 @@ export default {
 :deep(.p-inputnumber-input) {
   width: 4rem;
 }
+.filter-group {
+  height: 73vh;
+}
+
 </style>

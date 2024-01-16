@@ -1,13 +1,15 @@
 <template>
-  <span class="filtername">{{ title }}</span>
-  <TreeDropdownComponent
-    :placeholder="title"
-    class="animate__animated animate__flipInX animate__faster"
-    :nodes="items"
-    v-model="value"
-    :multiselect="true"
-    @change="handleChange"
-  />
+  <div class="container d-flex flex-column m-0 p-1">
+    <span class="filtername">{{ title }}</span>
+    <TreeDropdownComponent
+        :placeholder="title"
+        :nodes="items"
+        v-model="value"
+        :multiselect="true"
+        @change="handleChange"
+    />
+    <hr class="hr" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -34,4 +36,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.hr {
+  border: 1px solid #ececec;
+}
+.filtername {
+  color: black;
+}
+</style>

@@ -4,6 +4,7 @@
   <input type="datetime-local" v-model="min" @change="handleChange" />
   <span class="filtername">max</span>
   <input type="datetime-local" v-model="max" @change="handleChange" />
+  <hr class="hr" />
 </template>
 
 <script lang="ts">
@@ -36,5 +37,8 @@ export default {
 <style scoped>
 .filtername {
   color: black;
+}
+.hr {
+  border: 1px solid #ececec;
 }
 </style>

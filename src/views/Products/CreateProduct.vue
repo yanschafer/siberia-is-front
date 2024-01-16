@@ -451,4 +451,5 @@ export default {
   padding-top: 0.1rem;
   padding-bottom: 0.1rem;
 }
+.p-multiselect-label .p-placeholder }
 </style>

@@ -1,29 +1,32 @@
 <template>
-  <span class="filtername">{{ title }}</span>
-  <MDBRow class="d-flex flex-row flex-nowrap">
-    <MDBCol class="col-auto d-flex flex-column">
-      <span class="filtername">min</span>
-      <InputText
-        type="number"
-        style="width: 4rem !important"
-        v-model.number="min"
-        inputId="withoutgrouping"
-        :useGrouping="false"
-        @change="handleChange"
-      />
-    </MDBCol>
-    <MDBCol class="col-auto d-flex flex-column">
-      <span class="filtername">max</span>
-      <InputText
-        type="number"
-        style="width: 4rem !important"
-        v-model.number="max"
-        inputId="withoutgrouping"
-        :useGrouping="false"
-        @change="handleChange"
-      />
-    </MDBCol>
-  </MDBRow>
+  <div class="container d-flex flex-column m-0 p-1">
+    <span class="filtername">{{ title }}</span>
+    <MDBRow class="d-flex flex-row flex-nowrap">
+      <MDBCol class="col-auto d-flex flex-column">
+        <span class="filtername">min</span>
+        <InputText
+            type="number"
+            style="width: 4rem !important"
+            v-model.number="min"
+            inputId="withoutgrouping"
+            :useGrouping="false"
+            @change="handleChange"
+        />
+      </MDBCol>
+      <MDBCol class="col-auto d-flex flex-column">
+        <span class="filtername">max</span>
+        <InputText
+            type="number"
+            style="width: 4rem !important"
+            v-model.number="max"
+            inputId="withoutgrouping"
+            :useGrouping="false"
+            @change="handleChange"
+        />
+      </MDBCol>
+    </MDBRow>
+    <hr class="hr" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -60,5 +63,8 @@ export default {
 }
 :deep(.p-inputnumber-input) {
   width: 4rem;
+}
+.hr {
+  border: 1px solid #ececec;
 }
 </style>
