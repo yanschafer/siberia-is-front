@@ -436,6 +436,12 @@ export default {
 
       const creationResult = await this.productStore.create(newProductData);
       if (creationResult.success) {
+        this.$toast.add({
+          severity: "success",
+          summary: "Success",
+          detail: `Product successfully created`,
+          life: 3000,
+        });
         this.router.push({
           name: "Product details",
           params: { id: creationResult.getData().id.toString() },
