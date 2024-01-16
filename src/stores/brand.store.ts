@@ -18,17 +18,11 @@ export const useBrandStore = defineStore({
     },
     async loadBrandsList() {
       const brandModel = new BrandModel();
-      try {
-        const brandList = await brandModel.getAll();
-        if (brandList.success) {
-          this.brandItems = brandList.getData();
-          LoggerUtil.debug(this.brandItems);
-        } else {
-          console.error("Failed to load brand list");
-        }
-      } catch (error) {
-        console.error("An error occurred while loading brand list:", error);
+      const brandList = await brandModel.getAll();
+      if (brandList.success) {
+        this.brandItems = brandList.getData();
       }
+      return brandList;
     },
     async remove(brandId: number) {
       const brandModel = new BrandModel();

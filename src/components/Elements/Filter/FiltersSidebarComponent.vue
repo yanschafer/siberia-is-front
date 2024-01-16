@@ -6,42 +6,40 @@
     <div v-if="collapsed"></div>
     <div class="sidebar" v-else>
       <ScrollPanel class="sidebar animate__animated animate__fadeIn">
-        <div class="top-gradient-overlay">
-        </div>
+        <div class="top-gradient-overlay"></div>
         <template v-for="filter in filters">
           <TextFilter
-              v-if="isText(filter)"
-              :title="filter.title"
-              @change="handleFilterChange(filter, $event)"
+            v-if="isText(filter)"
+            :title="filter.title"
+            @change="handleFilterChange(filter, $event)"
           />
           <selector-filter
-              v-if="isSelect(filter)"
-              :title="filter.title"
-              :items="filter.items"
-              @change="handleFilterChange(filter, $event)"
+            v-if="isSelect(filter)"
+            :title="filter.title"
+            :items="filter.items"
+            @change="handleFilterChange(filter, $event)"
           />
           <tree-selector-filter
-              v-if="isTreeSelect(filter)"
-              :title="filter.title"
-              :items="filter.items"
-              @change="handleFilterChange(filter, $event)"
+            v-if="isTreeSelect(filter)"
+            :title="filter.title"
+            :items="filter.items"
+            @change="handleFilterChange(filter, $event)"
           />
           <min-max-filter
-              v-if="isNumber(filter)"
-              :title="filter.title"
-              @change="handleFilterChange(filter, $event)"
+            v-if="isNumber(filter)"
+            :title="filter.title"
+            @change="handleFilterChange(filter, $event)"
           />
           <min-max-date-filter
-              v-if="isDate(filter)"
-              :title="filter.title"
-              @change="handleFilterChange(filter, $event)"
+            v-if="isDate(filter)"
+            :title="filter.title"
+            @change="handleFilterChange(filter, $event)"
           />
         </template>
         <MDBBtn class="utility-btn btn-black" @click="search">Search</MDBBtn>
         <div class="bottom-gradient-overlay"></div>
       </ScrollPanel>
     </div>
-
   </div>
 </template>
 
@@ -61,7 +59,7 @@ import ProductSearchFilterDto from "@/api/modules/product/dto/product-search-fil
 import FieldSearchWrapperDto from "@/utils/crud/dto/field-search-wrapper.dto";
 import MinMaxDateFilter from "@/components/Elements/Filter/MinMaxDateFilter.vue";
 import TreeSelectorFilter from "@/components/Elements/Filter/TreeSelectorFilter.vue";
-import ScrollPanel from 'primevue/scrollpanel';
+import ScrollPanel from "primevue/scrollpanel";
 
 export default {
   name: "FiltersSidebarComponent",
@@ -112,7 +110,6 @@ export default {
       this.filtersObject[filterItem.key].value = value;
     },
     search() {
-      loggerUtil.debug(this.filtersObject);
       const searchFilterDto = {};
       Object.keys(this.filtersObject).map((key) => {
         const filter = this.filtersObject[key];
@@ -196,5 +193,4 @@ export default {
 .filter-group {
   height: 73vh;
 }
-
 </style>

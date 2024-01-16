@@ -14,9 +14,15 @@ export const useProductsStore = defineStore({
     productRows: [],
     productColumns: [
       { field: "name", header: PrintUtil.localize("nameCapslock", "default") },
-      { field: "vendorCode", header: PrintUtil.localize("skuCapslock", "products") },
+      {
+        field: "vendorCode",
+        header: PrintUtil.localize("skuCapslock", "products"),
+      },
       //Price field = Default price (commonPrice on backend)
-      { field: "price", header: PrintUtil.localize("priceCapslock", "products") },
+      {
+        field: "price",
+        header: PrintUtil.localize("priceCapslock", "products"),
+      },
     ],
     selectedProduct: {},
   }),
@@ -34,6 +40,7 @@ export const useProductsStore = defineStore({
       if (getProducts.success) {
         this.productRows = getProducts.getData();
       }
+      return getProducts;
     },
     async loadSelectedProduct(productId: number) {
       const productModel = new ProductModel();
@@ -41,6 +48,7 @@ export const useProductsStore = defineStore({
       if (product.success) {
         this.selectedProduct = product.getData();
       }
+      return product;
     },
     async updateProduct(
       productId: number,

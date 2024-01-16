@@ -29,7 +29,7 @@
 import TreeSelect from "primevue/treeselect";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
-import OverlayPanel from 'primevue/overlaypanel';
+import OverlayPanel from "primevue/overlaypanel";
 import loggerUtil from "@/utils/logger/logger.util";
 import { ref } from "vue";
 
@@ -45,7 +45,7 @@ export default {
       default: false,
     },
     modelValue: {
-      type: String,
+      type: Object,
     },
   },
   data() {
@@ -54,7 +54,7 @@ export default {
       searchText: "",
       expandedKeys: [],
       addNew: null,
-      inputName: 'Create name for a collection'
+      inputName: "Create name for a collection",
     };
   },
   mounted() {

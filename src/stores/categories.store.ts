@@ -17,22 +17,14 @@ export const useCategoriesStore = defineStore({
     },
     async loadCategoriesList() {
       const categoriesModel = new CategoryModel();
-      try {
-        const categoryList = await categoriesModel.getAll();
-        if (categoryList.success) {
-          this.categoryItems = this.transformCategoriesData(
-            categoryList.getData(),
-            0,
-          );
-        } else {
-          console.error("Failed to load categories list");
-        }
-      } catch (error) {
-        console.error(
-          "An error occurred while loading categories list:",
-          error,
+      const categoryList = await categoriesModel.getAll();
+      if (categoryList.success) {
+        this.categoryItems = this.transformCategoriesData(
+          categoryList.getData(),
+          0,
         );
       }
+      return categoryList;
     },
 
     transformCategoriesData(data, level) {

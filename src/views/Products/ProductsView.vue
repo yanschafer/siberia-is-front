@@ -14,7 +14,7 @@
             <TableComponent
               :editableColumns="editableColumns"
               :showEditColumn="true"
-              :rows="productsStore.productRows"
+              :rows="getFilteredProducts"
               :columns="productsStore.productColumns"
               :searchTerm="productsStore.searchTerm"
               @rowClick="handleRowClick"
@@ -131,10 +131,7 @@ export default {
     const collectionStore = useCollectionStore();
     const route = useRoute();
     const router = useRouter();
-    await productsStore.loadProductList();
-    await brandStore.loadBrandsList();
-    await collectionStore.loadCollectionList();
-    await categoryStore.loadCategoriesList();
+
     return {
       brandStore,
       collectionStore,
@@ -142,9 +139,18 @@ export default {
       productsStore,
       route,
       router,
+      loadProductListRes: await productsStore.loadProductList(),
+      loadBrandListRes: await brandStore.loadBrandsList(),
+      loadCollectionListRes: await collectionStore.loadCollectionList(),
+      loadCategoryListRes: await categoryStore.loadCategoriesList(),
     };
   },
-  created() {},
+  created() {
+    this.loadProductListRes.toastIfError(this.$toast, this.$nextTick);
+    this.loadBrandListRes.toastIfError(this.$toast, this.$nextTick);
+    this.loadCollectionListRes.toastIfError(this.$toast, this.$nextTick);
+    this.loadCategoryListRes.toastIfError(this.$toast, this.$nextTick);
+  },
   computed: {
     getFilteredProducts() {
       const searchTerm = this.productsStore.getSearchTerm;
@@ -175,29 +181,49 @@ export default {
   },
   methods: {
     localize(key, module = "products") {
-          return PrintUtil.localize(key, module);
+      return PrintUtil.localize(key, module);
     },
     handleSearch(searchTerm) {
       this.productsStore.searchTerm = searchTerm;
     },
     async handleFiltersSearch(filters) {
-      await this.productsStore.loadProductList(
+      const loadRes = await this.productsStore.loadProductList(
         new ProductSearchFilterDto(filters),
       );
+      loadRes.toastIfError(this.$toast, this.$nextTick);
     },
     handleRowClick(row) {
-      console.log("Clicked row with id:", row.id);
       this.router.push({
         name: "Product details",
         params: { id: row.id.toString() },
       });
     },
     async handleRowEdit(row) {
-      //TODO: Check that price is not empty
+      if (row.price == "") {
+        this.$toast.add({
+          severity: "error",
+          summary: "Update Failed",
+          detail: "Price cant be empty",
+          life: 3000,
+        });
+        return;
+      }
       const updated = await this.productsStore.updateProduct(row.id, {
         commonPrice: row.price,
       });
-      //TODO: Check for errors
+      if (!updated.success) {
+        const error = updated.getError();
+        if (error.httpStatusCode == 415) {
+          this.$toast.add({
+            severity: "error",
+            summary: "Update Failed",
+            detail: "Bad price provided",
+            life: 3000,
+          });
+        } else {
+          error.showServerErrorToast(this.$toast, this.$nextTick);
+        }
+      }
     },
   },
 };
