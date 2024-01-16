@@ -156,6 +156,7 @@ export default {
       noCategory: "No category",
       noCollection: "No collection",
       thisActionCannotBeUndoneThisProductDataWillBeLost: "This action cannot be undone, this product data will be lost",
+      productDescription: "Product description",
     },
     storehouses:{
       //CreateStorehouse.vue
@@ -192,6 +193,10 @@ export default {
       //MinMaxDateFilter.vue
       min: "min",
       max: "max",
+    },
+    components:{
+      //SearchComponent.vue
+      search: "Search",
     },
     storehousesSave: {
       token_is_dead: "Expired token. Please, relogin",

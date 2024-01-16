@@ -1,7 +1,7 @@
 <template>
 <span class="p-input-icon-left mb-2">
   <i class="pi pi-search" />
-  <InputText v-model="searchQuery" @input="handleSearch" size="small" placeholder="Search" />
+  <InputText v-model="searchQuery" @input="handleSearch" size="small" :placeholder="localize('search')" />
 </span>
 </template>
 
@@ -9,6 +9,7 @@
 import InputText from "primevue/inputtext";
 import 'primevue/resources/themes/lara-light-green/theme.css'
 import {MDBRow} from "mdb-vue-ui-kit/";
+import PrintUtil from "@/utils/localization/print.util";
 export default {
   name: 'SearchComponent',
   components: {InputText, MDBRow},
@@ -21,6 +22,9 @@ export default {
     };
   },
   methods: {
+    localize(key, module = "components") {
+          return PrintUtil.localize(key, module);
+    },
     handleSearch(event) {
       this.searchQuery = event.target.value;
       this.$emit('update:modelValue', this.searchQuery);
