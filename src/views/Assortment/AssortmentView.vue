@@ -101,29 +101,47 @@ export default {
         loadList() {},
       },
       idOnDelete: 0,
+      toastOnSuccess: "",
+      toastOnError: "",
       initCategoryDialog: {
         header: "Create a category",
         showSelect: true,
         selectItems: this.categoryList,
         selectName: "Select parent category",
         inputName: "Category name",
-        methodOnSave: () => this.categoryStore.loadCategoriesList(),
+        methodOnSave: async () => {
+          const loadRes = await this.categoryStore.loadCategoriesList();
+          loadRes.toastIfError(this.$toast, this.$nextTick);
+          this.initCategoryDialog.selectItems = this.categoryList;
+        },
         methodOnClose: () => loggerUtil.debug("workds"),
         model: new CategoryModel(),
+        toastSuccessText: "Category is created",
+        toastErrorText: "Category creation failed",
       },
       initBrandDialog: {
         header: "Create a brand",
         inputName: "Brand name",
         model: new BrandModel(),
-        methodOnSave: () => this.brandStore.loadBrandsList(),
+        methodOnSave: async () => {
+          const loadRes = await this.brandStore.loadBrandsList();
+          loadRes.toastIfError(this.$toast, this.$nextTick);
+        },
         methodOnClose: () => loggerUtil.debug("workds"),
+        toastSuccessText: "Brand is created",
+        toastErrorText: "Brand creation failed",
       },
       initCollectionDialog: {
         header: "Create a collection",
         inputName: "Collection name",
-        methodOnSave: () => this.collectionStore.loadCollectionList(),
+        methodOnSave: async () => {
+          const loadRes = await this.collectionStore.loadCollectionList();
+          loadRes.toastIfError(this.$toast, this.$nextTick);
+        },
         methodOnClose: () => loggerUtil.debug("workds"),
         model: new CollectionModel(),
+        toastSuccessText: "Collection is created",
+        toastErrorText: "Collection creation failed",
       },
     };
   },
@@ -133,9 +151,6 @@ export default {
     const categoryStore = useCategoriesStore();
     const modalStore = useModalStore();
     const dialogStore = useDialogStore();
-    await brandStore.loadBrandsList();
-    await collectionStore.loadCollectionList();
-    await categoryStore.loadCategoriesList();
 
     // await productStore.loadSelectedProduct(parseInt(route.params.id.toString()));
     return {
@@ -144,9 +159,16 @@ export default {
       collectionStore,
       modalStore,
       dialogStore,
+      loadBrandRes: await brandStore.loadBrandsList(),
+      loadCollectionRes: await collectionStore.loadCollectionList(),
+      loadCategoryRes: await categoryStore.loadCategoriesList(),
     };
   },
   created() {
+    this.loadBrandRes.toastIfError(this.$toast, this.$nextTick);
+    this.loadCollectionRes.toastIfError(this.$toast, this.$nextTick);
+    this.loadCategoryRes.toastIfError(this.$toast, this.$nextTick);
+
     this.initCategoryDialog.selectItems = this.categoryList;
   },
   methods: {
@@ -165,42 +187,74 @@ export default {
       if (removed.success) {
         this.modalStore.hide();
         await this.onDelete.loadList();
+        this.$toast.add({
+          severity: "success",
+          summary: "Success",
+          detail: this.toastOnSuccess,
+          life: 3000,
+        });
+      } else {
+        removed.toastIfError(this.$toast, this.$nextTick);
       }
     },
     deleteCollection(collectionRow) {
       loggerUtil.debug("Collection delete", collectionRow);
+      this.toastOnSuccess = "Collection is removed";
       this.onDelete = this.collectionStore;
       this.idOnDelete = collectionRow.id;
       this.showModal("collection", collectionRow.name);
     },
     deleteBrand(brandRow) {
       loggerUtil.debug("Brand delete", brandRow);
+      this.toastOnSuccess = "Brand is removed";
       this.onDelete = this.brandStore;
       this.idOnDelete = brandRow.id;
       this.showModal("brand", brandRow.name);
     },
+    showErrorToast() {
+      this.$toast.add({
+        severity: "warning",
+        summary: "Validate error",
+        detail: "Check data provided",
+        life: 3000,
+      });
+    },
     async editBrand(data) {
       if (data.name == "") {
-        //TODO: Show error
+        this.showErrorToast();
         return;
       }
       const updated = await this.brandStore.update(data.id, data);
       if (updated.success) {
-        await this.brandStore.loadBrandsList();
+        this.$toast.add({
+          severity: "success",
+          summary: "Success",
+          detail: "Brand is updated",
+          life: 3000,
+        });
+        const loadListRes = await this.brandStore.loadBrandsList();
+        loadListRes.toastIfError(this.$toast, this.$nextTick);
       } else {
-        //TODO: Check errors
+        updated.toastIfError(this.$toast, this.$nextTick);
       }
     },
     async editCollection(data) {
       if (data.name == "") {
-        //TODO: Show error
+        this.showErrorToast();
         return;
       }
       const updated = await this.collectionStore.update(data.id, data);
       if (updated.success) {
-        await this.collectionStore.loadCollectionList();
+        this.$toast.add({
+          severity: "success",
+          summary: "Success",
+          detail: "Collection is updated",
+          life: 3000,
+        });
+        const loadListRes = await this.collectionStore.loadCollectionList();
+        loadListRes.toastIfError(this.$toast, this.$nextTick);
       } else {
-        //TODO: Check errors
+        updated.toastIfError(this.$toast, this.$nextTick);
       }
     },
     startEditCategory(category) {
@@ -215,6 +269,8 @@ export default {
           model: new CategoryModel(),
           methodOnSave: this.categoryOnSave,
           methodOnClose: () => {},
+          toastSuccessText: "Category is updated",
+          toastErrorText: "Failed update category",
         },
         { id: category.id, input: category.label, selected: category.parent },
         (state) => ({
@@ -222,8 +278,10 @@ export default {
         }),
       );
     },
-    categoryOnSave() {
-      this.categoryStore.loadCategoriesList();
+    async categoryOnSave() {
+      const loadRes = await this.categoryStore.loadCategoriesList();
+      loadRes.toastIfError(this.$toast, this.$nextTick);
+      this.initCategoryDialog.selectItems = this.categoryList;
     },
     startRemoveCategory(category) {
       loggerUtil.debug("Category delete", category);
@@ -237,6 +295,8 @@ export default {
           model: new CategoryModel(),
           methodOnSave: this.categoryOnRemove,
           methodOnClose: () => {},
+          toastSuccessText: "Category is removed",
+          toastErrorText: "Failed remove category",
         },
         null,
         (state) => ({
@@ -252,8 +312,10 @@ export default {
         },
       );
     },
-    categoryOnRemove() {
-      this.categoryStore.loadCategoriesList();
+    async categoryOnRemove() {
+      const loadRes = await this.categoryStore.loadCategoriesList();
+      loadRes.toastIfError(this.$toast, this.$nextTick);
+      this.initCategoryDialog.selectItems = this.categoryList;
     },
     transformCategoryList(categoryList) {
       if (!categoryList || categoryList.length === 0) {

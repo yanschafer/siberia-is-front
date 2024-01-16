@@ -12,7 +12,7 @@
         <MDBCol class="d-flex flex-column justify-content-center">
           <MDBRow>
             <MDBCol
-                class="d-flex gap-1 align-items-center mb-3 animate__animated animate__flipInX animate__faster"
+              class="d-flex gap-1 align-items-center mb-3 animate__animated animate__flipInX animate__faster"
             >
               <h5 class="field-heading">
                 {{ localize("productNameCapslock") }}
@@ -46,18 +46,18 @@
                   v-model="vendorCode"
                 />
               </h5>
-                <h5 class="field-heading d-flex gap-1 align-items-center">
-                  {{ localize("brandCapslock") }}
-                  <SelectComponent
-                    :placeholder="placeholderBrand"
-                    class="animate__animated animate__flipInX animate__faster"
-                    :class="{ 'p-invalid': !validate.brand }"
-                    :items="brandList"
-                    v-model="brand"
+              <h5 class="field-heading d-flex gap-1 align-items-center">
+                {{ localize("brandCapslock") }}
+                <SelectComponent
+                  :placeholder="placeholderBrand"
+                  class="animate__animated animate__flipInX animate__faster"
+                  :class="{ 'p-invalid': !validate.brand }"
+                  :items="brandList"
+                  v-model="brand"
                 />
-                  <DialogComponentTrigger
-                    :button-text="createButtonText"
-                    :init-object="initBrandDialog"
+                <DialogComponentTrigger
+                  :button-text="createButtonText"
+                  :init-object="initBrandDialog"
                 />
               </h5>
               <h5 class="field-heading d-flex gap-1 align-items-center">
@@ -70,14 +70,16 @@
                   v-model="link"
                 />
               </h5>
-              <h5 class="field-heading d-flex flex-column gap-1 align-items-start">
+              <h5
+                class="field-heading d-flex flex-column gap-1 align-items-start"
+              >
                 <span class="field-heading separator">EXPIRATION DATE</span>
                 <InputText
-                    class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-                    :class="{ 'p-invalid': !validate.expirationDate }"
-                    type="text"
-                    :placeholder="placeholderExpirationDate"
-                    v-model="expirationDate"
+                  class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+                  :class="{ 'p-invalid': !validate.expirationDate }"
+                  type="text"
+                  :placeholder="placeholderExpirationDate"
+                  v-model="expirationDate"
                 />
               </h5>
             </MDBCol>
@@ -212,7 +214,7 @@ import { th } from "vuetify/locale";
 import ValidateRule from "@/utils/validator/validate-rule";
 import ValidatorUtil from "@/utils/validator/validator.util";
 import InputText from "primevue/inputtext";
-import Panel from 'primevue/panel';
+import Panel from "primevue/panel";
 
 export default {
   name: "CreateProduct",
@@ -229,7 +231,7 @@ export default {
     MDBCol,
     MDBBtn,
     InputText,
-    Panel
+    Panel,
   },
   data() {
     return {
@@ -239,14 +241,14 @@ export default {
       placeholderCollection: this.localize("selectACollection"),
       placeholderDescription: this.localize("placeholderDescription"),
       placeholderProductName: this.localize("placeholderProductName"),
-      placeholderVendorCode: this.localize('placeholderVendorCode'),
-      placeholderLink: this.localize('placeholderLink'),
-      placeholderColor: this.localize('placeholderColor'),
-      placeholderQuantityPerPackage: this.localize('placeholderNumber'),
-      placeholderDistributionPrice: this.localize('placeholderNumber'),
-      placeholderProfessionalPrice: this.localize('placeholderNumber'),
-      placeholderDefaultPrice: this.localize('placeholderNumber'),
-      placeholderExpirationDate: this.localize('placeholderExpirationDate'),
+      placeholderVendorCode: this.localize("placeholderVendorCode"),
+      placeholderLink: this.localize("placeholderLink"),
+      placeholderColor: this.localize("placeholderColor"),
+      placeholderQuantityPerPackage: this.localize("placeholderNumber"),
+      placeholderDistributionPrice: this.localize("placeholderNumber"),
+      placeholderProfessionalPrice: this.localize("placeholderNumber"),
+      placeholderDefaultPrice: this.localize("placeholderNumber"),
+      placeholderExpirationDate: this.localize("placeholderExpirationDate"),
       vendorCode: "",
       brand: null,
       name: "",
@@ -263,28 +265,49 @@ export default {
       photoBase64: "",
       photoName: "",
       initCategoryDialog: {
-        header: this.localize("createACategory"),
+        header: "Create a category",
         showSelect: true,
         selectItems: this.categoryList,
-        selectName: this.localize("selectParentCategory"),
-        inputName: this.localize("categoryName"),
-        methodOnSave: this.handleCategoryUpdate,
+        selectName: "Select parent category",
+        inputName: "Category name",
+        methodOnSave: async (category) => {
+          const loadRes = await this.categoriesStore.loadCategoriesList();
+          loadRes.toastIfError(this.$toast, this.$nextTick);
+          this.initCategoryDialog.selectItems = this.categoryList;
+          this.$nextTick(() => {
+            this.category = category.id;
+          });
+        },
         methodOnClose: () => loggerUtil.debug("workds"),
         model: new CategoryModel(),
+        toastSuccessText: "Category is created",
+        toastErrorText: "Category creation failed",
       },
       initBrandDialog: {
-        header: this.localize("createABrand"),
-        inputName: this.localize("brandName"),
+        header: "Create a brand",
+        inputName: "Brand name",
         model: new BrandModel(),
-        methodOnSave: this.handleBrandUpdate,
+        methodOnSave: async (brand) => {
+          const loadRes = await this.brandStore.loadBrandsList();
+          loadRes.toastIfError(this.$toast, this.$nextTick);
+          this.brand = brand;
+        },
         methodOnClose: () => loggerUtil.debug("workds"),
+        toastSuccessText: "Brand is created",
+        toastErrorText: "Brand creation failed",
       },
       initCollectionDialog: {
-        header: this.localize("createACollection"),
-        inputName: this.localize("collectionName"),
-        methodOnSave: this.handleCollectionUpdate,
+        header: "Create a collection",
+        inputName: "Collection name",
+        methodOnSave: async (collection) => {
+          const loadRes = await this.collectionStore.loadCollectionList();
+          loadRes.toastIfError(this.$toast, this.$nextTick);
+          this.collection = collection;
+        },
         methodOnClose: () => loggerUtil.debug("workds"),
         model: new CollectionModel(),
+        toastSuccessText: "Collection is created",
+        toastErrorText: "Collection creation failed",
       },
       validate: {
         vendorCode: true,

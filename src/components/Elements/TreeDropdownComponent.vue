@@ -32,6 +32,7 @@ import InputText from "primevue/inputtext";
 import OverlayPanel from "primevue/overlaypanel";
 import loggerUtil from "@/utils/logger/logger.util";
 import { ref } from "vue";
+import { useProductsStore } from "@/stores/products.store";
 
 export default {
   name: "TreeDropdownComponent",
@@ -60,6 +61,9 @@ export default {
   mounted() {
     this.selectedValue = { [this.modelValue]: true };
     this.addNew = this.$refs.addNew;
+    this.$watch("modelValue", () => {
+      this.selectedValue = { [this.modelValue]: true };
+    });
   },
   computed: {
     filteredNodes() {
