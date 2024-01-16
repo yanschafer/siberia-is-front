@@ -13,7 +13,8 @@
           :enableDelete="true"
           v-if="tab.id === 3"
           :nodes="transformCategoryList(categoryList)"
-          @row-delete="deleteCategory"
+          @row-delete="startRemoveCategory"
+          @row-edit="startEditCategory"
         />
         <TableComponent
           v-if="tab.id === 1"
@@ -54,6 +55,8 @@ import loggerUtil from "@/utils/logger/logger.util";
 import { useModalStore } from "@/stores/modal.store";
 import ModalComponent from "@/components/Elements/ModalComponent.vue";
 import ApiResponseDto from "@/api/dto/api-response.dto";
+import { useDialogStore } from "@/stores/dialog.store";
+import CategoryModel from "@/api/modules/category/models/category.model";
 
 export default {
   name: "AssortmentVue",
@@ -85,6 +88,7 @@ export default {
     const collectionStore = useCollectionStore();
     const categoryStore = useCategoriesStore();
     const modalStore = useModalStore();
+    const dialogStore = useDialogStore();
     await brandStore.loadBrandsList();
     await collectionStore.loadCollectionList();
     await categoryStore.loadCategoriesList();
@@ -95,6 +99,7 @@ export default {
       categoryStore,
       collectionStore,
       modalStore,
+      dialogStore,
     };
   },
   methods: {
@@ -114,12 +119,6 @@ export default {
         this.modalStore.hide();
         await this.onDelete.loadList();
       }
-    },
-    deleteCategory(categoryRow) {
-      loggerUtil.debug("Category delete", categoryRow);
-      this.onDelete = this.categoryStore;
-      this.idOnDelete = categoryRow.key;
-      this.showModal("category", categoryRow.label);
     },
     deleteCollection(collectionRow) {
       loggerUtil.debug("Collection delete", collectionRow);
@@ -157,42 +156,99 @@ export default {
         //TODO: Check errors
       }
     },
+    startEditCategory(category) {
+      loggerUtil.debug("START EDITING", category);
+      this.dialogStore.show(
+        {
+          header: `Edit category ${category.label}`,
+          showSelect: true,
+          selectItems: this.categoryList,
+          selectName: "Parent category",
+          inputName: "Category name",
+          model: new CategoryModel(),
+          methodOnSave: this.categoryOnSave,
+          methodOnClose: () => {},
+        },
+        { id: category.id, input: category.label, selected: category.parent },
+        (state) => ({
+          ...state.value,
+        }),
+      );
+    },
+    categoryOnSave() {
+      this.categoryStore.loadCategoriesList();
+    },
+    startRemoveCategory(category) {
+      loggerUtil.debug("Category delete", category);
+      this.dialogStore.show(
+        {
+          header: `Remove category ${category.label}`,
+          showSelect: true,
+          selectItems: this.categoryList,
+          selectName: "Parent category",
+          inputName: "Category name",
+          model: new CategoryModel(),
+          methodOnSave: this.categoryOnRemove,
+          methodOnClose: () => {},
+        },
+        null,
+        (state) => ({
+          removeChildren: !state.value.checkbox,
+          transferChildrenTo: state.value.parent,
+        }),
+        { id: category.id, input: category.label, selected: category.parent },
+        false,
+        true,
+        {
+          false: "Remove children",
+          true: "Move children to new parent",
+        },
+      );
+    },
+    categoryOnRemove() {
+      this.categoryStore.loadCategoriesList();
+    },
     transformCategoryList(categoryList) {
       if (!categoryList || categoryList.length === 0) {
         return [];
       }
 
       const list = categoryList.map((category, index) => {
-        loggerUtil.debug(category);
         return {
+          id: category.key,
           key: category.key,
+          label: category.label || "",
           data: {
+            id: category.key,
             label: category.label || "",
             isEditable: "",
           },
-          children: this.transformChildren(category.children),
+          children: this.transformChildren(category.key, category.children),
         };
       });
-      loggerUtil.debug(list);
       return list;
     },
 
-    transformChildren(children) {
+    transformChildren(parent, children) {
       if (!children || children.length === 0) {
         return [];
       }
 
       return children.map((child, index) => {
         return {
+          id: child.key,
           key: child.key,
           name: child.label || "",
+          parent,
+          label: child.label || "",
           data: {
+            parent,
             label: child.label || "",
             data: child.label || "",
             icon: child.icon,
             isEditable: "",
           },
-          children: this.transformChildren(child.children),
+          children: this.transformChildren(child.key, child.children),
         };
       });
     },

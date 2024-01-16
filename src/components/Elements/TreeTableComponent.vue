@@ -1,33 +1,17 @@
 <template>
   <div class="card">
     <TreeTable
-      class="animate__animated animate__fadeIn"
-      v-if="paginatedRows.length > 0"
-      v-model:editingRows="editingRows"
-      editMode="row"
-      paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink JumpToPageInput"
       :value="nodes"
       :paginator="true"
-      :rows="5"
+      :rows="6"
       scrollable
       scrollHeight="60vh"
       selectionMode="single"
-      @row-select="handleRowClick"
-      @row-edit-save="handleRowSave"
+      v-model:selectionKeys="selectedKey"
     >
-      <Column field="label" header="NAME" expander>
-        <template #default="slotProps">
-          <b>{{ slotProps.node.label }}</b>
-        </template>
-      </Column>
+      <Column field="label" header="NAME" expander></Column>
       <div class="container-fluid">
-        <Column
-          v-if="showEditColumn"
-          class="animate__animated animate__fadeIn utility-col"
-          :rowEditor="true"
-          style="width: 5rem; min-width: 8rem"
-          bodyStyle="text-align:center"
-        >
+        <Column v-if="showEditColumn" bodyStyle="text-align:center">
           <template #body>
             <div class="flex flex-wrap gap-2">
               <MDBBtn
@@ -62,6 +46,7 @@ import TreeTable from "primevue/treetable";
 import Column from "primevue/column";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
+import loggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "TreeTableComponent",
@@ -84,38 +69,61 @@ export default {
     editingRows: [],
     currentPage: 1,
     itemsPerPage: 7,
+    selectedKey: null,
+    selectedKeyOrigin: null,
   }),
   emits: ["rowDelete", "rowEdit"],
-  computed: {
-    paginatedRows() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
-      const filteredData = this.nodes;
-      return filteredData ? filteredData.slice(start) : [];
-    },
+  created() {
+    this.$watch("selectedKey", async () => {
+      loggerUtil.debug("this.selectedKey");
+      if (Object.values(this.selectedKey).length)
+        this.selectedKeyOrigin = this.selectedKey;
+
+      loggerUtil.debug(this.selectedKeyOrigin);
+      let item = this.findRecursive(
+        Object.keys(this.selectedKeyOrigin)[0],
+        this.nodes,
+      );
+
+      if (!item) return;
+
+      const data = { ...item, ...item.data };
+
+      loggerUtil.debug("DATA", item);
+      if (this.deleteClick) {
+        this.$emit("rowDelete", data);
+        this.deleteClick = false;
+        return;
+      }
+      if (this.editClick) {
+        this.$emit("rowEdit", data);
+        this.editClick = false;
+        return;
+      }
+    });
   },
   methods: {
+    findRecursive(id, arr) {
+      if (!arr || arr.length == 0) return null;
+      for (let el of arr) {
+        if (el.key == id) {
+          return el;
+        } else {
+          const res = this.findRecursive(id, el.children);
+          if (res) return res;
+        }
+      }
+      return null;
+    },
     isEditable(columnField) {
       return this.editableColumns && this.editableColumns.includes(columnField);
     },
     handleRowClick(event) {
-      if (this.deleteClick) {
-        this.$emit("rowDelete", event.data);
-        this.deleteClick = false;
-        return;
-      }
-      if (this.deleteClick) {
-        this.$emit("rowEdit", event.data);
-        this.deleteClick = false;
-        return;
-      }
-
       if (!event.originalEvent.target.classList.contains("utility-col")) {
         const selectedRow = event.data;
         this.$emit("rowClick", selectedRow);
       }
     },
-    handleRowSave() {},
     emitDelete(event) {
       this.deleteClick = true;
       event.target.parentElement.parentElement.parentElement.click();
