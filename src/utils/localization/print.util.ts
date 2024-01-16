@@ -1,42 +1,41 @@
+import engLocale from "@/utils/localization/eng.locale";
+import spanishLocale from "@/utils/localization/spanish.locale";
 class PrintUtil {
-  private storageKey: string = "locale"
-  private selectedLang: string
+  private storageKey: string = "locale";
+  private selectedLang: string;
 
   private locales = {
-    "eng": () => import("./eng.locale"),
-    "spanish": () => import("./spanish.locale")
-  }
+    eng: engLocale,
+    spanish: spanishLocale,
+  };
 
-  public availableLocales = ["eng", "spanish"]
+  public availableLocales = ["eng", "spanish"];
 
   private setLocale() {
-    const locale = localStorage.getItem(this.storageKey)
+    const locale = localStorage.getItem(this.storageKey);
     if (!locale) {
-      this.switchTo("eng")
-      return
+      this.switchTo("eng");
+      return;
     }
     if (locale && this.availableLocales.includes(locale))
-      this.selectedLang = locale
-    else
-      this.selectedLang = "eng"
+      this.selectedLang = locale;
+    else this.selectedLang = "eng";
   }
 
   constructor() {
-    this.setLocale()
+    this.setLocale();
   }
 
   public switchTo(locale: string) {
-    localStorage.setItem(this.storageKey, locale)
-    this.setLocale()
+    localStorage.setItem(this.storageKey, locale);
+    this.setLocale();
   }
 
-  public async localize(key: string, module: string = "default"): Promise<string> {
-    const localeModule = (await this.locales[this.selectedLang]()).default.modules[module]
-    if (localeModule)
-      return localeModule[key]
-    else
-      return `LOCALIZATION FOR ${module}.${key} NOT FOUND`
+  public localize(key: string, module: string = "default"): string {
+    const localeModule = this.locales[this.selectedLang].modules[module];
+    if (localeModule) return localeModule[key];
+    else return `LOCALIZATION FOR ${module}.${key} NOT FOUND`;
   }
 }
 
-export default new PrintUtil()
+export default new PrintUtil();

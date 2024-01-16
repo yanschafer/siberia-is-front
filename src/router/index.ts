@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import TokenUtil from "@/utils/token.util";
 import { appConf } from "@/api/conf/app.conf";
 import LoggerUtil from "@/utils/logger/logger.util";
+import PrintUtil from "@/utils/localization/print.util";
 
 /*
 user-managing = "1"
@@ -31,6 +32,7 @@ const routes = [
     path: "/",
     component: () => import("@/views/MainView.vue"),
     meta: {
+      name: PrintUtil.localize("panelName", "router"),
       hideTitle: true,
       requireAuth: true,
     },
@@ -41,6 +43,7 @@ const routes = [
         component: () => import("@/views/DashboardView.vue"),
         meta: {
           showAddBtn: false,
+          name: PrintUtil.localize("dashboard", "router"),
         },
       },
       {
@@ -49,6 +52,7 @@ const routes = [
         component: () => import("@/views/Assortment/AssortmentView.vue"),
         meta: {
           showAddBtn: false,
+          name: PrintUtil.localize("assortments", "router"),
         },
       },
       {
@@ -59,6 +63,7 @@ const routes = [
           ruleId: appConf.rules.productsManaging,
           showAddBtn: true,
           addBtnRoute: "New product",
+          meta: PrintUtil.localize("products", "router"),
         },
         children: [
           {
@@ -68,6 +73,7 @@ const routes = [
             props: true,
             meta: {
               showAddBtn: false,
+              name: PrintUtil.localize("Product", "router"),
             },
           },
         ],
@@ -77,12 +83,16 @@ const routes = [
         name: "New product",
         component: () => import("@/views/Products/CreateProduct.vue"),
         props: true,
+        meta: {
+          name: PrintUtil.localize("NewProduct", "router"),
+        },
       },
       {
         path: "/storehouses",
         name: "storehouses",
         component: () => import("@/views/Storehouses/StorehousesView.vue"),
         meta: {
+          name: PrintUtil.localize("storehouses", "router"),
           ruleId: appConf.rules.stockManaging,
           showAddBtn: true,
           addBtnRoute: "New storehouse",
@@ -95,6 +105,7 @@ const routes = [
               import("@/views/Storehouses/SingleStorehouseView.vue"),
             props: true,
             meta: {
+              name: PrintUtil.localize("Storehouse", "router"),
               showAddBtn: false,
             },
           },
@@ -105,6 +116,9 @@ const routes = [
         name: "New storehouse",
         component: () => import("@/views/Storehouses/CreateStorehouse.vue"),
         props: true,
+        meta: {
+          name: PrintUtil.localize("NewStorehouse", "router"),
+        },
       },
       {
         path: "/roles",
@@ -112,6 +126,7 @@ const routes = [
         component: () => import("@/views/Roles/RolesView.vue"),
         props: true,
         meta: {
+          name: PrintUtil.localize("roles", "router"),
           ruleId: appConf.rules.rbacManaging,
           showAddBtn: true,
           addBtnRoute: "New role",
@@ -123,6 +138,7 @@ const routes = [
             component: () => import("@/views/Roles/SingleRoleView.vue"),
             props: true,
             meta: {
+              name: PrintUtil.localize("Role", "router"),
               showAddBtn: false,
             },
           },
@@ -133,12 +149,16 @@ const routes = [
         name: "New role",
         component: () => import("@/views/Roles/CreateRole.vue"),
         props: true,
+        meta: {
+          name: PrintUtil.localize("NewRole", "router"),
+        },
       },
       {
         path: "/users",
         name: "users",
         component: () => import("@/views/Users/UsersView.vue"),
         meta: {
+          name: PrintUtil.localize("users", "router"),
           ruleId: appConf.rules.userManaging,
           showAddBtn: true,
           addBtnRoute: "New user",
@@ -150,6 +170,7 @@ const routes = [
             component: () => import("@/views/Users/SingleUserView.vue"),
             props: true,
             meta: {
+              name: PrintUtil.localize("User", "router"),
               showAddBtn: false,
             },
           },
@@ -160,12 +181,16 @@ const routes = [
         name: "New user",
         component: () => import("@/views/Users/CreateUser.vue"),
         props: true,
+        meta: {
+          name: PrintUtil.localize("NewUser", "router"),
+        },
       },
       {
         path: "/history",
         name: "History",
         component: () => import("@/views/History/HistoryView.vue"),
         meta: {
+          name: PrintUtil.localize("History", "router"),
           ruleId: appConf.rules.checkLogs,
           showAddBtn: false,
         },
@@ -176,6 +201,7 @@ const routes = [
             component: () => import("@/views/History/SingleHistoryView.vue"),
             props: true,
             meta: {
+              name: PrintUtil.localize("SingleHistory", "router"),
               showAddBtn: false,
             },
           },
@@ -186,6 +212,7 @@ const routes = [
         name: "Operations",
         component: () => import("@/views/Operations/OperationsView.vue"),
         meta: {
+          name: PrintUtil.localize("Operations", "router"),
           showAddBtn: false,
         },
         children: [
@@ -195,6 +222,9 @@ const routes = [
             component: () =>
               import("@/views/Operations/SingleOperationView.vue"),
             props: true,
+            meta: {
+              name: PrintUtil.localize("SingleOperation", "router"),
+            },
           },
         ],
       },

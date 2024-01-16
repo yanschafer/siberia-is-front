@@ -2,7 +2,7 @@
   <MDBContainer class="storehouse-info d-flex flex-column gap-3">
     <MDBRow>
       <MDBCol class="d-flex flex-column col-4 gap-2">
-        <h4 class="storehouse-heading">Role name</h4>
+        <h4 class="storehouse-heading">{{ localize("roleName", "role") }}</h4>
         <InputText
           :placeholder="namePlaceholder"
           class="input-wrapper animate__animated animate__fadeIn username-input"
@@ -12,7 +12,9 @@
       </MDBCol> </MDBRow
     ><MDBRow>
       <MDBCol class="d-flex flex-column col-4 gap-2">
-        <h4 class="storehouse-heading">Role description</h4>
+        <h4 class="storehouse-heading">
+          {{ localize("roleDescription", "role") }}
+        </h4>
         <Textarea
           :placeholder="descriptionPlaceholder"
           class="input-wrapper animate__animated animate__fadeIn username-input"
@@ -22,12 +24,12 @@
       </MDBCol>
     </MDBRow>
     <MDBCol class="d-flex justify-content-start">
-      <MDBBtn @click="cancelCreation" class="utility-btn" outline="black"
-        >CANCEL</MDBBtn
-      >
-      <MDBBtn @click="saveCreation" class="utility-btn btn-black"
-        >CREATE ROLE</MDBBtn
-      >
+      <MDBBtn @click="cancelCreation" class="utility-btn" outline="black">{{
+        localize("cancelCapslock")
+      }}</MDBBtn>
+      <MDBBtn @click="saveCreation" class="utility-btn btn-black">{{
+        localize("createRoleCapslock", "role")
+      }}</MDBBtn>
     </MDBCol>
     <MDBContainer>
       <TabsComponent :creation-mode="true" :roles="[roles]" />
@@ -44,6 +46,7 @@ import { useUsersStore } from "@/stores/user.store";
 import { useRolesStore } from "@/stores/roles.store";
 import { useRoute, useRouter } from "vue-router";
 import UserFullDto from "@/api/modules/user/dto/user-full.dto";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default defineComponent({
   name: "CreateRole",
@@ -82,6 +85,9 @@ export default defineComponent({
     };
   },
   methods: {
+    localize(key, module = "default") {
+      return PrintUtil.localize(key, module);
+    },
     async saveCreation() {
       const created = await this.rolesStore.create(this.name, this.description);
       if (created.success)

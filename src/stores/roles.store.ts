@@ -3,6 +3,7 @@ import RoleModel from "@/api/modules/rbac/models/role.model";
 import UpdateRoleDto from "@/api/modules/rbac/dto/roles/update-role.dto";
 import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.dto";
 import RoleInputDto from "@/api/modules/rbac/dto/roles/role-input.dto";
+import PrintUtil from "@/utils/localization/print.util";
 
 export const useRolesStore = defineStore({
   id: "roles",
@@ -11,8 +12,11 @@ export const useRolesStore = defineStore({
     selectedRole: {},
     rolesRows: [],
     rolesColumns: [
-      { field: "name", header: "ROLE NAME" },
-      { field: "relatedUsersCount", header: "USERS PER ROLE" },
+      { field: "name", header: PrintUtil.localize("roleNameCapslock", "role") },
+      {
+        field: "relatedUsersCount",
+        header: PrintUtil.localize("relatedUsersCountCapslock", "role"),
+      },
     ],
     roleOnCreate: {},
   }),

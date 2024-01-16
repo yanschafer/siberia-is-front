@@ -8,13 +8,16 @@ import TokenUtil from "@/utils/token.util";
 import ApiModelUtil from "@/utils/api-model.util";
 import UserSearchFilterDto from "@/api/modules/user/dto/user-search-filter.dto";
 import CreateUserDto from "@/api/modules/user/dto/create-user.dto";
+import PrintUtil from "@/utils/localization/print.util";
 
 export const useUsersStore = defineStore({
   id: "users",
   state: () => ({
     searchTerm: "",
     usersRows: [],
-    usersColumns: [{ field: "name", header: "NAME" }],
+    usersColumns: [
+      { field: "name", header: PrintUtil.localize("nameCapslock") },
+    ],
     selectedUser: {},
     userOnCreate: {},
   }),

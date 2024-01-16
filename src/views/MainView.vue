@@ -29,6 +29,8 @@ import DialogComponent from "@/components/Elements/DialogComponent.vue";
 import TokenUtil from "@/utils/token.util";
 import { appConf } from "@/api/conf/app.conf";
 import { MDBContainer } from "mdb-vue-ui-kit";
+import PrintUtil from "@/utils/localization/print.util";
+import loggerUtil from "@/utils/logger/logger.util";
 export default {
   name: "DashboardView",
   components: {
@@ -41,7 +43,7 @@ export default {
     return {
       sidebarItems: [
         {
-          name: "Dashboard",
+          name: PrintUtil.localize("Dashboard", "sidebar"),
           icon: "IconDashboard",
           iconColor: "#B8B8B8",
           iconSize: 24,
@@ -52,7 +54,7 @@ export default {
           rule: true,
         },
         {
-          name: "Products",
+          name: PrintUtil.localize("Products", "sidebar"),
           icon: "IconPackages",
           iconColor: "#B8B8B8",
           iconSize: 24,
@@ -63,7 +65,7 @@ export default {
           rule: appConf.rules.productsManaging,
         },
         {
-          name: "Assortment",
+          name: PrintUtil.localize("Assortments", "sidebar"),
           icon: "IconDashboard",
           iconColor: "#B8B8B8",
           iconSize: 24,
@@ -74,7 +76,7 @@ export default {
           rule: true,
         },
         {
-          name: "Storehouse",
+          name: PrintUtil.localize("Storehouses", "sidebar"),
           icon: "IconBuildingWarehouse",
           iconColor: "#B8B8B8",
           iconSize: 24,
@@ -85,7 +87,7 @@ export default {
           rule: appConf.rules.stockManaging,
         },
         {
-          name: "Users",
+          name: PrintUtil.localize("Users", "sidebar"),
           icon: "IconUser",
           iconColor: "#B8B8B8",
           iconSize: 24,
@@ -96,7 +98,7 @@ export default {
           rule: appConf.rules.userManaging,
         },
         {
-          name: "Roles",
+          name: PrintUtil.localize("Roles", "sidebar"),
           icon: "IconUsersGroup",
           iconColor: "#B8B8B8",
           iconSize: 24,
@@ -124,7 +126,10 @@ export default {
   },
   methods: {
     updatePageTitleAndContent() {
-      const routeNames = this.$route.matched.map((route) => route.name);
+      const routeNames = this.route.matched.map((route) => {
+        loggerUtil.debug(route);
+        return route.meta.name;
+      });
       const currentPageName = routeNames.pop() || "dashboard";
 
       if (currentPageName) {
@@ -148,7 +153,7 @@ export default {
     },
     navBreadcrumbs() {
       const breadcrumbs = this.$route.matched.map((route) => ({
-        name: route.name || "dashboard",
+        name: route.meta.name || "dashboard",
         path: route.path,
       }));
 
