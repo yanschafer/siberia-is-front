@@ -36,7 +36,7 @@
             @change="handleFilterChange(filter, $event)"
           />
         </template>
-        <MDBBtn class="utility-btn btn-black" @click="search">Search</MDBBtn>
+        <MDBBtn class="utility-btn btn-black" @click="search">{{ localize("search") }}</MDBBtn>
         <div class="bottom-gradient-overlay"></div>
       </ScrollPanel>
     </div>
@@ -59,7 +59,8 @@ import ProductSearchFilterDto from "@/api/modules/product/dto/product-search-fil
 import FieldSearchWrapperDto from "@/utils/crud/dto/field-search-wrapper.dto";
 import MinMaxDateFilter from "@/components/Elements/Filter/MinMaxDateFilter.vue";
 import TreeSelectorFilter from "@/components/Elements/Filter/TreeSelectorFilter.vue";
-import ScrollPanel from "primevue/scrollpanel";
+import ScrollPanel from 'primevue/scrollpanel';
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "FiltersSidebarComponent",
@@ -100,6 +101,9 @@ export default {
     this.filtersObject = { ...this.filtersInput };
   },
   methods: {
+    localize(key, module = "filters") {
+          return PrintUtil.localize(key, module);
+    },
     toggleSidebar() {
       this.collapsed = !this.collapsed;
     },

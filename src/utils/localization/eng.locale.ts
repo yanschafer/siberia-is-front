@@ -177,10 +177,14 @@ export default {
 
       //StorehouseOperation.vue
       selectAProduct: "Select a product",
+    },
+    filters:{
+      //FiltersSidebarComponent.vue
+      search: "Search",
 
-
-
-
+      //MinMaxDateFilter.vue
+      min: "min",
+      max: "max",
     },
     storehousesSave: {
       token_is_dead: "Expired token. Please, relogin",
