@@ -106,7 +106,6 @@ export default defineComponent({
   },
   methods: {
     async ruleRemoved({ roleId, linkedRule }) {
-      loggerUtil.debug("REMOVED", roleId, linkedRule);
       if (this.creationMode) {
         linkedRule.forEach((rule) => {
           this.currentRules = this.currentRules.filter(
@@ -121,8 +120,8 @@ export default defineComponent({
         result = await this.userStore.removeRule(this.userId || 0, linkedRule);
       else result = await this.rolesStore.removeRule(roleId, linkedRule);
 
-      if (result.success) {
-        //TODO: Check for errors
+      if (!result.success) {
+        result.getError().showServerErrorToast(this.$toast, this.$nextTick);
       }
     },
     async ruleSelected({ roleId, linkedRule }) {
@@ -137,8 +136,8 @@ export default defineComponent({
         result = await this.userStore.appendRule(this.userId || 0, linkedRule);
       else result = await this.rolesStore.appendRule(roleId, linkedRule);
 
-      if (result.success) {
-        //TODO: Check for errors
+      if (!result.success) {
+        result.getError().showServerErrorToast(this.$toast, this.$nextTick);
       }
     },
   },
