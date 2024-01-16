@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView } from "vue-router";
 import LoginView from "@/views/LoginView.vue";
-import ModalComponent from "@/components/Elements/ModalComponent.vue";
 </script>
 
 <template>
@@ -31,13 +30,13 @@ import ModalComponent from "@/components/Elements/ModalComponent.vue";
   border: 3px solid #ffffff;
 }
 * {
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
 }
 #app {
-  width: 100vw!important;
+  width: 100vw !important;
   overflow: hidden;
   height: 100vh;
-  padding: 0!important;
+  padding: 0 !important;
   display: flex;
 }
 ul {
@@ -45,8 +44,8 @@ ul {
   padding-left: 0;
 }
 .p-inputtext {
-  padding-top: 0.2rem!important;
-  padding-bottom: 0.2rem!important;
+  padding-top: 0.2rem !important;
+  padding-bottom: 0.2rem !important;
   background-color: #f8f8f8;
   border-radius: 0;
   border: 0;
@@ -60,6 +59,4 @@ ul {
 }
 </style>
 
-<style scoped>
-
-</style>
+<style scoped></style>

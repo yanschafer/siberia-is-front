@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import Button from "primevue/button";
-import { useCreationDialogStore } from "@/stores/creation-dialog.store.js";
+import { useDialogStore } from "@/stores/dialog.store";
 export default {
   name: "DialogComponentTrigger",
   components: {
@@ -17,7 +17,7 @@ export default {
     initObject: Object,
   },
   data: () => ({
-    dialogStore: useCreationDialogStore(),
+    dialogStore: useDialogStore(),
   }),
   methods: {
     handleBtn() {

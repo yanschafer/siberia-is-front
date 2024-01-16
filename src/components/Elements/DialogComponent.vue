@@ -9,8 +9,15 @@
     @change="handleDialogClose"
   >
     <MDBContainer class="d-flex flex-column">
-      <span>{{ inputName }}</span>
-      <InputText :placeholder="inputName" v-model="inputValue" />
+      <template v-if="showInput">
+        <span>{{ inputName }}</span>
+        <InputText :placeholder="inputName" v-model="inputValue" />
+      </template>
+      <template v-if="showCheckbox">
+        <button @click="checkboxValue = !checkboxValue">
+          {{ checkboxValues[checkboxValue] }}
+        </button>
+      </template>
       <template v-if="selectorVisible">
         <span>{{ selectorName }}</span>
         <TreeDropdownComponent
@@ -32,7 +39,7 @@ import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Dialog from "primevue/dialog";
 import { MDBContainer, MDBRow } from "mdb-vue-ui-kit";
-import { useCreationDialogStore } from "@/stores/creation-dialog.store";
+import { useDialogStore } from "@/stores/dialog.store";
 import loggerUtil from "@/utils/logger/logger.util";
 
 export default {
@@ -46,10 +53,10 @@ export default {
     Dialog,
   },
   setup() {
-    const createDialogStore = useCreationDialogStore();
+    const dialogStore = useDialogStore();
 
     return {
-      createDialogStore,
+      dialogStore,
     };
   },
   data() {
@@ -58,11 +65,24 @@ export default {
       selectedDropdownItem: null,
       saveButtonText: "Save",
       isVisible: false,
+      checkboxValue: false,
     };
   },
   created() {
+    this.$watch("checkboxValue", () => {
+      loggerUtil.debug(this.checkboxValue);
+    });
     this.$watch("isVisible", () => {
-      if (!this.isVisible) this.createDialogStore.cancelAndClose();
+      if (this.dialogStore.update) {
+        this.inputValue = this.dialogStore.update.input;
+        this.selectedDropdownItem = this.dialogStore.update.selected;
+        this.checkboxValue = false;
+      }
+      if (this.dialogStore.remove) {
+        this.inputValue = this.dialogStore.remove.input;
+        this.checkboxValue = false;
+      }
+      if (!this.isVisible) this.dialogStore.cancelAndClose();
     });
   },
   methods: {
@@ -70,11 +90,13 @@ export default {
       loggerUtil.debug(this.isVisible);
     },
     async save() {
-      this.createDialogStore.value = {
+      this.dialogStore.value = {
         name: this.inputValue == "" ? null : this.inputValue,
         parent: this.selectedDropdownItem,
+        checkbox: this.checkboxValue,
       };
-      const res = await this.createDialogStore.saveAndClose();
+      const res = await this.dialogStore.saveAndClose();
+      if (!res) return;
       if (!res.success) {
         loggerUtil.debug("error", res.getError());
         //TODO: Show errors
@@ -86,23 +108,34 @@ export default {
   },
   computed: {
     visible() {
-      this.isVisible = this.createDialogStore.getIsVisible;
-      return this.createDialogStore.getIsVisible;
+      this.isVisible = this.dialogStore.getIsVisible;
+      return this.dialogStore.getIsVisible;
     },
     header() {
-      return this.createDialogStore.dialogData.header;
+      return this.dialogStore.dialogData.header;
+    },
+    showInput() {
+      return this.dialogStore.dialogData.showInput;
     },
     inputName() {
-      return this.createDialogStore.dialogData.inputName;
+      return this.dialogStore.dialogData.inputName;
     },
     selectorVisible() {
-      return this.createDialogStore.dialogData.showSelect;
+      const showSelect = this.dialogStore.dialogData.showSelect;
+      if (!this.showCheckbox) return showSelect;
+      else return this.checkboxValue && showSelect;
     },
     selectorName() {
-      return this.createDialogStore.dialogData.selectName;
+      return this.dialogStore.dialogData.selectName;
     },
     selectorItems() {
-      return this.createDialogStore.dialogData.selectItems;
+      return this.dialogStore.dialogData.selectItems;
+    },
+    showCheckbox() {
+      return this.dialogStore.dialogData.showCheckbox;
+    },
+    checkboxValues() {
+      return this.dialogStore.dialogData.checkboxValues;
     },
   },
 };
