@@ -95,6 +95,7 @@ export const useOperationStore = defineStore({
       const transactionModel = new TransactionModel();
       const selected = await transactionModel.getAllStatuses();
       if (selected.success) this.statusesList = selected.getData();
+      return selected;
     },
   },
 });

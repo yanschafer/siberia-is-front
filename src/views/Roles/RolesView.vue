@@ -63,7 +63,6 @@ export default {
       this.rolesStore.searchTerm = searchTerm;
     },
     handleRowClick(row) {
-      console.log("Clicked row with id:", row.id);
       this.router.push({ name: "Role", params: { id: row.id.toString() } });
     },
   },

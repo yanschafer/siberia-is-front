@@ -35,6 +35,7 @@ export const useStorehousesStore = defineStore({
       const stockModel = new StockModel();
       const stockList = await stockModel.getList();
       if (stockList.success) this.storehousesRows = stockList.getData();
+      return stockList;
     },
     async loadStorehousesForInput() {
       const stockModel = new StockModel();
@@ -42,6 +43,7 @@ export const useStorehousesStore = defineStore({
       if (stockList.success) {
         this.storehouseListForInputs = stockList.getData();
       }
+      return stockList;
     },
     async loadSelectedStoreHouse(stockId: number) {
       const stockModel = new StockModel();
@@ -49,6 +51,7 @@ export const useStorehousesStore = defineStore({
       if (getStock.success) {
         this.selectedStore = getStock.getData();
       }
+      return getStock;
     },
     async updateStorehouse(
       storehouseId: number,

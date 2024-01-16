@@ -34,9 +34,11 @@ export default {
   async setup() {
     const historyStore = useHistoryStore();
     const route = useRoute();
-    await historyStore.loadItem(parseInt(route.params.id.toString()));
     return {
       historyStore,
+      loadItemRes: await historyStore.loadItem(
+        parseInt(route.params.id.toString()),
+      ),
     };
   },
   computed: {

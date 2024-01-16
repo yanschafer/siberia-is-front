@@ -235,16 +235,8 @@ export default {
     };
   },
   created() {
-    if (!this.userLoadRes.success) {
-      this.userLoadRes
-        .getError()
-        .showServerErrorToast(this.$toast, this.$nextTick);
-    }
-    if (!this.rolesLoadRes.success) {
-      this.rolesLoadRes
-        .getError()
-        .showServerErrorToast(this.$toast, this.$nextTick);
-    }
+    this.userLoadRes.toastIfError(this.$toast, this.$nextTick);
+    this.rolesLoadRes.toastIfError(this.$toast, this.$nextTick);
 
     this.rolesList = this.selectedUser.roles.map((el) => ({
       id: el.id,
@@ -299,13 +291,25 @@ export default {
       const res = await this.userStore.appendRoles(this.id, addedItems);
       if (!res.success)
         res.getError().showServerErrorToast(this.$toast, this.$nextTick);
-      await this.userStore.loadSelectedUser(parseInt(this.id.toString()));
+      else {
+        this.showSuccessToast();
+        const userLoad = await this.userStore.loadSelectedUser(
+          parseInt(this.id.toString()),
+        );
+        userLoad.toastIfError(this.$toast, this.$nextTick);
+      }
     },
     async rolesRemoved(removedItems) {
       const res = await this.userStore.removeRoles(this.id, removedItems);
       if (!res.success)
         res.getError().showServerErrorToast(this.$toast, this.$nextTick);
-      await this.userStore.loadSelectedUser(parseInt(this.id.toString()));
+      else {
+        this.showSuccessToast();
+        const userLoad = await this.userStore.loadSelectedUser(
+          parseInt(this.id.toString()),
+        );
+        userLoad.toastIfError(this.$toast, this.$nextTick);
+      }
     },
     startEditing() {
       this.editing = true;

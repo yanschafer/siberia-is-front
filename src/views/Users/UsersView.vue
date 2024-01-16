@@ -73,8 +73,7 @@ export default {
     };
   },
   mounted() {
-    if (!this.loadRes.success)
-      this.loadRes.getError().showServerErrorToast(this.$toast, this.$nextTick);
+    this.loadRes.toastIfError(this.$toast, this.$nextTick);
   },
   computed: {
     filteredUsers() {
@@ -100,11 +99,11 @@ export default {
     handleSearch(searchTerm) {
       this.usersStore.searchTerm = searchTerm;
     },
-    handleFiltersSearch(filter) {
-      this.usersStore.loadUsersList(filter);
+    async handleFiltersSearch(filter) {
+      const res = await this.usersStore.loadUsersList(filter);
+      res.toastIfError(this.$toast, this.$nextTick);
     },
     handleRowClick(row) {
-      console.log("Clicked row with id:", row.id);
       this.router.push({ name: "User", params: { id: row.id.toString() } });
     },
   },

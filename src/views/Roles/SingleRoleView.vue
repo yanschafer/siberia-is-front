@@ -171,16 +171,8 @@ export default {
       .addRule("name", nameValidateRule)
       .addRule("description", descriptionValidateRule);
 
-    if (!this.roleLoadRes.success) {
-      this.roleLoadRes
-        .getError()
-        .showServerErrorToast(this.$toast, this.$nextTick);
-    }
-    if (!this.usersLoadRes.success) {
-      this.usersLoadRes
-        .getError()
-        .showServerErrorToast(this.$toast, this.$nextTick);
-    }
+    this.roleLoadRes.toastIfError(this.$toast, this.$nextTick);
+    this.usersLoadRes.toastIfError(this.$toast, this.$nextTick);
   },
   methods: {
     localize(key, module) {

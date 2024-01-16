@@ -110,24 +110,26 @@ export default {
     selectedStorehouse: null,
     isStatusOnSelect: false,
   }),
-  created() {
-    if (this.selectedOperation.type.id != TransactionType.TRANSFER)
-      this.productColumns.push({ field: "price", header: "PRICE" });
-  },
   async setup() {
     const operationStore = useOperationStore();
     const storehousesStore = useStorehousesStore();
     const route = useRoute();
 
-    await operationStore.loadSelectedOperation(
-      parseInt(route.params.id.toString()),
-    );
-    await storehousesStore.loadStorehouseList();
-
     return {
       operationStore,
       storehousesStore,
+      loadStocksRes: await storehousesStore.loadStorehouseList(),
+      loadOperationRes: await operationStore.loadSelectedOperation(
+        parseInt(route.params.id.toString()),
+      ),
     };
+  },
+  created() {
+    this.loadOperationRes.toastIfError(this.$toast, this.$nextTick);
+    this.loadStocksRes.toastIfError(this.$toast, this.$nextTick);
+
+    if (this.selectedOperation.type.id != TransactionType.TRANSFER)
+      this.productColumns.push({ field: "price", header: "PRICE" });
   },
   methods: {
     isInProgressStatus(statusId: number) {
@@ -146,14 +148,30 @@ export default {
       loggerUtil.debug(this.selectedStatus);
     },
     handleStorehouseChange() {},
-
     async saveStatus() {
       if (this.selectedStatusNeedStock && !this.selectedStorehouse) {
-        //TODO: Show error (must select storehouse)
+        this.$toast.add({
+          severity: "error",
+          summary: "Update status error",
+          detail: "Storehouse must be selected",
+          life: 3000,
+        });
         return;
       }
 
-      loggerUtil.debug(this.selectedStatusNeedStock);
+      if (
+        this.selectedStatusNeedStock &&
+        this.selectedStorehouse &&
+        this.selectedStorehouse.id == this.selectedOperation.to.id
+      ) {
+        this.$toast.add({
+          severity: "error",
+          summary: "Update status error",
+          detail: "Select different storehouse",
+          life: 3000,
+        });
+        return;
+      }
 
       if (this.selectedStatus) {
         let changed: ApiResponseDto<TransactionSimpleDto> | null = null;
@@ -166,18 +184,30 @@ export default {
           );
 
         if (changed == null) {
-          //TODO: Show error
+          this.$toast.add({
+            severity: "error",
+            summary: "Update status error",
+            detail: "Storehouse and Status must be selected",
+            life: 3000,
+          });
+          return;
         }
 
-        if (changed?.success) {
+        if (changed.success) {
           this.selectedStatus = null;
           this.selectedStorehouse = null;
           this.toggleStatusChange();
         } else {
-          //TODO: Check for errors
+          loggerUtil.debug(changed.getError());
+          changed.getError().showServerErrorToast(this.$toast, this.$nextTick);
         }
       } else {
-        //TODO: Show error
+        this.$toast.add({
+          severity: "error",
+          summary: "Update status error",
+          detail: "Status must be selected",
+          life: 3000,
+        });
       }
     },
   },
