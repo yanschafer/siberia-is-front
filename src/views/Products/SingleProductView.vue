@@ -27,7 +27,7 @@
               class="d-flex gap-1 align-items-center mb-3 animate__animated animate__flipInX animate__faster"
               v-else
             >
-              <h5 class="field-heading">PRODUCT NAME</h5>
+              <h5 class="field-heading">{{ localize("productNameCapslock") }}</h5>
               <MDBInput
                 id="product-name-input"
                 class="input-wrapper animate__animated animate__fadeIn username-input"
@@ -40,7 +40,7 @@
               class="d-flex flex-column justify-content-start"
             >
               <MDBBtn @click="startEditing" class="utility-btn" outline="black"
-                >EDIT</MDBBtn
+                >{{ localize("editCapslock", "default") }}</MDBBtn
               >
             </MDBCol>
             <MDBCol
@@ -48,20 +48,20 @@
               v-else
             >
               <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger"
-                >DELETE</MDBBtn
+                >{{ localize("deleteCapslock", "default") }}</MDBBtn
               >
               <MDBBtn @click="cancelEditing" class="utility-btn" outline="black"
-                >CANCEL</MDBBtn
+                >{{ localize("cancelCapslock", "default") }}</MDBBtn
               >
               <MDBBtn @click="saveChanges" class="utility-btn" outline="black"
-                >SAVE</MDBBtn
+                >{{ localize("saveCapslock", "default") }}</MDBBtn
               >
             </MDBCol>
           </MDBRow>
           <MDBRow>
             <MDBCol class="d-flex flex-column gap-3 col-auto">
               <h5 class="field-heading d-flex gap-1 align-items-center">
-                SKU
+                  {{ localize("skuCapslock") }}
                 <span v-if="!editing" class="field-value copy-on">{{
                   sku
                 }}</span>
@@ -74,7 +74,7 @@
               </h5>
               <!--              <img class="sku-img" :src="barcodeImage" alt="Barcode">-->
               <h5 v-if="!editing" class="field-heading">
-                BRAND <span class="field-value copy-on">{{ brand }}</span>
+                  {{ localize("brandCapslock") }} <span class="field-value copy-on">{{ brand }}</span>
               </h5>
               <template v-else>
                 <SelectComponent
@@ -84,18 +84,18 @@
                   v-model="newBrand"
                 />
                 <DialogComponentTrigger
-                  button-text="CREATE"
+                  :button-text="createButtonText"
                   :init-object="initBrandDialog"
                 />
               </template>
               <h5 class="field-heading d-flex gap-1 align-items-center">
-                LINK
+                  {{ localize("linkCapslock") }}
                 <a
                   v-if="!editing"
                   target="_blank"
                   :href="link"
                   class="field-value copy-on"
-                  >OPEN IN NEW WINDOW</a
+                  >{{ localize("openInNewWindowCapslock") }}</a
                 >
                 <MDBInput
                   v-else
@@ -107,14 +107,14 @@
             </MDBCol>
             <MDBCol class="d-flex flex-column gap-3">
               <h5 class="field-heading d-flex gap-1 align-items-center">
-                QUANTITY <span class="field-value">{{ quantity }}</span>
+                  {{ localize("quantityCapslock") }} <span class="field-value">{{ quantity }}</span>
               </h5>
               <h5 class="field-heading d-flex gap-1 align-items-center">
-                LAST TIME ORDERED
+                  {{ localize("lastTimeOrderedCapslock") }}
                 <span class="field-value">{{ lastTimeOrdered }}</span>
               </h5>
               <h5 class="field-heading d-flex gap-1 align-items-center">
-                LAST PRICE ORDERED
+                  {{ localize("lastPriceOrderedCapslock") }}
                 <span class="field-value">{{ lastPriceOrdered }}</span>
               </h5>
               <!--              <h5 class="field-heading">COST PRICE <span class="field-value">{{ costPrice }}</span></h5>-->
@@ -134,7 +134,7 @@
           v-model="newCategory"
         />
         <DialogComponentTrigger
-          button-text="CREATE"
+          :button-text="createButtonText"
           :init-object="initCategoryDialog"
         />
       </template>
@@ -152,7 +152,7 @@
             v-model="newCollection"
           />
           <DialogComponentTrigger
-            button-text="CREATE"
+            :button-text="createButtonText"
             :init-object="initCollectionDialog"
           />
         </template>
@@ -165,7 +165,7 @@
           v-else
           class="animate__animated animate__flipInX animate__faster field-heading d-flex gap-1 align-items-center mb-0"
         >
-          NEW COLOR NAME
+            {{ localize("newColorNameCapslock") }}
           <MDBInput
             class="input-wrapper animate__animated animate__fadeIn username-input"
             type="text"
@@ -188,7 +188,7 @@
           <!--          <h5 class="field-heading">VOLUME <span class="field-value">{{ volume }}</span></h5>-->
           <!--          <h5 class="field-heading">SIZE <span class="field-value">{{ size }}</span></h5>-->
           <h5 class="field-heading">
-            QUANTITY PER PACKAGE
+              {{ localize("quantityPerPackageCapslock") }}
             <span v-if="!editing" class="field-value">{{
               quantityPerPackage
             }}</span>
@@ -202,7 +202,7 @@
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-            DISTRIBUTION PRICE
+              {{ localize("distributionPriceCapslock") }}
             <span v-if="!editing" class="field-value">{{
               distributionPrice
             }}</span>
@@ -218,7 +218,7 @@
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-            PROFESSIONAL PRICE
+              {{ localize("professionalPriceCapslock") }}
             <span v-if="!editing" class="field-value">{{
               professionalPrice
             }}</span>
@@ -234,7 +234,7 @@
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-            DEFAULT PRICE
+              {{ localize("defaultPriceCapslock") }}
             <span v-if="!editing" class="field-value">{{ defaultPrice }}</span>
             <MDBInput
               v-else
@@ -248,7 +248,7 @@
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-            EXPIRATION DATE
+              {{ localize("expirationDateCapslock") }}
             <span v-if="!editing" class="field-value">{{
               expirationDate
             }}</span>
@@ -288,6 +288,7 @@ import CollectionModel from "@/api/modules/collection/models/collection.model";
 import DialogComponentTrigger from "@/components/Elements/DialogComponentTrigger.vue";
 import ModalComponent from "@/components/Elements/ModalComponent.vue";
 import { useModalStore } from "@/stores/modal.store";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "SingleProductView",
@@ -340,9 +341,10 @@ export default {
   },
   data() {
     return {
-      placeholderBrand: "Select a brand",
-      placeholderCategory: "Select a category",
-      placeholderCollection: "Select a collection",
+      createButtonText: this.localize("createCapslock", "default"),
+      placeholderBrand: this.localize("selectABrand"),
+      placeholderCategory: this.localize("selectACategory"),
+      placeholderCollection: this.localize("selectACollection"),
       editing: false,
       photoBase64: null,
       photoName: null,
@@ -367,25 +369,25 @@ export default {
       newCostPrice: null,
       newExpirationDate: null,
       initCategoryDialog: {
-        header: "Create a category",
+        header: this.localize("createACategory"),
         showSelect: true,
         selectItems: this.categoryList,
-        selectName: "Select parent category",
-        inputName: "Category name",
+        selectName: this.localize("selectParentCategory"),
+        inputName: this.localize("categoryName"),
         methodOnSave: this.handleCategoryUpdate,
         methodOnClose: () => loggerUtil.debug("workds"),
         model: new CategoryModel(),
       },
       initBrandDialog: {
-        header: "Create a brand",
-        inputName: "Brand name",
+        header: this.localize("createABrand"),
+        inputName: this.localize("brandName"),
         model: new BrandModel(),
         methodOnSave: this.handleBrandUpdate,
         methodOnClose: () => loggerUtil.debug("workds"),
       },
       initCollectionDialog: {
-        header: "Create a collection",
-        inputName: "Collection name",
+        header: this.localize("createACollection"),
+        inputName: this.localize("collectionName"),
         methodOnSave: this.handleCollectionUpdate,
         methodOnClose: () => loggerUtil.debug("workds"),
         model: new CollectionModel(),
@@ -396,12 +398,15 @@ export default {
     this.initCategoryDialog.selectItems = this.categoryList;
   },
   methods: {
+    localize(key, module = "products") {
+          return PrintUtil.localize(key, module);
+    },
     confirmDeletion() {
       this.modalStore.show({
         title: "Confirm deletion",
         text: this.modalText,
         disclaimer:
-          "This action cannot be undone, this product data will be lost",
+          this.localize("thisActionCannotBeUndoneThisProductDataWillBeLost"),
       });
     },
     closeModal() {
@@ -482,7 +487,7 @@ export default {
   },
   computed: {
     modalText() {
-      return `Are you sure you want to delete product "${this.productName}?"`;
+      return `${this.localize("areYouSureYouWantToDeleteProduct")} "${this.productName}?"`;
     },
     categoryList() {
       return this.categoriesStore.getCategoryList;
@@ -507,8 +512,8 @@ export default {
     },
     brand() {
       if (this.selectedProduct.brand)
-        return this.selectedProduct.brand.name || "No brand";
-      else return "No brand";
+        return this.selectedProduct.brand.name || this.localize("noBrand");
+      else return this.localize("noBrand");
     },
     link() {
       return this.selectedProduct.link || "";
@@ -523,7 +528,7 @@ export default {
       return this.selectedProduct.expirationDate || 0;
     },
     lastTimeOrdered() {
-      if (!this.selectedProduct.lastPurchaseDate) return "No information";
+      if (!this.selectedProduct.lastPurchaseDate) return this.localize("noInformation");
       const date =
         new Date(parseInt(`${this.selectedProduct.lastPurchaseDate}000`)) || "";
       if (date === "") return date;
@@ -533,7 +538,7 @@ export default {
       return `${date.getFullYear()}-${month}-${day}`;
     },
     lastPriceOrdered() {
-      return this.selectedProduct.lastPurchasePrice || "No information";
+      return this.selectedProduct.lastPurchasePrice || this.localize("noInformation");
     },
     costPrice() {
       return this.selectedProduct.costPrice || "";
@@ -544,7 +549,7 @@ export default {
     category() {
       if (this.selectedProduct.category)
         return this.selectedProduct.category.name || "";
-      else return "No category";
+      else return this.localize("noCategory");
     },
     categoryId() {
       if (this.selectedProduct.category)
@@ -556,8 +561,8 @@ export default {
     },
     collectionName() {
       if (this.selectedProduct.collection)
-        return this.selectedProduct.collection.name || "No collection";
-      else return "No collection";
+        return this.selectedProduct.collection.name || this.localize("noCollection");
+      else return this.localize("noCollection");
     },
     color() {
       return this.selectedProduct.color || "";
