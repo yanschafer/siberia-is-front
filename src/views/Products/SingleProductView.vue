@@ -568,6 +568,14 @@ export default {
     getNullIfNoChange(newValue, originalValue) {
       return newValue == originalValue ? null : newValue;
     },
+    showNotFoundToast(type) {
+      this.$toast.add({
+        severity: "error",
+        summary: "Creation failed",
+        detail: `${type} not found`,
+        life: 3000,
+      });
+    },
     async saveChanges() {
       const brandId = this.newBrand ? this.newBrand.id : null;
       const collectionId = this.newCollection ? this.newCollection.id : null;
@@ -608,7 +616,29 @@ export default {
       const result = await this.productStore.updateProduct(this.id, data);
 
       this.editing = !result.success;
-      //TODO: Check for errors
+      if (!result.success) {
+        const error = result.getError();
+        if (error.httpStatusCode == 404) {
+          if (error.data?.includes("BrandDao")) {
+            this.showNotFoundToast("Brand");
+          }
+          if (error.data?.includes("CollectionDao")) {
+            this.showNotFoundToast("Collection");
+          }
+          if (error.data?.includes("CategoryDao")) {
+            this.showNotFoundToast("Category");
+          }
+          return;
+        }
+        error.showServerErrorToast(this.$toast, this.$nextTick);
+      } else {
+        this.$toast.add({
+          severity: "success",
+          summary: "Success",
+          detail: `Product successfully updated`,
+          life: 3000,
+        });
+      }
     },
   },
   computed: {
