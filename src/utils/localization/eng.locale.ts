@@ -117,6 +117,13 @@ export default {
       brandName: "Brand name",
       createACollection: "Create a collection",
       collectionName: "Collection name",
+      placeholderDescription: 'Add new description...',
+      placeholderProductName: 'Add new product name...',
+      placeholderVendorCode: 'Add new SKU...',
+      placeholderLink: 'Add new link...',
+      placeholderExpirationDate: 'Enter expiration date...',
+      placeholderColor: 'Add new color...',
+      placeholderNumber: 'Number...',
 
       //products.store.ts
       priceCapslock: "PRICE",

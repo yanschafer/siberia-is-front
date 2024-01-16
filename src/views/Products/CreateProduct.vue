@@ -1,6 +1,6 @@
 <template>
   <div class="animate__animated animate__fadeIn">
-    <MDBContainer class="animate__animated animate__fadeIn" fluid>
+    <Panel class="animate__animated animate__fadeIn" fluid>
       <MDBRow class="d-flex flex-row gap-5 header-row">
         <MDBCol
           class="col-auto animate__animated animate__flipInX animate__faster"
@@ -12,15 +12,16 @@
         <MDBCol class="d-flex flex-column justify-content-center">
           <MDBRow>
             <MDBCol
-              class="d-flex gap-1 align-items-center mb-3 animate__animated animate__flipInX animate__faster"
+                class="d-flex gap-1 align-items-center mb-3 animate__animated animate__flipInX animate__faster"
             >
               <h5 class="field-heading">
                 {{ localize("productNameCapslock") }}
               </h5>
-              <MDBInput
+              <InputText
                 id="product-name-input"
                 class="input-wrapper animate__animated animate__fadeIn username-input"
                 type="text"
+                :placeholder="placeholderProductName"
                 v-model="name"
               />
             </MDBCol>
@@ -34,41 +35,56 @@
             </MDBCol>
           </MDBRow>
           <MDBRow>
-            <MDBCol class="d-flex flex-column gap-3 col-auto">
+            <MDBCol class="d-flex flex-column gap-3 w-100">
               <h5 class="field-heading d-flex gap-1 align-items-center">
                 {{ localize("skuCapslock") }}
-                <MDBInput
+                <InputText
                   class="animate__animated animate__flipInX animate__faster input-wrapper animate__animated animate__fadeIn username-input"
                   :class="{ 'p-invalid': !validate.vendorCode }"
                   type="text"
+                  :placeholder="placeholderVendorCode"
                   v-model="vendorCode"
                 />
               </h5>
-              <SelectComponent
-                :placeholder="placeholderBrand"
-                class="animate__animated animate__flipInX animate__faster"
-                :class="{ 'p-invalid': !validate.brand }"
-                :items="brandList"
-                v-model="brand"
-              />
-              <DialogComponentTrigger
-                :button-text="createButtonText"
-                :init-object="initBrandDialog"
-              />
+                <h5 class="field-heading d-flex gap-1 align-items-center">
+                  {{ localize("brandCapslock") }}
+                  <SelectComponent
+                    :placeholder="placeholderBrand"
+                    class="animate__animated animate__flipInX animate__faster"
+                    :class="{ 'p-invalid': !validate.brand }"
+                    :items="brandList"
+                    v-model="brand"
+                />
+                  <DialogComponentTrigger
+                    :button-text="createButtonText"
+                    :init-object="initBrandDialog"
+                />
+              </h5>
               <h5 class="field-heading d-flex gap-1 align-items-center">
                 {{ localize("linkCapslock") }}
-                <MDBInput
+                <InputText
                   class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
                   :class="{ 'p-invalid': !validate.link }"
                   type="text"
+                  :placeholder="placeholderLink"
                   v-model="link"
+                />
+              </h5>
+              <h5 class="field-heading d-flex flex-column gap-1 align-items-start">
+                <span class="field-heading separator">EXPIRATION DATE</span>
+                <InputText
+                    class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+                    :class="{ 'p-invalid': !validate.expirationDate }"
+                    type="text"
+                    :placeholder="placeholderExpirationDate"
+                    v-model="expirationDate"
                 />
               </h5>
             </MDBCol>
           </MDBRow>
         </MDBCol>
       </MDBRow>
-    </MDBContainer>
+    </Panel>
     <MDBContainer class="description-section" fluid>
       <TreeDropdownComponent
         :placeholder="placeholderCategory"
@@ -99,10 +115,11 @@
           class="animate__animated animate__flipInX animate__faster field-heading d-flex gap-1 align-items-center mb-0"
         >
           {{ localize("colorCapslock") }}
-          <MDBInput
+          <InputText
             class="input-wrapper animate__animated animate__fadeIn username-input"
             :class="{ 'p-invalid': !validate.color }"
             type="text"
+            :placeholder="placeholderColor"
             v-model="color"
           />
         </h5>
@@ -112,13 +129,8 @@
         :class="{ 'p-invalid': !validate.description }"
         id="description"
         type="textarea"
+        :placeholder="placeholderDescription"
         v-model="description"
-      />
-      <MDBInput
-        class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-        :class="{ 'p-invalid': !validate.expirationDate }"
-        type="text"
-        v-model="expirationDate"
       />
     </MDBContainer>
     <MDBContainer class="footer-section" fluid>
@@ -126,10 +138,11 @@
         <MDBCol>
           <h5 class="field-heading">
             {{ localize("quantityPerPackageCapslock") }}
-            <MDBInput
+            <InputText
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
               :class="{ 'p-invalid': !validate.amountInBox }"
               type="text"
+              :placeholder="placeholderQuantityPerPackage"
               v-model="amountInBox"
             />
           </h5>
@@ -137,10 +150,11 @@
         <MDBCol>
           <h5 class="field-heading">
             {{ localize("distributionPriceCapslock") }}
-            <MDBInput
+            <InputText
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
               :class="{ 'p-invalid': !validate.distributorPrice }"
               type="text"
+              :placeholder="placeholderDistributionPrice"
               v-model="distributorPrice"
             />
           </h5>
@@ -148,10 +162,11 @@
         <MDBCol>
           <h5 class="field-heading">
             {{ localize("professionalPriceCapslock") }}
-            <MDBInput
+            <InputText
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
               :class="{ 'p-invalid': !validate.professionalPrice }"
               type="text"
+              :placeholder="placeholderProfessionalPrice"
               v-model="professionalPrice"
             />
           </h5>
@@ -159,10 +174,11 @@
         <MDBCol>
           <h5 class="field-heading">
             {{ localize("defaultPriceCapslock") }}
-            <MDBInput
+            <InputText
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
               :class="{ 'p-invalid': !validate.commonPrice }"
               type="text"
+              :placeholder="placeholderDefaultPrice"
               v-model="commonPrice"
             />
           </h5>
@@ -195,6 +211,8 @@ import PrintUtil from "@/utils/localization/print.util";
 import { th } from "vuetify/locale";
 import ValidateRule from "@/utils/validator/validate-rule";
 import ValidatorUtil from "@/utils/validator/validator.util";
+import InputText from "primevue/inputtext";
+import Panel from 'primevue/panel';
 
 export default {
   name: "CreateProduct",
@@ -210,6 +228,8 @@ export default {
     MDBRow,
     MDBCol,
     MDBBtn,
+    InputText,
+    Panel
   },
   data() {
     return {
@@ -217,6 +237,16 @@ export default {
       placeholderCategory: this.localize("selectACategory"),
       placeholderBrand: this.localize("selectABrand"),
       placeholderCollection: this.localize("selectACollection"),
+      placeholderDescription: this.localize("placeholderDescription"),
+      placeholderProductName: this.localize("placeholderProductName"),
+      placeholderVendorCode: this.localize('placeholderVendorCode'),
+      placeholderLink: this.localize('placeholderLink'),
+      placeholderColor: this.localize('placeholderColor'),
+      placeholderQuantityPerPackage: this.localize('placeholderNumber'),
+      placeholderDistributionPrice: this.localize('placeholderNumber'),
+      placeholderProfessionalPrice: this.localize('placeholderNumber'),
+      placeholderDefaultPrice: this.localize('placeholderNumber'),
+      placeholderExpirationDate: this.localize('placeholderExpirationDate'),
       vendorCode: "",
       brand: null,
       name: "",
@@ -470,8 +500,12 @@ export default {
 }
 .field-heading {
   font-size: 16px;
+  gap: 1rem;
   color: #4e4e4e;
+  margin-bottom: 0;
   font-weight: 500;
+  width: 100%;
+  max-width: max-content;
 }
 
 .copy-on {
@@ -485,8 +519,7 @@ export default {
   max-width: 75%;
 }
 .header-row {
-  border-bottom: 1px solid #eee;
-  padding-bottom: 2rem;
+  display: flex;
 }
 .description {
   width: 100%;
@@ -507,6 +540,7 @@ export default {
   max-width: 4.5rem;
   font-weight: 800;
   max-height: 2rem;
+  margin-top: 0 !important;
   padding-left: 2px;
   padding-right: 3px;
   padding-top: 2px;
@@ -560,5 +594,31 @@ export default {
   padding-bottom: 0.1rem;
 }
 .p-multiselect-label .p-placeholder {
+}
+:deep(#product-name-input) {
+  width: 100%;
+  max-width: 50vw !important;
+}
+:deep(.p-dropdown-label) {
+  padding-right: 0.1rem;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+  width: 100%;
+  max-width: fit-content;
+}
+:deep(.p-dropdown) {
+  width: 100%;
+  max-width: fit-content;
+}
+:deep(.p-dropdown-filter) {
+  padding-right: 0.1rem;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+}
+:deep(.p-panel-header) {
+  display: none;
+}
+:deep(.p-panel) {
+  border-top: 1px solid #e5e7eb;
 }
 </style>

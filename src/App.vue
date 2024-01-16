@@ -110,7 +110,6 @@ ul {
   padding-top: 2px;
   padding-bottom: 2px;
   border-radius: 7px;
-  margin-top: 0.5rem;
 }
 .p-component-overlay {
   background-color: rgba(255, 255, 255, 0.7)!important;
@@ -211,6 +210,30 @@ ul {
   transition: all 0.3s ease-in-out;
   border-bottom: 2px solid black;
 }
+
+.text-area {
+  border: 0;
+  border-radius: 0;
+  background-color: #f8f8f8;
+  border-bottom: 2px solid #cecece;
+  transition: all 0.3s ease-in-out;
+}
+.text-area:focus-within {
+  box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0);
+  transition: all 0.3s ease-in-out;
+  border-bottom: 2px solid black;
+}
+.text-area:focus {
+  box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0);
+  transition: all 0.3s ease-in-out;
+  border-bottom: 2px solid black;
+}
+.text-area:focus-within {
+  box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0);
+  transition: all 0.3s ease-in-out;
+  border-bottom: 2px solid black;
+}
+
 .p-dropdown-label {
   color: black;
 }

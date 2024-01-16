@@ -36,10 +36,13 @@
       }}</MDBBtn>
     </MDBCol>
   </MDBRow>
+  <SearchComponent @search="handleAddedSearch" />
   <TableComponent
-    :rows="addedList"
-    :columns="addedColumns"
-    :searchTerm="addedSearchTerm"
+       :rowsPerPage="6"
+       :rows="addedList"
+       :enable-delete="true"
+       :columns="addedColumns"
+       :searchTerm="addedSearchTerm"
   />
 </template>
 <script lang="ts">
@@ -52,6 +55,8 @@ import PrintUtil from "@/utils/localization/print.util";
 import ValidatorUtil from "@/utils/validator/validator.util";
 import ValidateRule from "@/utils/validator/validate-rule";
 import loggerUtil from "@/utils/logger/logger.util";
+import InputText from "primevue/inputtext";
+import SearchComponent from "@/components/Elements/SearchComponent.vue";
 
 export default {
   name: "StorehouseOperation",
@@ -63,6 +68,8 @@ export default {
     MDBRow,
     SelectComponent,
     TableComponent,
+    SearchComponent,
+    MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow, SelectComponent, TableComponent, InputText
   },
   props: {
     title: String,
@@ -114,6 +121,9 @@ export default {
     });
   },
   methods: {
+    handleAddedSearch(searchTerm) {
+      this.addedSearchTerm = searchTerm;
+    },
     localize(key, module = "storehouses") {
       return PrintUtil.localize(key, module);
     },
@@ -201,6 +211,7 @@ export default {
   height: auto;
   width: 100%;
   min-width: 4rem;
+  margin-top: 0;
   max-width: fit-content;
   font-weight: 800;
   max-height: 2rem;
@@ -227,5 +238,9 @@ export default {
 :deep(.p-toast) {
   position: relative;
   z-index: 99999999999999999999999999999999999 !important;
+}
+:deep(td.p-editable-column) {
+  height: 40px !important;
+  padding: 8px;
 }
 </style>
