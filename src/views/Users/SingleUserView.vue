@@ -18,7 +18,9 @@
         </MDBCol>
         <MDBCol class="align-self-center">
           <MDBRow class="d-flex flex-row flex-nowrap align-self-center">
-            <span class="user-roles-heading">USER ROLES</span>
+            <span class="user-roles-heading">{{
+              localize("userRolesCapslock", "user")
+            }}</span>
             <div class="container">
               <MDBBadge
                 v-for="roleName in userRolesNameList"
@@ -30,25 +32,29 @@
         </MDBCol>
       </MDBRow>
       <MDBCol v-if="!editing" class="d-flex justify-content-end">
-        <MDBBtn @click="startEditing" class="utility-btn" outline="black"
-          >EDIT</MDBBtn
-        >
+        <MDBBtn @click="startEditing" class="utility-btn" outline="black">{{
+          localize("editCapslock")
+        }}</MDBBtn>
       </MDBCol>
       <MDBCol v-else class="d-flex justify-content-end">
         <MDBBtn
           v-if="!isMySelf"
           @click="confirmDeletion"
           class="utility-btn btn-danger"
-          >DELETE</MDBBtn
+          >{{ localize("deleteCapslock") }}</MDBBtn
         >
-        <MDBBtn @click="cancelEditing" class="utility-btn" outline="black"
-          >CANCEL</MDBBtn
-        >
-        <MDBBtn @click="saveChanges" class="utility-btn btn-black">SAVE</MDBBtn>
+        <MDBBtn @click="cancelEditing" class="utility-btn" outline="black">{{
+          localize("cancelCapslock")
+        }}</MDBBtn>
+        <MDBBtn @click="saveChanges" class="utility-btn btn-black">{{
+          localize("saveCapslock")
+        }}</MDBBtn>
       </MDBCol>
     </MDBRow>
     <MDBRow class="d-flex flex-nowrap w-100">
-      <span class="user-roles-heading">USERNAME</span>
+      <span class="user-roles-heading">{{
+        localize("userNameCapslock", "user")
+      }}</span>
       <span v-if="!editing" class="username">{{ userUsername }}</span>
       <InputText
         v-else
@@ -58,7 +64,9 @@
       />
     </MDBRow>
     <MDBRow class="d-flex flex-nowrap w-100">
-      <span class="user-roles-heading">PASSWORD</span>
+      <span class="user-roles-heading">{{
+        localize("passwordCapslock", "user")
+      }}</span>
       <span v-if="!editing" class="password">{{ userPassword }}</span>
       <InputText
         v-else
@@ -111,6 +119,7 @@ import MultiSelectComponent from "@/components/Elements/MultiSelectComponent.vue
 import ModalComponent from "@/components/Elements/ModalComponent.vue";
 import { useModalStore } from "@/stores/modal.store";
 import TokenUtil from "@/utils/token.util";
+import PrintUtil from "@/utils/localization/print.util";
 export default {
   name: "SingleUserView",
   components: {
@@ -136,8 +145,8 @@ export default {
     showModal: false,
     searchTerm: "",
     originalUserName: "",
-    modalTitle: "Confirm deletion",
-    disclaimerText: "This action cannot be undone, this user data will be lost",
+    modalTitle: PrintUtil.localize("confirmDeletion"),
+    disclaimerText: PrintUtil.localize("deleteDisclaimer", "user"),
     newUserName: "",
     originalUserUsername: "",
     newUserUsername: "",
@@ -177,7 +186,7 @@ export default {
   },
   computed: {
     modalText() {
-      return `Are you sure you want to delete user "${this.userName}?"`;
+      return `${PrintUtil.localize("deleteWarn", "user")} "${this.userName}?"`;
     },
     isMySelf() {
       return TokenUtil.getAuthorizedId() == this.id;
@@ -201,9 +210,9 @@ export default {
       const roles = [];
       roles.push({
         id: 0,
-        name: "Personal rules",
+        name: PrintUtil.localize("personalRules", "user"),
         relatedUsersCount: 1,
-        description: "Rules which are related only to this user",
+        description: PrintUtil.localize("personalRulesDescription", "user"),
         rules: this.selectedUser.rules,
         canChange: true,
       });
@@ -219,6 +228,9 @@ export default {
     },
   },
   methods: {
+    localize(key, module = "default") {
+      return PrintUtil.localize(key, module);
+    },
     confirmDeletion() {
       this.modalStore.show({
         title: this.modalTitle,

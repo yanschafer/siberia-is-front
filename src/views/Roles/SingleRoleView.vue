@@ -1,5 +1,11 @@
 <template>
-  <ModalComponent :disclaimerText="disclaimerText" :modalTitle="modalTitle" :modalText="modalText" v-if="showModal" @closeModal="closeModal" />
+  <ModalComponent
+    :disclaimerText="disclaimerText"
+    :modalTitle="modalTitle"
+    :modalText="modalText"
+    v-if="showModal"
+    @closeModal="closeModal"
+  />
   <MDBContainer class="single-user-info d-flex flex-column gap-3">
     <MDBRow class="d-flex justify-content-around">
       <MDBRow class="w-auto">
@@ -40,14 +46,22 @@
         >
       </MDBCol>
       <MDBCol v-else class="d-flex justify-content-end">
-        <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">DELETE</MDBBtn>
-        <MDBBtn @click="cancelEditing" class="utility-btn" outline="black">CANCEL</MDBBtn>
-        <MDBBtn @click="saveChanges" class="utility-btn btn-black">SAVE</MDBBtn>
+        <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
+          localize("deleteCapslock")
+        }}</MDBBtn>
+        <MDBBtn @click="cancelEditing" class="utility-btn" outline="black">{{
+          localize("cancelCapslock")
+        }}</MDBBtn>
+        <MDBBtn @click="saveChanges" class="utility-btn btn-black">{{
+          localize("saveCapslock")
+        }}</MDBBtn>
       </MDBCol>
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="pt-4">
-    <span class="username">RELATED USERS: </span>
+    <span class="username"
+      >{{ localize("relatedUsersCapslock", "role") }}:
+    </span>
     <MultiSelectComponent
       :start-items="relatedUsers"
       :options="usersOptions"
@@ -88,6 +102,7 @@ import { appConf } from "@/api/conf/app.conf";
 import MultiSelectComponent from "@/components/Elements/MultiSelectComponent.vue";
 import { useUsersStore } from "@/stores/user.store";
 import loggerUtil from "@/utils/logger/logger.util";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "SingleRoleView",
@@ -127,9 +142,9 @@ export default {
     };
   },
   data: () => ({
-    modalTitle: 'Confirm deletion',
+    modalTitle: PrintUtil.localize("confirmDeletion"),
     modalText: ``,
-    disclaimerText: 'This action cannot be undone, this role data will be lost',
+    disclaimerText: PrintUtil.localize("deleteDisclaimer", "role"),
     showModal: false,
     activeTabId4: "role1-1",
     editing: false,
@@ -139,8 +154,11 @@ export default {
     originalRoleDescription: "",
   }),
   methods: {
+    localize(key, module) {
+      return PrintUtil.localize(key, module);
+    },
     confirmDeletion() {
-      this.roleName = this.selectedRole.name || '';
+      this.roleName = this.selectedRole.name || "";
       this.showModal = true;
     },
     closeModal() {
@@ -189,7 +207,7 @@ export default {
   },
   computed: {
     modalText() {
-      return `Are you sure you want to delete user "${this.roleName}?"`;
+      return `${PrintUtil.localize("deleteWarn", "role")} "${this.roleName}?"`;
     },
     selectedRole() {
       return this.rolesStore.getSelectedRole || {};
