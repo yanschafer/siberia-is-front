@@ -391,11 +391,11 @@ export default {
       newCostPrice: null,
       newExpirationDate: null,
       initCategoryDialog: {
-        header: "Create a category",
+        header: this.localize("createACategory"),
         showSelect: true,
         selectItems: this.categoryList,
-        selectName: "Select parent category",
-        inputName: "Category name",
+        selectName: this.localize("selectParentCategory"),
+        inputName: this.localize("categoryName"),
         methodOnSave: async (category) => {
           const loadRes = await this.categoriesStore.loadCategoriesList();
           loadRes.toastIfError(this.$toast, this.$nextTick);
@@ -406,12 +406,12 @@ export default {
         },
         methodOnClose: () => loggerUtil.debug("workds"),
         model: new CategoryModel(),
-        toastSuccessText: "Category is created",
-        toastErrorText: "Category creation failed",
+        toastSuccessText: this.localize("categoryIsCreated"),
+        toastErrorText: this.localize("categoryCreationFailed"),
       },
       initBrandDialog: {
-        header: "Create a brand",
-        inputName: "Brand name",
+        header: this.localize("createABrand"),
+        inputName: this.localize("brandName"),
         model: new BrandModel(),
         methodOnSave: async (brand) => {
           const loadRes = await this.brandStore.loadBrandsList();
@@ -419,12 +419,12 @@ export default {
           this.newBrand = brand;
         },
         methodOnClose: () => loggerUtil.debug("workds"),
-        toastSuccessText: "Brand is created",
-        toastErrorText: "Brand creation failed",
+        toastSuccessText: this.localize("brandIsCreated"),
+        toastErrorText: this.localize("brandCreationFailed"),
       },
       initCollectionDialog: {
-        header: "Create a collection",
-        inputName: "Collection name",
+        header: this.localize("createACollection"),
+        inputName: this.localize("collectionName"),
         methodOnSave: async (collection) => {
           const loadRes = await this.collectionStore.loadCollectionList();
           loadRes.toastIfError(this.$toast, this.$nextTick);
@@ -432,8 +432,8 @@ export default {
         },
         methodOnClose: () => loggerUtil.debug("workds"),
         model: new CollectionModel(),
-        toastSuccessText: "Collection is created",
-        toastErrorText: "Collection creation failed",
+        toastSuccessText: this.localize("collectionIsCreated"),
+        toastErrorText: this.localize("collectionCreationFailed"),
       },
       validate: {
         vendorCode: true,
@@ -550,8 +550,8 @@ export default {
       if (removed.success) {
         this.$toast.add({
           severity: "success",
-          summary: "Success",
-          detail: "Product is removed",
+          summary: this.localize("success", "storehouses"),
+          detail: this.localize("productIsRemoved"),
           life: 3000,
         });
         this.modalStore.hide();
@@ -579,8 +579,8 @@ export default {
       if (encoded == null) {
         this.$toast.add({
           severity: "error",
-          summary: "Failed upload",
-          detail: "Photo uploading failed",
+          summary: this.localize("failedUpload"),
+          detail: this.localize("photoUploadingFailed"),
           life: 3000,
         });
         return;
@@ -614,8 +614,8 @@ export default {
     showNotFoundToast(type) {
       this.$toast.add({
         severity: "error",
-        summary: "Creation failed",
-        detail: `${type} not found`,
+        summary: this.localize("creationFailed"),
+        detail: `${type} ${this.localize("notFound")}`,
         life: 3000,
       });
     },
@@ -677,8 +677,8 @@ export default {
       } else {
         this.$toast.add({
           severity: "success",
-          summary: "Success",
-          detail: `Product successfully updated`,
+          summary: this.localize("success", "storehouses"),
+          detail: this.localize("productSuccessfullyUpdated"),
           life: 3000,
         });
       }

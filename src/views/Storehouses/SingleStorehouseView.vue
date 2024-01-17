@@ -265,15 +265,15 @@ export default {
     showSuccessTransactionCreation(type, autoApproved) {
       this.$toast.add({
         severity: "success",
-        summary: "Success",
-        detail: `${type} created`,
+        summary: this.localize("success"),
+        detail: `${type} ${this.localize("created")}`,
         life: 3000,
       });
       if (autoApproved) {
         this.$toast.add({
           severity: "success",
-          summary: "Success",
-          detail: `${type} auto-approved`,
+          summary: this.localize("success"),
+          detail: `${type} ${this.localize("autoApproved")}`,
           life: 3000,
         });
       }
@@ -315,8 +315,8 @@ export default {
         if (error.httpStatusCode == 400 && error.data?.includes("enough")) {
           this.$toast.add({
             severity: "error",
-            summary: "Failed",
-            detail: `Not enough products for sale`,
+            summary: this.localize("failed"),
+            detail: this.localize("notEnoughProducts"),
             life: 3000,
           });
         }
@@ -361,8 +361,8 @@ export default {
         await this.storehouseStore.loadStorehouseList();
         this.$toast.add({
           severity: "success",
-          summary: "Success",
-          detail: "Storehouse is removed",
+          summary: this.localize("success"),
+          detail: this.localize("storehouseIsRemoved"),
           life: 3000,
         });
         this.router.push({ name: "storehouses" });
@@ -371,8 +371,8 @@ export default {
         if (error.httpStatusCode == 404) {
           this.$toast.add({
             severity: "error",
-            summary: "Failed",
-            detail: "Storehouse not found",
+            summary: this.localize("failed"),
+            detail: this.localize("storehouseNotFound"),
             life: 3000,
           });
           return;

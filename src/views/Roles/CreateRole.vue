@@ -67,13 +67,13 @@ export default defineComponent({
     return {
       name: "",
       description: "",
-      namePlaceholder: "Enter a role name",
-      descriptionPlaceholder: "Enter a role description",
+      namePlaceholder: this.localize("enterARoleName", "role"),
+      descriptionPlaceholder: this.localize("enterARoleDescription", "role"),
       roles: {
         id: 1,
-        name: "Rules",
+        name: this.localize("rules", "role"),
         relatedUsersCount: 0,
-        description: "Rules for new role",
+        description: this.localize("rulesForNewRole", "role"),
         rules: [],
         canChange: true,
       },
@@ -105,8 +105,8 @@ export default defineComponent({
     showSuccessToast() {
       this.$toast.add({
         severity: "success",
-        summary: "Success",
-        detail: "Role is created",
+        summary: this.localize("success", "storehouses"),
+        detail: this.localize("roleIsCreated", "role"),
         life: 3000,
       });
     },

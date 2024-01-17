@@ -12,7 +12,7 @@
       <MDBInput
         class="input-wrapper animate__animated animate__fadeIn username-input"
         type="text"
-        placeholder="Quantity"
+        :placeholder="localize('quantity')"
         v-model="quantity"
       />
     </MDBCol>
@@ -20,7 +20,7 @@
       <MDBInput
         class="input-wrapper animate__animated animate__fadeIn username-input"
         type="text"
-        placeholder="Price"
+        :placeholder="localize('price')"
         v-model="price"
       />
     </MDBCol>
@@ -135,7 +135,7 @@ export default {
       loggerUtil.debug(detail);
       this.$toast.add({
         severity: "error",
-        summary: "Failed",
+        summary: this.localize("failed"),
         detail,
         life: 3000,
       });
@@ -146,13 +146,13 @@ export default {
       validator.addRule("quantity", quantityValidateRule);
 
       if (!this.selectedProduct || !this.quantity) {
-        this.showErrorToast("Quantity and Product must be selected");
+        this.showErrorToast(this.localize("quantityAndProductMustBeSelected"));
         return;
       }
 
       if (this.showPrice && !this.price) {
         if (!this.price) {
-          this.showErrorToast("Price must be selected");
+          this.showErrorToast(this.localize("priceMustBeSelected"));
           return;
         }
         const priceValidateRule = new ValidateRule().required().setMin(0);
@@ -170,7 +170,7 @@ export default {
 
       if (this.needValidation) {
         if (this.amountValidation[this.selectedProduct.id] < this.quantity) {
-          this.showErrorToast("Not enough products");
+          this.showErrorToast(this.localize("notEnoughProductsStorehouses"));
           return;
         }
       }
