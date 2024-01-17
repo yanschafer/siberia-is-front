@@ -267,6 +267,9 @@ ul {
   width: 100%!important;
   border-bottom: 2px solid rgba(227, 227, 227, 0.49) !important;
 }
+.p-invalid {
+  border-color: #e24c4c!important;
+}
 </style>
 
 <style scoped></style>
