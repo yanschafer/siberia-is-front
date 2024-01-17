@@ -14,7 +14,7 @@
     >
       <img
         class="animate__animated animate__headShake animate__delay-1s utility-icon"
-        src="@/assets/icons/danger.svg"
+        src="../../../assets/icons/danger.svg"
       />
       <h3 class="modal-heading">{{ title }}</h3>
       <p class="modal-text mb-0">

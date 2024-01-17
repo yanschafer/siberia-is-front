@@ -46,7 +46,7 @@
   </Dialog>
 </template>
 <script lang="ts">
-import TreeDropdownComponent from "@/components/Elements/TreeDropdownComponent.vue";
+import TreeDropdownComponent from "@/components/Elements/Selectors/TreeDropdownComponent.vue";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Dialog from "primevue/dialog";

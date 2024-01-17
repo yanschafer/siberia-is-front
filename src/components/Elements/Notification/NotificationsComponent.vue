@@ -40,7 +40,7 @@ import { MDBBtn, MDBCol, MDBContainer, MDBDropdown, MDBDropdownMenu, MDBDropdown
 import OverlayPanel from 'primevue/overlaypanel';
 import Button from 'primevue/button';
 import Toast from "primevue/toast";
-import NotificationMessageComponent from "@/components/Elements/NotificationMessageComponent.vue";
+import NotificationMessageComponent from "@/components/Elements/Notification/NotificationMessageComponent.vue";
 
 export default {
   name: 'NotificationsComponent',

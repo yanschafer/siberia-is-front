@@ -97,7 +97,7 @@ import InputNumber from "primevue/inputnumber";
 import InputText from "primevue/inputtext";
 import { MDBBtn, MDBContainer } from "mdb-vue-ui-kit";
 import {IconSearchOff, IconInfoCircle} from "@tabler/icons-vue";
-import InfoMessageComponent from "@/components/Elements/InfoMessageComponent.vue";
+import InfoMessageComponent from "@/components/Elements/Dialogs/InfoMessageComponent.vue";
 
 export default defineComponent({
   components: {

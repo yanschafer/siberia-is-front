@@ -33,7 +33,7 @@
 import { MDBRow, MDBCol } from "mdb-vue-ui-kit";
 import InputNumber from "primevue/inputnumber";
 import InputText from "primevue/inputtext";
-import loggerUtil from "@/utils/logger/logger.util.js";
+import loggerUtil from "@/utils/logger/logger.util";
 import PrintUtil from "@/utils/localization/print.util";
 
 export default {

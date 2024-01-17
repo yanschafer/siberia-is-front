@@ -50,8 +50,8 @@
 </template>
 <script lang="ts">
 import { MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow } from "mdb-vue-ui-kit";
-import SelectComponent from "@/components/Elements/SelectComponent.vue";
-import TableComponent from "@/components/Elements/TableComponent.vue";
+import SelectComponent from "@/components/Elements/Selectors/SelectComponent.vue";
+import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import { useProductsStore } from "@/stores/products.store.js";
 import { useStorehousesStore } from "@/stores/storehouse.store";
 import PrintUtil from "@/utils/localization/print.util";
@@ -59,7 +59,7 @@ import ValidatorUtil from "@/utils/validator/validator.util";
 import ValidateRule from "@/utils/validator/validate-rule";
 import loggerUtil from "@/utils/logger/logger.util";
 import InputText from "primevue/inputtext";
-import SearchComponent from "@/components/Elements/SearchComponent.vue";
+import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 
 export default {
   name: "StorehouseOperation",

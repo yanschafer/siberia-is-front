@@ -15,8 +15,8 @@
 </template>
 
 <script lang="ts">
-import SelectComponent from "../SelectComponent.vue";
-import MultiSelectComponent from "@/components/Elements/MultiSelectComponent.vue";
+import SelectComponent from "../../Selectors/SelectComponent.vue";
+import MultiSelectComponent from "@/components/Elements/Selectors/MultiSelectComponent.vue";
 export default {
   components: { MultiSelectComponent, SelectComponent },
   name: "SelectorFilter",

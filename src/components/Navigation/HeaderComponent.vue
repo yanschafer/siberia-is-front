@@ -105,7 +105,7 @@ import {
   IconBell,
 } from "@tabler/icons-vue";
 import { ref } from "vue";
-import NotificationsComponent from "@/components/Elements/NotificationsComponent.vue";
+import NotificationsComponent from "@/components/Elements/Notification/NotificationsComponent.vue";
 import TokenUtil from "@/utils/token.util";
 import { appConf } from "@/api/conf/app.conf";
 import { useRouter } from "vue-router";
@@ -235,7 +235,7 @@ export default defineComponent({
   background-color: white;
 }
 .badge {
-  z-index: 999999;
+  z-index: 999;
   position: relative;
   top: -15px;
   left: -30px;

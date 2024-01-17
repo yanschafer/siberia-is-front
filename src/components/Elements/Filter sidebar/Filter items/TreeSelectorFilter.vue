@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import TreeDropdownComponent from "@/components/Elements/TreeDropdownComponent.vue";
+import TreeDropdownComponent from "@/components/Elements/Selectors/TreeDropdownComponent.vue";
 import loggerUtil from "@/utils/logger/logger.util";
 
 export default {

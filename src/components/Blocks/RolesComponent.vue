@@ -57,7 +57,7 @@ import MultiSelect from "primevue/multiselect";
 import { appConf } from "@/api/conf/app.conf";
 import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.dto";
 import loggerUtil from "@/utils/logger/logger.util";
-import MultiSelectComponent from "@/components/Elements/MultiSelectComponent.vue";
+import MultiSelectComponent from "@/components/Elements/Selectors/MultiSelectComponent.vue";
 import PrintUtil from "@/utils/localization/print.util";
 
 export default {

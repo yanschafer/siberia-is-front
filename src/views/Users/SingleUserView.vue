@@ -114,16 +114,16 @@ import {
   MDBInput,
 } from "mdb-vue-ui-kit";
 import Panel from "primevue/panel";
-import TabsComponent from "@/components/Elements/TabsComponent.vue";
+import TabsComponent from "@/components/Navigation/TabsComponent.vue";
 import UserFullDto from "@/api/modules/user/dto/user-full.dto";
 import { useRoute, useRouter } from "vue-router";
 import UpdateUserDto from "@/api/modules/user/dto/update-user.dto";
 import { useUsersStore } from "@/stores/user.store";
 import InputText from "primevue/inputtext";
-import SelectComponent from "@/components/Elements/SelectComponent.vue";
+import SelectComponent from "@/components/Elements/Selectors/SelectComponent.vue";
 import { useRolesStore } from "@/stores/roles.store";
-import MultiSelectComponent from "@/components/Elements/MultiSelectComponent.vue";
-import ModalComponent from "@/components/Elements/ModalComponent.vue";
+import MultiSelectComponent from "@/components/Elements/Selectors/MultiSelectComponent.vue";
+import ModalComponent from "@/components/Elements/Dialogs/ModalComponent.vue";
 import { useModalStore } from "@/stores/modal.store";
 import TokenUtil from "@/utils/token.util";
 import PrintUtil from "@/utils/localization/print.util";

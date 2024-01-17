@@ -21,13 +21,13 @@
   <router-view v-if="isIdProvided" :id="routeIdParam" />
 </template>
 <script lang="ts">
-import TableComponent from "@/components/Elements/TableComponent.vue";
-import SearchComponent from "@/components/Elements/SearchComponent.vue";
+import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
+import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useHistoryStore } from "@/stores/history.store";
 import { MDBContainer, MDBCol } from "mdb-vue-ui-kit";
 import { FilterType } from "@/api/conf/app.conf";
-import FiltersSidebarComponent from "@/components/Elements/Filter/FiltersSidebarComponent.vue";
+import FiltersSidebarComponent from "@/components/Elements/Filter sidebar/FiltersSidebarComponent.vue";
 import loggerUtil from "@/utils/logger/logger.util";
 import {IconSearchOff} from "@tabler/icons-vue";
 

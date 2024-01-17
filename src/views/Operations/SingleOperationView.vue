@@ -60,8 +60,8 @@
 </template>
 <script lang="ts">
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdb-vue-ui-kit";
-import TableComponent from "@/components/Elements/TableComponent.vue";
-import SearchComponent from "@/components/Elements/SearchComponent.vue";
+import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
+import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 import { useOperationStore } from "@/stores/operation.store";
 import { useRoute } from "vue-router";
 import {
@@ -70,7 +70,7 @@ import {
   TransactionType,
 } from "@/api/conf/app.conf";
 import LoggerUtil from "@/utils/logger/logger.util";
-import SelectComponent from "@/components/Elements/SelectComponent.vue";
+import SelectComponent from "@/components/Elements/Selectors/SelectComponent.vue";
 import { useStorehousesStore } from "@/stores/storehouse.store";
 import loggerUtil from "@/utils/logger/logger.util";
 import TransactionSimpleDto from "@/api/modules/transaction/dto/transaction-simple.dto";

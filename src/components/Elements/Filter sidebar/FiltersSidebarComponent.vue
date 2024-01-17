@@ -54,8 +54,8 @@
             }}</MDBBtn>
           </MDBCol>
         </MDBRow>
-        <div class="bottom-gradient-overlay"></div>
       </ScrollPanel>
+
     </div>
   </div>
 </template>
@@ -64,18 +64,18 @@
 import { IconAdjustmentsHorizontal } from "@tabler/icons-vue";
 import InputText from "primevue/inputtext";
 import InputNumber from "primevue/inputnumber";
-import SelectComponent from "@/components/Elements/SelectComponent.vue";
+import SelectComponent from "@/components/Elements/Selectors/SelectComponent.vue";
 import { MDBBtn, MDBCol, MDBRow } from "mdb-vue-ui-kit";
-import TextFilter from "@/components/Elements/Filter/TextFilter.vue";
-import SelectorFilter from "@/components/Elements/Filter/SelectorFilter.vue";
-import MinMaxFilter from "@/components/Elements/Filter/MinMaxFilter.vue";
+import TextFilter from "@/components/Elements/Filter sidebar/Filter items/TextFilter.vue";
+import SelectorFilter from "@/components/Elements/Filter sidebar/Filter items/SelectorFilter.vue";
+import MinMaxFilter from "@/components/Elements/Filter sidebar/Filter items/MinMaxFilter.vue";
 import loggerUtil from "@/utils/logger/logger.util";
 import { FilterType } from "@/api/conf/app.conf";
 import filesResolverUtil from "@/utils/files-resolver.util";
 import ProductSearchFilterDto from "@/api/modules/product/dto/product-search-filter.dto";
 import FieldSearchWrapperDto from "@/utils/crud/dto/field-search-wrapper.dto";
-import MinMaxDateFilter from "@/components/Elements/Filter/MinMaxDateFilter.vue";
-import TreeSelectorFilter from "@/components/Elements/Filter/TreeSelectorFilter.vue";
+import MinMaxDateFilter from "@/components/Elements/Filter sidebar/Filter items/MinMaxDateFilter.vue";
+import TreeSelectorFilter from "@/components/Elements/Filter sidebar/Filter items/TreeSelectorFilter.vue";
 import ScrollPanel from "primevue/scrollpanel";
 import PrintUtil from "@/utils/localization/print.util";
 
@@ -223,5 +223,13 @@ export default {
 }
 .filter-group {
   height: 73vh;
+}
+.overlay-bottom {
+  width: 100%;
+  height: 1rem;
+  background-color: black;
+  box-shadow: 0px -9px 10px 10px white;
+  position: absolute;
+  bottom: 0px;
 }
 </style>

@@ -18,7 +18,7 @@
 </template>
 <script lang="ts">
 import { MDBBadge, MDBBtn, MDBCol, MDBContainer, MDBRow } from "mdb-vue-ui-kit";
-import TabsComponent from "@/components/Elements/TabsComponent.vue";
+import TabsComponent from "@/components/Navigation/TabsComponent.vue";
 import { useHistoryStore } from "@/stores/history.store";
 import { useRoute } from "vue-router";
 

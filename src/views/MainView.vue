@@ -25,7 +25,7 @@
 import { useRoute, useRouter } from "vue-router";
 import SidebarComponent from "@/components/Navigation/SidebarComponent.vue";
 import HeaderComponent from "@/components/Navigation/HeaderComponent.vue";
-import DialogComponent from "@/components/Elements/DialogComponent.vue";
+import DialogComponent from "@/components/Elements/Dialogs/DialogComponent.vue";
 import TokenUtil from "@/utils/token.util";
 import { appConf } from "@/api/conf/app.conf";
 import { MDBContainer } from "mdb-vue-ui-kit";

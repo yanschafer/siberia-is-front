@@ -22,14 +22,14 @@
 </template>
 
 <script lang="ts">
-import TableComponent from "@/components/Elements/TableComponent.vue";
-import SearchComponent from "@/components/Elements/SearchComponent.vue";
+import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
+import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 import { useOperationStore } from "@/stores/operation.store";
 import { useRoute, useRouter } from "vue-router";
 import { FilterType, TransactionType } from "@/api/conf/app.conf";
 import LoggerUtil from "@/utils/logger/logger.util";
 import { MDBContainer, MDBCol } from "mdb-vue-ui-kit";
-import FiltersSidebarComponent from "@/components/Elements/Filter/FiltersSidebarComponent.vue";
+import FiltersSidebarComponent from "@/components/Elements/Filter sidebar/FiltersSidebarComponent.vue";
 import { useStorehousesStore } from "@/stores/storehouse.store";
 export default {
   name: "OperationsView",

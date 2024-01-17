@@ -110,14 +110,14 @@
 <script lang="ts">
 import { IconMapPinFilled, IconRoute } from "@tabler/icons-vue";
 import { MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow } from "mdb-vue-ui-kit";
-import TableComponent from "@/components/Elements/TableComponent.vue";
-import SearchComponent from "@/components/Elements/SearchComponent.vue";
-import ModalComponent from "@/components/Elements/ModalComponent.vue";
+import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
+import SearchComponent from "@/components/Inputs/SearchComponent.vue";
+import ModalComponent from "@/components/Elements/Dialogs/ModalComponent.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStorehousesStore } from "@/stores/storehouse.store";
 import StockUpdateDto from "@/api/modules/stock/dto/stock-update.dto";
 import { useToast } from "primevue/usetoast";
-import SelectComponent from "@/components/Elements/SelectComponent.vue";
+import SelectComponent from "@/components/Elements/Selectors/SelectComponent.vue";
 import { useProductsStore } from "@/stores/products.store";
 import StorehouseOperation from "@/views/Storehouses/StorehouseOperation.vue";
 import ProductListItemDto from "@/api/modules/product/dto/product-list-item.dto";

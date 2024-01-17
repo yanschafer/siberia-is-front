@@ -30,9 +30,9 @@
 </template>
 
 <script lang="ts">
-import FiltersSidebarComponent from "@/components/Elements/Filter/FiltersSidebarComponent.vue";
-import TableComponent from "@/components/Elements/TableComponent.vue";
-import SearchComponent from "@/components/Elements/SearchComponent.vue";
+import FiltersSidebarComponent from "@/components/Elements/Filter sidebar/FiltersSidebarComponent.vue";
+import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
+import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 import { useProductsStore } from "@/stores/products.store";
 import { useRoute, useRouter } from "vue-router";
 import { MDBCol, MDBContainer } from "mdb-vue-ui-kit";

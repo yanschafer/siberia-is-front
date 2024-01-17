@@ -4,18 +4,18 @@
       <MDBContainer class="d-flex container-content">
         <MDBCol class="col-auto">
           <FiltersSidebarComponent
-            :filters-input="filtersInput"
-            @start-search="handleFiltersSearch"
+              :filters-input="filtersInput"
+              @start-search="handleFiltersSearch"
           />
         </MDBCol>
         <MDBCol class="col-auto">
           <SearchComponent @search="handleSearch" />
           <TableComponent
-            :infoMessage="noDataMessage"
-            :rows="filteredUsers"
-            :columns="usersStore.usersColumns"
-            :searchTerm="usersStore.searchTerm"
-            @rowClick="handleRowClick"
+              :infoMessage="noDataMessage"
+              :rows="filteredUsers"
+              :columns="usersStore.usersColumns"
+              :searchTerm="usersStore.searchTerm"
+              @rowClick="handleRowClick"
           />
         </MDBCol>
       </MDBContainer>
@@ -27,12 +27,12 @@
 </template>
 
 <script lang="ts">
-import TableComponent from "@/components/Elements/TableComponent.vue";
-import SearchComponent from "@/components/Elements/SearchComponent.vue";
+import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
+import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useUsersStore } from "@/stores/user.store";
 import { MDBCol, MDBContainer } from "mdb-vue-ui-kit";
-import FiltersSidebarComponent from "@/components/Elements/Filter/FiltersSidebarComponent.vue";
+import FiltersSidebarComponent from "@/components/Elements/Filter sidebar/FiltersSidebarComponent.vue";
 import { FilterType } from "@/api/conf/app.conf";
 import { useToast } from "primevue/usetoast";
 import loggerUtil from "@/utils/logger/logger.util";
@@ -88,9 +88,9 @@ export default {
         return this.usersStore.getUserList;
       } else {
         return this.usersStore.getUserList.filter((row) =>
-          Object.values(row).some((value) =>
-            String(value).toLowerCase().includes(searchTerm.toLowerCase()),
-          ),
+            Object.values(row).some((value) =>
+                String(value).toLowerCase().includes(searchTerm.toLowerCase()),
+            ),
         );
       }
     },

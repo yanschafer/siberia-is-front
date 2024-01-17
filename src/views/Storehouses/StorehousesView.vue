@@ -18,8 +18,8 @@
 </template>
 
 <script lang="ts">
-import TableComponent from "@/components/Elements/TableComponent.vue";
-import SearchComponent from "@/components/Elements/SearchComponent.vue";
+import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
+import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 import { useStorehousesStore } from "@/stores/storehouse.store";
 import { useRoute, useRouter } from "vue-router";
 

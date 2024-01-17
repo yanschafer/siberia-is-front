@@ -35,7 +35,7 @@
 import {defineComponent} from "vue";
 import BarChartComponent from "@/components/Elements/Dashboard elements/BarChartComponent.vue";
 import GaugeChartComponent from "@/components/Elements/Dashboard elements/GaugeChartComponent.vue";
-import TableComponent from "@/components/Elements/TableComponent.vue";
+import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import ScrollPanel from "primevue/scrollpanel";
 import Panel from "primevue/panel";
 import TabView from "primevue/tabview";

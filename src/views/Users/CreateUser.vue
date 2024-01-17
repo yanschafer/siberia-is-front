@@ -42,7 +42,7 @@
 import { MDBBtn, MDBRow, MDBCol, MDBContainer, MDBInput } from "mdb-vue-ui-kit";
 import { IconMapPinFilled } from "@tabler/icons-vue";
 import InputText from "primevue/inputtext";
-import TabsComponent from "@/components/Elements/TabsComponent.vue";
+import TabsComponent from "@/components/Navigation/TabsComponent.vue";
 import { useUsersStore } from "@/stores/user.store";
 import CreateUserDto from "@/api/modules/user/dto/create-user.dto";
 import { useRouter } from "vue-router";

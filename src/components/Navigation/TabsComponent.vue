@@ -44,7 +44,7 @@ import { defineComponent } from "vue";
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import Checkbox from "primevue/checkbox";
-import RolesComponent from "@/components/Elements/RolesComponent.vue";
+import RolesComponent from "@/components/Blocks/RolesComponent.vue";
 import { useUsersStore } from "@/stores/user.store";
 import { useRolesStore } from "@/stores/roles.store";
 import ApiResponseDto from "@/api/dto/api-response.dto";

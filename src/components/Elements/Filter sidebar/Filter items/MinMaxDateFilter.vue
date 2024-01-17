@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import loggerUtil from "@/utils/logger/logger.util.js";
+import loggerUtil from "@/utils/logger/logger.util";
 import PrintUtil from "@/utils/localization/print.util";
 import Calendar from 'primevue/calendar';
 
