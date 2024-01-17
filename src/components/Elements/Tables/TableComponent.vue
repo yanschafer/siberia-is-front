@@ -84,7 +84,7 @@
       :infoIcon="infoMessage.icon"
       :infoTitle="infoMessage.title"
       :infoText="infoMessage.text"
-  />
+    />
   </div>
 </template>
 
@@ -96,7 +96,7 @@ import Paginator from "primevue/paginator";
 import InputNumber from "primevue/inputnumber";
 import InputText from "primevue/inputtext";
 import { MDBBtn, MDBContainer } from "mdb-vue-ui-kit";
-import {IconSearchOff, IconInfoCircle} from "@tabler/icons-vue";
+import { IconSearchOff, IconInfoCircle } from "@tabler/icons-vue";
 import InfoMessageComponent from "@/components/Elements/Dialogs/InfoMessageComponent.vue";
 
 export default defineComponent({
@@ -126,11 +126,16 @@ export default defineComponent({
     },
     rowsPerPage: {
       type: Number,
-      default: 6
+      default: 6,
     },
     infoMessage: {
       type: Object,
       required: false,
+      default: {
+        icon: "IconSearchOff",
+        title: "Nothing was found",
+        text: "Please clarify your search query.",
+      },
     },
   },
   emits: ["rowClick", "rowEditSave", "rowDelete"],
@@ -140,9 +145,9 @@ export default defineComponent({
       itemsPerPage: 7,
       editingRows: [],
       deleteClick: false,
-      noSearchResultIcon: 'IconSearchOff',
-      noSearchResultTitle: 'Nothing was found',
-      noSearchResultText: 'Please clarify your search query."'
+      noSearchResultIcon: "IconSearchOff",
+      noSearchResultTitle: "Nothing was found",
+      noSearchResultText: "Please clarify your search query.",
     };
   },
   computed: {
@@ -247,7 +252,7 @@ export default defineComponent({
   width: 10rem;
 }
 .message-heading {
-  color: #B8B8B8;
+  color: #b8b8b8;
 }
 .message-container {
   height: 50vh;

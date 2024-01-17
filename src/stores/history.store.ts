@@ -13,7 +13,7 @@ export const useHistoryStore = defineStore({
       { field: "eventObjectName", header: "TARGET NAME" },
       { field: "eventType", header: "TYPE" },
       { field: "author", header: "AUTHOR" },
-      { field: "timestamp", header: "DATE | TIME" },
+      { field: "timestamp", header: "DATE" },
     ],
     eventTypes: [],
     eventObjectTypes: [],
