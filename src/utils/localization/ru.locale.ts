@@ -96,6 +96,7 @@ export default {
             loginPlaceholder: "Придумайте логин",
             passwordPlaceholder: "Придумайте пароль",
             createUserCapslock: "СОЗДАТЬ ПОЛЬЗОВАТЕЛЯ",
+            userIsCreated: "Пользователь успешно создан",
 
             //SingleUserView.vue
             deleteWarn: "Вы уверены, что хотите удалить пользователя",
@@ -106,8 +107,22 @@ export default {
             userRolesCapslock: "РОЛИ ПОЛЬЗОВАТЕЛЯ",
             userNameCapslock: "ИМЯ ПОЛЬЗОВАТЕЛЯ",
             passwordCapslock: "ПАРОЛЬ",
+            roleCapslock: "РОЛЬ",
+            userIsUpdated: "Пользователь обновлен",
+            deletionFailed: "Ошибка при удалении",
+            userNotFound: "Пользователь не найден",
+            editUserRoles: "Изменить роли пользователя",
+
+            //UsersView.vue
+            name: "Номер",
+            login: "Логин",
+            nothingWasFound: "Ничего не найдено",
         },
         role: {
+            //RolesView.vue
+            nothingWasFound: "Ничего не найдено",
+            pleaseClarifyYourSearchQuery: "Пожалуйста, уточните поисковый запрос",
+
             //roles.store
             roleNameCapslock: "НАЗВАНИЕ РОЛИ",
             relatedUsersCountCapslock: "ПОЛЬЗОВАТЕЛЕЙ С РОЛЬЮ",
@@ -137,6 +152,7 @@ export default {
 
             //RolesComponent.vue
             tabSelectPlaceholder: "Выберите склад",
+            mainGroup: "Основная группа",
         },
         products: {
             //CreateProduct.vue
@@ -279,6 +295,9 @@ export default {
                 "Вы хотите удалить подкатегории, или привязать их к другому родителю?",
             validateError: "Ошибка валидации",
             checkDataProvided: "Проверьте данные",
+
+            //TabsComponent
+            rules: "Права",
         },
         storehousesSave: {
             token_is_dead: "Токен устарел. Пожалуйста, перезайдите в систему",
