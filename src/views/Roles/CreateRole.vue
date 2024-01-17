@@ -34,7 +34,7 @@
       }}</MDBBtn>
     </MDBCol>
     <MDBContainer>
-      <Panel  header="Role permissions">
+      <Panel  :header="localize('rolePermissions', 'role')">
         <TabsComponent :creation-mode="true" :roles="[roles]" />
       </Panel>
     </MDBContainer>

@@ -71,6 +71,7 @@ export default {
       loginPlaceholder: "Create user login",
       passwordPlaceholder: "Create password",
       createUserCapslock: "CREATE USER",
+      userIsCreated: "User is created",
 
       //SingleUserView.vue
       deleteWarn: "Are you sure you want to delete user",
@@ -81,8 +82,23 @@ export default {
       userRolesCapslock: "USER ROLES",
       userNameCapslock: "USERNAME",
       passwordCapslock: "PASSWORD",
+      roleCapslock: "ROLE",
+      userIsUpdated: "User is updated",
+      deletionFailed: "Deletion failed",
+      userNotFound: "User not found",
+      editUserRoles: "Edit user roles",
+
+      //UsersView.vue
+      name: "Name",
+      login: "Login",
+      nothingWasFound: "Nothing was found",
+
     },
     role: {
+      //RolesView.vue
+      nothingWasFound: "Nothing was found",
+      pleaseClarifyYourSearchQuery: "Please clarify your search query",
+
       //roles.store
       roleNameCapslock: "ROLE NAME",
       relatedUsersCountCapslock: "USERS PER ROLE",
@@ -112,6 +128,7 @@ export default {
 
       //RolesComponent.vue
       tabSelectPlaceholder: "Select storehouse",
+      mainGroup: "Main group",
     },
     products: {
       //CreateProduct.vue
@@ -254,6 +271,9 @@ export default {
         "Would you like to remove the category along with its child subcategories, or relocate them to another parent group?",
       validateError: "Validate error",
       checkDataProvided: "Check data provided",
+
+      //TabsComponent
+      rules: "Rules",
     },
     storehousesSave: {
       token_is_dead: "Expired token. Please, relogin",
