@@ -18,23 +18,14 @@
           type="text"
           v-model="login"
         />
-      </MDBCol>
-      <MDBCol class="d-flex flex-column col-4 gap-2">
         <h4 class="storehouse-heading">{{ localize("password") }}</h4>
         <InputText
-          :placeholder="passwordPlaceholder"
-          class="input-wrapper animate__animated animate__fadeIn username-input"
-          :class="{ 'p-invalid': !validate.password }"
-          type="text"
-          v-model="password"
+            :placeholder="passwordPlaceholder"
+            class="input-wrapper animate__animated animate__fadeIn username-input"
+            :class="{ 'p-invalid': !validate.password }"
+            type="text"
+            v-model="password"
         />
-        <!--        <h4 class="storehouse-heading">Confirm password</h4>-->
-        <!--        <InputText-->
-        <!--          :placeholder="passwordTwicePlaceholder"-->
-        <!--          class="input-wrapper animate__animated animate__fadeIn username-input"-->
-        <!--          type="text"-->
-        <!--          v-model="newPasswordRepeat"-->
-        <!--        />-->
       </MDBCol>
     </MDBRow>
     <MDBCol class="d-flex justify-content-start">

@@ -34,7 +34,9 @@
       }}</MDBBtn>
     </MDBCol>
     <MDBContainer>
-      <TabsComponent :creation-mode="true" :roles="[roles]" />
+      <Panel  header="Role permissions">
+        <TabsComponent :creation-mode="true" :roles="[roles]" />
+      </Panel>
     </MDBContainer>
   </MDBContainer>
 </template>
@@ -51,6 +53,7 @@ import UserFullDto from "@/api/modules/user/dto/user-full.dto";
 import PrintUtil from "@/utils/localization/print.util";
 import ValidatorUtil from "@/utils/validator/validator.util";
 import ValidateRule from "@/utils/validator/validate-rule";
+import Panel from "primevue/panel"
 
 export default defineComponent({
   name: "CreateRole",
@@ -62,6 +65,7 @@ export default defineComponent({
     MDBBtn,
     InputText,
     Textarea,
+    Panel
   },
   data() {
     return {
@@ -154,4 +158,15 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped></style>
+<style scoped>
+.utility-btn {
+  max-width: 10.5rem;
+}
+:deep(.p-panel-content) {
+  padding: 0;
+}
+.span {
+  color: #6c6c6c;
+  margin-right: 1rem;
+}
+</style>

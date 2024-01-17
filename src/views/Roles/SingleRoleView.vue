@@ -14,14 +14,14 @@
           >
             {{ roleName }}
           </h1>
-          <MDBRow v-else>
-            <MDBCol class="col-auto">
+          <MDBRow class="d-flex flex-row justify-content-between" v-else>
+            <MDBCol class="col-auto col-span">
               <p
                   class="animate__animated animate__fadeIn label">
                 {{ localize("roleNameCapslock", "role") }}
               </p>
             </MDBCol>
-            <MDBCol class="col-auto">
+            <MDBCol class="col-auto d-flex flex-row justify-content-end">
               <InputText
                   class="input-wrapper animate__animated animate__fadeIn username-input"
                   :class="{ 'p-invalid': !validate.name }"
@@ -31,22 +31,21 @@
             </MDBCol>
 
           </MDBRow>
-
           <p
               v-if="!editing"
               class="animate__animated animate__fadeIn">
             {{ roleDescription }}
           </p>
-          <MDBRow v-else>
-            <MDBCol class="col-auto">
+          <MDBRow class="d-flex flex-row justify-content-between mt-2" v-else>
+            <MDBCol class="col-auto col-span">
               <span
                   class="animate__animated animate__fadeIn">
                 {{ localize("roleDescriptionCapslock", "role") }}
               </span>
             </MDBCol>
-            <MDBCol class="col-auto">
+            <MDBCol class="col-auto align-items-end">
               <InputText
-                  class="input-wrapper animate__animated animate__fadeIn username-input"
+                  class="input-wrapper animate__animated animate__fadeIn username-input input-text"
                   :class="{ 'p-invalid': !validate.description }"
                   type="text"
                   v-model="newRoleDescription"
@@ -401,4 +400,12 @@ export default {
   color: #6c6c6c;
   margin-right: 1rem;
 }
+.col-span {
+  display: flex;
+  align-items: center!important;
+}
+.label {
+  margin: 0;
+}
+
 </style>
