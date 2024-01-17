@@ -48,7 +48,7 @@ export const useUsersStore = defineStore({
       filters: UserSearchFilterDto = new UserSearchFilterDto(),
     ) {
       const userModel = new UserModel();
-      const getUsers = await userModel.getAll();
+      const getUsers = await userModel.getAll(filters);
       if (getUsers.success) {
         this.usersRows = getUsers.getData();
       } else {

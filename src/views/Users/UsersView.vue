@@ -11,7 +11,7 @@
         <MDBCol class="col-auto">
           <SearchComponent @search="handleSearch" />
           <TableComponent
-              :infoMessage="noDataMessage"
+            :infoMessage="noDataMessage"
             :rows="filteredUsers"
             :columns="usersStore.usersColumns"
             :searchTerm="usersStore.searchTerm"

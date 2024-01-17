@@ -8,7 +8,8 @@ export default {
       confirmDeletion: "Confirm deletion",
       errorMessageCopiedToClipboard: "Error message copied to clipboard",
       errorOccurred: "Error occurred",
-      somethingWrong: "Something went wrong, provide this error code to administrator.",
+      somethingWrong:
+        "Something went wrong, provide this error code to administrator.",
 
       cancelCapslock: "CANCEL",
       editCapslock: "EDIT",
@@ -108,8 +109,11 @@ export default {
       roleIsRemoved: "Role is removed",
       deletionFailed: "Deletion failed",
       roleNotFound: "Role not found",
+
+      //RolesComponent.vue
+      tabSelectPlaceholder: "Select storehouse",
     },
-    products:{
+    products: {
       //CreateProduct.vue
       productNameCapslock: "PRODUCT NAME",
       skuCapslock: "SKU",
@@ -129,13 +133,13 @@ export default {
       brandName: "Brand name",
       createACollection: "Create a collection",
       collectionName: "Collection name",
-      placeholderDescription: 'Add new description...',
-      placeholderProductName: 'Add new product name...',
-      placeholderVendorCode: 'Add new SKU...',
-      placeholderLink: 'Add new link...',
-      placeholderExpirationDate: 'Enter expiration date...',
-      placeholderColor: 'Add new color...',
-      placeholderNumber: 'Number...',
+      placeholderDescription: "Add new description...",
+      placeholderProductName: "Add new product name...",
+      placeholderVendorCode: "Add new SKU...",
+      placeholderLink: "Add new link...",
+      placeholderExpirationDate: "Enter expiration date...",
+      placeholderColor: "Add new color...",
+      placeholderNumber: "Number...",
       failedUpload: "Failed upload",
       photoUploadingFailed: "Photo uploading failed",
       creationFailed: "Creation failed",
@@ -162,7 +166,6 @@ export default {
       priceCantBeEmpty: "Price cant be empty",
       badPriceProvided: "Bad price provided",
 
-
       //SingleProductView.vue
       brandCapslock: "BRAND",
       openInNewWindowCapslock: "OPEN IN NEW WINDOW",
@@ -171,12 +174,14 @@ export default {
       lastPriceOrderedCapslock: "LAST PRICE ORDERED",
       newColorNameCapslock: "NEW COLOR NAME",
       expirationDateCapslock: "EXPIRATION DATE",
-      areYouSureYouWantToDeleteProduct: "Are you sure you want to delete product",
+      areYouSureYouWantToDeleteProduct:
+        "Are you sure you want to delete product",
       noBrand: "No brand",
       noInformation: "No information",
       noCategory: "No category",
       noCollection: "No collection",
-      thisActionCannotBeUndoneThisProductDataWillBeLost: "This action cannot be undone, this product data will be lost",
+      thisActionCannotBeUndoneThisProductDataWillBeLost:
+        "This action cannot be undone, this product data will be lost",
       productDescription: "Product description",
       categoryIsCreated: "Category is created",
       categoryCreationFailed: "Category creation failed",
@@ -187,7 +192,7 @@ export default {
       productIsRemoved: "Product is removed",
       productSuccessfullyUpdated: "Product successfully updated",
     },
-    storehouses:{
+    storehouses: {
       //CreateStorehouse.vue
       storehouseName: "Storehouse name",
       storehouseAddress: "Storehouse address",
@@ -205,7 +210,8 @@ export default {
       newSaleRegistration: "New Sale Registration",
       newRequestRegistration: "New Request Registration",
       confirmDeletion: "Confirm deletion",
-      deleteWarn: "This action cannot be undone, this storehouse data will be lost",
+      deleteWarn:
+        "This action cannot be undone, this storehouse data will be lost",
       messageForUser: "Are you sure you want to delete storehouse named",
       changesWereSaved: "Changes were saved",
       success: "Success",
@@ -227,15 +233,16 @@ export default {
       priceMustBeSelected: "Price must be selected",
       notEnoughProductsStorehouses: "Not enough products",
     },
-    filters:{
+    filters: {
       //FiltersSidebarComponent.vue
       search: "Search",
+      clear: "Clear",
 
       //MinMaxDateFilter.vue
       min: "min",
       max: "max",
     },
-    components:{
+    components: {
       //SearchComponent.vue
       search: "Search",
 
@@ -243,7 +250,8 @@ export default {
       createNameForACollection: "Create name for a collection",
 
       //DialogComponent.vue
-      message: "Would you like to remove the category along with its child subcategories, or relocate them to another parent group?",
+      message:
+        "Would you like to remove the category along with its child subcategories, or relocate them to another parent group?",
       validateError: "Validate error",
       checkDataProvided: "Check data provided",
     },

@@ -5,23 +5,23 @@
       <MDBCol class="col-auto d-flex flex-column">
         <span class="filtername">{{ localize("min") }}</span>
         <InputText
-            type="number"
-            style="width: 4rem !important"
-            v-model.number="min"
-            inputId="withoutgrouping"
-            :useGrouping="false"
-            @change="handleChange"
+          type="number"
+          style="width: 4rem !important"
+          v-model.number="min"
+          inputId="withoutgrouping"
+          :useGrouping="false"
+          @change="handleChange"
         />
       </MDBCol>
       <MDBCol class="col-auto d-flex flex-column">
         <span class="filtername">{{ localize("max") }}</span>
         <InputText
-            type="number"
-            style="width: 4rem !important"
-            v-model.number="max"
-            inputId="withoutgrouping"
-            :useGrouping="false"
-            @change="handleChange"
+          type="number"
+          style="width: 4rem !important"
+          v-model.number="max"
+          inputId="withoutgrouping"
+          :useGrouping="false"
+          @change="handleChange"
         />
       </MDBCol>
     </MDBRow>
@@ -41,15 +41,22 @@ export default {
   name: "MinMaxFilter",
   props: {
     title: String,
+    clear: Boolean,
   },
   emits: ["change"],
   data: () => ({
     min: null,
     max: null,
   }),
+  mounted() {
+    this.$watch("clear", () => {
+      this.min = null;
+      this.max = null;
+    });
+  },
   methods: {
     localize(key, module = "filters") {
-          return PrintUtil.localize(key, module);
+      return PrintUtil.localize(key, module);
     },
     handleChange() {
       this.$emit("change", { min: this.min, max: this.max });

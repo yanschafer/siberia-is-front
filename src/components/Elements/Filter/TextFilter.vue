@@ -2,28 +2,42 @@
   <div class="container d-flex flex-column m-0 p-1">
     <span class="filtername">{{ title }}</span>
     <InputText @change="handleOnchange" type="text" v-model="value" />
-    <hr class="hr">
+    <hr class="hr" />
   </div>
 </template>
 
 <script lang="ts">
 import InputText from "primevue/inputtext";
+import loggerUtil from "@/utils/logger/logger.util";
 
 export default {
   components: { InputText },
   name: "TextFilter",
   props: {
     title: String,
+    modelValue: {
+      required: true,
+    },
   },
   emits: ["change"],
   data: () => ({
     value: "",
   }),
-  methods: {
-    handleOnchange() {
-      this.$emit("change", this.value);
-    },
+  setup(props, { emit }) {
+    const handleOnchange = (event) => {
+      emit("update:modelValue", event.value);
+      emit("change", event.value);
+    };
+
+    return { handleOnchange };
   },
+  mounter() {
+    this.$watch("modelValue", () => {
+      loggerUtil.debug("model value changed");
+      this.value = this.modelValue;
+    });
+  },
+  methods: {},
 };
 </script>
 

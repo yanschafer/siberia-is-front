@@ -19,11 +19,18 @@ export default {
   }),
   props: {
     title: String,
+    clear: Boolean,
   },
   emits: ["change"],
+  mounted() {
+    this.$watch("clear", () => {
+      this.min = null;
+      this.max = null;
+    });
+  },
   methods: {
     localize(key, module = "filters") {
-          return PrintUtil.localize(key, module);
+      return PrintUtil.localize(key, module);
     },
     handleChange() {
       let minTimestamp = new Date(this.min).getTime();

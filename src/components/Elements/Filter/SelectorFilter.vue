@@ -2,17 +2,16 @@
   <div class="container d-flex flex-column m-0 p-1">
     <span class="filtername">{{ title }}</span>
     <MultiSelectComponent
-        :start-items="[]"
-        :options="items"
-        option-label="name"
-        :placeholder="title"
-        :disabled="false"
-        @items-changed="handleChange"
+      v-model="selected"
+      :start-items="[]"
+      :options="items"
+      option-label="name"
+      :placeholder="title"
+      :disabled="false"
+      @items-changed="handleChange"
     />
     <hr class="hr" />
   </div>
-
-
 </template>
 
 <script lang="ts">
@@ -27,9 +26,17 @@ export default {
       type: Array,
       default: [],
     },
+    clear: Boolean,
   },
   emits: ["change"],
-  data: () => ({}),
+  data: () => ({
+    selected: [],
+  }),
+  mounter() {
+    this.$watch("clear", () => {
+      this.selected = [];
+    });
+  },
   methods: {
     handleChange(items) {
       this.$emit("change", items);

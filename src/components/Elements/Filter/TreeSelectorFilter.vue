@@ -22,11 +22,17 @@ export default {
   props: {
     title: String,
     items: Array,
+    clear: Boolean,
   },
   emits: ["change"],
   data: () => ({
     value: [],
   }),
+  mounted() {
+    this.$watch("clear", () => {
+      this.value = [];
+    });
+  },
   methods: {
     handleChange() {
       loggerUtil.debug(this.value);
