@@ -2,10 +2,10 @@
   <span class="filtername">{{ title }}</span>
   <span class="filtername">{{ localize("min") }}</span>
   <input type="datetime-local" v-model="min" @change="handleChange" />
-  <Calendar v-model="min" showIcon iconDisplay="input" />
+  <Calendar id="calendar-12h" v-model="min" showTime hourFormat="12" />
   <span class="filtername">{{ localize("max") }}</span>
   <input type="datetime-local" v-model="max" @change="handleChange" />
-  <Calendar v-model="max" showIcon iconDisplay="input" />
+  <Calendar id="calendar-12h" v-model="max" showTime hourFormat="12" />
   <hr class="hr" />
 </template>
 
