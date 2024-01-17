@@ -11,51 +11,44 @@
           <TextFilter
             v-if="isText(filter)"
             :title="filter.title"
-            :clear="clearTrigger"
             @change="handleFilterChange(filter, $event)"
-            v-model="filterValuesArray[index]"
           />
           <selector-filter
             v-if="isSelect(filter)"
             :title="filter.title"
             :items="filter.items"
-            :clear="clearTrigger"
             @change="handleFilterChange(filter, $event)"
           />
           <tree-selector-filter
             v-if="isTreeSelect(filter)"
             :title="filter.title"
             :items="filter.items"
-            :clear="clearTrigger"
             @change="handleFilterChange(filter, $event)"
           />
           <min-max-filter
             v-if="isNumber(filter)"
             :title="filter.title"
-            :clear="clearTrigger"
             @change="handleFilterChange(filter, $event)"
           />
           <min-max-date-filter
             v-if="isDate(filter)"
             :title="filter.title"
-            :clear="clearTrigger"
             @change="handleFilterChange(filter, $event)"
           />
         </template>
         <MDBRow>
           <MDBCol>
-            <MDBBtn class="utility-btn btn-black" @click="search">{{
-              localize("search")
-            }}</MDBBtn>
-          </MDBCol>
-          <MDBCol>
             <MDBBtn class="utility-btn btn-black" @click="clearFields">{{
               localize("clear")
             }}</MDBBtn>
           </MDBCol>
+          <MDBCol>
+            <MDBBtn class="utility-btn btn-black" @click="search">{{
+              localize("search")
+            }}</MDBBtn>
+          </MDBCol>
         </MDBRow>
       </ScrollPanel>
-
     </div>
   </div>
 </template>
@@ -78,6 +71,8 @@ import MinMaxDateFilter from "@/components/Elements/Filter sidebar/Filter items/
 import TreeSelectorFilter from "@/components/Elements/Filter sidebar/Filter items/TreeSelectorFilter.vue";
 import ScrollPanel from "primevue/scrollpanel";
 import PrintUtil from "@/utils/localization/print.util";
+import { useCategoriesStore } from "@/stores/categories.store";
+import { useFiltersStore } from "@/stores/filters.store";
 
 export default {
   name: "FiltersSidebarComponent",
@@ -105,16 +100,14 @@ export default {
   emits: ["startSearch"],
   data() {
     return {
-      filterValuesArray: [],
       filtersObject: {},
       filters: [],
       collapsed: true,
-      clearTrigger: false,
+      textFilterValue: null,
     };
   },
   created() {
     this.filters = Object.keys(this.filtersInput).map((key) => {
-      this.filterValuesArray.push(null);
       return {
         ...this.filtersInput?.[key],
         key,
@@ -127,9 +120,10 @@ export default {
       return PrintUtil.localize(key, module);
     },
     clearFields() {
-      loggerUtil.debug(this.filterValuesArray);
-      this.filterValuesArray = this.filterValuesArray.map((el) => null);
-      loggerUtil.debug(this.filterValuesArray);
+      useFiltersStore().clearFilter();
+      this.$nextTick(() => {
+        this.search();
+      });
     },
     toggleSidebar() {
       this.collapsed = !this.collapsed;

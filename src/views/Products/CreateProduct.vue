@@ -20,6 +20,7 @@
               <InputText
                 id="product-name-input"
                 class="input-wrapper animate__animated animate__fadeIn username-input"
+                :class="{ 'p-invalid': !validate.name }"
                 type="text"
                 :placeholder="placeholderProductName"
                 v-model="name"
@@ -73,7 +74,9 @@
               <h5
                 class="field-heading d-flex flex-column gap-1 align-items-start"
               >
-                <span class="field-heading separator">{{ localize("expirationDateCapslock") }}</span>
+                <span class="field-heading separator">{{
+                  localize("expirationDateCapslock")
+                }}</span>
                 <InputText
                   class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
                   :class="{ 'p-invalid': !validate.expirationDate }"
@@ -100,7 +103,7 @@
         :init-object="initCategoryDialog"
       />
       <h1 class="product-heading d-flex gap-1 align-items-center">
-          {{ localize("productDescription") }}
+        {{ localize("productDescription") }}
         <SelectComponent
           :placeholder="placeholderCollection"
           class="animate__animated animate__flipInX animate__faster"

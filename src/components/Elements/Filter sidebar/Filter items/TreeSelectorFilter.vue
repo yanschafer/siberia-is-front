@@ -15,6 +15,7 @@
 <script lang="ts">
 import TreeDropdownComponent from "@/components/Elements/Selectors/TreeDropdownComponent.vue";
 import loggerUtil from "@/utils/logger/logger.util";
+import { useFiltersStore } from "@/stores/filters.store";
 
 export default {
   name: "TreeSelectorFilter",
@@ -28,9 +29,10 @@ export default {
   data: () => ({
     value: [],
   }),
-  mounted() {
-    this.$watch("clear", () => {
-      this.value = [];
+  created() {
+    const filtersStore = useFiltersStore();
+    filtersStore.$onAction(({ name }) => {
+      if (name == "clearFilter") this.value = [];
     });
   },
   methods: {

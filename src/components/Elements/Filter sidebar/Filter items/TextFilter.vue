@@ -9,35 +9,29 @@
 <script lang="ts">
 import InputText from "primevue/inputtext";
 import loggerUtil from "@/utils/logger/logger.util";
+import { useFiltersStore } from "@/stores/filters.store";
 
 export default {
   components: { InputText },
   name: "TextFilter",
   props: {
     title: String,
-    modelValue: {
-      required: true,
-    },
   },
   emits: ["change"],
   data: () => ({
-    value: "",
+    value: null,
   }),
-  setup(props, { emit }) {
-    const handleOnchange = (event) => {
-      emit("update:modelValue", event.value);
-      emit("change", event.value);
-    };
-
-    return { handleOnchange };
+  methods: {
+    handleOnchange(event) {
+      this.$emit("change", this.value);
+    },
   },
-  mounter() {
-    this.$watch("modelValue", () => {
-      loggerUtil.debug("model value changed");
-      this.value = this.modelValue;
+  created() {
+    const filtersStore = useFiltersStore();
+    filtersStore.$onAction(({ name }) => {
+      if (name == "clearFilter") this.value = null;
     });
   },
-  methods: {},
 };
 </script>
 
