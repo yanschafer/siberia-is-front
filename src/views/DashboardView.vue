@@ -59,8 +59,13 @@ export default defineComponent({
         data: [400000, 350000, 400000, 600000]
       }],
       websiteOptions: {
+        plotOptions: {
+          bar: {
+            columnWidth: '40%'
+          }
+        },
         chart: {
-          id: '2'
+          id: '2',
         },
         colors: ["#000000"],
         xaxis: {
