@@ -2,7 +2,7 @@
   <MDBAccordion v-model="activeItem" borderless>
     <MDBAccordionItem
       style="width: max-content; padding: 0.1rem !important"
-      headerTitle="Main group"
+      :headerTitle="localize('mainGroup', 'role')"
       collapseId="collapseOne"
     >
       <div
@@ -91,16 +91,18 @@ export default {
       default: false,
     },
   },
-  data: () => ({
-    activeItem: "1",
-    lastCheckboxSelected: [],
-    selectedRules: [],
-    selectedRulesWithStorehouses: {},
-    multiSelectPlaceholder: "Select storehouse",
-    storehouseList: {},
-    lastStorehouseList: {},
-    storehouseIdToObject: {},
-  }),
+  data() {
+      return{
+          activeItem: "1",
+          lastCheckboxSelected: [],
+          selectedRules: [],
+          selectedRulesWithStorehouses: {},
+          multiSelectPlaceholder: this.localize("tabSelectPlaceholder", "role"),
+          storehouseList: {},
+          lastStorehouseList: {},
+          storehouseIdToObject: {},
+      }
+  },
   emits: ["newRuleSelected", "ruleRemoved"],
   created() {
     this.selectedRules = this.role?.rules.map((el) => el.ruleId);

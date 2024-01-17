@@ -52,6 +52,7 @@ import LinkedRuleDto from "@/api/modules/rbac/dto/rules/linked-rule.dto";
 import { useRulesStore } from "@/stores/rules.store";
 import { useStorehousesStore } from "@/stores/storehouse.store";
 import loggerUtil from "@/utils/logger/logger.util";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default defineComponent({
   components: {
@@ -96,10 +97,12 @@ export default defineComponent({
 
     return { userStore, rolesStore, rulesStore, storehousesStore };
   },
-  data: () => ({
-    activeTabId: "",
-    currentRules: [],
-  }),
+  data (){
+      return{
+          activeTabId: "",
+          currentRules: [],
+      }
+  },
   computed: {
     stocks() {
       return this.storehousesStore.getStorehouseListForInputs;
@@ -109,11 +112,14 @@ export default defineComponent({
     },
   },
   methods: {
+    localize(key, module) {
+          return PrintUtil.localize(key, module);
+    },
     showSuccessToast(type) {
       this.$toast.add({
         severity: "success",
-        summary: "Success",
-        detail: `Rules ${type}`,
+        summary: this.localize("success", "storehouses"),
+        detail: `${this.localize("rules", "components")} ${type}`,
         life: 3000,
       });
     },

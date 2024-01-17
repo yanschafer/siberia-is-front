@@ -99,8 +99,8 @@ export default {
     showSuccessToast() {
       this.$toast.add({
         severity: "success",
-        summary: "Success",
-        detail: "User is created",
+        summary: this.localize("success", "storehouses"),
+        detail: this.localize("userIsCreated", "user"),
         life: 3000,
       });
     },

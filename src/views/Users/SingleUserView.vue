@@ -80,12 +80,12 @@
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="pt-4">
-    <span class="span">ROLE</span>
+    <span class="span">{{ localize(" roleCapslock", "user") }}</span>
     <MultiSelectComponent
       :start-items="rolesList"
       :options="rolesOptions"
       option-label="name"
-      placeholder="Edit user roles"
+      :placeholder="localize('editUserRoles', 'user')"
       @items-added="rolesAdded"
       @items-removed="rolesRemoved"
     />
@@ -261,8 +261,8 @@ export default {
     showSuccessToast() {
       this.$toast.add({
         severity: "success",
-        summary: "Success",
-        detail: "User is updated",
+        summary: this.localize("success", "storehouses"),
+        detail: this.localize("userIsUpdated", "user"),
         life: 3000,
       });
     },
@@ -353,8 +353,8 @@ export default {
         } else if (error.httpStatusCode == 404) {
           this.$toast.add({
             severity: "error",
-            summary: "Deletion failed",
-            detail: "User not found",
+            summary: this.localize("deletionFailed", "user"),
+            detail: this.localize("userNotFound", "user"),
             life: 3000,
           });
           this.$router.push({ name: "users" });

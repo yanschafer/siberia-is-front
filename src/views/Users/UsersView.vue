@@ -36,6 +36,7 @@ import FiltersSidebarComponent from "@/components/Elements/Filter sidebar/Filter
 import { FilterType } from "@/api/conf/app.conf";
 import { useToast } from "primevue/usetoast";
 import loggerUtil from "@/utils/logger/logger.util";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "UsersView",
@@ -46,25 +47,27 @@ export default {
     SearchComponent,
     TableComponent,
   },
-  data: () => ({
-    noDataMessage: {
-      icon: "IconSearchOff",
-      title: "Nothing was found",
-      text: "Please clarify your search query",
-    },
-    filtersInput: {
-      name: {
-        title: "Name",
-        type: FilterType.TEXT,
-        value: null,
-      },
-      login: {
-        title: "Login",
-        type: FilterType.TEXT,
-        value: null,
-      },
-    },
-  }),
+  data (){
+      return{
+          noDataMessage: {
+              icon: "IconSearchOff",
+              title: this.localize("nothingWasFound"),
+              text: this.localize("pleaseClarifyYourSearchQuery", "role"),
+          },
+          filtersInput: {
+              name: {
+                  title: this.localize("name"),
+                  type: FilterType.TEXT,
+                  value: null,
+              },
+              login: {
+                  title: this.localize("login"),
+                  type: FilterType.TEXT,
+                  value: null,
+              },
+          },
+      }
+  },
   async setup() {
     const usersStore = useUsersStore();
     const route = useRoute();
@@ -102,6 +105,9 @@ export default {
     },
   },
   methods: {
+    localize(key, module = "user") {
+          return PrintUtil.localize(key, module);
+    },
     handleSearch(searchTerm) {
       this.usersStore.searchTerm = searchTerm;
     },

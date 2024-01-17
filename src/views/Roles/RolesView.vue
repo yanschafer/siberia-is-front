@@ -17,6 +17,7 @@ import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useRolesStore } from "@/stores/roles.store";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "RolesView",
@@ -28,8 +29,8 @@ export default {
     return {
       noDataMessage: {
         icon: "IconSearchOff",
-        title: "Nothing was found",
-        text: "Please clarify your search query",
+        title: this.localize("nothingWasFound", "role"),
+        text: this.localize("pleaseClarifyYourSearchQuery", "role"),
       },
     }
   },
@@ -69,6 +70,9 @@ export default {
     },
   },
   methods: {
+    localize(key, module) {
+          return PrintUtil.localize(key, module);
+    },
     handleSearch(searchTerm) {
       this.rolesStore.searchTerm = searchTerm;
     },
