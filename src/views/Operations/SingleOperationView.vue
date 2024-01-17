@@ -196,9 +196,22 @@ export default {
         if (changed.success) {
           this.selectedStatus = null;
           this.selectedStorehouse = null;
+          const loadRes = await this.operationStore.loadOperationList();
+          loadRes.toastIfError(this.$toast, this.$nextTick);
           this.toggleStatusChange();
         } else {
-          loggerUtil.debug(changed.getError());
+          if (
+            changed.getError().httpStatusCode == 400 &&
+            changed.getError().data?.includes("enough")
+          ) {
+            this.$toast.add({
+              severity: "error",
+              summary: "Update status error",
+              detail: "Not enough products in store",
+              life: 3000,
+            });
+            return;
+          }
           changed.getError().showServerErrorToast(this.$toast, this.$nextTick);
         }
       } else {

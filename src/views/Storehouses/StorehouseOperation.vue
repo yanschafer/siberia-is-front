@@ -38,7 +38,7 @@
   </MDBRow>
   <SearchComponent @search="handleAddedSearch" />
   <TableComponent
-      :info-message="noDataMessage"
+    :info-message="noDataMessage"
     :rowsPerPage="6"
     :infoMessage="noDataMessage"
     :rows="addedList"
