@@ -1,93 +1,62 @@
 <template>
-  <v-chart class="chart" :option="option" />
+  <div class="gauge-chart">
+    <apexchart width="500" type="radialBar" :options="chartOptions" :series="series"></apexchart>
+  </div>
 </template>
 
 <script>
-import VChart from "vue-echarts";
-import { use } from 'echarts/core'
-import { GaugeChart } from 'echarts/charts'
-import {
-  TitleComponent,
-  TooltipComponent,
-  LegendComponent
-} from 'echarts/components'
-import { CanvasRenderer } from 'echarts/renderers'
+import VueApexCharts from 'vue3-apexcharts'
 
-use([
-  TitleComponent,
-  TooltipComponent,
-  LegendComponent,
-  GaugeChart,
-  CanvasRenderer
-])
 export default {
   components: {
-    VChart
+    VueApexCharts
   },
   data() {
     return {
-      option: {
-        series: {
-          type: 'gauge',
-          axisLine: {
-            lineStyle: {
-              width: 30,
-              color: [
-                [0.3, '#e3e3e3'],
-                [0.7, '#737373'],
-                [1, '#0c0c0c']
-              ]
-            }
-          },
-          pointer: {
-            itemStyle: {
-              color: 'auto'
-            }
-          },
-          axisTick: {
-            distance: -30,
-            length: 8,
-            lineStyle: {
-              color: '#fff',
-              width: 2
-            }
-          },
-          splitLine: {
-            distance: -30,
-            length: 30,
-            lineStyle: {
-              color: '#fff',
-              width: 4
-            }
-          },
-          axisLabel: {
-            color: 'inherit',
-            distance: -25,
-            fontSize: 16
-          },
-
-          detail: {
-            valueAnimation: true,
-            formatter: '{value}%',
-            color: 'inherit',
-            fontSize: 16,
-            offsetCenter: [0, '-60%'] // Adjust the vertical position for value
-          },
-          data: [
-            {
-              value: 80,
-              name: 'Sold 800K of 1M',
-              title: {
-                offsetCenter: ['0', '70%']
+      series: [80],
+      chartOptions: {
+        chart: {
+          height: 350,
+          type: 'radialBar',
+          offsetY: -10
+        },
+        plotOptions: {
+          radialBar: {
+            startAngle: -135,
+            endAngle: 135,
+            dataLabels: {
+              name: {
+                fontSize: '16px',
+                color: undefined,
+                offsetY: 120
               },
-              detail: {
-                offsetCenter: ['0', '40%'],
-                fontSize: 40
+              value: {
+                offsetY: 0,
+                fontSize: '50px',
+                fontFamily: 'Lato, sans-serif',
+                fontWeight: '600',
+                color: undefined,
+                formatter: function (val) {
+                  return val + "%";
+                }
               }
             }
-          ]
-        }
-      }
+          }
+        },
+        colors: ["#1e1e1e"],
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shade: 'dark',
+            shadeIntensity: 0.15,
+            inverseColors: false,
+            opacityFrom: 1,
+            opacityTo: 1,
+            stops: [0, 50, 65, 91]
+          },
+        },
+        labels: ['800K sold from 1M'],
+      },
     };
   },
   methods: {

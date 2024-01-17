@@ -128,7 +128,10 @@ export default defineComponent({
       type: Number,
       default: 6
     },
-    infoMessage: Object,
+    infoMessage: {
+      type: Object,
+      required: false,
+    },
   },
   emits: ["rowClick", "rowEditSave", "rowDelete"],
   data() {

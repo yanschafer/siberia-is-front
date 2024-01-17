@@ -4,6 +4,7 @@ import PrimeVue from 'primevue/config';
 import 'primevue/resources/themes/lara-light-green/theme.css'
 import 'primeicons/primeicons.css'
 import ToastService from 'primevue/toastservice';
+import VueApexCharts from "vue3-apexcharts";
 
 
 
@@ -16,6 +17,7 @@ import router from './router'
 
 const app = createApp(App)
 
+app.use(VueApexCharts);
 app.use(createPinia())
 app.use(router)
 app.use(PrimeVue, {
