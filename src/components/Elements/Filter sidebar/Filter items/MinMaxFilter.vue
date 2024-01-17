@@ -35,23 +35,23 @@ import InputNumber from "primevue/inputnumber";
 import InputText from "primevue/inputtext";
 import loggerUtil from "@/utils/logger/logger.util";
 import PrintUtil from "@/utils/localization/print.util";
+import { useFiltersStore } from "@/stores/filters.store";
 
 export default {
-  components: { MDBCol, MDBRow, InputNumber, InputText},
+  components: { MDBCol, MDBRow, InputNumber, InputText },
   name: "MinMaxFilter",
   props: {
     title: String,
-    clear: Boolean,
   },
   emits: ["change"],
   data: () => ({
     min: null,
     max: null,
   }),
-  mounted() {
-    this.$watch("clear", () => {
-      this.min = null;
-      this.max = null;
+  created() {
+    const filtersStore = useFiltersStore();
+    filtersStore.$onAction(({ name }) => {
+      if (name == "clearFilter") this.min = this.max = null;
     });
   },
   methods: {

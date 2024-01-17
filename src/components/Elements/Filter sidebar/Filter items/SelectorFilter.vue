@@ -17,6 +17,7 @@
 <script lang="ts">
 import SelectComponent from "../../Selectors/SelectComponent.vue";
 import MultiSelectComponent from "@/components/Elements/Selectors/MultiSelectComponent.vue";
+import { useFiltersStore } from "@/stores/filters.store";
 export default {
   components: { MultiSelectComponent, SelectComponent },
   name: "SelectorFilter",
@@ -26,15 +27,15 @@ export default {
       type: Array,
       default: [],
     },
-    clear: Boolean,
   },
   emits: ["change"],
   data: () => ({
     selected: [],
   }),
-  mounter() {
-    this.$watch("clear", () => {
-      this.selected = [];
+  created() {
+    const filtersStore = useFiltersStore();
+    filtersStore.$onAction(({ name }) => {
+      if (name == "clearFilter") this.selected = [];
     });
   },
   methods: {
