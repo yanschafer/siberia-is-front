@@ -4,7 +4,7 @@
     @approved="removeAndCloseModal"
     @close="closeModal"
   />
-  <div class="card card-body">
+  <ScrollPanel style="height: 80vh" class="main-area animate__animated animate__fadeIn">
     <TabView>
       <TabPanel v-for="tab in tabs" :key="tab.title" :header="tab.title">
         <template v-if="tab.id === 1">
@@ -56,7 +56,7 @@
         </template>
       </TabPanel>
     </TabView>
-  </div>
+  </ScrollPanel>
 </template>
 
 <script lang="ts">
@@ -76,6 +76,7 @@ import CategoryModel from "@/api/modules/category/models/category.model";
 import BrandModel from "@/api/modules/brand/models/brand.model";
 import CollectionModel from "@/api/modules/collection/models/collection.model";
 import DialogComponentTrigger from "@/components/Elements/DialogComponentTrigger.vue";
+import ScrollPanel from "primevue/scrollpanel";
 
 export default {
   name: "AssortmentVue",
@@ -86,6 +87,7 @@ export default {
     DialogComponentTrigger,
     TabView,
     TabPanel,
+    ScrollPanel
   },
   data() {
     return {
