@@ -2,17 +2,23 @@
   <span class="filtername">{{ title }}</span>
   <span class="filtername">{{ localize("min") }}</span>
   <input type="datetime-local" v-model="min" @change="handleChange" />
+  <Calendar v-model="min" showIcon iconDisplay="input" />
   <span class="filtername">{{ localize("max") }}</span>
   <input type="datetime-local" v-model="max" @change="handleChange" />
+  <Calendar v-model="max" showIcon iconDisplay="input" />
   <hr class="hr" />
 </template>
 
 <script lang="ts">
 import loggerUtil from "@/utils/logger/logger.util.js";
 import PrintUtil from "@/utils/localization/print.util";
+import Calendar from 'primevue/calendar';
 
 export default {
   name: "MinMaxDateFilter",
+  components: {
+    Calendar
+  },
   data: () => ({
     min: null,
     max: null,

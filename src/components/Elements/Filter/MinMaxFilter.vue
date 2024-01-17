@@ -12,6 +12,7 @@
             :useGrouping="false"
             @change="handleChange"
         />
+        <Calendar showIcon iconDisplay="input" />
       </MDBCol>
       <MDBCol class="col-auto d-flex flex-column">
         <span class="filtername">{{ localize("max") }}</span>
@@ -23,6 +24,7 @@
             :useGrouping="false"
             @change="handleChange"
         />
+        <Calendar showIcon iconDisplay="input" />
       </MDBCol>
     </MDBRow>
     <hr class="hr" />
@@ -33,11 +35,12 @@
 import { MDBRow, MDBCol } from "mdb-vue-ui-kit";
 import InputNumber from "primevue/inputnumber";
 import InputText from "primevue/inputtext";
+import Calendar from 'primevue/calendar';
 import loggerUtil from "@/utils/logger/logger.util.js";
 import PrintUtil from "@/utils/localization/print.util";
 
 export default {
-  components: { MDBCol, MDBRow, InputNumber, InputText },
+  components: { MDBCol, MDBRow, InputNumber, InputText, Calendar },
   name: "MinMaxFilter",
   props: {
     title: String,
