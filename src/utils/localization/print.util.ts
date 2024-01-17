@@ -1,5 +1,6 @@
 import engLocale from "@/utils/localization/eng.locale";
 import spanishLocale from "@/utils/localization/spanish.locale";
+import ruLocale from "@/utils/localization/ru.locale";
 class PrintUtil {
   private storageKey: string = "locale";
   private selectedLang: string;
@@ -7,6 +8,7 @@ class PrintUtil {
   private locales = {
     eng: engLocale,
     spanish: spanishLocale,
+    ru: ruLocale
   };
 
   public availableLocales = ["eng", "spanish"];
