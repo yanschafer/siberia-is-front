@@ -7,36 +7,53 @@
     <div class="sidebar" v-else>
       <ScrollPanel class="sidebar animate__animated animate__fadeIn">
         <div class="top-gradient-overlay"></div>
-        <template v-for="filter in filters">
+        <template v-for="(filter, index) in filters">
           <TextFilter
             v-if="isText(filter)"
             :title="filter.title"
+            :clear="clearTrigger"
             @change="handleFilterChange(filter, $event)"
+            v-model="filterValuesArray[index]"
           />
           <selector-filter
             v-if="isSelect(filter)"
             :title="filter.title"
             :items="filter.items"
+            :clear="clearTrigger"
             @change="handleFilterChange(filter, $event)"
           />
           <tree-selector-filter
             v-if="isTreeSelect(filter)"
             :title="filter.title"
             :items="filter.items"
+            :clear="clearTrigger"
             @change="handleFilterChange(filter, $event)"
           />
           <min-max-filter
             v-if="isNumber(filter)"
             :title="filter.title"
+            :clear="clearTrigger"
             @change="handleFilterChange(filter, $event)"
           />
           <min-max-date-filter
             v-if="isDate(filter)"
             :title="filter.title"
+            :clear="clearTrigger"
             @change="handleFilterChange(filter, $event)"
           />
         </template>
-        <MDBBtn class="utility-btn btn-black" @click="search">{{ localize("search") }}</MDBBtn>
+        <MDBRow>
+          <MDBCol>
+            <MDBBtn class="utility-btn btn-black" @click="search">{{
+              localize("search")
+            }}</MDBBtn>
+          </MDBCol>
+          <MDBCol>
+            <MDBBtn class="utility-btn btn-black" @click="clearFields">{{
+              localize("clear")
+            }}</MDBBtn>
+          </MDBCol>
+        </MDBRow>
         <div class="bottom-gradient-overlay"></div>
       </ScrollPanel>
     </div>
@@ -59,7 +76,7 @@ import ProductSearchFilterDto from "@/api/modules/product/dto/product-search-fil
 import FieldSearchWrapperDto from "@/utils/crud/dto/field-search-wrapper.dto";
 import MinMaxDateFilter from "@/components/Elements/Filter/MinMaxDateFilter.vue";
 import TreeSelectorFilter from "@/components/Elements/Filter/TreeSelectorFilter.vue";
-import ScrollPanel from 'primevue/scrollpanel';
+import ScrollPanel from "primevue/scrollpanel";
 import PrintUtil from "@/utils/localization/print.util";
 
 export default {
@@ -88,21 +105,31 @@ export default {
   emits: ["startSearch"],
   data() {
     return {
+      filterValuesArray: [],
       filtersObject: {},
       filters: [],
       collapsed: true,
+      clearTrigger: false,
     };
   },
   created() {
-    this.filters = Object.keys(this.filtersInput).map((key) => ({
-      ...this.filtersInput?.[key],
-      key,
-    }));
+    this.filters = Object.keys(this.filtersInput).map((key) => {
+      this.filterValuesArray.push(null);
+      return {
+        ...this.filtersInput?.[key],
+        key,
+      };
+    });
     this.filtersObject = { ...this.filtersInput };
   },
   methods: {
     localize(key, module = "filters") {
-          return PrintUtil.localize(key, module);
+      return PrintUtil.localize(key, module);
+    },
+    clearFields() {
+      loggerUtil.debug(this.filterValuesArray);
+      this.filterValuesArray = this.filterValuesArray.map((el) => null);
+      loggerUtil.debug(this.filterValuesArray);
     },
     toggleSidebar() {
       this.collapsed = !this.collapsed;

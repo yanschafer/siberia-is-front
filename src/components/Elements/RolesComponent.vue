@@ -34,7 +34,7 @@
               :start-items="storehouseList[item.id]"
               :options="storehouseOptions"
               option-label="name"
-              :placeholder="'multiSelectPlaceholder'"
+              :placeholder="localize('tabSelectPlaceholder')"
               :disabled="!canChange"
               @items-added="storehouseAdded(item.id, $event)"
               @items-removed="storehouseRemoved(item.id, $event)"
@@ -58,6 +58,7 @@ import { appConf } from "@/api/conf/app.conf";
 import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.dto";
 import loggerUtil from "@/utils/logger/logger.util";
 import MultiSelectComponent from "@/components/Elements/MultiSelectComponent.vue";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "RolesComponent",
@@ -132,6 +133,9 @@ export default {
     this.lastStorehouseList = { ...this.storehouseList };
   },
   methods: {
+    localize(key, module = "role") {
+      return PrintUtil.localize(key, module);
+    },
     emit(type, { roleId, rule, stockId }) {
       let linkedRule: LinkedRuleInputDto[] = [];
       if (typeof stockId == "object" && stockId != null)
@@ -232,7 +236,7 @@ export default {
     contrast(106%) !important;
 }
 .label {
-  margin-left: .5rem!important;
+  margin-left: 0.5rem !important;
   font-weight: 500;
 }
 </style>

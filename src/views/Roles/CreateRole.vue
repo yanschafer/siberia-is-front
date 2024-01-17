@@ -131,7 +131,9 @@ export default defineComponent({
           params: { id: created.getData().id.toString() },
         });
     },
-    cancelCreation() {},
+    cancelCreation() {
+      this.router.push({ name: "roles" });
+    },
   },
   computed: {
     // selectedUser(): UserFullDto {

@@ -24,11 +24,17 @@ export default {
     optionLabel: String,
     placeholder: String,
     disabled: Boolean,
+    modelValue: Array,
   },
   emits: ["itemsAdded", "itemsRemoved", "itemsChanged"],
   created() {
     this.items = [...this.startItems];
     this.lastItems = [...this.startItems];
+  },
+  mounter() {
+    this.$watch("modelValue", () => {
+      this.items = this.modelValue || [];
+    });
   },
   methods: {
     listContains(list, item) {
