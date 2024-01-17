@@ -1,5 +1,5 @@
 <template>
-  <ScrollPanel style="height: 80vh" class="main-area animate__animated animate__fadeIn">
+  <ScrollPanel style="width: 88vw; height: 80vh" class="main-area animate__animated animate__fadeIn">
     <div class="d-flex flex-row">
       <div class="col col-7">
         <div class="line-chart">
