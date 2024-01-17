@@ -6,7 +6,7 @@
         :key="index"
         v-for="(message, index) in messages"
         :severity="message.severity"
-        :closable="true"
+        :closable="false"
         @onClose="handleClose(message)"
     >
     <MDBRow style="min-width: 16rem;" class="w-100">

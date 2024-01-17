@@ -23,11 +23,12 @@
             :messages="notificationMessages" />
       </MDBContainer>
       <MDBRow class="footer-row">
-        <Button
+        <MDBBtn
           @click="clearAllMessages"
+          class="btn-black"
           :disabled="notificationMessages.length === 0">
           Clear
-        </Button>
+        </MDBBtn>
       </MDBRow>
     </OverlayPanel>
     <Toast ref="toast" />
@@ -51,6 +52,7 @@ export default {
     IconBellFilled,
     MDBRow,
     MDBContainer,
+    MDBBtn,
     OverlayPanel,
     Button,
     Toast
