@@ -20,8 +20,7 @@
       </template>
       <template v-if="showCheckbox">
         <p class="text-center">
-          Would you like to remove the category along with its child
-          subcategories, or relocate them to another parent group?
+          {{ localize("message", "components") }}
         </p>
         <MDBBtn outline="black" @click="checkboxValue = !checkboxValue">
           {{ checkboxValues[checkboxValue] }}
@@ -54,6 +53,7 @@ import Dialog from "primevue/dialog";
 import { MDBContainer, MDBRow, MDBBtn } from "mdb-vue-ui-kit";
 import { useDialogStore } from "@/stores/dialog.store";
 import loggerUtil from "@/utils/logger/logger.util";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "DialogComponent",
@@ -77,7 +77,7 @@ export default {
     return {
       inputValue: "",
       selectedDropdownItem: null,
-      saveButtonText: "Save",
+      saveButtonText: this.localize("saveCapslock", "default"),
       isVisible: false,
       checkboxValue: false,
       inputError: false,
@@ -102,6 +102,9 @@ export default {
     });
   },
   methods: {
+    localize(key, module = "products") {
+          return PrintUtil.localize(key, module);
+    },
     handleDialogClose() {
       loggerUtil.debug(this.isVisible);
     },
@@ -115,8 +118,8 @@ export default {
       if (this.showInput && this.inputValue == "") {
         this.$toast.add({
           severity: "warning",
-          summary: "Validate error",
-          detail: "Check data provided",
+          summary: this.localize("validateError", "components"),
+          detail: this.localize("checkDataProvided", "components"),
           life: 3000,
         });
         this.inputError = true;

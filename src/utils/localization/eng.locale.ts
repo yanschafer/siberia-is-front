@@ -90,12 +90,24 @@ export default {
       roleName: "Role name",
       roleDescription: "Role description",
       createRoleCapslock: "CREATE ROLE",
+      enterARoleName: "Enter a role name",
+      enterARoleDescription: "Enter a role description",
+      rules: "Rules",
+      rulesForNewRole: "Rules for new role",
+      roleIsCreated: "Role is created",
 
       //SingleRoleView.vue
       relatedUsersCapslock: "RELATED USERS",
       deleteDisclaimer:
         "This action cannot be undone, this role data will be lost",
       deleteWarn: "Are you sure you want to delete role",
+      roleDescriptionCapslock: "ROLE DESCRIPTION",
+      editRelatedUsers: "Edit related users",
+      rolePermissions: "Role permissions",
+      roleIsUpdated: "Role is updated",
+      roleIsRemoved: "Role is removed",
+      deletionFailed: "Deletion failed",
+      roleNotFound: "Role not found",
     },
     products:{
       //CreateProduct.vue
@@ -124,6 +136,11 @@ export default {
       placeholderExpirationDate: 'Enter expiration date...',
       placeholderColor: 'Add new color...',
       placeholderNumber: 'Number...',
+      failedUpload: "Failed upload",
+      photoUploadingFailed: "Photo uploading failed",
+      creationFailed: "Creation failed",
+      notFound: "not found",
+      productSuccessfullyCreated: "Product successfully created",
 
       //products.store.ts
       priceCapslock: "PRICE",
@@ -141,6 +158,10 @@ export default {
       brand: "Brand",
       collection: "Collection",
       category: "Category",
+      updateFailed: "Update Failed",
+      priceCantBeEmpty: "Price cant be empty",
+      badPriceProvided: "Bad price provided",
+
 
       //SingleProductView.vue
       brandCapslock: "BRAND",
@@ -157,6 +178,14 @@ export default {
       noCollection: "No collection",
       thisActionCannotBeUndoneThisProductDataWillBeLost: "This action cannot be undone, this product data will be lost",
       productDescription: "Product description",
+      categoryIsCreated: "Category is created",
+      categoryCreationFailed: "Category creation failed",
+      brandIsCreated: "Brand is created",
+      brandCreationFailed: "Brand creation failed",
+      collectionIsCreated: "Collection is created",
+      collectionCreationFailed: "Collection creation failed",
+      productIsRemoved: "Product is removed",
+      productSuccessfullyUpdated: "Product successfully updated",
     },
     storehouses:{
       //CreateStorehouse.vue
@@ -164,6 +193,7 @@ export default {
       storehouseAddress: "Storehouse address",
       enterStorehouseName: "Enter storehouse name",
       enterStorehouseAddress: "Enter storehouse address",
+      storehouseCreationSuccess: "Storehouse creation success",
 
       //SingleStorehouseView.vue
       editStorehouse: "Edit storehouse",
@@ -179,12 +209,23 @@ export default {
       messageForUser: "Are you sure you want to delete storehouse named",
       changesWereSaved: "Changes were saved",
       success: "Success",
+      created: "created",
+      autoApproved: "auto-approved",
+      failed: "Failed",
+      notEnoughProducts: "Not enough products for sale",
+      storehouseIsRemoved: "Storehouse is removed",
+      storehouseNotFound: "Storehouse not found",
 
       //storehouse.store.ts
       addressCapslock: "ADDRESS",
 
       //StorehouseOperation.vue
       selectAProduct: "Select a product",
+      quantity: "Quantity",
+      price: "Price",
+      quantityAndProductMustBeSelected: "Quantity and Product must be selected",
+      priceMustBeSelected: "Price must be selected",
+      notEnoughProductsStorehouses: "Not enough products",
     },
     filters:{
       //FiltersSidebarComponent.vue
@@ -197,6 +238,14 @@ export default {
     components:{
       //SearchComponent.vue
       search: "Search",
+
+      //TreeDropdownComponent.vue
+      createNameForACollection: "Create name for a collection",
+
+      //DialogComponent.vue
+      message: "Would you like to remove the category along with its child subcategories, or relocate them to another parent group?",
+      validateError: "Validate error",
+      checkDataProvided: "Check data provided",
     },
     storehousesSave: {
       token_is_dead: "Expired token. Please, relogin",

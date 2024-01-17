@@ -18,7 +18,7 @@
             <MDBCol class="col-auto">
               <p
                   class="animate__animated animate__fadeIn label">
-                ROLE NAME
+                {{ localize("roleNameCapslock", "role") }}
               </p>
             </MDBCol>
             <MDBCol class="col-auto">
@@ -41,7 +41,7 @@
             <MDBCol class="col-auto">
               <span
                   class="animate__animated animate__fadeIn">
-                ROLE DESCRIPTION
+                {{ localize("roleDescriptionCapslock", "role") }}
               </span>
             </MDBCol>
             <MDBCol class="col-auto">
@@ -62,7 +62,7 @@
       </MDBRow>
       <MDBCol v-if="!editing" class="d-flex justify-content-end">
         <MDBBtn @click="startEditing" class="utility-btn" outline="black"
-          >EDIT</MDBBtn
+          >{{ localize("editCapslock", "default") }}</MDBBtn
         >
       </MDBCol>
       <MDBCol v-else class="d-flex justify-content-end">
@@ -86,14 +86,14 @@
       :start-items="relatedUsers"
       :options="usersOptions"
       option-label="name"
-      placeholder="Edit related users"
+      :placeholder="localize('editRelatedUsers', 'role')"
       :disabled="!canEditUsers"
       @items-added="usersAdded"
       @items-removed="usersRemoved"
     />
   </MDBContainer>
   <MDBContainer class="pt-4">
-    <Panel  header="Role permissions">
+    <Panel  :header="localize('rolePermissions', 'role')">
       <TabsComponent :roles="roles" :user-id="null" />
     </Panel>
   </MDBContainer>
@@ -209,8 +209,8 @@ export default {
     showSuccessToast() {
       this.$toast.add({
         severity: "success",
-        summary: "Success",
-        detail: "Role is updated",
+        summary: this.localize("success", "storehouses"),
+        detail: this.localize("roleIsUpdated", "role"),
         life: 3000,
       });
     },
@@ -226,8 +226,8 @@ export default {
       if (removed.success) {
         this.$toast.add({
           severity: "success",
-          summary: "Success",
-          detail: "Role is removed",
+          summary: this.localize("success", "storehouses"),
+          detail: this.localize("roleIsRemoved", "role"),
           life: 3000,
         });
         this.modalStore.hide();
@@ -272,8 +272,8 @@ export default {
         } else if (error.httpStatusCode == 404) {
           this.$toast.add({
             severity: "error",
-            summary: "Deletion failed",
-            detail: "Role not found",
+            summary: this.localize("deletionFailed", "role"),
+            detail: this.localize("roleNotFound", "role"),
             life: 3000,
           });
           this.$router.push({ name: "roles" });

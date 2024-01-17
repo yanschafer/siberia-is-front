@@ -18,7 +18,7 @@
           v-model="searchText"
           type="text"
           class="p-inputtext"
-          placeholder="Search"
+          :placeholder="localize('search')"
         />
       </div>
     </template>
@@ -33,6 +33,7 @@ import OverlayPanel from "primevue/overlaypanel";
 import loggerUtil from "@/utils/logger/logger.util";
 import { ref } from "vue";
 import { useProductsStore } from "@/stores/products.store";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "TreeDropdownComponent",
@@ -55,7 +56,7 @@ export default {
       searchText: "",
       expandedKeys: [],
       addNew: null,
-      inputName: "Create name for a collection",
+      inputName: this.localize("createNameForACollection"),
     };
   },
   mounted() {
@@ -74,6 +75,9 @@ export default {
     },
   },
   methods: {
+    localize(key, module = "components") {
+          return PrintUtil.localize(key, module);
+    },
     toggle(event) {
       this.addNew.toggle(event);
     },

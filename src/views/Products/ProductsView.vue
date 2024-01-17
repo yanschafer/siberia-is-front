@@ -208,8 +208,8 @@ export default {
       if (row.price == "") {
         this.$toast.add({
           severity: "error",
-          summary: "Update Failed",
-          detail: "Price cant be empty",
+          summary: this.localize("updateFailed"),
+          detail: this.localize("priceCantBeEmpty"),
           life: 3000,
         });
         return;
@@ -222,8 +222,8 @@ export default {
         if (error.httpStatusCode == 415) {
           this.$toast.add({
             severity: "error",
-            summary: "Update Failed",
-            detail: "Bad price provided",
+            summary: this.localize("updateFailed"),
+            detail: this.localize("badPriceProvided"),
             life: 3000,
           });
         } else {
