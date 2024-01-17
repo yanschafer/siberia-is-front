@@ -13,11 +13,13 @@
     </Button>
     <OverlayPanel
         class="notification-body"
+        @update:visible="handleOverlayUpdate"
         ref="op">
       <MDBContainer
           class="noti-container overflow-y-scroll">
         <NotificationMessageComponent
             :op="op"
+            @close="handleNotificationClose"
             :messages="notificationMessages" />
       </MDBContainer>
       <MDBRow class="footer-row">
@@ -66,10 +68,37 @@ export default {
       ],
     };
   },
-
+  watch: {
+    notificationMessages: {
+      handler(newMessages) {
+        if (newMessages.length === 0) {
+          this.clearAllMessages();
+        }
+      },
+      deep: true, // следим за изменениями внутри массива
+      immediate: true,
+    },
+  },
   methods: {
+    handleNotificationClose(closedMessage) {
+      // Удалить закрытое уведомление из массива
+      this.notificationMessages = this.notificationMessages.filter(message => message !== closedMessage);
+
+      // Проверить, есть ли еще открытые уведомления
+      if (this.notificationMessages.length === 0) {
+        this.clearAllMessages();
+      }
+    },
     toggle(event) {
-      this.op.toggle(event);
+      this.$refs.op.toggle(event);
+    },
+    handleOverlayUpdate(visible) {
+      if (!visible && this.$refs.op.$el) {
+        const opWidth = this.$refs.op.$el.offsetWidth;
+        if (opWidth < 300) {
+          this.clearAllMessages();
+        }
+      }
     },
     showNotification() {
       this.$refs.toast.add({
@@ -82,7 +111,7 @@ export default {
     clearAllMessages() {
       if (this.notificationMessages.length > 0) {
         this.notificationMessages = [];
-        this.op.hide();
+        this.$refs.op.hide();
         this.showNotification()
       }
     },

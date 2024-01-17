@@ -7,7 +7,7 @@
         v-for="(message, index) in messages"
         :severity="message.severity"
         :closable="true"
-        @onClose="handleClose"
+        @onClose="handleClose(message)"
     >
     <MDBRow style="min-width: 16rem;" class="w-100">
       <MDBCol class="col-auto">
@@ -47,10 +47,9 @@ export default {
     },
   },
   methods: {
-    handleClose() {
-      if (this.messages.length === 0) {
-        this.op.hide();
-      }
+    handleClose(message) {
+      // Оповестить о закрытии текущего уведомления
+      this.$emit('close', message);
     },
   }
 };
