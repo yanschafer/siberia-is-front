@@ -5,100 +5,103 @@
     @close="closeModal"
   />
   <div class="storehouse-container">
-    <MDBContainer class="animate__animated animate__fadeIn storehouse-info d-flex flex-column gap-3">
+    <MDBContainer
+      class="animate__animated animate__fadeIn storehouse-info d-flex flex-column gap-3"
+    >
       <h1 v-if="!editing" class="storehouse-heading">{{ storehouseName }}</h1>
       <InputText
-          v-else
-          class="input-wrapper animate__animated animate__fadeIn username-input"
-          type="text"
-          v-model="newStorehouseName"
+        v-else
+        class="input-wrapper animate__animated animate__fadeIn username-input"
+        type="text"
+        v-model="newStorehouseName"
       />
       <span v-if="!editing" class="storehouse-adress">
-      <IconMapPinFilled color="#4E4E4E" :size="24" stroke-width="1" />
-      {{ storehouseAddress }}
-    </span>
+        <IconMapPinFilled color="#4E4E4E" :size="24" stroke-width="1" />
+        {{ storehouseAddress }}
+      </span>
       <InputText
-          v-else
-          class="input-wrapper animate__animated animate__fadeIn username-input"
-          type="text"
-          v-model="newStorehouseAdress"
+        v-else
+        class="input-wrapper animate__animated animate__fadeIn username-input"
+        type="text"
+        v-model="newStorehouseAdress"
       />
       <MDBBtn
-          v-if="!editing"
-          @click="startEditing"
-          class="utility-btn"
-          outline="black"
-          >{{ localize("editStorehouse") }}</MDBBtn
+        v-if="!editing"
+        @click="startEditing"
+        class="utility-btn"
+        outline="black"
+        >{{ localize("editStorehouse") }}</MDBBtn
       >
-    <MDBCol v-else class="d-flex justify-content-start">
-      <MDBBtn @click="cancelEditing" class="utility-btn" outline="black">{{
-        localize("cancelCapslock", "default")
-      }}</MDBBtn>
-      <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
-        localize("deleteStorehouseCapslock")
-      }}</MDBBtn>
-      <MDBBtn @click="saveChanges" class="utility-btn btn-black">{{
-        localize("saveCapslock", "default")
-      }}</MDBBtn>
-    </MDBCol>
-  </MDBContainer>
-  <MDBContainer class="d-flex flex-column gap-3">
-    <MDBRow
-      class="d-flex flex-row w-100 align-items-center align-self-center gap-3 pt-4"
-    >
-      <h1 class="storehouse-heading">Products in stock</h1>
-      <template v-if="!newArrival && !newSale && !newRequest">
-        <MDBBtn
-          v-if="arrivalAvailable"
-          @click="addNewArrival"
-          class="utility-btn"
-          outline="black"
-          >{{ localize("newArrivalCapslock") }}</MDBBtn
-        >
-        <MDBBtn
-          v-if="saleAvailable"
-          @click="addNewSale"
-          class="utility-btn"
-          outline="black"
-          >{{ localize("newSaleCapslock") }}</MDBBtn
-        >
-        <MDBBtn
-          v-if="requestAvailable"
-          @click="addNewRequest"
-          class="utility-btn"
-          outline="black"
-          >{{ localize("newRequestCapslock") }}</MDBBtn
-        >
+      <MDBCol v-else class="d-flex justify-content-start">
+        <MDBBtn @click="cancelEditing" class="utility-btn" outline="black">{{
+          localize("cancelCapslock", "default")
+        }}</MDBBtn>
+        <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
+          localize("deleteStorehouseCapslock")
+        }}</MDBBtn>
+        <MDBBtn @click="saveChanges" class="utility-btn btn-black">{{
+          localize("saveCapslock", "default")
+        }}</MDBBtn>
+      </MDBCol>
+    </MDBContainer>
+    <MDBContainer class="d-flex flex-column gap-3">
+      <MDBRow
+        class="d-flex flex-row w-100 align-items-center align-self-center gap-3 pt-4"
+      >
+        <h1 class="storehouse-heading">Products in stock</h1>
+        <template v-if="!newArrival && !newSale && !newRequest">
+          <MDBBtn
+            v-if="arrivalAvailable"
+            @click="addNewArrival"
+            class="utility-btn"
+            outline="black"
+            >{{ localize("newArrivalCapslock") }}</MDBBtn
+          >
+          <MDBBtn
+            v-if="saleAvailable"
+            @click="addNewSale"
+            class="utility-btn"
+            outline="black"
+            >{{ localize("newSaleCapslock") }}</MDBBtn
+          >
+          <MDBBtn
+            v-if="requestAvailable"
+            @click="addNewRequest"
+            class="utility-btn"
+            outline="black"
+            >{{ localize("newRequestCapslock") }}</MDBBtn
+          >
           <SearchComponent class="search" @search="handleSearch" />
           <TableComponent
-              :rows="productRows"
-              :columns="productColumns"
-              :searchTerm="searchTerm"
+            :info-message="noDataMessage"
+            :rows="productRows"
+            :columns="productColumns"
+            :searchTerm="searchTerm"
           />
         </template>
         <template v-else>
           <template v-if="newArrival">
             <StorehouseOperation
-                :title="localize('newArrivalRegistration')"
-                @cancel="newArrival = false"
-                @save="saveNewArrival"
+              :title="localize('newArrivalRegistration')"
+              @cancel="newArrival = false"
+              @save="saveNewArrival"
             ></StorehouseOperation>
           </template>
           <template v-else-if="newSale">
             <StorehouseOperation
-                :title="localize('newSaleRegistration')"
-                :need-validation="true"
-                :amount-validation="productListValidateObject"
-                @cancel="newSale = false"
-                @save="saveNewSale"
+              :title="localize('newSaleRegistration')"
+              :need-validation="true"
+              :amount-validation="productListValidateObject"
+              @cancel="newSale = false"
+              @save="saveNewSale"
             ></StorehouseOperation>
           </template>
           <template v-else-if="newRequest">
             <StorehouseOperation
-                :title="localize('newRequestRegistration')"
-                :show-price="false"
-                @cancel="newRequest = false"
-                @save="saveNewRequest"
+              :title="localize('newRequestRegistration')"
+              :show-price="false"
+              @cancel="newRequest = false"
+              @save="saveNewRequest"
             ></StorehouseOperation>
           </template>
         </template>
@@ -147,7 +150,7 @@ export default {
     MDBRow,
     ModalComponent,
     Toast,
-    InputText
+    InputText,
   },
   props: {
     id: {
@@ -186,6 +189,11 @@ export default {
         address: true,
       },
       validator: new ValidatorUtil(),
+      noDataMessage: {
+        icon: "IconInfoCircle",
+        title: "No product yet in the list",
+        text: "Please add one first",
+      },
     };
   },
   async setup() {

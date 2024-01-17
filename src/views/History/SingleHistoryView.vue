@@ -10,8 +10,8 @@
       <span class="username">{{ author }}</span>
     </MDBRow>
     <MDBRow class="d-flex flex-nowrap w-100">
-      <span class="user-roles-heading">DATE | TIME</span>
-      <span class="username">{{ dateTime }}</span>
+      <span class="user-roles-heading">DATE</span>
+      <span class="username">{{ date }}</span>
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="pt-4"> {{ description }} </MDBContainer>
@@ -52,8 +52,10 @@ export default {
       const selectedType = this.selectedHistory.eventType || "";
       return selectedType.toLowerCase() + "d";
     },
-    dateTime() {
-      return this.selectedHistory.timestamp || "";
+    date() {
+      const dateTime = this.selectedHistory.timestamp || null;
+      if (dateTime) return dateTime.split("T")[0];
+      else return "";
     },
     author() {
       return this.selectedHistory.author || "";

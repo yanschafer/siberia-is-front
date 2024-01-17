@@ -1,32 +1,32 @@
 <template>
   <div>
     <Button
-        type="button"
-        class="icon-bg d-flex justify-content-center align-items-center"
-        icon="pi pi-image"
-        label="Image"
-        @click="toggle">
-      <IconBellFilled
-        color="#B8B8B8"
-        :size="24"
-        stroke-width="1" />
+      type="button"
+      class="icon-bg d-flex justify-content-center align-items-center"
+      icon="pi pi-image"
+      label="Image"
+      @click="toggle"
+    >
+      <IconBellFilled color="#B8B8B8" :size="24" stroke-width="1" />
     </Button>
     <OverlayPanel
-        class="notification-body"
-        @update:visible="handleOverlayUpdate"
-        ref="op">
-      <MDBContainer
-          class="noti-container overflow-y-scroll">
+      class="notification-body"
+      @update:visible="handleOverlayUpdate"
+      ref="op"
+    >
+      <MDBContainer class="noti-container overflow-y-scroll">
         <NotificationMessageComponent
-            :op="op"
-            @close="handleNotificationClose"
-            :messages="notificationMessages" />
+          :op="op"
+          @close="handleNotificationClose"
+          :messages="notificationMessages"
+        />
       </MDBContainer>
       <MDBRow class="footer-row">
         <MDBBtn
           @click="clearAllMessages"
           class="btn-black"
-          :disabled="notificationMessages.length === 0">
+          :disabled="notificationMessages.length === 0"
+        >
           Clear
         </MDBBtn>
       </MDBRow>
@@ -37,14 +37,22 @@
 
 <script lang="ts">
 import { IconBell, IconBellFilled, IconRoute } from "@tabler/icons-vue";
-import { MDBBtn, MDBCol, MDBContainer, MDBDropdown, MDBDropdownMenu, MDBDropdownToggle, MDBRow } from "mdb-vue-ui-kit";
-import OverlayPanel from 'primevue/overlaypanel';
-import Button from 'primevue/button';
+import {
+  MDBBtn,
+  MDBCol,
+  MDBContainer,
+  MDBDropdown,
+  MDBDropdownMenu,
+  MDBDropdownToggle,
+  MDBRow,
+} from "mdb-vue-ui-kit";
+import OverlayPanel from "primevue/overlaypanel";
+import Button from "primevue/button";
 import Toast from "primevue/toast";
 import NotificationMessageComponent from "@/components/Elements/Notification/NotificationMessageComponent.vue";
 
 export default {
-  name: 'NotificationsComponent',
+  name: "NotificationsComponent",
   components: {
     NotificationMessageComponent,
     IconRoute,
@@ -55,18 +63,48 @@ export default {
     MDBBtn,
     OverlayPanel,
     Button,
-    Toast
+    Toast,
   },
   data() {
     return {
       op: null,
       notificationMessages: [
-        { severity: 'success', summary: 'Success Message', text: 'Initial Success Message', dateTime: "2022-01-01" },
-        { severity: 'info', summary: 'Info message', text: 'Initial Info Message', dateTime: "2022-01-01" },
-        { severity: 'error', summary: 'Error message', text: 'Ошибка', dateTime: "2022-01-01"},
-        { severity: 'error', summary: 'Error message', text: 'Ошибка', dateTime: "2022-01-01"},
-        { severity: 'error', summary: 'Error message', text: 'Ошибка', dateTime: "2022-01-01"},
-        { severity: 'error', summary: 'Error message', text: 'Ошибка', dateTime: "2022-01-01"}
+        {
+          severity: "success",
+          summary: "Success Message",
+          text: "Initial Success Message",
+          date: "2022-01-01",
+        },
+        {
+          severity: "info",
+          summary: "Info message",
+          text: "Initial Info Message",
+          date: "2022-01-01",
+        },
+        {
+          severity: "error",
+          summary: "Error message",
+          text: "Ошибка",
+          date: "2022-01-01",
+        },
+        {
+          severity: "error",
+          summary: "Error message",
+          text: "Ошибка",
+          date: "2022-01-01",
+        },
+        {
+          severity: "error",
+          summary: "Error message",
+          text: "Ошибка",
+          date: "2022-01-01",
+        },
+        {
+          severity: "error",
+          summary: "Error message",
+          text: "Ошибка",
+          date: "2022-01-01",
+        },
       ],
     };
   },
@@ -84,7 +122,9 @@ export default {
   methods: {
     handleNotificationClose(closedMessage) {
       // Удалить закрытое уведомление из массива
-      this.notificationMessages = this.notificationMessages.filter(message => message !== closedMessage);
+      this.notificationMessages = this.notificationMessages.filter(
+        (message) => message !== closedMessage,
+      );
 
       // Проверить, есть ли еще открытые уведомления
       if (this.notificationMessages.length === 0) {
@@ -104,9 +144,9 @@ export default {
     },
     showNotification() {
       this.$refs.toast.add({
-        severity: 'info',
-        summary: 'Cleared Notifications',
-        detail: 'All notifications have been cleared.',
+        severity: "info",
+        summary: "Cleared Notifications",
+        detail: "All notifications have been cleared.",
         life: 3000,
       });
     },
@@ -114,11 +154,11 @@ export default {
       if (this.notificationMessages.length > 0) {
         this.notificationMessages = [];
         this.$refs.op.hide();
-        this.showNotification()
+        this.showNotification();
       }
     },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -146,7 +186,7 @@ export default {
 .icon-bg {
   width: 50px;
   height: 50px;
-  border: 2px solid #EEEEEE;
+  border: 2px solid #eeeeee;
   border-radius: 50%;
   padding: 0;
   box-shadow: none;
@@ -174,6 +214,6 @@ export default {
 }
 :deep(.p-overlaypanel) {
   width: 100%;
-  min-width: 30rem!important;
+  min-width: 30rem !important;
 }
 </style>

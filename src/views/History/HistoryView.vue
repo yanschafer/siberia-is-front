@@ -9,7 +9,7 @@
       </MDBCol>
       <MDBCol class="content-col">
         <TableComponent
-            :infoMessage="noDataMessage"
+          :infoMessage="noDataMessage"
           :rows="filteredHistory"
           :columns="historyStore.historyColumns"
           :searchTerm="historyStore.searchTerm"
@@ -29,7 +29,7 @@ import { MDBContainer, MDBCol } from "mdb-vue-ui-kit";
 import { FilterType } from "@/api/conf/app.conf";
 import FiltersSidebarComponent from "@/components/Elements/Filter sidebar/FiltersSidebarComponent.vue";
 import loggerUtil from "@/utils/logger/logger.util";
-import {IconSearchOff} from "@tabler/icons-vue";
+import { IconSearchOff } from "@tabler/icons-vue";
 
 export default {
   name: "HistoryView",
@@ -110,10 +110,11 @@ export default {
         ) {
           return {
             ...el,
+            timestamp: this.translateTimestamp(el.timestamp),
             eventObjectName: `Operation ${el.eventObjectName}`,
           };
         }
-        return el;
+        return { ...el, timestamp: this.translateTimestamp(el.timestamp) };
       });
     },
     routeIdParam() {
@@ -130,6 +131,10 @@ export default {
         name: "Single history",
         params: { id: row.id },
       });
+    },
+    translateTimestamp(timestamp) {
+      if (timestamp) return timestamp.split("T")[0];
+      return timestamp;
     },
     async handleSearchStart(filters) {
       const res = await this.historyStore.loadHistoryList(filters);
