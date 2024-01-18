@@ -10,8 +10,9 @@
       <IconUserFilled color="#B8B8B8" :size="24" stroke-width="1" />
     </Button>
     <OverlayPanel class="notification-body" ref="op">
-      <h5 class="heading">Profile</h5>
-      <span>USER NAME: </span><span class="name">Andreas</span>
+      <h5 class="heading">{{ localize("profileHeader") }}</h5>
+      <span>{{ localize("userNameCapslockSpaced") }}: </span
+      ><span class="name">{{ username }}</span>
       <hr class="hr" />
       <MDBRow class="footer-row">
         <MDBCol class="lang-col">
@@ -19,14 +20,14 @@
         </MDBCol>
         <MDBCol class="d-flex justify-content-end">
           <a class="logout" href="#" @click.prevent="logout"
-            ><IconLogout2 /> Log Out</a
-          >
+            ><IconLogout2 /> {{ localize("logout") }}
+          </a>
         </MDBCol>
       </MDBRow>
     </OverlayPanel>
   </div>
 </template>
-<script>
+<script lang="ts">
 import Router from "@/router";
 import { MDBBtn, MDBContainer, MDBRow, MDBCol } from "mdb-vue-ui-kit";
 import { IconLogout2, IconUserFilled } from "@tabler/icons-vue";
@@ -35,6 +36,7 @@ import Button from "primevue/button";
 import TokenUtil from "@/utils/token.util";
 import NotificationSocketModel from "@/api/modules/notification/models/notification-socket.model";
 import LangSelectComponent from "@/components/Navigation/LangSelectComponent.vue";
+import PrintUtil from "@/utils/localization/print.util.js";
 
 export default {
   name: "ProfileComponent",
@@ -52,10 +54,17 @@ export default {
   data() {
     return {
       op: null,
+      username: "",
       router: Router,
     };
   },
+  created() {
+    this.username = TokenUtil.getAuthorizedName() || "";
+  },
   methods: {
+    localize(key, module = "user") {
+      return PrintUtil.localize(key, module);
+    },
     toggle(event) {
       this.$refs.op.toggle(event);
     },

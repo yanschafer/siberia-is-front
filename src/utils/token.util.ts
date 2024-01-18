@@ -1,5 +1,6 @@
 import TokenPairDto from "@/api/modules/auth/dto/token-pair.dto";
 import AuthorizedUserDto from "@/api/modules/auth/dto/authorized-user.dto";
+import UserDto from "@/api/modules/user/dto/user.dto";
 
 class TokenUtil {
   private accessToken: string | null = null;
@@ -7,7 +8,7 @@ class TokenUtil {
   private readonly accessTokenKey = "access";
   private readonly refreshTokenKey = "refresh";
   private readonly authorizedUserKey = "authorized";
-  private authorizedUserDto: AuthorizedUserDto | null = null;
+  private authorizedUserDto: UserDto | null = null;
 
   constructor() {
     if (localStorage.getItem(this.authorizedUserKey)) {
@@ -59,6 +60,11 @@ class TokenUtil {
 
   getAuthorizedId() {
     if (this.authorizedUserDto) return this.authorizedUserDto.id;
+    else return null;
+  }
+
+  getAuthorizedName() {
+    if (this.authorizedUserDto) return this.authorizedUserDto.name;
     else return null;
   }
 

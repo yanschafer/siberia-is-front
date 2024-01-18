@@ -81,6 +81,7 @@ export default {
       personalRulesDescription: "Rules which are related only to this user",
       userRolesCapslock: "USER ROLES",
       userNameCapslock: "USERNAME",
+      userNameCapslockSpaced: "USER NAME",
       passwordCapslock: "PASSWORD",
       roleCapslock: "ROLE",
       userIsUpdated: "User is updated",
@@ -92,6 +93,10 @@ export default {
       name: "Name",
       login: "Login",
       nothingWasFound: "Nothing was found",
+
+      //ProfileComponent
+      profileHeader: "Profile",
+      logout: "Log out",
     },
     role: {
       //RolesView.vue
