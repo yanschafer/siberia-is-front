@@ -8,7 +8,9 @@
     <MDBRow class="d-flex justify-content-around">
       <MDBRow class="w-auto">
         <MDBCol class="col-auto">
-          <h1 v-if="!editing" class="username-heading">{{ userName }}</h1>
+          <MDBRow v-if="!editing">
+            <h1 class="username-heading">{{ userName }}</h1>
+          </MDBRow>
           <InputText
             v-else
             class="input-wrapper animate__animated animate__fadeIn username-input"
@@ -23,6 +25,7 @@
               localize("userRolesCapslock", "user")
             }}</span>
             <div class="container">
+              <Tag severity="success" value="Current user"></Tag>
               <MDBBadge
                 v-for="roleName in userRolesNameList"
                 color="secondary"
@@ -33,11 +36,17 @@
         </MDBCol>
       </MDBRow>
       <MDBCol v-if="!editing" class="d-flex justify-content-end">
-        <MDBBtn @click="startEditing" class="utility-btn" outline="black">{{
-          localize("editCapslock")
-        }}</MDBBtn>
+        <MDBBtn
+          @click="startEditing"
+          class="animate__animated animate__fadeIn utility-btn"
+          outline="black"
+          >{{ localize("editCapslock") }}</MDBBtn
+        >
       </MDBCol>
-      <MDBCol v-else class="d-flex justify-content-end">
+      <MDBCol
+        v-else
+        class="animate__animated animate__fadeIn d-flex justify-content-end"
+      >
         <MDBBtn
           v-if="!isMySelf"
           @click="confirmDeletion"
@@ -114,6 +123,7 @@ import {
   MDBInput,
 } from "mdb-vue-ui-kit";
 import Panel from "primevue/panel";
+import Tag from "primevue/tag";
 import TabsComponent from "@/components/Navigation/TabsComponent.vue";
 import UserFullDto from "@/api/modules/user/dto/user-full.dto";
 import { useRoute, useRouter } from "vue-router";
@@ -149,6 +159,7 @@ export default {
     MDBTabItem,
     MDBTabPane,
     Panel,
+    Tag,
   },
   data: () => ({
     editing: false,
@@ -412,5 +423,14 @@ export default {
 .span {
   color: #6c6c6c;
   margin-right: 1rem;
+}
+:deep(.p-tag) {
+  padding-left: 0.65em !important;
+  padding-right: 0.65em !important;
+  padding-top: 0.35em !important;
+  padding-bottom: 0.35em !important;
+  font-size: 0.75em;
+  height: 100%;
+  max-height: 1.18rem;
 }
 </style>
