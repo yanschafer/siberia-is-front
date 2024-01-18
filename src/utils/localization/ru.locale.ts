@@ -126,6 +126,7 @@ export default {
       deletionFailed: "Ошибка при удалении",
       userNotFound: "Пользователь не найден",
       editUserRoles: "Изменить роли пользователя",
+      currentUser: "Текущий ползователь",
 
       //UsersView.vue
       name: "Номер",
@@ -298,6 +299,9 @@ export default {
       notEnoughProducts: "Недостаточно товаров для продажи",
       storehouseIsRemoved: "Склад удален",
       storehouseNotFound: "Склад не найден",
+      noStorehouseAvailable: "Нет доступных складов",
+      tryToEditStorehouse:
+        "Попробуйте отредактировать доступные склады во вкладке 'Пользователи', или сообщите администратору.",
 
       //storehouse.store.ts
       addressCapslock: "АДРЕС",
@@ -309,6 +313,8 @@ export default {
       quantityAndProductMustBeSelected: "Вы должны указать цену и товар",
       priceMustBeSelected: "Вы должны указать цену",
       notEnoughProductsStorehouses: "Не достаточно товаров",
+      noProductInList: "В списке еще нет товаров",
+      pleaseAddOneFirst: "Пожалуйста, начните с добавления товара.",
     },
     filters: {
       //FiltersSidebarComponent.vue
@@ -478,6 +484,21 @@ export default {
       operationCapslock: "ОПЕРАЦИЯ",
       fromCapslock: "ИЗ",
       toCapslock: "В",
+    },
+    dashboard: {
+      //DashboardView.vue
+      lastDay: "За последний день",
+      week: "За неделю",
+      month: "За месяц",
+      quarter: "За квартал",
+      sales: "Продажи",
+      website: "Сайт",
+      store: "Склад",
+      lastSaleDateCapslock: "ДАТА ПОСЛЕДНЕЙ ПРОДАЖИ",
+      totalQuantityCapslock: "ОБЩЕЕ КОЛ-ВО",
+      totalValueCapslock: "ОБЩАЯ СТОИМОСТЬ",
+      leastBestsellingItems: "Самые непродоваемые товары",
+      soldFrom: "Продано на 800K из 1M",
     },
   },
 };

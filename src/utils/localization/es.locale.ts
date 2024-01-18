@@ -97,6 +97,7 @@ export default {
       deletionFailed: "Error al eliminar",
       userNotFound: "Usuario no encontrado",
       editUserRoles: "Editar roles de usuario",
+      currentUser: "Usuario Actual",
 
       //UsersView.vue
       name: "Nombre",
@@ -271,6 +272,9 @@ export default {
       notEnoughProducts: "No hay suficientes productos para la venta",
       storehouseIsRemoved: "El almacén ha sido eliminado",
       storehouseNotFound: "Almacén no encontrado",
+      noStorehouseAvailable: "No hay almacén disponible",
+      tryToEditStorehouse:
+        "Intenta editar los almacenes disponibles en la pestaña de administración de usuarios, o informa a tu administrador",
 
       //storehouse.store.ts
       addressCapslock: "DIRECCIÓN",
@@ -282,6 +286,8 @@ export default {
       quantityAndProductMustBeSelected: "Debe seleccionar Cantidad y Producto",
       priceMustBeSelected: "Debe seleccionar el Precio",
       notEnoughProductsStorehouses: "No hay suficientes productos",
+      noProductInList: "Aún no hay productos en la lista",
+      pleaseAddOneFirst: "Por favor, agrega uno primero",
     },
     filters: {
       //FiltersSidebarComponent.vue
@@ -453,6 +459,21 @@ export default {
       operationCapslock: "OPERACIÓN",
       fromCapslock: "DESDE",
       toCapslock: "A",
+    },
+    dashboard: {
+      //DashboardView.vue
+      lastDay: "Último día",
+      week: "Semana",
+      month: "Mes",
+      quarter: "Trimestre",
+      sales: "Ventas",
+      website: "Sitio web",
+      store: "Tienda",
+      lastSaleDateCapslock: "FECHA DE ÚLTIMA VENTA",
+      totalQuantityCapslock: "CANTIDAD TOTAL",
+      totalValueCapslock: "VALOR TOTAL",
+      leastBestsellingItems: "Productos Menos Vendidos",
+      soldFrom: "800K vendidos de 1M",
     },
   },
 };
