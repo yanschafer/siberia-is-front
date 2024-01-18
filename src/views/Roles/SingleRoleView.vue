@@ -120,6 +120,7 @@ import PrintUtil from "@/utils/localization/print.util";
 import ValidatorUtil from "@/utils/validator/validator.util";
 import ValidateRule from "@/utils/validator/validate-rule";
 import { useModalStore } from "@/stores/modal.store";
+import { useAuthCheckStore } from "@/stores/auth-check.store";
 
 export default {
   name: "SingleRoleView",
@@ -151,6 +152,7 @@ export default {
     const rolesStore = useRolesStore();
     const usersStore = useUsersStore();
     const modalStore = useModalStore();
+    const authCheckStore = useAuthCheckStore();
     const router = useRouter();
     const route = useRoute();
 
@@ -162,6 +164,7 @@ export default {
       ),
       usersLoadRes: await usersStore.loadUsersList(),
       modalStore,
+      authCheckStore,
       router,
     };
   },
@@ -345,7 +348,7 @@ export default {
       }));
     },
     canEditUsers() {
-      return TokenUtil.hasAccessTo(appConf.rules.userManaging);
+      return this.authCheckStore.getCanEditUsersInRole;
     },
   },
 };
