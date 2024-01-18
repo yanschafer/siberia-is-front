@@ -41,12 +41,12 @@ export const useHistoryStore = defineStore({
     getEventTypes: (state) =>
       state.eventTypes.map((el) => ({
         ...el,
-        name: PrintUtil.localize(el.name),
+        name: PrintUtil.localize(el.name, "history"),
       })),
     getEventObjectTypes: (state) =>
       state.eventObjectTypes.map((el) => ({
         ...el,
-        name: PrintUtil.localize(el.name),
+        name: PrintUtil.localize(el.name, "history"),
       })),
   },
 
