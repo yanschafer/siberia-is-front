@@ -7,6 +7,10 @@ import TransferTransactionModel from "@/api/modules/transaction/models/transfer-
 import ApiResponseDto from "@/api/dto/api-response.dto";
 import TransactionSimpleDto from "@/api/modules/transaction/dto/transaction-simple.dto";
 import TransactionSearchFilterDto from "@/api/modules/transaction/dto/transaction-search-filter.dto";
+import PrintUtil from "@/utils/localization/print.util";
+
+const localize = (key, module = "operations") =>
+  PrintUtil.localize(key, module);
 
 export const useOperationStore = defineStore({
   id: "operations",
@@ -14,10 +18,10 @@ export const useOperationStore = defineStore({
     searchTerm: "",
     operationRows: [],
     operationColumns: [
-      { field: "operation", header: "OPERATION" },
-      { field: "from", header: "FROM" },
-      { field: "to", header: "TO" },
-      { field: "status", header: "STATUS" },
+      { field: "operation", header: localize("operationsCapslock") },
+      { field: "from", header: localize("fromCapslock") },
+      { field: "to", header: localize("toCapslock") },
+      { field: "status", header: localize("statusCapslock") },
     ],
     selectedOperation: {},
     statusesList: [],
@@ -26,6 +30,14 @@ export const useOperationStore = defineStore({
     getSearchTerm: (state) => state.searchTerm,
     getOperationList: (state) => state.operationRows,
     getSelectedOperation: (state) => state.selectedOperation,
+    getAvailableStatuses: (state) => {
+      if (state.selectedOperation.availableStatuses)
+        return state.selectedOperation.availableStatuses.map((el) => ({
+          ...el,
+          name: localize(el.name),
+        }));
+      else return [];
+    },
     getStatusList: (state) => state.statusesList,
   },
   actions: {
