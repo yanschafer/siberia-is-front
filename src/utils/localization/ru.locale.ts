@@ -51,6 +51,8 @@ export default {
       nameCapslock: "НАЗВАНИЕ",
       nothingFound: "Ничего не найдено",
       nothingFoundClarifyQuery: "Пожалуйста, уточните поисковый запрос.",
+      rulesUpdatedToast: "Роли обновлены",
+      rulesUpdatedToastDetails: "Ваша роль была обновлена администратором.",
     },
     router: {
       panelName: "Siberia Panel",
@@ -91,6 +93,7 @@ export default {
     header: {
       History: "История",
       Operations: "Операции",
+      Profile: "Профиль",
       Notifications: "Уведомления",
       AddBtnLabel: "+ Добавить",
     },
@@ -115,7 +118,8 @@ export default {
       personalRulesDescription:
         "Права, которые уникальны только для этого пользователя",
       userRolesCapslock: "РОЛИ ПОЛЬЗОВАТЕЛЯ",
-      userNameCapslock: "ИМЯ ПОЛЬЗОВАТЕЛЯ",
+      userNameCapslock: "ЛОГИН ПОЛЬЗОВАТЕЛЯ",
+      userNameCapslockSpaced: "ИМЯ",
       passwordCapslock: "ПАРОЛЬ",
       roleCapslock: "РОЛЬ",
       userIsUpdated: "Пользователь обновлен",
@@ -127,6 +131,9 @@ export default {
       name: "Номер",
       login: "Логин",
       nothingWasFound: "Ничего не найдено",
+
+      profileHeader: "Профиль",
+      logout: "Выйти",
     },
     role: {
       //RolesView.vue
@@ -163,6 +170,26 @@ export default {
       //RolesComponent.vue
       tabSelectPlaceholder: "Выберите склад",
       mainGroup: "Основная группа",
+
+      "User managing": "Управление пользователями",
+      "Rbac managing": "Управление ролями",
+      "Check logs": "Проверьте логи",
+      "Brand managing": "Управление брендами",
+      "Collection managing": "Управление коллекциями",
+      "Category managing": "Управление категориями",
+      "Products managing": "Управление товарами",
+      "Stock managing": "Управление складами",
+      "Arrival managing": "Управление приходом",
+      "Create arrivals": "Регистрация прихода",
+      "Approve and cancel arrivals": "Подтвердить и отменить приход",
+      "Sales managing": "Управление продажами",
+      "Create sales": "Регистрация продажи",
+      "Approve and cancel sales": "Подтвердить или отменить продажу",
+      "Requests managing": "Управление запросами",
+      "Create requests": "Регистрация запроса",
+      "Approve and cancel requests": "Подтверждение или отмена запроса",
+      "Get request in process": "Запрос в процессе",
+      "Approve request delivery": "Подтверждение доставки запроса",
     },
     products: {
       //CreateProduct.vue

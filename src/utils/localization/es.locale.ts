@@ -19,6 +19,9 @@ export default {
       nameCapslock: "NOMBRE",
       nothingFound: "Nada fue encontrado",
       nothingFoundClarifyQuery: "Por favor, aclara tu consulta de búsqueda.",
+      rulesUpdatedToast: "Reglas actualizadas",
+      rulesUpdatedToastDetails:
+        "Tus reglas fueron actualizadas por el administrador",
     },
     router: {
       panelName: "Panel de Siberia",
@@ -60,6 +63,7 @@ export default {
     header: {
       History: "Historial",
       Operations: "Operaciones",
+      Profile: "Perfil",
       Notifications: "Notificaciones",
       AddBtnLabel: "+ Agregar",
     },
@@ -86,6 +90,7 @@ export default {
         "Reglas que están relacionadas solo con este usuario",
       userRolesCapslock: "ROLES DE USUARIO",
       userNameCapslock: "NOMBRE DE USUARIO",
+      userNameCapslockSpaced: "NOMBRE DE USUARIO",
       passwordCapslock: "CONTRASEÑA",
       roleCapslock: "ROL",
       userIsUpdated: "Usuario actualizado",
@@ -97,6 +102,10 @@ export default {
       name: "Nombre",
       login: "Inicio de sesión",
       nothingWasFound: "No se encontró nada",
+
+      //ProfileComponent
+      profileHeader: "Perfil",
+      logout: "Cerrar sesión",
     },
     role: {
       // RolesView.vue
@@ -133,6 +142,26 @@ export default {
       //RolesComponent.vue
       tabSelectPlaceholder: "Seleccionar almacén",
       mainGroup: "Grupo principal",
+
+      "User managing": "Gestión de usuarios",
+      "Rbac managing": "Gestión de roles",
+      "Check logs": "Ver registros",
+      "Brand managing": "Gestión de marcas",
+      "Collection managing": "Gestión de colecciones",
+      "Category managing": "Gestión de categorías",
+      "Products managing": "Gestión de productos",
+      "Stock managing": "Gestión de almacenes",
+      "Arrival managing": "Gestión de llegadas",
+      "Create arrivals": "Crear llegadas",
+      "Approve and cancel arrivals": "Aprobar y cancelar llegadas",
+      "Sales managing": "Gestión de ventas",
+      "Create sales": "Crear ventas",
+      "Approve and cancel sales": "Aprobar y cancelar ventas",
+      "Requests managing": "Gestión de solicitudes",
+      "Create requests": "Crear solicitudes",
+      "Approve and cancel requests": "Aprobar y cancelar solicitudes",
+      "Get request in process": "Obtener solicitud en proceso",
+      "Approve request delivery": "Aprobar la entrega de la solicitud",
     },
     products: {
       //CreateProduct.vue

@@ -57,7 +57,7 @@
           localize("editCapslock", "default")
         }}</MDBBtn>
       </MDBCol>
-      <MDBCol v-else class="d-flex justify-content-end">
+      <MDBCol v-else class="d-flex justify-content-end gap-2">
         <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
           localize("deleteCapslock")
         }}</MDBBtn>

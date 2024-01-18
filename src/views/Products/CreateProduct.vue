@@ -26,7 +26,9 @@
                 v-model="name"
               />
             </MDBCol>
-            <MDBCol class="animate__animated animate__flipInX animate__faster">
+            <MDBCol
+              class="animate__animated animate__flipInX animate__faster d-flex gap-2"
+            >
               <MDBBtn @click="cancel" class="utility-btn" outline="black">{{
                 localize("cancelCapslock", "default")
               }}</MDBBtn>
