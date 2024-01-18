@@ -4,7 +4,7 @@
       class="bg-container d-flex flex-row align-items-center gap-3"
       fluid
     >
-      <MDBContainer class="d-flex gap-2 flex-row align-items-center">
+      <MDBContainer class="d-flex gap-2 flex-row align-items-center fix-margin">
         <h1 :key="title" class="animate__animated animate__fadeInUp heading">
           {{ title }}
         </h1>
@@ -260,5 +260,8 @@ export default defineComponent({
 }
 .breadcrumb-item {
   text-transform: capitalize;
+}
+.fix-margin {
+  margin-left: 0 !important;
 }
 </style>
