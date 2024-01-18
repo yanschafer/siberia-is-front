@@ -28,7 +28,7 @@
         />
       </MDBCol>
     </MDBRow>
-    <MDBCol class="d-flex justify-content-start">
+    <MDBCol class="d-flex justify-content-start gap-2">
       <MDBBtn @click="cancelCreation" class="utility-btn" outline="black">{{
         localize("cancelCapslock")
       }}</MDBBtn>
