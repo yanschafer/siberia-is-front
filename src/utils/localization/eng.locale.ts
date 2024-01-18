@@ -337,5 +337,32 @@ export default {
       Collections: "Collections",
       Categories: "Categories",
     },
+    history: {
+      Operation: "Operation",
+      Author: "Author",
+      DateRange: "Date range",
+      EventType: "Event type",
+      EventObjectType: "Event object type",
+
+      //history.store + SingleHistoryView.vue
+      targetCapslock: "TARGET",
+      targetNameCapslock: "TARGET NAME",
+      typeCapslock: "TYPE",
+      authorCapslock: "AUTHOR",
+      dateCapslock: "DATE",
+
+      Create: "Create",
+      Update: "Update",
+      Remove: "Remove",
+
+      "Stock event": "Stock Event",
+      "User event": "User Event",
+      "Role event": "Role Event",
+      "Product event": "Product Event",
+      "Brand event": "Brand Event",
+      "Collection event": "Collection Event",
+      "Category event": "Category Event",
+      "Transaction event": "Operation event",
+    },
   },
 };

@@ -2,15 +2,15 @@
   <MDBContainer class="single-user-info d-flex flex-column gap-3">
     <MDBRow class="d-flex">
       <MDBRow class="w-auto">
-        <h1 class="username-heading">{{ targetName }} was {{ type }}</h1>
+        <h1 class="username-heading">{{ targetName }} -> {{ type }}</h1>
       </MDBRow>
     </MDBRow>
     <MDBRow class="d-flex flex-nowrap w-100">
-      <span class="user-roles-heading">AUTHOR</span>
+      <span class="user-roles-heading">{{ localize("authorCapslock") }}</span>
       <span class="username">{{ author }}</span>
     </MDBRow>
     <MDBRow class="d-flex flex-nowrap w-100">
-      <span class="user-roles-heading">DATE</span>
+      <span class="user-roles-heading">{{ localize("dateCapslock") }}</span>
       <span class="username">{{ date }}</span>
     </MDBRow>
   </MDBContainer>
@@ -21,6 +21,7 @@ import { MDBBadge, MDBBtn, MDBCol, MDBContainer, MDBRow } from "mdb-vue-ui-kit";
 import TabsComponent from "@/components/Navigation/TabsComponent.vue";
 import { useHistoryStore } from "@/stores/history.store";
 import { useRoute } from "vue-router";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "SingleHistoryView",
@@ -50,7 +51,7 @@ export default {
     },
     type() {
       const selectedType = this.selectedHistory.eventType || "";
-      return selectedType.toLowerCase() + "d";
+      return this.localize(selectedType);
     },
     date() {
       const dateTime = this.selectedHistory.timestamp || null;
@@ -62,6 +63,11 @@ export default {
     },
     description() {
       return this.selectedHistory.eventDescription;
+    },
+  },
+  methods: {
+    localize(key, module = "history") {
+      return PrintUtil.localize(key, module);
     },
   },
 };
