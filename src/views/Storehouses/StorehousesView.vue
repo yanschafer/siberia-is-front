@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid" style="padding: 0; width: 86vw;">
+  <div class="container-fluid" style="padding: 0; width: 86vw">
     <template v-if="!isIdProvided">
       <SearchComponent
         v-model="storehousesStore.searchTerm"
@@ -22,12 +22,14 @@ import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 import { useStorehousesStore } from "@/stores/storehouse.store";
 import { useRoute, useRouter } from "vue-router";
+import { useAuthCheckStore } from "@/stores/auth-check.store";
 
 export default {
   name: "StorehousesView",
   components: { SearchComponent, TableComponent },
   async setup() {
     const storehousesStore = useStorehousesStore();
+    const authCheckStore = useAuthCheckStore();
     const route = useRoute();
     const router = useRouter();
 
@@ -36,19 +38,26 @@ export default {
       route,
       router,
       loadStockListRes: await storehousesStore.loadStorehouseList(),
+      authCheckStore,
     };
   },
   created() {
     this.loadStockListRes.toastIfError(this.$toast, this.$nextTick);
+    this.authCheckStore.$onAction(async ({ name }) => {
+      if (name == "refresh") {
+        const loadRes = await this.storehousesStore.loadStorehouseList();
+        loadRes.toastIfError(this.$toast, this.$nextTick);
+      }
+    });
   },
   data() {
     return {
       noDataMessage: {
         icon: "IconInfoCircle",
-        title: "No products added to the list yet",
-        text: "Start with registering one",
+        title: "No storehouse available",
+        text: "Try to edit available storehouses in users managing tab, or report to your administrator",
       },
-    }
+    };
   },
   computed: {
     filteredStorehouses() {

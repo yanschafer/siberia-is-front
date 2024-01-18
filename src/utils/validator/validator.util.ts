@@ -16,10 +16,9 @@ export default class ValidatorUtil {
     Object.keys(data).forEach((el) => {
       const rule = this.rules[el];
       if (!rule) return;
-      const checkRes = this.rules[el].check(data[el]);
-      if (!checkRes) res[el] = checkRes;
+      res[el] = this.rules[el].check(data[el]);
     });
-    if (res && Object.keys(res).length) return res;
+    if (res && Object.values(res).some((el) => !el)) return res;
     else return true;
   }
 

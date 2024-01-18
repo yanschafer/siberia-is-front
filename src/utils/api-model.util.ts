@@ -6,9 +6,11 @@ import TokenPairDto from "@/api/modules/auth/dto/token-pair.dto";
 import TokenUtil from "@/utils/token.util";
 import LoggerUtil from "@/utils/logger/logger.util";
 import AuthorizedUserDto from "@/api/modules/auth/dto/authorized-user.dto";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import loggerUtil from "@/utils/logger/logger.util";
 import NotificationSocketModel from "@/api/modules/notification/models/notification-socket.model";
+import { useAuthCheckStore } from "@/stores/auth-check.store";
+import router from "@/router/index";
 
 export default class ApiModelUtil {
   constructor(private baseEndpoint: string) {}
@@ -179,14 +181,39 @@ export default class ApiModelUtil {
     return await result;
   }
 
-  initSockets() {
-    loggerUtil.debug("START SOCKET");
-    NotificationSocketModel.setNewRulesUpdateCallback(() => {
+  initSockets(toast) {
+    NotificationSocketModel.setNewRulesUpdateCallback(async () => {
+      if (toast) {
+        toast.add({
+          severity: "info",
+          summary: "Rules updated",
+          detail: "Your rules were updated by administrator",
+          life: 3000,
+        });
+      }
       loggerUtil.debugPrefixed(
         "WebSocket",
         "Start processing update-rules event",
       );
-      new ApiModelUtil("").refresh();
+      const authCheckStore = useAuthCheckStore();
+      await new ApiModelUtil("").refresh();
+      const route = router.currentRoute._value;
+      if (route && route.meta && route.meta.ruleId) {
+        if (
+          !route.meta.ruleId.some((el) =>
+            TokenUtil.hasAccessTo(parseInt(el.toString())),
+          )
+        ) {
+          router.push({ name: "dashboard" });
+        }
+        if (route.name == "Storehouse") {
+          if (route.params && route.params.id) {
+            if (!TokenUtil.hasAnyAccessToStock(route.params.id))
+              router.push({ name: "storehouses" });
+          }
+        }
+      }
+      authCheckStore.refresh();
     });
     NotificationSocketModel.init();
   }

@@ -25,6 +25,7 @@ export default class WsResolverUtil {
   };
 
   public close() {
+    this.socket?.close(3488);
     this.socket = null;
   }
 
@@ -51,15 +52,14 @@ export default class WsResolverUtil {
         };
 
         this.socket.onclose = async (event) => {
+          if (event.code == 3488) return;
           loggerUtil.debugPrefixed("WebSocket", "Websocket closed", event);
           if (TokenUtil.isAuthorized()) {
             this.socket = null;
             //Firstly, refresh tokens
-            // const apiModelUtil = new ApiModelUtil("");
-            // await apiModelUtil.refresh();
-            // setTimeout(async () => {
-            //   await this.init();
-            // }, 200);
+            const apiModelUtil = new ApiModelUtil("");
+            const res = await apiModelUtil.refresh();
+            if (res.success) this.init();
           }
         };
 
@@ -80,6 +80,7 @@ export default class WsResolverUtil {
         this.whileInactive.map((el) => {
           this.sendRequest(el);
         });
+        this.whileInactive = [];
       });
     });
   }

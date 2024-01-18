@@ -133,6 +133,7 @@ import { appConf, TransactionStatus } from "@/api/conf/app.conf";
 import TokenUtil from "@/utils/token.util";
 import loggerUtil from "@/utils/logger/logger.util";
 import InputText from "primevue/inputtext";
+import { useAuthCheckStore } from "@/stores/auth-check.store";
 
 export default {
   name: "SingleStorehouseView",
@@ -194,11 +195,15 @@ export default {
         title: "No product yet in the list",
         text: "Please add one first",
       },
+      arrivalAvailable: true,
+      saleAvailable: true,
+      requestAvailable: true,
     };
   },
   async setup() {
     const productStore = useProductsStore();
     const storehouseStore = useStorehousesStore();
+    const authCheckStore = useAuthCheckStore();
     const modalStore = useModalStore();
     const route = useRoute();
     const router = useRouter();
@@ -207,16 +212,32 @@ export default {
       storehouseStore,
       productStore,
       modalStore,
+      route,
       router,
       loadProductListRes: await productStore.loadProductList(),
       loadSelectedStorehouse: await storehouseStore.loadSelectedStoreHouse(
         parseInt(route.params.id.toString()),
       ),
+      authCheckStore,
     };
   },
   created() {
     this.loadProductListRes.toastIfError(this.$toast, this.$nextTick);
     this.loadSelectedStorehouse.toastIfError(this.$toast, this.$nextTick);
+    if (this.loadSelectedStorehouse.success) this.updateMangeButtons();
+
+    this.authCheckStore.$onAction(async ({ name }) => {
+      if (name == "refresh") {
+        const loadRes = await this.storehouseStore.loadSelectedStoreHouse(
+          this.id,
+        );
+        if (!loadRes.success) {
+          if (loadRes.getError().httpStatusCode != 403) {
+            loadRes.toastIfError(this.$toast, this.$nextTick);
+          }
+        } else this.updateMangeButtons();
+      }
+    });
 
     const nameValidateRule = new ValidateRule().skipIfNull().required();
     const addressValidateRule = new ValidateRule().skipIfNull().required();
@@ -248,19 +269,24 @@ export default {
       });
       return obj;
     },
-    arrivalAvailable() {
-      return TokenUtil.hasAccessToStock(appConf.rules.arrivalCreation, this.id);
-    },
-    saleAvailable() {
-      return TokenUtil.hasAccessToStock(appConf.rules.saleCreation, this.id);
-    },
-    requestAvailable() {
-      return TokenUtil.hasAccessToStock(appConf.rules.requestCreation, this.id);
-    },
   },
   methods: {
     localize(key, module = "storehouses") {
       return PrintUtil.localize(key, module);
+    },
+    updateMangeButtons() {
+      this.arrivalAvailable = TokenUtil.hasAccessToStock(
+        appConf.rules.arrivalCreation,
+        this.id,
+      );
+      this.saleAvailable = TokenUtil.hasAccessToStock(
+        appConf.rules.saleCreation,
+        this.id,
+      );
+      this.requestAvailable = TokenUtil.hasAccessToStock(
+        appConf.rules.requestCreation,
+        this.id,
+      );
     },
     showSuccessToast() {
       this.$toast.add({

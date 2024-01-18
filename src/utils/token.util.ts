@@ -47,6 +47,16 @@ class TokenUtil {
     } else return false;
   }
 
+  hasAnyAccessToStock(stockId) {
+    if (this.authorizedUserDto) {
+      return (
+        this.authorizedUserDto.rules.filter((el) => {
+          return el.stockId == stockId;
+        }).length > 0
+      );
+    } else return false;
+  }
+
   getAuthorizedId() {
     if (this.authorizedUserDto) return this.authorizedUserDto.id;
     else return null;

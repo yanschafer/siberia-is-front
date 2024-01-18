@@ -1,13 +1,12 @@
 <script lang="ts">
 import { RouterView } from "vue-router";
-import NotificationSocketModel from "@/api/modules/notification/models/notification-socket.model";
 import TokenUtil from "@/utils/token.util";
 import ApiModelUtil from "@/utils/api-model.util";
-import loggerUtil from "@/utils/logger/logger.util";
+
 export default {
   components: { RouterView },
   created() {
-    if (TokenUtil.isAuthorized()) new ApiModelUtil("").initSockets();
+    if (TokenUtil.isAuthorized()) new ApiModelUtil("").initSockets(this.$toast);
   },
 };
 </script>

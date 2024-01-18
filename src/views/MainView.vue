@@ -31,6 +31,7 @@ import { appConf } from "@/api/conf/app.conf";
 import { MDBContainer } from "mdb-vue-ui-kit";
 import PrintUtil from "@/utils/localization/print.util";
 import loggerUtil from "@/utils/logger/logger.util";
+import { useAuthCheckStore } from "@/stores/auth-check.store";
 export default {
   name: "DashboardView",
   components: {
@@ -41,74 +42,6 @@ export default {
   },
   data() {
     return {
-      sidebarItems: [
-        {
-          name: PrintUtil.localize("Dashboard", "sidebar"),
-          icon: "IconDashboard",
-          iconColor: "#B8B8B8",
-          iconSize: 24,
-          strokeWidth: 1,
-          disabled: false,
-          active: true,
-          route: "dashboard",
-          rule: true,
-        },
-        {
-          name: PrintUtil.localize("Products", "sidebar"),
-          icon: "IconPackages",
-          iconColor: "#B8B8B8",
-          iconSize: 24,
-          strokeWidth: 1,
-          disabled: false,
-          active: true,
-          route: "products",
-          rule: appConf.rules.productsManaging,
-        },
-        {
-          name: PrintUtil.localize("Assortments", "sidebar"),
-          icon: "IconDashboard",
-          iconColor: "#B8B8B8",
-          iconSize: 24,
-          strokeWidth: 1,
-          disabled: false,
-          active: true,
-          route: "assortment",
-          rule: true,
-        },
-        {
-          name: PrintUtil.localize("Storehouses", "sidebar"),
-          icon: "IconBuildingWarehouse",
-          iconColor: "#B8B8B8",
-          iconSize: 24,
-          strokeWidth: 1,
-          disabled: false,
-          active: false,
-          route: "storehouses",
-          rule: appConf.rules.stockManaging,
-        },
-        {
-          name: PrintUtil.localize("Users", "sidebar"),
-          icon: "IconUser",
-          iconColor: "#B8B8B8",
-          iconSize: 24,
-          strokeWidth: 1,
-          disabled: false,
-          active: false,
-          route: "users",
-          rule: appConf.rules.userManaging,
-        },
-        {
-          name: PrintUtil.localize("Roles", "sidebar"),
-          icon: "IconUsersGroup",
-          iconColor: "#B8B8B8",
-          iconSize: 24,
-          strokeWidth: 1,
-          disabled: false,
-          active: false,
-          route: "roles",
-          rule: appConf.rules.rbacManaging,
-        },
-      ],
       router: useRouter(),
       pageTitle: "",
       showAddBtn: false,
@@ -117,6 +50,7 @@ export default {
   },
   setup() {
     return {
+      authCheckStore: useAuthCheckStore(),
       router: useRouter(),
       route: useRoute(),
     };
@@ -147,9 +81,7 @@ export default {
   },
   computed: {
     sidebar() {
-      return this.sidebarItems.filter(
-        (el) => TokenUtil.hasAccessTo(el.rule) || el.rule === true,
-      );
+      return this.authCheckStore.getSidebarItems;
     },
     navBreadcrumbs() {
       const breadcrumbs = this.$route.matched.map((route) => ({
@@ -168,6 +100,7 @@ export default {
   },
   mounted() {
     this.updatePageTitleAndContent();
+    this.authCheckStore.refresh();
   },
 };
 </script>

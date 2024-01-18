@@ -12,7 +12,7 @@
           <InputText
             v-else
             class="input-wrapper animate__animated animate__fadeIn username-input"
-            :class="{ 'p-invalid': validate.name }"
+            :class="{ 'p-invalid': !validate.name }"
             type="text"
             v-model="newUserName"
           />
@@ -60,7 +60,7 @@
       <InputText
         v-else
         class="input-wrapper animate__animated animate__fadeIn username-input"
-        :class="{ 'p-invalid': validate.login }"
+        :class="{ 'p-invalid': !validate.login }"
         type="text"
         v-model="newUserUsername"
       />
@@ -73,7 +73,7 @@
       <InputText
         v-else
         class="input-wrapper animate__animated animate__fadeIn username-input"
-        :class="{ 'p-invalid': validate.password }"
+        :class="{ 'p-invalid': !validate.password }"
         type="text"
         v-model="newUserPassword"
       />
@@ -92,7 +92,7 @@
   </MDBContainer>
   <MDBContainer class="pt-4">
     <Suspense>
-      <Panel  header="Role permissions">
+      <Panel header="Role permissions">
         <TabsComponent :roles="roles" :user-id="selectedUser.id" />
       </Panel>
     </Suspense>
@@ -129,6 +129,7 @@ import TokenUtil from "@/utils/token.util";
 import PrintUtil from "@/utils/localization/print.util";
 import ValidateRule from "@/utils/validator/validate-rule";
 import ValidatorUtil from "@/utils/validator/validator.util";
+import loggerUtil from "@/utils/logger/logger.util";
 export default {
   name: "SingleUserView",
   components: {
@@ -148,7 +149,7 @@ export default {
     MDBTabContent,
     MDBTabItem,
     MDBTabPane,
-    Panel
+    Panel,
   },
   data: () => ({
     editing: false,
@@ -337,6 +338,7 @@ export default {
 
       const userUpdateDto = new UpdateUserDto(newName, newLogin, newPassword);
       const validateRes = this.validator.validate(userUpdateDto);
+      loggerUtil.debug(userUpdateDto, validateRes);
       if (validateRes !== true) {
         this.validate = validateRes;
         this.validator.showErrorToast(this.$toast);
