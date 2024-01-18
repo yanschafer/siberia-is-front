@@ -8,6 +8,7 @@ import LoggerUtil from "@/utils/logger/logger.util";
 import AuthorizedUserDto from "@/api/modules/auth/dto/authorized-user.dto";
 import { useRouter } from "vue-router";
 import loggerUtil from "@/utils/logger/logger.util";
+import NotificationSocketModel from "@/api/modules/notification/models/notification-socket.model";
 
 export default class ApiModelUtil {
   constructor(private baseEndpoint: string) {}
@@ -176,5 +177,17 @@ export default class ApiModelUtil {
       );
 
     return await result;
+  }
+
+  initSockets() {
+    loggerUtil.debug("START SOCKET");
+    NotificationSocketModel.setNewRulesUpdateCallback(() => {
+      loggerUtil.debugPrefixed(
+        "WebSocket",
+        "Start processing update-rules event",
+      );
+      new ApiModelUtil("").refresh();
+    });
+    NotificationSocketModel.init();
   }
 }

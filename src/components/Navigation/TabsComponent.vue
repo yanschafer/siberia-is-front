@@ -12,20 +12,19 @@
       </template>
     </MDBTabNav>
     <MDBTabContent class="content">
-      <ScrollPanel
-          style="width: 100%; height: 40vh;">
-      <template v-for="role in roles">
+      <ScrollPanel style="width: 100%; height: 40vh">
+        <template v-for="role in roles">
           <MDBTabPane class="content" :tabId="String(role.id)">
             <RolesComponent
-            @new-rule-selected="ruleSelected"
-            @rule-removed="ruleRemoved"
-            :role="role"
-            :can-change="role.canChange"
-            :rules="rules"
-            :stocks="stocks"
-          />
+              @new-rule-selected="ruleSelected"
+              @rule-removed="ruleRemoved"
+              :role="validateRole(role)"
+              :can-change="role.canChange"
+              :rules="rules"
+              :stocks="stocks"
+            />
           </MDBTabPane>
-      </template>
+        </template>
       </ScrollPanel>
     </MDBTabContent>
   </MDBTabs>
@@ -39,7 +38,7 @@ import {
   MDBTabContent,
   MDBTabPane,
 } from "mdb-vue-ui-kit";
-import ScrollPanel from 'primevue/scrollpanel';
+import ScrollPanel from "primevue/scrollpanel";
 import { defineComponent } from "vue";
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
@@ -65,7 +64,7 @@ export default defineComponent({
     MDBTabItem,
     MDBTabContent,
     MDBTabPane,
-    ScrollPanel
+    ScrollPanel,
   },
   props: {
     userId: {
@@ -123,6 +122,11 @@ export default defineComponent({
         life: 3000,
       });
     },
+    validateRole(role) {
+      loggerUtil.debug(role);
+      if (role.rules) return role;
+      else return { ...role, rules: [] };
+    },
     async ruleRemoved({ roleId, linkedRule }) {
       if (this.creationMode) {
         linkedRule.forEach((rule) => {
@@ -168,13 +172,13 @@ export default defineComponent({
 
 <style scoped>
 .tabs {
-  padding-right: 0!important;
+  padding-right: 0 !important;
 }
 .content {
-  padding: 0!important;
+  padding: 0 !important;
 }
 :deep(.col-9) {
-  padding-left: 0!important;
+  padding-left: 0 !important;
   border-left: 2px solid #e3e3e3 !important;
 }
 </style>
