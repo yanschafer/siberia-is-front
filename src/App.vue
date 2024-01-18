@@ -1,6 +1,15 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
-import LoginView from "@/views/LoginView.vue";
+<script lang="ts">
+import { RouterView } from "vue-router";
+import NotificationSocketModel from "@/api/modules/notification/models/notification-socket.model";
+import TokenUtil from "@/utils/token.util";
+import ApiModelUtil from "@/utils/api-model.util";
+import loggerUtil from "@/utils/logger/logger.util";
+export default {
+  components: { RouterView },
+  created() {
+    if (TokenUtil.isAuthorized()) new ApiModelUtil("").initSockets();
+  },
+};
 </script>
 
 <template>
@@ -112,16 +121,16 @@ ul {
   border-radius: 7px;
 }
 .p-component-overlay {
-  background-color: rgba(255, 255, 255, 0.7)!important;
+  background-color: rgba(255, 255, 255, 0.7) !important;
   backdrop-filter: blur(10px);
 }
 .p-dialog {
-  border-radius: 29px!important;
-  border: 2px solid #eee!important;
-  background: #fff!important;
-  width: 100%!important;
-  max-width: 35rem!important;
-  box-shadow: 0px 4px 28.3px 4px rgba(0, 0, 0, 0.06)!important;
+  border-radius: 29px !important;
+  border: 2px solid #eee !important;
+  background: #fff !important;
+  width: 100% !important;
+  max-width: 35rem !important;
+  box-shadow: 0px 4px 28.3px 4px rgba(0, 0, 0, 0.06) !important;
 }
 .p-dialog-header {
   border-top-left-radius: 29px;
@@ -136,7 +145,7 @@ ul {
   max-width: 5rem;
 }
 .table-header {
-  width: max-content!important;
+  width: max-content !important;
   max-width: 6rem;
   display: flex;
 }
@@ -237,7 +246,8 @@ ul {
 .p-dropdown-label {
   color: black;
 }
-.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
   color: #f9f9f9;
   border-color: white;
   background-color: black;
@@ -264,14 +274,14 @@ ul {
   text-align: left;
 }
 .accordion-item {
-  width: 100%!important;
+  width: 100% !important;
   border-bottom: 2px solid rgba(227, 227, 227, 0.49) !important;
 }
 .p-invalid {
-  border-color: #e24c4c!important;
+  border-color: #e24c4c !important;
 }
-input[type='number'] {
-  -moz-appearance:textfield;
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

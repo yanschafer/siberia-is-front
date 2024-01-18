@@ -110,6 +110,7 @@ import TokenUtil from "@/utils/token.util";
 import { appConf } from "@/api/conf/app.conf";
 import { useRouter } from "vue-router";
 import PrintUtil from "@/utils/localization/print.util";
+import ApiModelUtil from "@/utils/api-model.util";
 
 export default defineComponent({
   name: "HeaderComponent",
@@ -166,13 +167,16 @@ export default defineComponent({
       return PrintUtil.localize(key, module);
     },
     navigate() {
-      this.router.push({ name: this.addBtnRoute || "" });
+      new ApiModelUtil("").initSockets();
+      // this.router.push({ name: this.addBtnRoute || "" });
     },
     handleClickHistory() {
-      this.$router.push({ name: "History" });
+      new ApiModelUtil("").initSockets();
+      // this.$router.push({ name: "History" });
     },
     handleClickOperations() {
-      this.$router.push({ name: "Operations" });
+      new ApiModelUtil("").initSockets();
+      // this.$router.push({ name: "Operations" });
     },
   },
   computed: {

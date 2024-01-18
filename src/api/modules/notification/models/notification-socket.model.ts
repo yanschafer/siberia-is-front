@@ -1,7 +1,12 @@
 import WsResolverUtil from "@/utils/ws/ws-resolver.util";
 
-export default class NotificationSocketModel extends WsResolverUtil {
+class NotificationSocketModel extends WsResolverUtil {
   public setNewNotificationCallback(callback: Function) {
-    this.subscribe("new-notification", callback)
+    this.subscribe("new-notification", callback);
+  }
+  public setNewRulesUpdateCallback(callback: Function) {
+    this.subscribe("update-rules", callback);
   }
 }
+
+export default new NotificationSocketModel();
