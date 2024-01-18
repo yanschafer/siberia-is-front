@@ -162,7 +162,6 @@ export default {
 </script>
 <style scoped>
 .table-header {
-  width: 1rem !important;
 }
 .message-heading {
   color: #b8b8b8;

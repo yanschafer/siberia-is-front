@@ -106,12 +106,11 @@ ul {
   padding: 0.2rem;
 }
 .utility-btn {
-  height: auto;
+  height: 2rem;
   width: 100%;
   min-width: 4rem;
   max-width: max-content;
   font-weight: 800;
-  max-height: 2rem;
   margin: 0;
   padding-left: 10px;
   padding-right: 10px;
@@ -145,7 +144,7 @@ ul {
 }
 .table-header {
   width: max-content !important;
-  max-width: 6rem;
+  max-width: 10rem;
   display: flex;
 }
 .p-tabview-title {

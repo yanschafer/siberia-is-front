@@ -32,7 +32,7 @@
         outline="black"
         >{{ localize("editStorehouse") }}</MDBBtn
       >
-      <MDBCol v-else class="d-flex justify-content-start">
+      <MDBCol v-else class="d-flex justify-content-start gap-2">
         <MDBBtn @click="cancelEditing" class="utility-btn" outline="black">{{
           localize("cancelCapslock", "default")
         }}</MDBBtn>

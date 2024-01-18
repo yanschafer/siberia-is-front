@@ -49,7 +49,7 @@
       </MDBCol>
       <MDBCol
         v-else
-        class="animate__animated animate__fadeIn d-flex justify-content-end"
+        class="animate__animated animate__fadeIn d-flex justify-content-end gap-2"
       >
         <MDBBtn
           v-if="!isMySelf"

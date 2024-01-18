@@ -5,7 +5,7 @@
     @close="closeModal"
   />
   <ScrollPanel
-    style="height: 80vh"
+    style="height: 80vh; width: 88vw"
     class="main-area animate__animated animate__fadeIn"
   >
     <TabView>
