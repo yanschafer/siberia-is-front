@@ -54,6 +54,7 @@ import PrintUtil from "@/utils/localization/print.util";
 import ValidatorUtil from "@/utils/validator/validator.util";
 import ValidateRule from "@/utils/validator/validate-rule";
 import Panel from "primevue/panel";
+import { create } from "axios";
 
 export default defineComponent({
   name: "CreateRole",
@@ -136,33 +137,20 @@ export default defineComponent({
         return;
       }
       const created = await this.rolesStore.create(this.name, this.description);
-      if (created.success)
+      if (created.success) {
+        this.showSuccessToast();
         this.router.push({
           name: "Role",
           params: { id: created.getData().id.toString() },
         });
+      } else {
+        created.toastIfError(this.$toast, this.$nextTick);
+      }
     },
     cancelCreation() {
       this.clearValidationErrors();
       this.router.push({ name: "roles" });
     },
-  },
-  computed: {
-    // selectedUser(): UserFullDto {
-    //   return this.userStore.getSelectedUser;
-    // },
-    // roles() {
-    //   const roles = [];
-    //   return roles.concat(this.selectedUser.roles);
-    // },
-    // rolesOptions() {
-    //   return this.rolesStore.getRolesList.map((el) => {
-    //     return {
-    //       id: el.id,
-    //       name: el.name,
-    //     };
-    //   });
-    // },
   },
 });
 </script>

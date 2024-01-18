@@ -18,18 +18,20 @@
           :value="category.key"
           @change="checkboxChanges"
         />
-        <label class="label" :for="category.key">{{ category.name }}</label>
+        <label class="label" :for="category.key">{{
+          localize(category.name)
+        }}</label>
       </div>
     </MDBAccordionItem>
     <template v-for="category in categories">
       <MDBAccordionItem
         style="width: max-content; padding: 0.1rem !important"
-        :headerTitle="category.name"
+        :headerTitle="localize(category.name)"
         :collapseId="`collapse${category.id}`"
       >
         <template v-for="item in categoryItems(category.id - 1)">
           <MDBContainer class="d-flex flex-column">
-            <span>{{ item.name }}</span>
+            <span>{{ localize(item.name) }}</span>
             <MultiSelectComponent
               :start-items="storehouseList[item.id]"
               :options="storehouseOptions"
@@ -92,16 +94,16 @@ export default {
     },
   },
   data() {
-      return{
-          activeItem: "1",
-          lastCheckboxSelected: [],
-          selectedRules: [],
-          selectedRulesWithStorehouses: {},
-          multiSelectPlaceholder: this.localize("tabSelectPlaceholder", "role"),
-          storehouseList: {},
-          lastStorehouseList: {},
-          storehouseIdToObject: {},
-      }
+    return {
+      activeItem: "1",
+      lastCheckboxSelected: [],
+      selectedRules: [],
+      selectedRulesWithStorehouses: {},
+      multiSelectPlaceholder: this.localize("tabSelectPlaceholder", "role"),
+      storehouseList: {},
+      lastStorehouseList: {},
+      storehouseIdToObject: {},
+    };
   },
   emits: ["newRuleSelected", "ruleRemoved"],
   created() {

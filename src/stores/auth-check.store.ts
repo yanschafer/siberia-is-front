@@ -103,6 +103,7 @@ export const useAuthCheckStore = defineStore({
     sidebarItems: [...availableSidebarItems],
     hasAccessToHistory: true,
     assortmentTabs: [...availableAssortmentTabs],
+    canEditUsersInRole: true,
   }),
   getters: {
     getSidebarItems() {
@@ -113,6 +114,9 @@ export const useAuthCheckStore = defineStore({
     },
     getAssortmentTabs() {
       return this.assortmentTabs;
+    },
+    getCanEditUsersInRole() {
+      return this.canEditUsersInRole;
     },
   },
   actions: {
@@ -125,6 +129,9 @@ export const useAuthCheckStore = defineStore({
       this.hasAccessToHistory = TokenUtil.hasAccessTo(appConf.rules.checkLogs);
       this.assortmentTabs = availableAssortmentTabs.filter((el) =>
         TokenUtil.hasAccessTo(el.ruleId),
+      );
+      this.canEditUsersInRole = TokenUtil.hasAccessTo(
+        appConf.rules.userManaging,
       );
     },
   },

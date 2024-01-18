@@ -19,6 +19,8 @@ export default {
       nameCapslock: "NAME",
       nothingFound: "Nothing was found",
       nothingFoundClarifyQuery: "Please clarify your search query.",
+      rulesUpdatedToast: "Rules updated",
+      rulesUpdatedToastDetails: "Your rules were updated by administrator",
     },
     router: {
       panelName: "Siberia Panel",
@@ -137,6 +139,26 @@ export default {
       //RolesComponent.vue
       tabSelectPlaceholder: "Select storehouse",
       mainGroup: "Main group",
+
+      "User managing": "Users managing",
+      "Rbac managing": "Roles managing",
+      "Check logs": "Check logs",
+      "Brand managing": "Brands managing",
+      "Collection managing": "Collections managing",
+      "Category managing": "Categories managing",
+      "Products managing": "Products managing",
+      "Stock managing": "Storehouses managing",
+      "Arrival managing": "Arrival managing",
+      "Create arrivals": "Create arrivals",
+      "Approve and cancel arrivals": "Approve and cancel arrivals",
+      "Sales managing": "Sales managing",
+      "Create sales": "Create sales",
+      "Approve and cancel sales": "Approve and cancel sales",
+      "Requests managing": "Requests managing",
+      "Create requests": "Create requests",
+      "Approve and cancel requests": "Approve and cancel requests",
+      "Get request in process": "Get request in process",
+      "Approve request delivery": "Approve request delivery",
     },
     products: {
       //CreateProduct.vue
@@ -282,8 +304,8 @@ export default {
 
       //TabsComponent
       rules: "Rules",
-      added: "added",
       removed: "removed",
+      added: "added",
 
       //LangSelectComponent
       langChangeHeading: "Language changed",
