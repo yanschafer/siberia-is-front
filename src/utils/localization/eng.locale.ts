@@ -455,5 +455,20 @@ export default {
       fromCapslock: "FROM",
       toCapslock: "TO",
     },
+    dashboard: {
+      //DashboardView.vue
+      lastDay: "Last day",
+      week: "Week",
+      month: "Month",
+      quarter: "Quarter",
+      sales: "Sales",
+      website: "Website",
+      store: "Store",
+      lastSaleDateCapslock: "LAST SALE DATE",
+      totalQuantityCapslock: "TOTAL QUANTITY",
+      totalValueCapslock: "TOTAL VALUE",
+      leastBestsellingItems: "Least Bestselling Items",
+      soldFrom: "800K sold from 1M",
+    },
   },
 };
