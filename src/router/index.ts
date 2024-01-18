@@ -53,6 +53,11 @@ const routes = [
         meta: {
           showAddBtn: false,
           name: PrintUtil.localize("assortments", "router"),
+          ruleId: [
+            appConf.rules.brandManaging,
+            appConf.rules.collectionManaging,
+            appConf.rules.categoryManaging,
+          ],
         },
       },
       {
@@ -60,7 +65,7 @@ const routes = [
         name: "products",
         component: () => import("@/views/Products/ProductsView.vue"),
         meta: {
-          ruleId: appConf.rules.productsManaging,
+          ruleId: [appConf.rules.productsManaging],
           showAddBtn: true,
           addBtnRoute: "New product",
           name: PrintUtil.localize("products", "router"),
@@ -93,7 +98,7 @@ const routes = [
         component: () => import("@/views/Storehouses/StorehousesView.vue"),
         meta: {
           name: PrintUtil.localize("storehouses", "router"),
-          ruleId: appConf.rules.stockManaging,
+          ruleId: [appConf.rules.stockManaging],
           showAddBtn: true,
           addBtnRoute: "New storehouse",
         },
@@ -127,7 +132,7 @@ const routes = [
         props: true,
         meta: {
           name: PrintUtil.localize("roles", "router"),
-          ruleId: appConf.rules.rbacManaging,
+          ruleId: [appConf.rules.rbacManaging],
           showAddBtn: true,
           addBtnRoute: "New role",
         },
@@ -159,7 +164,7 @@ const routes = [
         component: () => import("@/views/Users/UsersView.vue"),
         meta: {
           name: PrintUtil.localize("users", "router"),
-          ruleId: appConf.rules.userManaging,
+          ruleId: [appConf.rules.userManaging],
           showAddBtn: true,
           addBtnRoute: "New user",
         },
@@ -191,7 +196,7 @@ const routes = [
         component: () => import("@/views/History/HistoryView.vue"),
         meta: {
           name: PrintUtil.localize("History", "router"),
-          ruleId: appConf.rules.checkLogs,
+          ruleId: [appConf.rules.checkLogs],
           showAddBtn: false,
         },
         children: [
@@ -252,11 +257,22 @@ router.beforeEach((to, from, next) => {
   }
 
   if (to.meta["ruleId"]) {
-    if (!TokenUtil.hasAccessTo(parseInt(to.meta["ruleId"].toString()))) {
+    if (
+      !to.meta.ruleId.some((el) =>
+        TokenUtil.hasAccessTo(parseInt(el.toString())),
+      )
+    ) {
       next("/dashboard");
       return;
+    } else LoggerUtil.debug(to, to.meta);
+  }
+
+  if (to.name == "Storehouse") {
+    if (to.params && to.params.id) {
+      if (!TokenUtil.hasAnyAccessToStock(to.params.id))
+        router.push({ name: "storehouses" });
     }
-  } else LoggerUtil.debug(to, to.meta);
+  }
 
   next();
 });

@@ -112,6 +112,7 @@ import { appConf } from "@/api/conf/app.conf";
 import { useRouter } from "vue-router";
 import PrintUtil from "@/utils/localization/print.util";
 import ApiModelUtil from "@/utils/api-model.util";
+import { useAuthCheckStore } from "@/stores/auth-check.store";
 import ProfileComponent from "@/components/Elements/Profile/ProfileComponent.vue";
 
 export default defineComponent({
@@ -170,21 +171,18 @@ export default defineComponent({
       return PrintUtil.localize(key, module);
     },
     navigate() {
-      new ApiModelUtil("").initSockets();
-      // this.router.push({ name: this.addBtnRoute || "" });
+      this.router.push({ name: this.addBtnRoute || "" });
     },
     handleClickHistory() {
-      new ApiModelUtil("").initSockets();
-      // this.$router.push({ name: "History" });
+      this.$router.push({ name: "History" });
     },
     handleClickOperations() {
-      new ApiModelUtil("").initSockets();
-      // this.$router.push({ name: "Operations" });
+      this.$router.push({ name: "Operations" });
     },
   },
   computed: {
     hasAccessToHistory() {
-      return TokenUtil.hasAccessTo(appConf.rules.checkLogs);
+      return this.authCheckStore.getHasAccessToHistory;
     },
   },
   setup() {
@@ -193,12 +191,14 @@ export default defineComponent({
     const tooltip3 = ref(false);
     const dropdown24 = ref(false);
     const router = useRouter();
+
     return {
       tooltip1,
       tooltip2,
       tooltip3,
       dropdown24,
       router,
+      authCheckStore: useAuthCheckStore(),
     };
   },
 });

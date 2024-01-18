@@ -4,7 +4,10 @@
     @approved="removeAndCloseModal"
     @close="closeModal"
   />
-  <ScrollPanel style="height: 80vh" class="main-area animate__animated animate__fadeIn">
+  <ScrollPanel
+    style="height: 80vh"
+    class="main-area animate__animated animate__fadeIn"
+  >
     <TabView>
       <TabPanel v-for="tab in tabs" :key="tab.title" :header="tab.title">
         <template v-if="tab.id === 1">
@@ -77,6 +80,7 @@ import BrandModel from "@/api/modules/brand/models/brand.model";
 import CollectionModel from "@/api/modules/collection/models/collection.model";
 import DialogComponentTrigger from "@/components/Elements/Dialogs/DialogComponentTrigger.vue";
 import ScrollPanel from "primevue/scrollpanel";
+import { useAuthCheckStore } from "@/stores/auth-check.store";
 
 export default {
   name: "AssortmentVue",
@@ -87,17 +91,12 @@ export default {
     DialogComponentTrigger,
     TabView,
     TabPanel,
-    ScrollPanel
+    ScrollPanel,
   },
   data() {
     return {
       editableColumns: ["name"],
       brandColumns: [{ field: "name", header: "NAME" }],
-      tabs: [
-        { id: 1, title: "Brands", content: "Tab 1 Content" },
-        { id: 2, title: "Collections", content: "Tab 2 Content" },
-        { id: 3, title: "Categories", content: "Tab 3 Content" },
-      ],
       onDelete: {
         remove(modelId: number): Promise<ApiResponseDto<any>> {},
         loadList() {},
@@ -153,6 +152,7 @@ export default {
     const categoryStore = useCategoriesStore();
     const modalStore = useModalStore();
     const dialogStore = useDialogStore();
+    const authCheckStore = useAuthCheckStore();
 
     // await productStore.loadSelectedProduct(parseInt(route.params.id.toString()));
     return {
@@ -164,6 +164,7 @@ export default {
       loadBrandRes: await brandStore.loadBrandsList(),
       loadCollectionRes: await collectionStore.loadCollectionList(),
       loadCategoryRes: await categoryStore.loadCategoriesList(),
+      authCheckStore,
     };
   },
   created() {
@@ -364,8 +365,10 @@ export default {
       });
     },
   },
-
   computed: {
+    tabs() {
+      return this.authCheckStore.getAssortmentTabs;
+    },
     categoryList() {
       return this.categoryStore.getCategoryList;
     },
