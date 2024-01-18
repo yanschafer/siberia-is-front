@@ -94,6 +94,7 @@ export default {
       deletionFailed: "Deletion failed",
       userNotFound: "User not found",
       editUserRoles: "Edit user roles",
+      currentUser: "Current User",
 
       //UsersView.vue
       name: "Name",
