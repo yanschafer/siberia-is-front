@@ -61,6 +61,7 @@
         >
           {{ notificationCount > 999 ? "999+" : notificationCount }}
         </MDBBadge>
+        <ProfileComponent />
       </MDBContainer>
     </MDBContainer>
 
@@ -112,10 +113,12 @@ import { useRouter } from "vue-router";
 import PrintUtil from "@/utils/localization/print.util";
 import ApiModelUtil from "@/utils/api-model.util";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
+import ProfileComponent from "@/components/Elements/Profile/ProfileComponent.vue";
 
 export default defineComponent({
   name: "HeaderComponent",
   components: {
+    ProfileComponent,
     IconHome2,
     MDBTooltip,
     NotificationsComponent,
@@ -214,12 +217,12 @@ export default defineComponent({
   height: auto;
   width: 100%;
   min-width: 4rem;
-  max-width: 4.5rem;
+  max-width: max-content;
   font-weight: 800;
   max-height: 2rem;
   margin: 0;
-  padding-left: 2px;
-  padding-right: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
   padding-top: 2px;
   padding-bottom: 2px;
   border-radius: 7px;

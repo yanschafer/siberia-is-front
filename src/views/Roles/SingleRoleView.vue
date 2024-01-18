@@ -16,53 +16,46 @@
           </h1>
           <MDBRow class="d-flex flex-row justify-content-between" v-else>
             <MDBCol class="col-auto col-span">
-              <p
-                  class="animate__animated animate__fadeIn label">
+              <p class="animate__animated animate__fadeIn label">
                 {{ localize("roleNameCapslock", "role") }}
               </p>
             </MDBCol>
             <MDBCol class="col-auto d-flex flex-row justify-content-end">
               <InputText
-                  class="input-wrapper animate__animated animate__fadeIn username-input"
-                  :class="{ 'p-invalid': !validate.name }"
-                  type="text"
-                  v-model="newRoleName"
+                class="input-wrapper animate__animated animate__fadeIn username-input"
+                :class="{ 'p-invalid': !validate.name }"
+                type="text"
+                v-model="newRoleName"
               />
             </MDBCol>
-
           </MDBRow>
-          <p
-              v-if="!editing"
-              class="animate__animated animate__fadeIn">
+          <p v-if="!editing" class="animate__animated animate__fadeIn">
             {{ roleDescription }}
           </p>
           <MDBRow class="d-flex flex-row justify-content-between mt-2" v-else>
             <MDBCol class="col-auto col-span">
-              <span
-                  class="animate__animated animate__fadeIn">
+              <span class="animate__animated animate__fadeIn">
                 {{ localize("roleDescriptionCapslock", "role") }}
               </span>
             </MDBCol>
             <MDBCol class="col-auto align-items-end">
               <InputText
-                  class="input-wrapper animate__animated animate__fadeIn username-input input-text"
-                  :class="{ 'p-invalid': !validate.description }"
-                  type="text"
-                  v-model="newRoleDescription"
+                class="input-wrapper animate__animated animate__fadeIn username-input input-text"
+                :class="{ 'p-invalid': !validate.description }"
+                type="text"
+                v-model="newRoleDescription"
               />
             </MDBCol>
           </MDBRow>
-
         </MDBCol>
       </MDBRow>
       <MDBRow class="w-auto">
-        <MDBCol class="col-auto">
-        </MDBCol>
+        <MDBCol class="col-auto"> </MDBCol>
       </MDBRow>
       <MDBCol v-if="!editing" class="d-flex justify-content-end">
-        <MDBBtn @click="startEditing" class="utility-btn" outline="black"
-          >{{ localize("editCapslock", "default") }}</MDBBtn
-        >
+        <MDBBtn @click="startEditing" class="utility-btn" outline="black">{{
+          localize("editCapslock", "default")
+        }}</MDBBtn>
       </MDBCol>
       <MDBCol v-else class="d-flex justify-content-end">
         <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
@@ -78,9 +71,7 @@
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="pt-4">
-    <span class="span"
-      >{{ localize("relatedUsersCapslock", "role") }}
-    </span>
+    <span class="span">{{ localize("relatedUsersCapslock", "role") }} </span>
     <MultiSelectComponent
       :start-items="relatedUsers"
       :options="usersOptions"
@@ -92,7 +83,7 @@
     />
   </MDBContainer>
   <MDBContainer class="pt-4">
-    <Panel  :header="localize('rolePermissions', 'role')">
+    <Panel :header="localize('rolePermissions', 'role')">
       <TabsComponent :roles="roles" :user-id="null" />
     </Panel>
   </MDBContainer>
@@ -148,7 +139,7 @@ export default {
     MDBTabPane,
     MDBInput,
     Panel,
-    InputText
+    InputText,
   },
   props: {
     id: {
@@ -365,19 +356,6 @@ export default {
 .user-roles-heading {
   width: fit-content;
 }
-.utility-btn {
-  height: auto;
-  width: 100%;
-  min-width: 4rem;
-  max-width: fit-content;
-  font-weight: 800;
-  max-height: 2rem;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  border-radius: 7px;
-}
 .username {
   color: #121212;
   font-weight: 600;
@@ -402,10 +380,9 @@ export default {
 }
 .col-span {
   display: flex;
-  align-items: center!important;
+  align-items: center !important;
 }
 .label {
   margin: 0;
 }
-
 </style>

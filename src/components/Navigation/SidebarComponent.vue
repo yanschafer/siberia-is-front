@@ -2,9 +2,8 @@
   <MDBContainer class="d-flex flex-column align-items-center sidebar-bg">
     <img alt="logo" class="logo" src="../../assets/logo.svg" />
     <MDBCol
-      class="sidebar-item-group d-flex justify-content-center flex-column"
+      class="sidebar-item-group d-flex justify-content-center align-items-center flex-column"
     >
-      <LangSelectComponent />
       <router-link
         v-for="(item, index) in sidebarItems"
         :key="index"
@@ -42,9 +41,6 @@
         >
       </router-link>
     </MDBCol>
-    <a class="logout" href="#" @click.prevent="logout"
-      ><IconLogout2 /> Log Out</a
-    >
   </MDBContainer>
 </template>
 

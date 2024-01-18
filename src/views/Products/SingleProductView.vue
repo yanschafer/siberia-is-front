@@ -879,21 +879,6 @@ export default {
 .footer-section {
   padding-top: 1.3rem;
 }
-.utility-btn {
-  height: auto;
-  width: 100%;
-  min-width: 4rem;
-  max-width: 4.5rem;
-  font-weight: 800;
-  max-height: 2rem;
-  margin-top: 0 !important;
-  padding-left: 2px;
-  padding-right: 3px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  border-radius: 7px;
-  margin-top: 0.5rem;
-}
 .p-cascadeselect-panel .p-cascadeselect-items {
   padding-left: 0 !important;
 }

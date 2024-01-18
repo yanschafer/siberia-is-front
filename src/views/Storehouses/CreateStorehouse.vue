@@ -119,20 +119,6 @@ export default {
   font-size: 32px;
   width: fit-content;
 }
-.utility-btn {
-  height: auto;
-  width: 100%;
-  min-width: 4rem;
-  max-width: 4.5rem;
-  font-weight: 800;
-  max-height: 2rem;
-  padding-left: 2px;
-  padding-right: 3px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  border-radius: 7px;
-  margin-top: 0.5rem;
-}
 :deep(.form-outline) {
   width: 100%;
   max-width: 10rem;
