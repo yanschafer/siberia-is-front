@@ -315,6 +315,7 @@ export default {
       notEnoughProductsStorehouses: "Не достаточно товаров",
       noProductInList: "В списке еще нет товаров",
       pleaseAddOneFirst: "Пожалуйста, начните с добавления товара.",
+      productAlreadyInList: "Продукт уже есть в списке.",
     },
     filters: {
       //FiltersSidebarComponent.vue

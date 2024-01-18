@@ -175,6 +175,15 @@ export default {
         return;
       }
 
+      const alreadyInList =
+        this.addedList.filter((el) => el.id == this.selectedProduct.id)
+          .length != 0;
+
+      if (alreadyInList) {
+        this.showErrorToast(this.localize("productAlreadyInList"));
+        return;
+      }
+
       if (this.needValidation) {
         if (this.amountValidation[this.selectedProduct.id] < this.quantity) {
           this.showErrorToast(this.localize("notEnoughProductsStorehouses"));

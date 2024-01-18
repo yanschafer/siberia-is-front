@@ -288,6 +288,7 @@ export default {
       notEnoughProductsStorehouses: "No hay suficientes productos",
       noProductInList: "Aún no hay productos en la lista",
       pleaseAddOneFirst: "Por favor, agrega uno primero",
+      productAlreadyInList: "El producto ya esta listado",
     },
     filters: {
       //FiltersSidebarComponent.vue
