@@ -1,5 +1,5 @@
 import engLocale from "@/utils/localization/eng.locale";
-import spanishLocale from "@/utils/localization/spanish.locale";
+import esLocale from "@/utils/localization/es.locale";
 import ruLocale from "@/utils/localization/ru.locale";
 class PrintUtil {
   private storageKey: string = "locale";
@@ -7,11 +7,11 @@ class PrintUtil {
 
   private locales = {
     eng: engLocale,
-    spanish: spanishLocale,
+    es: esLocale,
     ru: ruLocale
   };
 
-  public availableLocales = ["eng", "spanish"];
+  public availableLocales = ["eng", "es", "ru"];
 
   private setLocale() {
     const locale = localStorage.getItem(this.storageKey);

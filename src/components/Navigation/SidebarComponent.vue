@@ -1,6 +1,7 @@
 <template>
   <MDBContainer class="d-flex flex-column align-items-center sidebar-bg">
     <img alt="logo" class="logo" src="../../assets/logo.svg">
+    <LangSelectComponent />
     <MDBCol class="sidebar-item-group d-flex justify-content-center flex-column">
       <router-link
           v-for="(item, index) in sidebarItems"
@@ -21,16 +22,20 @@
 
 <script lang="ts">
 import {useRoute} from 'vue-router';
-import { MDBContainer, MDBCol } from "mdb-vue-ui-kit";
+import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdb-vue-ui-kit";
 import { IconDashboard, IconPackages, IconLock, IconBuildingWarehouse, IconUsersGroup, IconLogout2, IconUser } from '@tabler/icons-vue';
 import TokenUtil from "@/utils/token.util";
 import Router from "@/router";
+import LangSelectComponent from "@/components/Navigation/LangSelectComponent.vue";
 
 export default {
   name: 'SidebarComponent',
   components: {
+    LangSelectComponent,
     MDBContainer,
     MDBCol,
+    MDBRow,
+    MDBBtn,
     IconPackages,
     IconLock,
     IconBuildingWarehouse,

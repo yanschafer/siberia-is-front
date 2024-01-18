@@ -5,6 +5,7 @@ import 'primevue/resources/themes/lara-light-green/theme.css'
 import 'primeicons/primeicons.css'
 import ToastService from 'primevue/toastservice';
 import VueApexCharts from "vue3-apexcharts";
+import Tooltip from 'primevue/tooltip';
 
 
 
@@ -16,6 +17,9 @@ import App from './App.vue'
 import router from './router'
 
 const app = createApp(App)
+
+
+app.directive('tooltip', Tooltip);
 
 app.use(VueApexCharts);
 app.use(createPinia())
