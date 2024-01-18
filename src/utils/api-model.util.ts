@@ -11,6 +11,7 @@ import loggerUtil from "@/utils/logger/logger.util";
 import NotificationSocketModel from "@/api/modules/notification/models/notification-socket.model";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
 import router from "@/router/index";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default class ApiModelUtil {
   constructor(private baseEndpoint: string) {}
@@ -186,8 +187,8 @@ export default class ApiModelUtil {
       if (toast) {
         toast.add({
           severity: "info",
-          summary: "Rules updated",
-          detail: "Your rules were updated by administrator",
+          summary: PrintUtil.localize("rulesUpdatedToast"),
+          detail: PrintUtil.localize("rulesUpdatedToastDetails"),
           life: 3000,
         });
       }

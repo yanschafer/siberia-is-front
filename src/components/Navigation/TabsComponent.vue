@@ -96,11 +96,11 @@ export default defineComponent({
 
     return { userStore, rolesStore, rulesStore, storehousesStore };
   },
-  data (){
-      return{
-          activeTabId: "",
-          currentRules: [],
-      }
+  data() {
+    return {
+      activeTabId: "",
+      currentRules: [],
+    };
   },
   computed: {
     stocks() {
@@ -112,13 +112,13 @@ export default defineComponent({
   },
   methods: {
     localize(key, module) {
-          return PrintUtil.localize(key, module);
+      return PrintUtil.localize(key, module);
     },
     showSuccessToast(type) {
       this.$toast.add({
         severity: "success",
         summary: this.localize("success", "storehouses"),
-        detail: `${this.localize("rules", "components")} ${type}`,
+        detail: `${this.localize("rules", "components")} ${this.localize(type, "components")}`,
         life: 3000,
       });
     },
