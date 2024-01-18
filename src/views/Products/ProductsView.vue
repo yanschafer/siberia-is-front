@@ -1,7 +1,10 @@
 <template>
-  <div class="container-fluid" style="padding: 0">
+  <ScrollPanel
+    style="height: 80vh; width: 88vw"
+    class="main-area animate__animated animate__fadeIn"
+  >
     <template v-if="!isIdProvided">
-      <MDBContainer class="d-flex container-content">
+      <MDBContainer class="d-flex">
         <MDBCol class="col-auto">
           <FiltersSidebarComponent
             :filters-input="sidebarFilter"
@@ -9,7 +12,7 @@
           />
         </MDBCol>
         <MDBCol class="col-auto">
-          <MDBContainer class="table-container">
+          <div>
             <SearchComponent @search="handleSearch" />
             <TableComponent
               :info-message="noDataMessage"
@@ -21,12 +24,12 @@
               @rowClick="handleRowClick"
               @row-edit-save="handleRowEdit"
             />
-          </MDBContainer>
+          </div>
         </MDBCol>
       </MDBContainer>
     </template>
     <router-view v-if="isIdProvided" :id="routeIdParam" />
-  </div>
+  </ScrollPanel>
 </template>
 
 <script lang="ts">
@@ -237,10 +240,6 @@ export default {
 
 <style scoped>
 .container-content {
-  width: 100%;
   margin: 0;
-}
-.table-container {
-  width: 83vw;
 }
 </style>

@@ -1,24 +1,29 @@
 <template>
-  <template v-if="!isIdProvided">
-    <MDBContainer class="d-flex container-content">
-      <MDBCol class="col-auto">
-        <FiltersSidebarComponent
-          :filters-input="filtersInput"
-          @start-search="handleSearchStart"
-        />
-      </MDBCol>
-      <MDBCol class="content-col">
-        <TableComponent
-          :infoMessage="noDataMessage"
-          :rows="filteredHistory"
-          :columns="historyStore.historyColumns"
-          :searchTerm="historyStore.searchTerm"
-          @rowClick="handleRowClick"
-        />
-      </MDBCol>
-    </MDBContainer>
-  </template>
-  <router-view v-if="isIdProvided" :id="routeIdParam" />
+  <ScrollPanel
+    style="height: 80vh; width: 85vw"
+    class="animate__animated animate__fadeIn"
+  >
+    <template v-if="!isIdProvided">
+      <div class="d-flex">
+        <MDBCol class="col-auto">
+          <FiltersSidebarComponent
+            :filters-input="filtersInput"
+            @start-search="handleSearchStart"
+          />
+        </MDBCol>
+        <MDBCol class="content-col">
+          <TableComponent
+            :infoMessage="noDataMessage"
+            :rows="filteredHistory"
+            :columns="historyStore.historyColumns"
+            :searchTerm="historyStore.searchTerm"
+            @rowClick="handleRowClick"
+          />
+        </MDBCol>
+      </div>
+    </template>
+    <router-view v-if="isIdProvided" :id="routeIdParam" />
+  </ScrollPanel>
 </template>
 <script lang="ts">
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
@@ -31,6 +36,7 @@ import FiltersSidebarComponent from "@/components/Elements/Filter sidebar/Filter
 import loggerUtil from "@/utils/logger/logger.util";
 import { IconSearchOff } from "@tabler/icons-vue";
 import PrintUtil from "@/utils/localization/print.util";
+import ScrollPanel from "primevue/scrollpanel";
 
 export default {
   name: "HistoryView",
@@ -40,6 +46,7 @@ export default {
     MDBContainer,
     MDBCol,
     FiltersSidebarComponent,
+    ScrollPanel,
   },
   data() {
     return {

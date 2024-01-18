@@ -1,28 +1,34 @@
 <template>
-  <template v-if="!isIdProvided">
-    <MDBContainer class="d-flex container-content">
-      <MDBCol class="col-auto">
-        <FiltersSidebarComponent
-          :filters-input="filtersInput"
-          @start-search="handleFiltersSearch"
-        />
-      </MDBCol>
-      <MDBCol class="content-col">
-        <TableComponent
-          :infoMessage="noDataMessage"
-          :rows="filteredOperations"
-          :columns="operationStore.operationColumns"
-          :searchTerm="''"
-          @rowClick="handleRowClick"
-        />
-      </MDBCol>
-    </MDBContainer>
-  </template>
-  <router-view v-if="isIdProvided" :id="routeIdParam" />
+  <ScrollPanel
+    style="height: 80vh; width: 85vw"
+    class="animate__animated animate__fadeIn"
+  >
+    <template v-if="!isIdProvided">
+      <div class="d-flex">
+        <MDBCol class="col-auto">
+          <FiltersSidebarComponent
+            :filters-input="filtersInput"
+            @start-search="handleFiltersSearch"
+          />
+        </MDBCol>
+        <MDBCol class="content-col">
+          <TableComponent
+            :infoMessage="noDataMessage"
+            :rows="filteredOperations"
+            :columns="operationStore.operationColumns"
+            :searchTerm="''"
+            @rowClick="handleRowClick"
+          />
+        </MDBCol>
+      </div>
+    </template>
+    <router-view v-if="isIdProvided" :id="routeIdParam" />
+  </ScrollPanel>
 </template>
 
 <script lang="ts">
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
+import ScrollPanel from "primevue/scrollpanel";
 import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 import { useOperationStore } from "@/stores/operation.store";
 import { useRoute, useRouter } from "vue-router";
@@ -40,6 +46,7 @@ export default {
     SearchComponent,
     MDBContainer,
     MDBCol,
+    ScrollPanel,
   },
   data() {
     return {

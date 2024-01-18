@@ -4,144 +4,140 @@
     @approved="removeAndCloseModal"
     @close="closeModal"
   />
-  <div class="animate__animated animate__fadeIn">
-    <Panel class="animate__animated animate__fadeIn">
-      <MDBRow class="d-flex flex-row gap-5 header-row">
-        <MDBCol v-if="!editing" class="col-auto">
-          <img class="product-img" :src="imageSource" :alt="productName" />
-        </MDBCol>
-        <MDBCol
-          v-else
-          style="padding-left: 12px"
-          class="col-auto animate__animated animate__flipInX animate__faster"
+  <ScrollPanel
+    style="height: 80vh; width: 85vw"
+    class="animate__animated animate__fadeIn"
+  >
+    <MDBRow class="d-flex flex-row gap-5 header-row">
+      <MDBCol v-if="!editing" class="col-auto">
+        <img class="product-img" :src="imageSource" :alt="productName" />
+      </MDBCol>
+      <MDBCol
+        v-else
+        style="padding-left: 12px"
+        class="col-auto animate__animated animate__flipInX animate__faster"
+      >
+        <div class="product-img">
+          <FileUploadComponent @changed="fileUploaded" />
+        </div>
+      </MDBCol>
+      <MDBCol class="d-flex flex-column justify-content-center">
+        <MDBRow
+          style="padding-left: 12px; margin-bottom: 1rem"
+          v-if="!editing"
+          class="d-flex d-flex justify-content-end"
         >
-          <div class="product-img">
-            <FileUploadComponent @changed="fileUploaded" />
-          </div>
+          <MDBBtn @click="startEditing" class="utility-btn" outline="black">{{
+            localize("editCapslock", "default")
+          }}</MDBBtn>
+        </MDBRow>
+        <MDBCol
+          style="margin-bottom: 1rem"
+          class="animate__animated animate__flipInX animate__faster gap-3 d-flex justify-content-end"
+          v-else
+        >
+          <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
+            localize("deleteCapslock", "default")
+          }}</MDBBtn>
+          <MDBBtn @click="cancelEditing" class="utility-btn" outline="black">{{
+            localize("cancelCapslock", "default")
+          }}</MDBBtn>
+          <MDBBtn @click="saveChanges" class="utility-btn" outline="black">{{
+            localize("saveCapslock", "default")
+          }}</MDBBtn>
         </MDBCol>
-        <MDBCol class="d-flex flex-column justify-content-center">
-          <MDBRow
-            style="padding-left: 12px; margin-bottom: 1rem"
-            v-if="!editing"
-            class="d-flex d-flex justify-content-end"
-          >
-            <MDBBtn @click="startEditing" class="utility-btn" outline="black">{{
-              localize("editCapslock", "default")
-            }}</MDBBtn>
-          </MDBRow>
+        <MDBRow>
+          <MDBCol class="product-name-col" v-if="!editing">
+            <h1 class="product-heading">{{ productName }}</h1>
+          </MDBCol>
           <MDBCol
-            style="margin-bottom: 1rem"
-            class="animate__animated animate__flipInX animate__faster gap-3 d-flex justify-content-end"
+            class="d-flex gap-1 align-items-center mb-3 animate__animated animate__flipInX animate__faster"
             v-else
           >
-            <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
-              localize("deleteCapslock", "default")
-            }}</MDBBtn>
-            <MDBBtn
-              @click="cancelEditing"
-              class="utility-btn"
-              outline="black"
-              >{{ localize("cancelCapslock", "default") }}</MDBBtn
-            >
-            <MDBBtn @click="saveChanges" class="utility-btn" outline="black">{{
-              localize("saveCapslock", "default")
-            }}</MDBBtn>
+            <h5 class="field-heading mb-0">
+              {{ localize("productNameCapslock") }}
+            </h5>
+            <InputText
+              id="product-name-input"
+              class="input-wrapper animate__animated animate__fadeIn username-input"
+              :class="{ 'p-invalid': !validate.name }"
+              type="text"
+              v-model="newProductName"
+            />
           </MDBCol>
-          <MDBRow>
-            <MDBCol class="product-name-col" v-if="!editing">
-              <h1 class="product-heading">{{ productName }}</h1>
-            </MDBCol>
-            <MDBCol
-              class="d-flex gap-1 align-items-center mb-3 animate__animated animate__flipInX animate__faster"
-              v-else
-            >
-              <h5 class="field-heading mb-0">
-                {{ localize("productNameCapslock") }}
-              </h5>
+        </MDBRow>
+        <MDBRow>
+          <MDBCol class="d-flex flex-column gap-3 col-auto">
+            <h5 class="field-heading d-flex gap-1 align-items-center">
+              {{ localize("skuCapslock") }}
+              <span v-if="!editing" class="field-value copy-on">{{ sku }}</span>
               <InputText
-                id="product-name-input"
-                class="input-wrapper animate__animated animate__fadeIn username-input"
-                :class="{ 'p-invalid': !validate.name }"
+                v-else
+                class="animate__animated animate__flipInX animate__faster input-wrapper animate__animated animate__fadeIn username-input"
+                :class="{ 'p-invalid': !validate.vendorCode }"
                 type="text"
-                v-model="newProductName"
+                v-model="newSku"
               />
-            </MDBCol>
-          </MDBRow>
-          <MDBRow>
-            <MDBCol class="d-flex flex-column gap-3 col-auto">
-              <h5 class="field-heading d-flex gap-1 align-items-center">
-                {{ localize("skuCapslock") }}
-                <span v-if="!editing" class="field-value copy-on">{{
-                  sku
-                }}</span>
-                <InputText
-                  v-else
-                  class="animate__animated animate__flipInX animate__faster input-wrapper animate__animated animate__fadeIn username-input"
-                  :class="{ 'p-invalid': !validate.vendorCode }"
-                  type="text"
-                  v-model="newSku"
-                />
-              </h5>
-              <!--              <img class="sku-img" :src="barcodeImage" alt="Barcode">-->
-              <h5 v-if="!editing" class="field-heading">
+            </h5>
+            <!--              <img class="sku-img" :src="barcodeImage" alt="Barcode">-->
+            <h5 v-if="!editing" class="field-heading">
+              {{ localize("brandCapslock") }}
+              <span class="field-value copy-on">{{ brand }}</span>
+            </h5>
+            <template v-else>
+              <h5 class="field-heading">
                 {{ localize("brandCapslock") }}
-                <span class="field-value copy-on">{{ brand }}</span>
-              </h5>
-              <template v-else>
-                <h5 class="field-heading">
-                  {{ localize("brandCapslock") }}
-                  <SelectComponent
-                    :placeholder="placeholderBrand"
-                    class="animate__animated animate__flipInX animate__faster"
-                    :class="{ 'p-invalid': !validate.brand }"
-                    :items="brandList"
-                    v-model="newBrand"
-                  />
-                  <DialogComponentTrigger
-                    :button-text="createButtonText"
-                    :init-object="initBrandDialog"
-                  />
-                </h5>
-              </template>
-              <h5 class="field-heading d-flex gap-1 align-items-center">
-                {{ localize("linkCapslock") }}
-                <a
-                  v-if="!editing"
-                  target="_blank"
-                  :href="link"
-                  class="field-value copy-on"
-                  >{{ localize("openInNewWindowCapslock") }}</a
-                >
-                <InputText
-                  v-else
-                  class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-                  :class="{ 'p-invalid': !validate.link }"
-                  type="text"
-                  v-model="newLink"
+                <SelectComponent
+                  :placeholder="placeholderBrand"
+                  class="animate__animated animate__flipInX animate__faster"
+                  :class="{ 'p-invalid': !validate.brand }"
+                  :items="brandList"
+                  v-model="newBrand"
+                />
+                <DialogComponentTrigger
+                  :button-text="createButtonText"
+                  :init-object="initBrandDialog"
                 />
               </h5>
-            </MDBCol>
-            <MDBCol v-if="!editing" class="d-flex flex-column gap-3">
-              <h5 class="field-heading d-flex gap-1 align-items-center">
-                {{ localize("quantityCapslock") }}
-                <span class="field-value">{{ quantity }}</span>
-              </h5>
-              <h5 class="field-heading d-flex gap-1 align-items-center">
-                {{ localize("lastTimeOrderedCapslock") }}
-                <span class="field-value">{{ lastTimeOrdered }}</span>
-              </h5>
-              <h5 class="field-heading d-flex gap-1 align-items-center">
-                {{ localize("lastPriceOrderedCapslock") }}
-                <span class="field-value">{{ lastPriceOrdered }}</span>
-              </h5>
-              <!--              <h5 class="field-heading">COST PRICE <span class="field-value">{{ costPrice }}</span></h5>-->
-              <!--              <h5 class="field-heading">STATUS <span class="field-value">{{ status }}</span></h5>-->
-            </MDBCol>
-          </MDBRow>
-        </MDBCol>
-      </MDBRow>
-    </Panel>
-    <MDBContainer class="description-section" fluid>
+            </template>
+            <h5 class="field-heading d-flex gap-1 align-items-center">
+              {{ localize("linkCapslock") }}
+              <a
+                v-if="!editing"
+                target="_blank"
+                :href="link"
+                class="field-value copy-on"
+                >{{ localize("openInNewWindowCapslock") }}</a
+              >
+              <InputText
+                v-else
+                class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+                :class="{ 'p-invalid': !validate.link }"
+                type="text"
+                v-model="newLink"
+              />
+            </h5>
+          </MDBCol>
+          <MDBCol v-if="!editing" class="d-flex flex-column gap-3">
+            <h5 class="field-heading d-flex gap-1 align-items-center">
+              {{ localize("quantityCapslock") }}
+              <span class="field-value">{{ quantity }}</span>
+            </h5>
+            <h5 class="field-heading d-flex gap-1 align-items-center">
+              {{ localize("lastTimeOrderedCapslock") }}
+              <span class="field-value">{{ lastTimeOrdered }}</span>
+            </h5>
+            <h5 class="field-heading d-flex gap-1 align-items-center">
+              {{ localize("lastPriceOrderedCapslock") }}
+              <span class="field-value">{{ lastPriceOrdered }}</span>
+            </h5>
+            <!--              <h5 class="field-heading">COST PRICE <span class="field-value">{{ costPrice }}</span></h5>-->
+            <!--              <h5 class="field-heading">STATUS <span class="field-value">{{ status }}</span></h5>-->
+          </MDBCol>
+        </MDBRow>
+      </MDBCol>
+    </MDBRow>
+    <div class="description-section" fluid>
       <h5 v-if="!editing" class="field-heading">{{ category }}</h5>
       <template v-else>
         <MDBRow>
@@ -211,8 +207,8 @@
         type="textarea"
         v-model="newDescription"
       />
-    </MDBContainer>
-    <MDBContainer class="footer-section" fluid>
+    </div>
+    <div class="footer-section" fluid>
       <MDBRow>
         <MDBCol>
           <!--          <h5 class="field-heading">VOLUME <span class="field-value">{{ volume }}</span></h5>-->
@@ -308,8 +304,8 @@
           <!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ defaultMarkup }}</span></h5>-->
         </MDBCol>
       </MDBRow>
-    </MDBContainer>
-  </div>
+    </div>
+  </ScrollPanel>
 </template>
 <script lang="ts">
 import FileUpload from "primevue/fileupload";
@@ -337,7 +333,7 @@ import PrintUtil from "@/utils/localization/print.util";
 import InputText from "primevue/inputtext";
 import ValidatorUtil from "@/utils/validator/validator.util";
 import ValidateRule from "@/utils/validator/validate-rule";
-import Panel from "primevue/panel";
+import ScrollPanel from "primevue/scrollpanel";
 export default {
   name: "SingleProductView",
   components: {
@@ -347,7 +343,7 @@ export default {
     TreeDropdownComponent,
     SelectComponent,
     InputText,
-    Panel,
+    ScrollPanel,
     CascadeSelect,
     MDBInput,
     FileUploadComponent,
@@ -854,14 +850,14 @@ export default {
 .field-value {
   font-weight: 800;
   color: #121212;
-  font-size: 16px;
+  font-size: 1.1vw;
 }
 .product-heading {
   font-weight: 600;
   color: #121212;
   width: 100%;
   margin-bottom: 2rem;
-  font-size: 32px;
+  font-size: 2vw;
 }
 .field-heading {
   font-size: 16px;
@@ -948,5 +944,8 @@ export default {
 }
 :deep(.p-panel) {
   border-top: 1px solid #e5e7eb;
+}
+.header-row {
+  padding-right: 2rem;
 }
 </style>

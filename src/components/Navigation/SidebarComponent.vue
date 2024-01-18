@@ -145,13 +145,13 @@ export default {
 }
 .logo {
   width: 100%;
-  max-width: 70px;
+  max-width: 5vw;
 }
 .item-icon {
   border-radius: 50%;
   border: 2px solid #b8b8b8;
-  height: 50px;
-  width: 50px;
+  height: 4vw;
+  width: 4vw;
   display: flex;
   align-items: center;
   justify-content: center;

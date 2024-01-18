@@ -19,6 +19,7 @@ export default {
 /* ===== Scrollbar CSS ===== */
 /* Firefox */
 * {
+  font-size: 1.1vw;
   scrollbar-width: auto;
   scrollbar-color: #171717 #ffffff;
 }

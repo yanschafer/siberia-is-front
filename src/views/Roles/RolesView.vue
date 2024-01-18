@@ -1,15 +1,20 @@
 <template>
-  <template v-if="!isIdProvided">
-    <SearchComponent @search="handleSearch" />
-    <TableComponent
+  <ScrollPanel
+    style="height: 80vh; width: 85vw"
+    class="animate__animated animate__fadeIn"
+  >
+    <template v-if="!isIdProvided">
+      <SearchComponent @search="handleSearch" />
+      <TableComponent
         :info-message="noDataMessage"
-      :rows="filteredRoles"
-      :columns="rolesStore.rolesColumns"
-      :searchTerm="rolesStore.searchTerm"
-      @rowClick="handleRowClick"
-    />
-  </template>
-  <router-view v-if="isIdProvided" :id="routeIdParam" />
+        :rows="filteredRoles"
+        :columns="rolesStore.rolesColumns"
+        :searchTerm="rolesStore.searchTerm"
+        @rowClick="handleRowClick"
+      />
+    </template>
+    <router-view v-if="isIdProvided" :id="routeIdParam" />
+  </ScrollPanel>
 </template>
 
 <script lang="ts">
@@ -18,10 +23,11 @@ import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useRolesStore } from "@/stores/roles.store";
 import PrintUtil from "@/utils/localization/print.util";
+import ScrollPanel from "primevue/scrollpanel";
 
 export default {
   name: "RolesView",
-  components: { SearchComponent, TableComponent },
+  components: { SearchComponent, TableComponent, ScrollPanel },
   props: {
     id: String,
   },
@@ -32,7 +38,7 @@ export default {
         title: this.localize("nothingWasFound", "role"),
         text: this.localize("pleaseClarifyYourSearchQuery", "role"),
       },
-    }
+    };
   },
   async setup() {
     const rolesStore = useRolesStore();
@@ -71,7 +77,7 @@ export default {
   },
   methods: {
     localize(key, module) {
-          return PrintUtil.localize(key, module);
+      return PrintUtil.localize(key, module);
     },
     handleSearch(searchTerm) {
       this.rolesStore.searchTerm = searchTerm;

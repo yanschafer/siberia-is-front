@@ -573,6 +573,7 @@ export default {
 }
 .header-row {
   display: flex;
+  padding-right: 2rem !important;
 }
 .description {
   width: 100%;
