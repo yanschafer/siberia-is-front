@@ -86,13 +86,16 @@ export default defineComponent({
 .clear-btn {
   padding: 0!important;
   filter: grayscale(1);
+  opacity: 0.2;
   transition: all 0.3s ease-in-out;
 }
 .clear-btn:hover {
   filter: grayscale(0);
+  opacity: 1;
 }
 .active {
   filter: grayscale(0);
+  opacity: 1;
 }
 .flag {
   width: 20px;
