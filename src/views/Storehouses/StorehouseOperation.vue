@@ -91,8 +91,8 @@ export default {
     return {
       noDataMessage: {
         icon: "IconInfoCircle",
-        title: "No product yet in the list",
-        text: "Please add one first",
+        title: this.localize("noProductInList"),
+        text: this.localize("pleaseAddOneFirst"),
       },
       selectedProduct: null,
       quantity: null,

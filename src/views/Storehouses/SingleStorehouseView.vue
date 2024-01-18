@@ -192,8 +192,8 @@ export default {
       validator: new ValidatorUtil(),
       noDataMessage: {
         icon: "IconInfoCircle",
-        title: "No product yet in the list",
-        text: "Please add one first",
+        title: this.localize("noProductInList"),
+        text: this.localize("pleaseAddOneFirst"),
       },
       arrivalAvailable: true,
       saleAvailable: true,

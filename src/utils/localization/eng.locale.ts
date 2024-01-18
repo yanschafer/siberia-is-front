@@ -246,6 +246,9 @@ export default {
       notEnoughProducts: "Not enough products for sale",
       storehouseIsRemoved: "Storehouse is removed",
       storehouseNotFound: "Storehouse not found",
+      noStorehouseAvailable: "No storehouse available",
+      tryToEditStorehouse:
+        "Try to edit available storehouses in users managing tab, or report to your administrator",
 
       //storehouse.store.ts
       addressCapslock: "ADDRESS",
@@ -257,6 +260,8 @@ export default {
       quantityAndProductMustBeSelected: "Quantity and Product must be selected",
       priceMustBeSelected: "Price must be selected",
       notEnoughProductsStorehouses: "Not enough products",
+      noProductInList: "No product yet in the list",
+      pleaseAddOneFirst: "Please add one first",
     },
     filters: {
       //FiltersSidebarComponent.vue
