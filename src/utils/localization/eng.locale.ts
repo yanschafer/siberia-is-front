@@ -100,6 +100,7 @@ export default {
 
       //ProfileComponent
       profileHeader: "Profile",
+
       logout: "Log out",
     },
     role: {

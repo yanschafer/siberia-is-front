@@ -91,6 +91,7 @@ export default {
     header: {
       History: "История",
       Operations: "Операции",
+      Profile: "Профиль",
       Notifications: "Уведомления",
       AddBtnLabel: "+ Добавить",
     },
@@ -115,7 +116,8 @@ export default {
       personalRulesDescription:
         "Права, которые уникальны только для этого пользователя",
       userRolesCapslock: "РОЛИ ПОЛЬЗОВАТЕЛЯ",
-      userNameCapslock: "ИМЯ ПОЛЬЗОВАТЕЛЯ",
+      userNameCapslock: "ЛОГИН ПОЛЬЗОВАТЕЛЯ",
+      userNameCapslockSpaced: "ИМЯ",
       passwordCapslock: "ПАРОЛЬ",
       roleCapslock: "РОЛЬ",
       userIsUpdated: "Пользователь обновлен",
@@ -127,6 +129,9 @@ export default {
       name: "Номер",
       login: "Логин",
       nothingWasFound: "Ничего не найдено",
+
+      profileHeader: "Профиль",
+      logout: "Выйти",
     },
     role: {
       //RolesView.vue
