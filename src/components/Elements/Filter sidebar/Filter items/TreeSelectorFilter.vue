@@ -27,17 +27,17 @@ export default {
   },
   emits: ["change"],
   data: () => ({
-    value: [],
+    value: null,
   }),
   created() {
     const filtersStore = useFiltersStore();
     filtersStore.$onAction(({ name }) => {
-      if (name == "clearFilter") this.value = [];
+      if (name == "clearFilter") this.value = null;
     });
   },
   methods: {
     handleChange() {
-      loggerUtil.debug(this.value);
+      loggerUtil.debug("VALUE", this.value);
       this.$emit("change", this.value);
     },
   },

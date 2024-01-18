@@ -60,10 +60,15 @@ export default {
     };
   },
   mounted() {
-    this.selectedValue = { [this.modelValue]: true };
+    if (this.modelValue) {
+      this.selectedValue = { [this.modelValue]: true };
+    }
     this.addNew = this.$refs.addNew;
     this.$watch("modelValue", () => {
+      if (this.modelValue[0].id) return;
+      loggerUtil.debug("Model value", this.modelValue);
       this.selectedValue = { [this.modelValue]: true };
+      loggerUtil.debug("Selected value", this.selectedValue);
     });
   },
   computed: {
@@ -71,22 +76,24 @@ export default {
       return this.filterNodes(this.nodes, this.searchText.toLowerCase(), true);
     },
     selectionMode() {
+      loggerUtil.debug(this.multiselect ? "multiple" : "single");
       return this.multiselect ? "multiple" : "single";
     },
   },
   methods: {
     localize(key, module = "components") {
-          return PrintUtil.localize(key, module);
+      return PrintUtil.localize(key, module);
     },
     toggle(event) {
       this.addNew.toggle(event);
     },
     handleChange() {
+      loggerUtil.debug("From handle", this.selectedValue);
       this.$emit(
         "update:modelValue",
         this.multiselect
           ? Object.keys(this.selectedValue)
-              .filter((el) => el != "")
+              .filter((el) => el != "" && !Number.isNaN(parseInt(el)))
               .map((el) => ({
                 id: parseInt(el),
               }))
