@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import loggerUtil from "@/utils/logger/logger.util";
 import ApiResponseDto from "@/api/dto/api-response.dto";
+import PrintUtil from "@/utils/localization/print.util";
+import printUtil from "@/utils/localization/print.util";
 
 const defaultValues = {
   visible: false,
@@ -115,7 +117,7 @@ export const useDialogStore = defineStore({
         this.methodOnClose();
         toast.add({
           severity: "success",
-          summary: "Success",
+          summary: printUtil.localize("success", "success"),
           detail: this.toastSuccessText,
           life: 3000,
         });

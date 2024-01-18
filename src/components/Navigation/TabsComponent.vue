@@ -145,7 +145,7 @@ export default defineComponent({
       if (!result.success) {
         result.getError().showServerErrorToast(this.$toast, this.$nextTick);
       } else {
-        this.showSuccessToast("removed");
+        this.showSuccessToast(this.localize("removed", "components"));
       }
     },
     async ruleSelected({ roleId, linkedRule }) {
@@ -163,7 +163,7 @@ export default defineComponent({
       if (!result.success) {
         result.getError().showServerErrorToast(this.$toast, this.$nextTick);
       } else {
-        this.showSuccessToast("added");
+        this.showSuccessToast(this.localize("added", "components"));
       }
     },
   },

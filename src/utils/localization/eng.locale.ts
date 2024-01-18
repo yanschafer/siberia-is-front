@@ -310,6 +310,17 @@ export default {
       //LangSelectComponent
       langChangeHeading: "Language changed",
       langChangeDetail: "The page will be reloaded automatically",
+
+      //FileUploadComponent.vue
+      releaseToDropFileHere: "Release to drop file here.",
+      dropFileHereOr: "Drop file here or",
+      clickHere: "click here",
+      toUpload: "to upload.",
+    },
+    utils: {
+      //api-model.util.ts
+      rulesUpdated: "Rules updated",
+      yourRulesWereUpdated: "Your rules were updated by administrator",
     },
     storehousesSave: {
       token_is_dead: "Expired token. Please, relogin",
