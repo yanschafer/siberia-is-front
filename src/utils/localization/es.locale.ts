@@ -17,6 +17,8 @@ export default {
       createCapslock: "CREAR",
       saveCapslock: "GUARDAR",
       nameCapslock: "NOMBRE",
+      nothingFound: "Nada fue encontrado",
+      nothingFoundClarifyQuery: "Por favor, aclara tu consulta de búsqueda.",
     },
     router: {
       panelName: "Panel de Siberia",
@@ -46,6 +48,7 @@ export default {
       SingleOperation: "Operación Individual",
     },
     sidebar: {
+      //auth-check.store
       Dashboard: "Tablero",
       Products: "Productos",
       Assortments: "Asortimentos",
@@ -275,15 +278,152 @@ export default {
 
       //TabsComponent
       rules: "Reglas",
+      added: "añadido",
+      removed: "eliminado",
 
       //LangSelectComponent
       langChangeHeading: "Idioma cambiado",
       langChangeDetail: "La página se recargará automáticamente",
+
+      //FileUploadComponent.vue
+      releaseToDropFileHere: "Suelta para soltar el archivo aquí.",
+      dropFileHereOr: "Suelta el archivo aquí o",
+      clickHere: "haz clic aquí",
+      toUpload: "para cargar",
+    },
+
+    utils: {
+      //api-model.util.ts
+      rulesUpdated: "Las reglas han sido actualizadas",
+      yourRulesWereUpdated:
+        "Tus permisos han sido actualizados por el administrador.",
     },
     storehousesSave: {
       token_is_dead: "Token expirado. Por favor, vuelve a iniciar sesión",
       wrong_data_type:
         "Tipo de datos incorrecto. Por favor, verifica los datos proporcionados",
+    },
+    assortment: {
+      //AssortmentView.vue
+      createPlusCapslock: "CREAR +",
+      tableNameHeader: "NOMBRE",
+      brand: "Marca",
+      collection: "Colección",
+      category: "Categoría",
+      confirmModalTitle: "Confirmar eliminación",
+      confirmModalText: "¿Estás seguro de que deseas eliminar",
+      confirmModalDisclaimer: "Esta acción no se puede deshacer, esto",
+      dataWillBeLostText: "se perderán los datos",
+      Success: "Éxito",
+
+      modalHeaderCreateCategory: "Crear una categoría",
+      selectName: "Categoría principal",
+      inputNameCategory: "Nombre de la categoría",
+      editCategoryHeader: "Editar categoría",
+      removeCategoryHeader: "Eliminar categoría",
+      toastSuccessCreationCategory: "La categoría ha sido creada",
+      toastSuccessUpdateCategory: "La categoría ha sido actualizada",
+      toastSuccessRemoveCategory: "La categoría ha sido eliminada",
+      toastErrorCreationCategory: "Error al crear la categoría",
+      toastErrorUpdateCategory: "Error al actualizar la categoría",
+      toastErrorRemoveCategory: "Error al eliminar la categoría",
+      removeChildrenTitle: "Eliminar hijos",
+      moveChildrenToAnotherParent: "Mover hijos a otro padre",
+
+      modalHeaderCreateBrand: "Crear una marca",
+      inputNameBrand: "Nombre de la marca",
+      toastSuccessCreationBrand: "La marca ha sido creada",
+      toastErrorCreationBrand: "Error al crear la marca",
+      brandRemoveSuccessToast: "La marca ha sido eliminada",
+      brandUpdatedSuccessToast: "La marca ha sido actualizada",
+
+      modalHeaderCreateCollection: "Crear una colección",
+      inputNameCollection: "Nombre de la colección",
+      toastSuccessCreationCollection: "La colección ha sido creada",
+      toastErrorCreationCollection: "Error al crear la colección",
+      collectionRemoveSuccessToast: "La colección ha sido eliminada",
+      collectionUpdatedSuccessToast: "La colección ha sido actualizada",
+
+      //auth-check.store
+      Brands: "Marcas",
+      Collections: "Colecciones",
+      Categories: "Categorías",
+    },
+    history: {
+      Operation: "Operación",
+      Author: "Autor",
+      DateRange: "Rango de fechas",
+      EventType: "Tipo de evento",
+      EventObjectType: "Tipo de objeto de evento",
+
+      //history.store + SingleHistoryView.vue
+      targetCapslock: "OBJETIVO",
+      targetNameCapslock: "NOMBRE DEL OBJETIVO",
+      typeCapslock: "TIPO",
+      authorCapslock: "AUTOR",
+      dateCapslock: "FECHA",
+
+      Create: "Crear",
+      Update: "Actualizar",
+      Remove: "Eliminar",
+
+      "Stock event": "Evento de Stock",
+      "User event": "Evento de Usuario",
+      "Role event": "Evento de Rol",
+      "Product event": "Evento de Producto",
+      "Brand event": "Evento de Marca",
+      "Collection event": "Evento de Colección",
+      "Category event": "Evento de Categoría",
+      "Transaction event": "Evento de Operación",
+    },
+    operations: {
+      Arrival: "Llegada",
+      Sale: "Venta",
+      Request: "Solicitud",
+
+      operationType: "Tipo de operación",
+      operationStatus: "Estado de la operación",
+      storehouseTo: "Almacén DESTINO",
+      storehouseFrom: "Almacén ORIGEN",
+
+      Open: "Abierto",
+      Created: "Creado",
+      "Creation cancelled": "Creación cancelada",
+      "In progress": "En progreso",
+      "Processing cancelled": "Procesamiento cancelado",
+      Delivered: "Entregado",
+      "Not delivered": "No entregado",
+      Failed: "Fallido",
+      Processed: "Procesado",
+      "Delivery cancelled": "Entrega cancelada",
+
+      updateStatusError: "Error al actualizar el estado",
+      storehouseIsRequired: "Se requiere almacén",
+      selectDifferentStorehouse: "Selecciona un almacén diferente",
+      storehouseAndStatusRequiredError: "Se requieren almacén y estado",
+      notEnoughProductsInStore: "No hay suficientes productos en el almacén",
+      statusRequired: "Se requiere estado",
+
+      storehouseCapslock: "ALMACÉN",
+      statusCapslock: "ESTADO",
+      nameCapslock: "NOMBRE",
+      skuCapslock: "SKU",
+      quantityCapslock: "CANTIDAD",
+      priceCapslock: "PRECIO",
+      success: "Éxito",
+      statusUpdated: "El estado ha sido actualizado",
+
+      selectStorehousePlaceholder: "Selecciona un almacén",
+      save: "Guardar",
+      productsIn: "Productos en",
+      from: "desde",
+      to: "a",
+      "Change status": "Cambiar estado",
+      Cancel: "Cancelar",
+
+      operationCapslock: "OPERACIÓN",
+      fromCapslock: "DESDE",
+      toCapslock: "A",
     },
   },
 };

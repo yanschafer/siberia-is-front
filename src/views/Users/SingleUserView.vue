@@ -25,7 +25,11 @@
               localize("userRolesCapslock", "user")
             }}</span>
             <div class="container">
-              <Tag severity="success" value="Current user"></Tag>
+              <Tag
+                v-if="isCurrent"
+                severity="success"
+                value="Current user"
+              ></Tag>
               <MDBBadge
                 v-for="roleName in userRolesNameList"
                 color="secondary"
@@ -183,6 +187,7 @@ export default {
       password: true,
     },
     validator: new ValidatorUtil(),
+    isCurrent: false,
   }),
   props: {
     id: {
@@ -260,6 +265,7 @@ export default {
       name: el.name,
     }));
     this.lastRolesList = [...this.rolesList];
+    this.isCurrent = TokenUtil.getAuthorizedId() == this.id;
 
     const userNameValidateRule = new ValidateRule().skipIfNull().required();
     const loginValidateRule = new ValidateRule().skipIfNull().required();

@@ -49,6 +49,8 @@ export default {
       createCapslock: "СОЗДАТЬ",
       saveCapslock: "СОХРАНИТЬ",
       nameCapslock: "НАЗВАНИЕ",
+      nothingFound: "Ничего не найдено",
+      nothingFoundClarifyQuery: "Пожалуйста, уточните поисковый запрос.",
     },
     router: {
       panelName: "Siberia Panel",
@@ -305,15 +307,150 @@ export default {
 
       //TabsComponent
       rules: "Права",
+      added: "добавлены",
+      removed: "удалены",
 
       //LangSelectComponent
       langChangeHeading: "Язык изменен",
       langChangeDetail: "Страница будет перезагружена автоматически",
+
+      //FileUploadComponent.vue
+      releaseToDropFileHere: "Отпустите файл для загрузки",
+      dropFileHereOr: "Перетащите файл в это окно, или",
+      clickHere: "нажмите здесь",
+      toUpload: "для загрузки.",
+    },
+    utils: {
+      //api-model.util.ts
+      rulesUpdated: "Роли обновлены",
+      yourRulesWereUpdated: "Ваши права были обновлены администратором.",
     },
     storehousesSave: {
       token_is_dead: "Токен устарел. Пожалуйста, перезайдите в систему",
       wrong_data_type:
         "Неверный тип данных. Пожалуйста, проверьте данные и попробуйте снова",
+    },
+    assortment: {
+      createPlusCapslock: "СОЗДАТЬ +",
+      tableNameHeader: "НАЗВАНИЕ",
+      brand: "Бренд",
+      collection: "Коллекция",
+      category: "Категория",
+      confirmModalTitle: "Подтвердить удаление",
+      confirmModalText: "Вы уверены, что хотите удалить",
+      confirmModalDisclaimer: "Это действие нельзя отменить, ",
+      dataWillBeLostText: "данные будут потеряны",
+      Success: "Успех",
+
+      modalHeaderCreateCategory: "Создать категорию",
+      selectName: "Родительская категория",
+      inputNameCategory: "Название категории",
+      editCategoryHeader: "Изменить категорию",
+      removeCategoryHeader: "Удалить категорию",
+      toastSuccessCreationCategory: "Категория создана",
+      toastSuccessUpdateCategory: "Категория обновлена",
+      toastSuccessRemoveCategory: "Категория удалена",
+      toastErrorCreationCategory: "Ошибка создания категории",
+      toastErrorUpdateCategory: "Ошибка обновления категории",
+      toastErrorRemoveCategory: "Ошибка удаления категории",
+      removeChildrenTitle: "Удалить дочерние элементы",
+      moveChildrenToAnotherParent:
+        "Переместить дочерние элементы к другому родителю",
+
+      modalHeaderCreateBrand: "Создать бренд",
+      inputNameBrand: "Название бренда",
+      toastSuccessCreationBrand: "Бренд создан",
+      toastErrorCreationBrand: "Ошибка создания бренда",
+      brandRemoveSuccessToast: "Бренд удален",
+      brandUpdatedSuccessToast: "Бренд обновлен",
+
+      modalHeaderCreateCollection: "Создать коллекцию",
+      inputNameCollection: "Название коллекции",
+      toastSuccessCreationCollection: "Коллекция создана",
+      toastErrorCreationCollection: "Ошибка создания коллекции",
+      collectionRemoveSuccessToast: "Коллекция удалена",
+      collectionUpdatedSuccessToast: "Коллекция обновлена",
+
+      //auth-check.store
+      Brands: "Бренды",
+      Collections: "Коллекции",
+      Categories: "Категории",
+    },
+    history: {
+      Operation: "Операция",
+      Author: "Автор",
+      DateRange: "Диапазон дат",
+      EventType: "Тип события",
+      EventObjectType: "Тип объекта события",
+
+      //history.store + SingleHistoryView.vue
+      targetCapslock: "ЦЕЛЬ",
+      targetNameCapslock: "НАЗВАНИЕ ЦЕЛИ",
+      typeCapslock: "ТИП",
+      authorCapslock: "АВТОР",
+      dateCapslock: "ДАТА",
+
+      Create: "Создать",
+      Update: "Обновить",
+      Remove: "Удалить",
+
+      "Stock event": "Событие склада",
+      "User event": "Событие пользователя",
+      "Role event": "Событие роли",
+      "Product event": "Событие продукта",
+      "Brand event": "Событие бренда",
+      "Collection event": "Событие коллекции",
+      "Category event": "Событие категории",
+      "Transaction event": "Событие операции",
+    },
+    operations: {
+      Arrival: "Приход",
+      Sale: "Продажа",
+      Request: "Запрос",
+
+      operationType: "Тип операции",
+      operationStatus: "Статус операции",
+      storehouseTo: "Склад, куда",
+      storehouseFrom: "Склад, откуда",
+
+      Open: "Открыт",
+      Created: "Создан",
+      "Creation cancelled": "Создание отменено",
+      "In progress": "В процессе",
+      "Processing cancelled": "Обработка отменена",
+      Delivered: "Доставлен",
+      "Not delivered": "Не доставлен",
+      Failed: "Неудачно",
+      Processed: "Обработано",
+      "Delivery cancelled": "Доставка отменена",
+
+      updateStatusError: "Ошибка обновления статуса",
+      storehouseIsRequired: "Требуется склад",
+      selectDifferentStorehouse: "Выберите другой склад",
+      storehouseAndStatusRequiredError: "Требуются склад и статус",
+      notEnoughProductsInStore: "Недостаточно продуктов на складе",
+      statusRequired: "Требуется статус",
+
+      storehouseCapslock: "СКЛАД",
+      statusCapslock: "СТАТУС",
+      nameCapslock: "НАЗВАНИЕ",
+      skuCapslock: "SKU",
+      quantityCapslock: "КОЛИЧЕСТВО",
+      priceCapslock: "ЦЕНА",
+      success: "Успешно",
+      statusUpdated: "Статус обновлен",
+
+      selectStorehousePlaceholder: "Выберите склад",
+      save: "Сохранить",
+      productsIn: "Товары в",
+      from: "от",
+      to: "к",
+      "Change status": "Изменить статус",
+      Cancel: "Отмена",
+
+      operationCapslock: "ОПЕРАЦИЯ",
+      fromCapslock: "ИЗ",
+      toCapslock: "В",
     },
   },
 };
