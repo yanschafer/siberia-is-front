@@ -96,11 +96,11 @@ export default defineComponent({
 
     return { userStore, rolesStore, rulesStore, storehousesStore };
   },
-  data (){
-      return{
-          activeTabId: "",
-          currentRules: [],
-      }
+  data() {
+    return {
+      activeTabId: "",
+      currentRules: [],
+    };
   },
   computed: {
     stocks() {
@@ -112,7 +112,7 @@ export default defineComponent({
   },
   methods: {
     localize(key, module) {
-          return PrintUtil.localize(key, module);
+      return PrintUtil.localize(key, module);
     },
     showSuccessToast(type) {
       this.$toast.add({
@@ -145,7 +145,7 @@ export default defineComponent({
       if (!result.success) {
         result.getError().showServerErrorToast(this.$toast, this.$nextTick);
       } else {
-        this.showSuccessToast("removed");
+        this.showSuccessToast(this.localize("removed", "components"));
       }
     },
     async ruleSelected({ roleId, linkedRule }) {
@@ -163,7 +163,7 @@ export default defineComponent({
       if (!result.success) {
         result.getError().showServerErrorToast(this.$toast, this.$nextTick);
       } else {
-        this.showSuccessToast("added");
+        this.showSuccessToast(this.localize("added", "components"));
       }
     },
   },
