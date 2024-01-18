@@ -72,7 +72,7 @@
               type="button"
               class="utility-btn btn-danger"
               @click="emitDelete"
-              >DELETE</MDBBtn
+              >{{ localize("deleteCapslock") }}</MDBBtn
             >
           </div>
         </template>
@@ -98,6 +98,7 @@ import InputText from "primevue/inputtext";
 import { MDBBtn, MDBContainer } from "mdb-vue-ui-kit";
 import { IconSearchOff, IconInfoCircle } from "@tabler/icons-vue";
 import InfoMessageComponent from "@/components/Elements/Dialogs/InfoMessageComponent.vue";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default defineComponent({
   components: {
@@ -133,8 +134,8 @@ export default defineComponent({
       required: false,
       default: {
         icon: "IconSearchOff",
-        title: "Nothing was found",
-        text: "Please clarify your search query.",
+        title: PrintUtil.localize("nothingFound"),
+        text: PrintUtil.localize("nothingFoundClarifyQuery"),
       },
     },
   },
@@ -146,8 +147,8 @@ export default defineComponent({
       editingRows: [],
       deleteClick: false,
       noSearchResultIcon: "IconSearchOff",
-      noSearchResultTitle: "Nothing was found",
-      noSearchResultText: "Please clarify your search query.",
+      noSearchResultTitle: this.localize("nothingFound"),
+      noSearchResultText: this.localize("nothingFoundClarifyQuery"),
     };
   },
   computed: {
@@ -159,6 +160,9 @@ export default defineComponent({
     },
   },
   methods: {
+    localize(key, module = "default") {
+      return PrintUtil.localize(key, module);
+    },
     isEditable(columnField) {
       return this.editableColumns && this.editableColumns.includes(columnField);
     },

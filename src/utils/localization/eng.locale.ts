@@ -17,6 +17,8 @@ export default {
       createCapslock: "CREATE",
       saveCapslock: "SAVE",
       nameCapslock: "NAME",
+      nothingFound: "Nothing was found",
+      nothingFoundClarifyQuery: "Please clarify your search query.",
     },
     router: {
       panelName: "Siberia Panel",
@@ -46,6 +48,7 @@ export default {
       SingleOperation: "Single operation",
     },
     sidebar: {
+      //auth-check.store
       Dashboard: "Dashboard",
       Products: "Products",
       Assortments: "Assortments",
@@ -58,6 +61,7 @@ export default {
       History: "History",
       Operations: "Operations",
       Notifications: "Notifications",
+      Profile: "Profile",
       AddBtnLabel: "+ Add",
     },
     auth: {
@@ -286,6 +290,52 @@ export default {
     storehousesSave: {
       token_is_dead: "Expired token. Please, relogin",
       wrong_data_type: "Wrong data type. Please, check data provided",
+    },
+    assortment: {
+      //AssortmentView.vue
+      createPlusCapslock: "CREATE +",
+      tableNameHeader: "NAME",
+      brand: "Brand",
+      collection: "Collection",
+      category: "Category",
+      confirmModalTitle: "Confirm deletion",
+      confirmModalText: "Are you sure you want to delete",
+      confirmModalDisclaimer: "This action cannot be undone, this",
+      dataWillBeLostText: "data will be lost",
+      Success: "Success",
+
+      modalHeaderCreateCategory: "Create a category",
+      selectName: "Parent category",
+      inputNameCategory: "Category name",
+      editCategoryHeader: "Edit category",
+      removeCategoryHeader: "Remove category",
+      toastSuccessCreationCategory: "Category is created",
+      toastSuccessUpdateCategory: "Category is updated",
+      toastSuccessRemoveCategory: "Category is removed",
+      toastErrorCreationCategory: "Category creation failed",
+      toastErrorUpdateCategory: "Category updating failed",
+      toastErrorRemoveCategory: "Category removing failed",
+      removeChildrenTitle: "Remove children",
+      moveChildrenToAnotherParent: "Move children to new parent",
+
+      modalHeaderCreateBrand: "Create a brand",
+      inputNameBrand: "Brand name",
+      toastSuccessCreationBrand: "Brand is created",
+      toastErrorCreationBrand: "Brand creation failed",
+      brandRemoveSuccessToast: "Brand is removed",
+      brandUpdatedSuccessToast: "Brand is updated",
+
+      modalHeaderCreateCollection: "Create a collection",
+      inputNameCollection: "Collection name",
+      toastSuccessCreationCollection: "Collection is created",
+      toastErrorCreationCollection: "Collection creation failed",
+      collectionRemoveSuccessToast: "Collection is removed",
+      collectionUpdatedSuccessToast: "Collection is updated",
+
+      //auth-check.store
+      Brands: "Brands",
+      Collections: "Collections",
+      Categories: "Categories",
     },
   },
 };

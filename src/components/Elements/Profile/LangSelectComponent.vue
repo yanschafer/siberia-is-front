@@ -128,7 +128,7 @@ export default defineComponent({
       this.showSuccessToast();
       setTimeout(() => {
         location.reload();
-      }, 3500);
+      }, 2500);
     },
   },
 });

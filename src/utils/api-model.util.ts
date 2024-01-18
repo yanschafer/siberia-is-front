@@ -85,7 +85,7 @@ export default class ApiModelUtil {
         refreshResult,
       );
       TokenUtil.logout();
-      window.location = "/login";
+      // window.location = "/login";
       return new ApiResponseDto<T>(false, null, refreshResult.getError());
     }
   }

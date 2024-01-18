@@ -193,6 +193,12 @@ export default {
     this.usersLoadRes.toastIfError(this.$toast, this.$nextTick);
   },
   methods: {
+    clearValidationErrors() {
+      this.validate = {
+        name: true,
+        description: true,
+      };
+    },
     localize(key, module) {
       return PrintUtil.localize(key, module);
     },
@@ -238,6 +244,7 @@ export default {
       this.newRoleDescription = this.roleDescription;
     },
     async saveChanges() {
+      this.clearValidationErrors();
       const name = this.newRoleName == this.roleName ? null : this.newRoleName;
       const description =
         this.newRoleDescription == this.roleDescription
@@ -275,9 +282,8 @@ export default {
       }
     },
     cancelEditing() {
+      this.clearValidationErrors();
       this.editing = false;
-      this.newRoleName = this.originalRoleName; // Возвращаем оригинальное имя при отмене
-      this.originalRoleName = ""; // Сбрасываем оригинальное имя
     },
     async usersAdded(addedUsers) {
       const result = await Promise.all(

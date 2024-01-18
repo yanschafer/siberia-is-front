@@ -12,7 +12,7 @@
       <TabPanel v-for="tab in tabs" :key="tab.title" :header="tab.title">
         <template v-if="tab.id === 1">
           <DialogComponentTrigger
-            button-text="CREATE +"
+            :button-text="localize('createPlusCapslock')"
             class="mb-2"
             :init-object="initBrandDialog"
           />
@@ -21,7 +21,7 @@
             :rows="brandList"
             :editableColumns="editableColumns"
             :showEditColumn="true"
-            :columns="brandColumns"
+            :columns="tableColumns"
             edit-input-type="str"
             @row-delete="deleteBrand"
             @row-edit-save="editBrand"
@@ -29,7 +29,7 @@
         </template>
         <template v-if="tab.id === 2">
           <DialogComponentTrigger
-            button-text="CREATE +"
+            :button-text="localize('createPlusCapslock')"
             :init-object="initCollectionDialog"
           />
           <TableComponent
@@ -37,7 +37,7 @@
             :showEditColumn="true"
             :enableDelete="true"
             :rows="collectionList"
-            :columns="brandColumns"
+            :columns="tableColumns"
             edit-input-type="str"
             @row-delete="deleteCollection"
             @row-edit-save="editCollection"
@@ -45,7 +45,7 @@
         </template>
         <template v-if="tab.id === 3">
           <DialogComponentTrigger
-            button-text="CREATE +"
+            :button-text="localize('createPlusCapslock')"
             :init-object="initCategoryDialog"
           />
           <TreeTableComponent
@@ -81,6 +81,7 @@ import CollectionModel from "@/api/modules/collection/models/collection.model";
 import DialogComponentTrigger from "@/components/Elements/Dialogs/DialogComponentTrigger.vue";
 import ScrollPanel from "primevue/scrollpanel";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "AssortmentVue",
@@ -96,7 +97,9 @@ export default {
   data() {
     return {
       editableColumns: ["name"],
-      brandColumns: [{ field: "name", header: "NAME" }],
+      tableColumns: [
+        { field: "name", header: this.localize("tableNameHeader") },
+      ],
       onDelete: {
         remove(modelId: number): Promise<ApiResponseDto<any>> {},
         loadList() {},
@@ -105,11 +108,11 @@ export default {
       toastOnSuccess: "",
       toastOnError: "",
       initCategoryDialog: {
-        header: "Create a category",
+        header: this.localize("modalHeaderCreateCategory"),
         showSelect: true,
         selectItems: this.categoryList,
-        selectName: "Select parent category",
-        inputName: "Category name",
+        selectName: this.localize("selectName"),
+        inputName: this.localize("inputNameCategory"),
         methodOnSave: async () => {
           const loadRes = await this.categoryStore.loadCategoriesList();
           loadRes.toastIfError(this.$toast, this.$nextTick);
@@ -117,32 +120,32 @@ export default {
         },
         methodOnClose: () => loggerUtil.debug("workds"),
         model: new CategoryModel(),
-        toastSuccessText: "Category is created",
-        toastErrorText: "Category creation failed",
+        toastSuccessText: this.localize("toastSuccessCreationCategory"),
+        toastErrorText: this.localize("toastErrorCreationCategory"),
       },
       initBrandDialog: {
-        header: "Create a brand",
-        inputName: "Brand name",
+        header: this.localize("modalHeaderCreateBrand"),
+        inputName: this.localize("inputNameBrand"),
         model: new BrandModel(),
         methodOnSave: async () => {
           const loadRes = await this.brandStore.loadBrandsList();
           loadRes.toastIfError(this.$toast, this.$nextTick);
         },
         methodOnClose: () => loggerUtil.debug("workds"),
-        toastSuccessText: "Brand is created",
-        toastErrorText: "Brand creation failed",
+        toastSuccessText: this.localize("toastSuccessCreationBrand"),
+        toastErrorText: this.localize("toastErrorCreationBrand"),
       },
       initCollectionDialog: {
-        header: "Create a collection",
-        inputName: "Collection name",
+        header: this.localize("modalHeaderCreateCollection"),
+        inputName: this.localize("inputNameCollection"),
         methodOnSave: async () => {
           const loadRes = await this.collectionStore.loadCollectionList();
           loadRes.toastIfError(this.$toast, this.$nextTick);
         },
         methodOnClose: () => loggerUtil.debug("workds"),
         model: new CollectionModel(),
-        toastSuccessText: "Collection is created",
-        toastErrorText: "Collection creation failed",
+        toastSuccessText: this.localize("toastSuccessCreationCollection"),
+        toastErrorText: this.localize("toastErrorCreationCollection"),
       },
     };
   },
@@ -154,7 +157,6 @@ export default {
     const dialogStore = useDialogStore();
     const authCheckStore = useAuthCheckStore();
 
-    // await productStore.loadSelectedProduct(parseInt(route.params.id.toString()));
     return {
       brandStore,
       categoryStore,
@@ -175,11 +177,14 @@ export default {
     this.initCategoryDialog.selectItems = this.categoryList;
   },
   methods: {
+    localize(key, module = "assortment") {
+      return PrintUtil.localize(key, module);
+    },
     showModal(type, name) {
       this.modalStore.show({
-        title: "Confirm deletion",
-        text: `Are you sure you want to delete ${type} ${name}`,
-        disclaimer: `This action cannot be undone, this ${type} data will be lost`,
+        title: this.localize("confirmModalTitle"),
+        text: `${this.localize("confirmModalText")} ${this.localize(type)} "${name}"`,
+        disclaimer: `${this.localize("confirmModalDisclaimer")} ${type} ${this.localize("dataWillBeLostText")}`,
       });
     },
     closeModal() {
@@ -192,7 +197,7 @@ export default {
         await this.onDelete.loadList();
         this.$toast.add({
           severity: "success",
-          summary: "Success",
+          summary: this.localize("Success"),
           detail: this.toastOnSuccess,
           life: 3000,
         });
@@ -201,24 +206,22 @@ export default {
       }
     },
     deleteCollection(collectionRow) {
-      loggerUtil.debug("Collection delete", collectionRow);
-      this.toastOnSuccess = "Collection is removed";
+      this.toastOnSuccess = this.localize("toastSuccessRemoveCollection");
       this.onDelete = this.collectionStore;
       this.idOnDelete = collectionRow.id;
       this.showModal("collection", collectionRow.name);
     },
     deleteBrand(brandRow) {
-      loggerUtil.debug("Brand delete", brandRow);
-      this.toastOnSuccess = "Brand is removed";
+      this.toastOnSuccess = this.localize("toastSuccessRemoveBrand");
       this.onDelete = this.brandStore;
       this.idOnDelete = brandRow.id;
       this.showModal("brand", brandRow.name);
     },
     showErrorToast() {
       this.$toast.add({
-        severity: "warning",
-        summary: "Validate error",
-        detail: "Check data provided",
+        severity: "error",
+        summary: PrintUtil.localize("validateError", "components"),
+        detail: PrintUtil.localize("checkDataProvided", "components"),
         life: 3000,
       });
     },
@@ -231,8 +234,8 @@ export default {
       if (updated.success) {
         this.$toast.add({
           severity: "success",
-          summary: "Success",
-          detail: "Brand is updated",
+          summary: this.localize("Success"),
+          detail: this.localize("toastSuccessUpdateBrand"),
           life: 3000,
         });
         const loadListRes = await this.brandStore.loadBrandsList();
@@ -250,8 +253,8 @@ export default {
       if (updated.success) {
         this.$toast.add({
           severity: "success",
-          summary: "Success",
-          detail: "Collection is updated",
+          summary: this.localize("Success"),
+          detail: this.localize("toastSuccessUpdateCollection"),
           life: 3000,
         });
         const loadListRes = await this.collectionStore.loadCollectionList();
@@ -261,19 +264,18 @@ export default {
       }
     },
     startEditCategory(category) {
-      loggerUtil.debug("START EDITING", category);
       this.dialogStore.show(
         {
-          header: `Edit category ${category.label}`,
+          header: `${this.localize("editCategoryHeader")} ${category.label}`,
           showSelect: true,
           selectItems: this.categoryList,
-          selectName: "Parent category",
-          inputName: "Category name",
+          selectName: this.localize("selectName"),
+          inputName: this.localize("inputNameCategory"),
           model: new CategoryModel(),
           methodOnSave: this.categoryOnSave,
           methodOnClose: () => {},
-          toastSuccessText: "Category is updated",
-          toastErrorText: "Failed update category",
+          toastSuccessText: this.localize("toastSuccessUpdateCategory"),
+          toastErrorText: this.localize("toastErrorUpdateCategory"),
         },
         { id: category.id, input: category.label, selected: category.parent },
         (state) => ({
@@ -287,19 +289,18 @@ export default {
       this.initCategoryDialog.selectItems = this.categoryList;
     },
     startRemoveCategory(category) {
-      loggerUtil.debug("Category delete", category);
       this.dialogStore.show(
         {
-          header: `Remove category ${category.label}`,
+          header: `${this.localize("removeCategoryHeader")} ${category.label}`,
           showSelect: true,
           selectItems: this.categoryList,
-          selectName: "Parent category",
-          inputName: "Category name",
+          selectName: this.localize("selectName"),
+          inputName: this.localize("inputNameCategory"),
           model: new CategoryModel(),
           methodOnSave: this.categoryOnRemove,
           methodOnClose: () => {},
-          toastSuccessText: "Category is removed",
-          toastErrorText: "Failed remove category",
+          toastSuccessText: this.localize("toastSuccessRemoveCategory"),
+          toastErrorText: this.localize("toastErrorRemoveCategory"),
         },
         null,
         (state) => ({
@@ -310,8 +311,8 @@ export default {
         false,
         true,
         {
-          false: "Remove children",
-          true: "Move children to new parent",
+          true: "Remove children",
+          false: "Move children to new parent",
         },
       );
     },

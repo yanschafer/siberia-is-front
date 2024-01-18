@@ -58,7 +58,7 @@ import {
 } from "@tabler/icons-vue";
 import TokenUtil from "@/utils/token.util";
 import Router from "@/router";
-import LangSelectComponent from "@/components/Navigation/LangSelectComponent.vue";
+import LangSelectComponent from "@/components/Elements/Profile/LangSelectComponent.vue";
 import NotificationSocketModel from "@/api/modules/notification/models/notification-socket.model";
 
 export default {

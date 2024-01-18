@@ -79,19 +79,19 @@ const availableSidebarItems = [
 const availableAssortmentTabs = [
   {
     id: 1,
-    title: "Brands",
+    title: PrintUtil.localize("Brands", "assortment"),
     content: "Tab 1 Content",
     ruleId: appConf.rules.brandManaging,
   },
   {
     id: 2,
-    title: "Collections",
+    title: PrintUtil.localize("Collections", "assortment"),
     content: "Tab 2 Content",
     ruleId: appConf.rules.collectionManaging,
   },
   {
     id: 3,
-    title: "Categories",
+    title: PrintUtil.localize("Categories", "assortment"),
     content: "Tab 3 Content",
     ruleId: appConf.rules.categoryManaging,
   },

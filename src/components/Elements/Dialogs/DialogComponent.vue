@@ -103,7 +103,7 @@ export default {
   },
   methods: {
     localize(key, module = "products") {
-          return PrintUtil.localize(key, module);
+      return PrintUtil.localize(key, module);
     },
     handleDialogClose() {
       loggerUtil.debug(this.isVisible);
@@ -117,7 +117,7 @@ export default {
 
       if (this.showInput && this.inputValue == "") {
         this.$toast.add({
-          severity: "warning",
+          severity: "error",
           summary: this.localize("validateError", "components"),
           detail: this.localize("checkDataProvided", "components"),
           life: 3000,

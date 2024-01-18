@@ -73,6 +73,12 @@ export default {
       .addRule("address", addressValidateRule);
   },
   methods: {
+    clearValidationErrors() {
+      this.validate = {
+        name: true,
+        address: true,
+      };
+    },
     localize(key, module = "storehouses") {
       return PrintUtil.localize(key, module);
     },
@@ -85,6 +91,7 @@ export default {
       });
     },
     async saveCreation() {
+      this.clearValidationErrors();
       const newStorehouse = {
         name: this.name,
         address: this.address,
@@ -106,6 +113,7 @@ export default {
       }
     },
     cancelCreation() {
+      this.clearValidationErrors();
       this.router.push({ name: "storehouses" });
     },
   },

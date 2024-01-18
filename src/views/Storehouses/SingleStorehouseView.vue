@@ -271,6 +271,12 @@ export default {
     },
   },
   methods: {
+    clearValidationErrors() {
+      this.validate = {
+        name: true,
+        address: true,
+      };
+    },
     localize(key, module = "storehouses") {
       return PrintUtil.localize(key, module);
     },
@@ -420,8 +426,10 @@ export default {
       this.newStorehouseName = this.storehouseName;
       this.originalStorehouseAdress = this.storehouseAddress;
       this.newStorehouseAdress = this.storehouseAddress;
+      this.clearValidationErrors();
     },
     async saveChanges() {
+      this.clearValidationErrors();
       const data = new StockUpdateDto(
         ValidatorUtil.getNullIfNoChange(
           this.newStorehouseName,
@@ -451,6 +459,7 @@ export default {
       }
     },
     cancelEditing() {
+      this.clearValidationErrors();
       this.editing = false;
     },
   },

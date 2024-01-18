@@ -35,7 +35,7 @@ import OverlayPanel from "primevue/overlaypanel";
 import Button from "primevue/button";
 import TokenUtil from "@/utils/token.util";
 import NotificationSocketModel from "@/api/modules/notification/models/notification-socket.model";
-import LangSelectComponent from "@/components/Navigation/LangSelectComponent.vue";
+import LangSelectComponent from "@/components/Elements/Profile/LangSelectComponent.vue";
 import PrintUtil from "@/utils/localization/print.util.js";
 
 export default {

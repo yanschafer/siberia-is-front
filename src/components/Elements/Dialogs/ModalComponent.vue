@@ -21,10 +21,12 @@
         {{ text }} <span class="disclaimer">{{ disclaimer }}</span>
       </p>
       <MDBRow class="d-flex flex-row gap-5 mt-3">
-        <MDBBtn @click="close" class="utility-btn btn-black">CANCEL</MDBBtn>
-        <MDBBtn @click="closeAndApprove" class="utility-btn btn-danger"
-          >DELETE</MDBBtn
-        >
+        <MDBBtn @click="close" class="utility-btn btn-black">{{
+          localize("cancelCapslock")
+        }}</MDBBtn>
+        <MDBBtn @click="closeAndApprove" class="utility-btn btn-danger">{{
+          localize("deleteCapslock")
+        }}</MDBBtn>
       </MDBRow>
     </MDBContainer>
   </MDBContainer>
@@ -34,6 +36,7 @@
 import { defineComponent, ref } from "vue";
 import { MDBBtn, MDBCol, MDBContainer, MDBRow } from "mdb-vue-ui-kit";
 import { useModalStore } from "@/stores/modal.store";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default defineComponent({
   name: "ModalComponent",
@@ -57,6 +60,9 @@ export default defineComponent({
     },
   },
   methods: {
+    localize(key, module = "default") {
+      return PrintUtil.localize(key, module);
+    },
     close() {
       this.store.hide();
       this.$emit("close");
