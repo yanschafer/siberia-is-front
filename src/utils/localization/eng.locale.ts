@@ -270,6 +270,9 @@ export default {
       notEnoughProducts: "Not enough products for sale",
       storehouseIsRemoved: "Storehouse is removed",
       storehouseNotFound: "Storehouse not found",
+      noStorehouseAvailable: "No storehouse available",
+      tryToEditStorehouse:
+        "Try to edit available storehouses in users managing tab, or report to your administrator",
 
       //storehouse.store.ts
       addressCapslock: "ADDRESS",
@@ -281,6 +284,8 @@ export default {
       quantityAndProductMustBeSelected: "Quantity and Product must be selected",
       priceMustBeSelected: "Price must be selected",
       notEnoughProductsStorehouses: "Not enough products",
+      noProductInList: "No product yet in the list",
+      pleaseAddOneFirst: "Please add one first",
     },
     filters: {
       //FiltersSidebarComponent.vue
@@ -449,6 +454,21 @@ export default {
       operationCapslock: "OPERATION",
       fromCapslock: "FROM",
       toCapslock: "TO",
+    },
+    dashboard: {
+      //DashboardView.vue
+      lastDay: "Last day",
+      week: "Week",
+      month: "Month",
+      quarter: "Quarter",
+      sales: "Sales",
+      website: "Website",
+      store: "Store",
+      lastSaleDateCapslock: "LAST SALE DATE",
+      totalQuantityCapslock: "TOTAL QUANTITY",
+      totalValueCapslock: "TOTAL VALUE",
+      leastBestsellingItems: "Least Bestselling Items",
+      soldFrom: "800K sold from 1M",
     },
   },
 };

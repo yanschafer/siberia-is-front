@@ -23,6 +23,7 @@ import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 import { useStorehousesStore } from "@/stores/storehouse.store";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "StorehousesView",
@@ -54,8 +55,8 @@ export default {
     return {
       noDataMessage: {
         icon: "IconInfoCircle",
-        title: "No storehouse available",
-        text: "Try to edit available storehouses in users managing tab, or report to your administrator",
+        title: this.localize("noStorehouseAvailable"),
+        text: this.localize("tryToEditStorehouse"),
       },
     };
   },
@@ -80,6 +81,9 @@ export default {
     },
   },
   methods: {
+    localize(key, module = "storehouses") {
+      return PrintUtil.localize(key, module);
+    },
     handleSearch(searchTerm) {
       this.storehousesStore.searchTerm = searchTerm;
     },
