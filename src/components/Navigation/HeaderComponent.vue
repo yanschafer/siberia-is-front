@@ -61,7 +61,12 @@
         >
           {{ notificationCount > 999 ? "999+" : notificationCount }}
         </MDBBadge>
-        <ProfileComponent />
+        <MDBTooltip v-model="tooltip4" tag="a" direction="left">
+          <template #reference>
+            <ProfileComponent />
+          </template>
+          <template #tip> {{ localize("Profile") }} </template>
+        </MDBTooltip>
       </MDBContainer>
     </MDBContainer>
 
@@ -189,6 +194,7 @@ export default defineComponent({
     const tooltip1 = ref(false);
     const tooltip2 = ref(false);
     const tooltip3 = ref(false);
+    const tooltip4 = ref(false);
     const dropdown24 = ref(false);
     const router = useRouter();
 
@@ -196,6 +202,7 @@ export default defineComponent({
       tooltip1,
       tooltip2,
       tooltip3,
+      tooltip4,
       dropdown24,
       router,
       authCheckStore: useAuthCheckStore(),

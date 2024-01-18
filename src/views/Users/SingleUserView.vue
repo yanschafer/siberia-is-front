@@ -270,6 +270,13 @@ export default {
       .addRule("password", passwordRule);
   },
   methods: {
+    clearValidationErrors() {
+      this.validate = {
+        name: true,
+        login: true,
+        password: true,
+      };
+    },
     showSuccessToast() {
       this.$toast.add({
         severity: "success",
@@ -336,8 +343,10 @@ export default {
       this.newUserUsername = this.userUsername;
       this.originalUserPassword = this.userPassword;
       this.newUserPassword = "";
+      this.clearValidationErrors();
     },
     async saveChanges() {
+      this.clearValidationErrors();
       const newName =
         this.newUserName == this.originalUserName ? null : this.newUserName;
       const newLogin =
@@ -384,6 +393,7 @@ export default {
       this.originalUserName = "";
       this.originalUserUsername = "";
       this.originalUserPassword = "";
+      this.clearValidationErrors();
     },
   },
 };

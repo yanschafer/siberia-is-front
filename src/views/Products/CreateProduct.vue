@@ -392,6 +392,23 @@ export default {
     localize(key, module = "products") {
       return PrintUtil.localize(key, module);
     },
+    clearValidationErrors() {
+      this.validate = {
+        vendorCode: true,
+        brand: true,
+        name: true,
+        description: true,
+        distributorPrice: true,
+        professionalPrice: true,
+        commonPrice: true,
+        category: true,
+        collection: true,
+        color: true,
+        amountInBox: true,
+        expirationDate: true,
+        link: true,
+      };
+    },
     async fileChanged(files: File[]) {
       const file = files[0];
       const encoded = await EncoderUtil.encode(file);
@@ -428,6 +445,7 @@ export default {
       });
     },
     async create() {
+      this.clearValidationErrors();
       const brandId = this.brand ? this.brand.id : null;
       const collectionId = this.collection ? this.collection.id : null;
       const categoryId = parseInt(String(this.category));
@@ -490,6 +508,7 @@ export default {
       }
     },
     cancel() {
+      this.clearValidationErrors();
       this.router.push({
         name: "products",
       });

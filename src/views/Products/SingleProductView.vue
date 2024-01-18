@@ -535,6 +535,23 @@ export default {
     localize(key, module = "products") {
       return PrintUtil.localize(key, module);
     },
+    clearValidationErrors() {
+      this.validate = {
+        vendorCode: true,
+        brand: true,
+        name: true,
+        description: true,
+        distributorPrice: true,
+        professionalPrice: true,
+        commonPrice: true,
+        category: true,
+        collection: true,
+        color: true,
+        amountInBox: true,
+        expirationDate: true,
+        link: true,
+      };
+    },
     confirmDeletion() {
       this.modalStore.show({
         title: "Confirm deletion",
@@ -608,6 +625,7 @@ export default {
       this.newExpirationDate = this.expirationDate;
     },
     cancelEditing() {
+      this.clearValidationErrors();
       this.editing = false;
     },
     getNullIfNoChange(newValue, originalValue) {
@@ -622,6 +640,7 @@ export default {
       });
     },
     async saveChanges() {
+      this.clearValidationErrors();
       const brandId = this.newBrand ? this.newBrand.id : null;
       const collectionId = this.newCollection ? this.newCollection.id : null;
       const categoryId = parseInt(String(this.newCategory));

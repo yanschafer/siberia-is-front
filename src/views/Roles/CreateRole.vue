@@ -34,7 +34,7 @@
       }}</MDBBtn>
     </MDBCol>
     <MDBContainer>
-      <Panel  :header="localize('rolePermissions', 'role')">
+      <Panel :header="localize('rolePermissions', 'role')">
         <TabsComponent :creation-mode="true" :roles="[roles]" />
       </Panel>
     </MDBContainer>
@@ -53,7 +53,7 @@ import UserFullDto from "@/api/modules/user/dto/user-full.dto";
 import PrintUtil from "@/utils/localization/print.util";
 import ValidatorUtil from "@/utils/validator/validator.util";
 import ValidateRule from "@/utils/validator/validate-rule";
-import Panel from "primevue/panel"
+import Panel from "primevue/panel";
 
 export default defineComponent({
   name: "CreateRole",
@@ -65,7 +65,7 @@ export default defineComponent({
     MDBBtn,
     InputText,
     Textarea,
-    Panel
+    Panel,
   },
   data() {
     return {
@@ -106,6 +106,12 @@ export default defineComponent({
       .addRule("description", descriptionValidateRule);
   },
   methods: {
+    clearValidationErrors() {
+      this.validate = {
+        name: true,
+        description: true,
+      };
+    },
     showSuccessToast() {
       this.$toast.add({
         severity: "success",
@@ -118,6 +124,7 @@ export default defineComponent({
       return PrintUtil.localize(key, module);
     },
     async saveCreation() {
+      this.clearValidationErrors();
       const data = {
         name: this.name,
         description: this.description,
@@ -136,6 +143,7 @@ export default defineComponent({
         });
     },
     cancelCreation() {
+      this.clearValidationErrors();
       this.router.push({ name: "roles" });
     },
   },

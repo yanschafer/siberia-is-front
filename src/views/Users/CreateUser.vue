@@ -96,6 +96,13 @@ export default {
       .addRule("password", passwordRule);
   },
   methods: {
+    clearValidationErrors() {
+      this.validate = {
+        name: true,
+        login: true,
+        password: true,
+      };
+    },
     showSuccessToast() {
       this.$toast.add({
         severity: "success",
@@ -108,9 +115,11 @@ export default {
       return PrintUtil.localize(key, module);
     },
     cancelCreation() {
+      this.clearValidationErrors();
       this.router.push({ name: "users" });
     },
     async saveCreation() {
+      this.clearValidationErrors();
       const createDto = new CreateUserDto(
         {
           name: this.name,

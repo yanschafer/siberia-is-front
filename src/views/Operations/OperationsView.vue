@@ -9,7 +9,7 @@
       </MDBCol>
       <MDBCol class="content-col">
         <TableComponent
-            :infoMessage="noDataMessage"
+          :infoMessage="noDataMessage"
           :rows="filteredOperations"
           :columns="operationStore.operationColumns"
           :searchTerm="''"
@@ -31,6 +31,7 @@ import LoggerUtil from "@/utils/logger/logger.util";
 import { MDBContainer, MDBCol } from "mdb-vue-ui-kit";
 import FiltersSidebarComponent from "@/components/Elements/Filter sidebar/FiltersSidebarComponent.vue";
 import { useStorehousesStore } from "@/stores/storehouse.store";
+import PrintUtil from "@/utils/localization/print.util";
 export default {
   name: "OperationsView",
   components: {
@@ -68,12 +69,12 @@ export default {
           ],
         },
         to: {
-          title: "Stocks TO",
+          title: "Storehouse TO",
           type: FilterType.SELECT,
           items: this.stockStore.getStorehouseList,
         },
         from: {
-          title: "Stocks FROM",
+          title: "Storehouse FROM",
           type: FilterType.SELECT,
           items: this.stockStore.getStorehouseList,
         },
@@ -114,10 +115,10 @@ export default {
         );
       const res = data.map((el) => ({
         id: el.id,
-        operation: this.typeMapper[el.type.id],
+        operation: this.localize(this.typeMapper[el.type.id]),
         from: el.fromName,
         to: el.toName,
-        status: el.status.name,
+        status: this.localize(el.status.name),
       }));
       LoggerUtil.debug(res);
       return res;
@@ -130,6 +131,9 @@ export default {
     },
   },
   methods: {
+    localize(key, module = "operations") {
+      return PrintUtil.localize(key, module);
+    },
     handleRowClick(row) {
       this.router.push({
         name: "Single operation",
@@ -145,6 +149,6 @@ export default {
 
 <style scoped>
 .content-col {
-  width: 75vw!important;
+  width: 75vw !important;
 }
 </style>

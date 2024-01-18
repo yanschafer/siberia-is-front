@@ -30,6 +30,7 @@ import { FilterType } from "@/api/conf/app.conf";
 import FiltersSidebarComponent from "@/components/Elements/Filter sidebar/FiltersSidebarComponent.vue";
 import loggerUtil from "@/utils/logger/logger.util";
 import { IconSearchOff } from "@tabler/icons-vue";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "HistoryView",
@@ -44,27 +45,27 @@ export default {
     return {
       noDataMessage: {
         icon: "IconSearchOff",
-        title: "Nothing was found",
-        text: "Please clarify your search query",
+        title: this.localize("nothingFound", "default"),
+        text: this.localize("nothingFoundClarifyQuery", "default"),
       },
       filtersInput: {
         author: {
-          title: "Author",
+          title: this.localize("Author"),
           type: FilterType.TEXT,
           value: null,
         },
         range: {
-          title: "Date range",
+          title: this.localize("DateRange"),
           type: FilterType.DATE,
           value: { min: null, max: null },
         },
         eventTypeId: {
-          title: "Event type",
+          title: this.localize("EventType"),
           type: FilterType.SELECT,
           items: this.historyStore.getEventTypes,
         },
         eventObjectTypeId: {
-          title: "Event object type",
+          title: this.localize("EventObjectType"),
           type: FilterType.SELECT,
           items: this.historyStore.getEventObjectTypes,
         },
@@ -110,11 +111,18 @@ export default {
         ) {
           return {
             ...el,
+            eventType: this.localize(el.eventType),
+            eventObjectType: this.localize(el.eventObjectType),
             timestamp: this.translateTimestamp(el.timestamp),
-            eventObjectName: `Operation ${el.eventObjectName}`,
+            eventObjectName: `${this.localize("Operation")} ${el.eventObjectName}`,
           };
         }
-        return { ...el, timestamp: this.translateTimestamp(el.timestamp) };
+        return {
+          ...el,
+          eventType: this.localize(el.eventType),
+          eventObjectType: this.localize(el.eventObjectType),
+          timestamp: this.translateTimestamp(el.timestamp),
+        };
       });
     },
     routeIdParam() {
@@ -125,8 +133,10 @@ export default {
     },
   },
   methods: {
+    localize(key, module = "history") {
+      return PrintUtil.localize(key, module);
+    },
     handleRowClick(row) {
-      console.log("Clicked row with id:", row.id);
       this.router.push({
         name: "Single history",
         params: { id: row.id },

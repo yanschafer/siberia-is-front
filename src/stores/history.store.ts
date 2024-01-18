@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import HistoryModel from "@/api/modules/history/models/history.model";
 import HistorySearchFilterDto from "@/api/modules/history/dto/history-search-filter.dto";
+import PrintUtil from "@/utils/localization/print.util";
 
 export const useHistoryStore = defineStore({
   id: "history",
@@ -9,11 +10,26 @@ export const useHistoryStore = defineStore({
     historyRows: [],
     selectedItem: {},
     historyColumns: [
-      { field: "eventObjectType", header: "TARGET" },
-      { field: "eventObjectName", header: "TARGET NAME" },
-      { field: "eventType", header: "TYPE" },
-      { field: "author", header: "AUTHOR" },
-      { field: "timestamp", header: "DATE" },
+      {
+        field: "eventObjectType",
+        header: PrintUtil.localize("targetCapslock", "history"),
+      },
+      {
+        field: "eventObjectName",
+        header: PrintUtil.localize("targetNameCapslock", "history"),
+      },
+      {
+        field: "eventType",
+        header: PrintUtil.localize("typeCapslock", "history"),
+      },
+      {
+        field: "author",
+        header: PrintUtil.localize("authorCapslock", "history"),
+      },
+      {
+        field: "timestamp",
+        header: PrintUtil.localize("dateCapslock", "history"),
+      },
     ],
     eventTypes: [],
     eventObjectTypes: [],
@@ -22,8 +38,16 @@ export const useHistoryStore = defineStore({
     getSearchTerm: (state) => state.searchTerm,
     getHistoryList: (state) => state.historyRows,
     getSelectedHistory: (state) => state.selectedItem,
-    getEventTypes: (state) => state.eventTypes,
-    getEventObjectTypes: (state) => state.eventObjectTypes,
+    getEventTypes: (state) =>
+      state.eventTypes.map((el) => ({
+        ...el,
+        name: PrintUtil.localize(el.name, "history"),
+      })),
+    getEventObjectTypes: (state) =>
+      state.eventObjectTypes.map((el) => ({
+        ...el,
+        name: PrintUtil.localize(el.name, "history"),
+      })),
   },
 
   actions: {

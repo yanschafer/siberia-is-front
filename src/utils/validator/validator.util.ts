@@ -1,5 +1,5 @@
 import ValidateRule from "@/utils/validator/validate-rule";
-import loggerUtil from "@/utils/logger/logger.util";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default class ValidatorUtil {
   public rules: Record<string, ValidateRule>[] = [];
@@ -23,11 +23,10 @@ export default class ValidatorUtil {
   }
 
   showErrorToast(toast) {
-    loggerUtil.debug("SHOW ERROR TOAST");
     toast.add({
-      severity: "warning",
-      summary: "Validate error",
-      detail: "Check data provided",
+      severity: "error",
+      summary: PrintUtil.localize("validateError", "components"),
+      detail: PrintUtil.localize("checkDataProvided", "components"),
       life: 3000,
     });
   }

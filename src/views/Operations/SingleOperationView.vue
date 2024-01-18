@@ -4,14 +4,18 @@
       <MDBRow class="w-auto">
         <h1 class="username-heading">
           {{ operation }}
-          <template v-if="from !== ''">from "{{ from }}"</template>
-          <template v-if="to !== ''"> to "{{ to }}"</template>
+          <template v-if="from !== ''"
+            >{{ localize("from") }} "{{ from }}"</template
+          >
+          <template v-if="to !== ''"> {{ localize("to") }} "{{ to }}"</template>
         </h1>
       </MDBRow>
     </MDBRow>
     <MDBRow class="d-flex flex-nowrap">
       <MDBCol class="col-auto">
-        <span class="user-roles-heading">STATUS: </span>
+        <span class="user-roles-heading"
+          >{{ localize("statusCapslock") }}:
+        </span>
         <span class="username">{{ status }}</span>
       </MDBCol>
       <template v-if="haveAvailableStatuses">
@@ -22,17 +26,21 @@
         </MDBCol>
         <template v-if="isStatusOnSelect">
           <MDBCol class="col-auto">
-            <span class="user-roles-heading">STATUS</span>
+            <span class="user-roles-heading">{{
+              localize("statusCapslock")
+            }}</span>
             <SelectComponent
               v-model="selectedStatus"
               @change="handleStatusChange"
               :placeholder="statusPlaceholder"
               :filter="false"
-              :items="selectedOperation.availableStatuses"
+              :items="availableStatuses"
             />
           </MDBCol>
           <MDBCol class="col-auto" v-if="selectedStatusNeedStock">
-            <span class="user-roles-heading">STOREHOUSE</span>
+            <span class="user-roles-heading">{{
+              localize("storehouseCapslock")
+            }}</span>
             <SelectComponent
               v-model="selectedStorehouse"
               @click="handleStorehouseChange"
@@ -41,14 +49,18 @@
               :items="storehousesList"
             />
           </MDBCol>
-          <MDBBtn class="utility-btn" @click="saveStatus"> Save </MDBBtn>
+          <MDBBtn class="utility-btn" @click="saveStatus">
+            {{ localize("save") }}
+          </MDBBtn>
         </template>
       </template>
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="mt-4">
     <MDBRow class="w-auto">
-      <h1 class="username-heading mb-2">Products in {{ operation }}</h1>
+      <h1 class="username-heading mb-2">
+        {{ localize("productsIn") }} {{ operation }}
+      </h1>
     </MDBRow>
     <SearchComponent />
     <TableComponent
@@ -75,6 +87,7 @@ import { useStorehousesStore } from "@/stores/storehouse.store";
 import loggerUtil from "@/utils/logger/logger.util";
 import TransactionSimpleDto from "@/api/modules/transaction/dto/transaction-simple.dto";
 import ApiResponseDto from "@/api/dto/api-response.dto";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "SingleOperationView",
@@ -100,12 +113,24 @@ export default {
       [TransactionType.TRANSFER]: "Request",
     },
     productColumns: [
-      { field: "name", header: "NAME" },
-      { field: "vendorCode", header: "SKU" },
-      { field: "amount", header: "QUANTITY" },
+      {
+        field: "name",
+        header: PrintUtil.localize("nameCapslock", "operations"),
+      },
+      {
+        field: "vendorCode",
+        header: PrintUtil.localize("skuCapslock", "operations"),
+      },
+      {
+        field: "amount",
+        header: PrintUtil.localize("quantityCapslock", "operations"),
+      },
     ],
     searchTerm: "",
-    storehousesPlaceholder: "Select storehouse",
+    storehousesPlaceholder: PrintUtil.localize(
+      "selectStorehousePlaceholder",
+      "operations",
+    ),
     selectedStatus: null,
     selectedStorehouse: null,
     isStatusOnSelect: false,
@@ -129,11 +154,14 @@ export default {
     this.loadStocksRes.toastIfError(this.$toast, this.$nextTick);
 
     if (this.selectedOperation.type.id != TransactionType.TRANSFER)
-      this.productColumns.push({ field: "price", header: "PRICE" });
+      this.productColumns.push({
+        field: "price",
+        header: this.localize("priceCapslock"),
+      });
   },
   methods: {
-    isInProgressStatus(statusId: number) {
-      return statusId == TransactionStatus.IN_PROGRESS;
+    localize(key, module = "operations") {
+      return PrintUtil.localize(key, module);
     },
     async changeToStatus(statusId: number) {
       return await this.operationStore.changeStatus(this.id, statusId);
@@ -152,8 +180,8 @@ export default {
       if (this.selectedStatusNeedStock && !this.selectedStorehouse) {
         this.$toast.add({
           severity: "error",
-          summary: "Update status error",
-          detail: "Storehouse must be selected",
+          summary: this.localize("updateStatusError"),
+          detail: this.localize("storehouseIsRequired"),
           life: 3000,
         });
         return;
@@ -166,8 +194,8 @@ export default {
       ) {
         this.$toast.add({
           severity: "error",
-          summary: "Update status error",
-          detail: "Select different storehouse",
+          summary: this.localize("updateStatusError"),
+          detail: this.localize("selectDifferentStorehouse"),
           life: 3000,
         });
         return;
@@ -186,8 +214,8 @@ export default {
         if (changed == null) {
           this.$toast.add({
             severity: "error",
-            summary: "Update status error",
-            detail: "Storehouse and Status must be selected",
+            summary: this.localize("updateStatusError"),
+            detail: this.localize("storehouseAndStatusRequiredError"),
             life: 3000,
           });
           return;
@@ -196,6 +224,12 @@ export default {
         if (changed.success) {
           this.selectedStatus = null;
           this.selectedStorehouse = null;
+          this.$toast.add({
+            severity: "success",
+            summary: this.localize("success"),
+            detail: this.localize("statusUpdated"),
+            life: 3000,
+          });
           const loadRes = await this.operationStore.loadOperationList();
           loadRes.toastIfError(this.$toast, this.$nextTick);
           this.toggleStatusChange();
@@ -206,8 +240,8 @@ export default {
           ) {
             this.$toast.add({
               severity: "error",
-              summary: "Update status error",
-              detail: "Not enough products in store",
+              summary: this.localize("updateStatusError"),
+              detail: this.localize("notEnoughProductsInStore"),
               life: 3000,
             });
             return;
@@ -217,8 +251,8 @@ export default {
       } else {
         this.$toast.add({
           severity: "error",
-          summary: "Update status error",
-          detail: "Status must be selected",
+          summary: this.localize("updateStatusError"),
+          detail: this.localize("statusRequired"),
           life: 3000,
         });
       }
@@ -226,7 +260,9 @@ export default {
   },
   computed: {
     changeStatusTitle() {
-      return this.isStatusOnSelect ? "Cancel" : "Change status";
+      return this.isStatusOnSelect
+        ? this.localize("Cancel")
+        : this.localize("Change status");
     },
     selectedStatusNeedStock() {
       if (!this.selectedStatus) return false;
@@ -241,11 +277,16 @@ export default {
     selectedOperation() {
       return this.operationStore.getSelectedOperation;
     },
+    availableStatuses() {
+      return this.operationStore.getAvailableStatuses;
+    },
     haveAvailableStatuses() {
       return this.selectedOperation.availableStatuses;
     },
     operation() {
-      return this.typeMapper[this.selectedOperation.type.id] || "";
+      if (this.selectedOperation.type)
+        return this.localize(this.typeMapper[this.selectedOperation.type.id]);
+      else return "";
     },
     from() {
       return this.selectedOperation.from?.name || "";
@@ -254,7 +295,9 @@ export default {
       return this.selectedOperation.to?.name || "";
     },
     status() {
-      return this.selectedOperation.status.name || "";
+      if (this.selectedOperation.status)
+        return this.localize(this.selectedOperation.status.name);
+      else return "";
     },
     products() {
       return this.selectedOperation.products.map((el) => ({
