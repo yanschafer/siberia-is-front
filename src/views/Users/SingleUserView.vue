@@ -105,7 +105,7 @@
   </MDBContainer>
   <MDBContainer class="pt-4">
     <Suspense>
-      <Panel header="Role permissions">
+      <Panel :header="localize('rolePermissions', 'role')">
         <TabsComponent :roles="roles" :user-id="selectedUser.id" />
       </Panel>
     </Suspense>
