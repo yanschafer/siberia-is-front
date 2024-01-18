@@ -28,7 +28,7 @@
               <Tag
                 v-if="isCurrent"
                 severity="success"
-                value="Current user"
+                :value="localize('currentUser', 'user')"
               ></Tag>
               <MDBBadge
                 v-for="roleName in userRolesNameList"
