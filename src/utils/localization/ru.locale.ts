@@ -52,10 +52,10 @@ export default {
     },
     router: {
       panelName: "Siberia Panel",
-      dashboard: "дашборд",
+      dashboard: "статистика",
       assortments: "ассортимент",
 
-      products: "продукты",
+      products: "товары",
       NewProduct: "Создание товара",
       Product: "Товар",
 

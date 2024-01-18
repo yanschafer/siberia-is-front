@@ -110,12 +110,12 @@ ul {
   height: auto;
   width: 100%;
   min-width: 4rem;
-  max-width: 4.5rem;
-  min-height: 2rem;
+  max-width: max-content;
   font-weight: 800;
   max-height: 2rem;
-  padding-left: 2px;
-  padding-right: 3px;
+  margin: 0;
+  padding-left: 10px;
+  padding-right: 10px;
   padding-top: 2px;
   padding-bottom: 2px;
   border-radius: 7px;

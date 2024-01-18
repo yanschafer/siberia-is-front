@@ -445,19 +445,6 @@ export default {
 .storehouse-adress {
   font-weight: 500;
 }
-.utility-btn {
-  height: auto;
-  width: 100%;
-  min-width: 4rem;
-  max-width: fit-content;
-  font-weight: 800;
-  max-height: 2rem;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  border-radius: 7px;
-}
 .storehouse-info {
   border-bottom: 1px solid #eeeeee;
   padding-bottom: 2rem;

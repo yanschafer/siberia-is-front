@@ -280,19 +280,6 @@ export default {
 .user-roles-heading {
   width: fit-content;
 }
-.utility-btn {
-  height: auto;
-  width: 100%;
-  min-width: 4rem;
-  max-width: fit-content;
-  font-weight: 800;
-  max-height: 2rem;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  border-radius: 7px;
-}
 .username {
   color: #121212;
   font-weight: 600;

@@ -92,7 +92,7 @@
   </MDBContainer>
   <MDBContainer class="pt-4">
     <Suspense>
-      <Panel  header="Role permissions">
+      <Panel header="Role permissions">
         <TabsComponent :roles="roles" :user-id="selectedUser.id" />
       </Panel>
     </Suspense>
@@ -148,7 +148,7 @@ export default {
     MDBTabContent,
     MDBTabItem,
     MDBTabPane,
-    Panel
+    Panel,
   },
   data: () => ({
     editing: false,
@@ -386,19 +386,6 @@ export default {
 }
 .user-roles-heading {
   width: fit-content;
-}
-.utility-btn {
-  height: auto;
-  width: 100%;
-  min-width: 4rem;
-  max-width: fit-content;
-  font-weight: 800;
-  max-height: 2rem;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  border-radius: 7px;
 }
 .username {
   color: #121212;

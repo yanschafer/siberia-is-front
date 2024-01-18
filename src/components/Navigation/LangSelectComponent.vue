@@ -1,8 +1,8 @@
 <template>
-  <MDBRow class="w-100 d-flex justify-content-center">
+  <MDBRow class="w-100 d-flex">
     <MDBCol v-if="selectedLang !== 'eng'" class="col-auto p-0">
       <MDBBtn
-        v-tooltip.right="{
+        v-tooltip.left="{
           value: 'Switch to english',
           pt: {
             arrow: {
@@ -32,7 +32,7 @@
     </MDBCol>
     <MDBCol v-if="selectedLang !== 'es'" class="col-auto p-0">
       <MDBBtn
-        v-tooltip.right="{
+        v-tooltip.left="{
           value: 'Cambiar a español',
           pt: {
             arrow: {
@@ -62,7 +62,7 @@
     </MDBCol>
     <MDBCol v-if="selectedLang !== 'ru'" class="col-auto p-0">
       <MDBBtn
-        v-tooltip.right="{
+        v-tooltip.left="{
           value: 'Переключить на русский',
           pt: {
             arrow: {

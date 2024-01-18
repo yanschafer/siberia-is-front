@@ -20,11 +20,11 @@
         />
         <h4 class="storehouse-heading">{{ localize("password") }}</h4>
         <InputText
-            :placeholder="passwordPlaceholder"
-            class="input-wrapper animate__animated animate__fadeIn username-input"
-            :class="{ 'p-invalid': !validate.password }"
-            type="text"
-            v-model="password"
+          :placeholder="passwordPlaceholder"
+          class="input-wrapper animate__animated animate__fadeIn username-input"
+          :class="{ 'p-invalid': !validate.password }"
+          type="text"
+          v-model="password"
         />
       </MDBCol>
     </MDBRow>
@@ -154,20 +154,6 @@ export default {
   color: #121212;
   font-size: 32px;
   width: fit-content;
-}
-.utility-btn {
-  height: auto;
-  width: 100%;
-  min-width: 4rem;
-  max-width: 6rem;
-  font-weight: 800;
-  max-height: 2rem;
-  padding-left: 2px;
-  padding-right: 3px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  border-radius: 7px;
-  margin-top: 0.5rem;
 }
 :deep(.form-outline) {
   width: 100%;

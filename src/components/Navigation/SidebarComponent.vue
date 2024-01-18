@@ -4,7 +4,6 @@
     <MDBCol
       class="sidebar-item-group d-flex justify-content-center align-items-center flex-column"
     >
-      <LangSelectComponent />
       <router-link
         v-for="(item, index) in sidebarItems"
         :key="index"
@@ -42,9 +41,6 @@
         >
       </router-link>
     </MDBCol>
-    <a class="logout" href="#" @click.prevent="logout"
-      ><IconLogout2 /> Log Out</a
-    >
   </MDBContainer>
 </template>
 
