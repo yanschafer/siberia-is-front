@@ -118,7 +118,7 @@ export default defineComponent({
       this.$toast.add({
         severity: "success",
         summary: this.localize("success", "storehouses"),
-        detail: `${this.localize("rules", "components")} ${type}`,
+        detail: `${this.localize("rules", "components")} ${this.localize(type, "components")}`,
         life: 3000,
       });
     },
