@@ -9,7 +9,7 @@ export default {
       errorMessageCopiedToClipboard: "Mensaje de error copiado al portapapeles",
       errorOccurred: "Se produjo un error",
       somethingWrong:
-          "Algo salió mal, proporciona este código de error al administrador.",
+        "Algo salió mal, proporciona este código de error al administrador.",
 
       cancelCapslock: "CANCELAR",
       editCapslock: "EDITAR",
@@ -62,8 +62,9 @@ export default {
     },
     auth: {
       bad_credentials:
-          "Esta combinación de usuario/contraseña no existe. Por favor, verifica la información proporcionada o contacta con tu administrador.",
-      error_empty_fields: "El inicio de sesión y la contraseña no deben estar en blanco.",
+        "Esta combinación de usuario/contraseña no existe. Por favor, verifica la información proporcionada o contacta con tu administrador.",
+      error_empty_fields:
+        "El inicio de sesión y la contraseña no deben estar en blanco.",
     },
     user: {
       //CreateUser.vue
@@ -76,9 +77,10 @@ export default {
       //SingleUserView.vue
       deleteWarn: "¿Estás seguro de que deseas eliminar al usuario?",
       deleteDisclaimer:
-          "Esta acción no se puede deshacer, se perderán los datos de este usuario",
+        "Esta acción no se puede deshacer, se perderán los datos de este usuario",
       personalRules: "Reglas personales",
-      personalRulesDescription: "Reglas que están relacionadas solo con este usuario",
+      personalRulesDescription:
+        "Reglas que están relacionadas solo con este usuario",
       userRolesCapslock: "ROLES DE USUARIO",
       userNameCapslock: "NOMBRE DE USUARIO",
       passwordCapslock: "CONTRASEÑA",
@@ -115,7 +117,7 @@ export default {
       //SingleRoleView.vue
       relatedUsersCapslock: "USUARIOS RELACIONADOS",
       deleteDisclaimer:
-          "Esta acción no se puede deshacer, se perderán los datos de este rol",
+        "Esta acción no se puede deshacer, se perderán los datos de este rol",
       deleteWarn: "¿Estás seguro de que deseas eliminar el rol?",
       roleDescriptionCapslock: "DESCRIPCIÓN DEL ROL",
       editRelatedUsers: "Editar usuarios relacionados",
@@ -191,13 +193,13 @@ export default {
       newColorNameCapslock: "NOMBRE DEL NUEVO COLOR",
       expirationDateCapslock: "FECHA DE VENCIMIENTO",
       areYouSureYouWantToDeleteProduct:
-          "¿Estás seguro de que deseas eliminar el producto?",
+        "¿Estás seguro de que deseas eliminar el producto?",
       noBrand: "Sin marca",
       noInformation: "Sin información",
       noCategory: "Sin categoría",
       noCollection: "Sin colección",
       thisActionCannotBeUndoneThisProductDataWillBeLost:
-          "Esta acción no se puede deshacer, se perderán los datos de este producto",
+        "Esta acción no se puede deshacer, se perderán los datos de este producto",
       productDescription: "Descripción del producto",
       categoryIsCreated: "Categoría creada",
       categoryCreationFailed: "Error al crear la categoría",
@@ -227,7 +229,7 @@ export default {
       newRequestRegistration: "Registro de Nueva Solicitud",
       confirmDeletion: "Confirmar eliminación",
       deleteWarn:
-          "Esta acción no se puede deshacer, se perderán los datos de este almacén",
+        "Esta acción no se puede deshacer, se perderán los datos de este almacén",
       messageForUser: "¿Estás seguro de que deseas eliminar el almacén llamado",
       changesWereSaved: "Los cambios fueron guardados",
       success: "Éxito",
@@ -267,16 +269,21 @@ export default {
 
       //DialogComponent.vue
       message:
-          "¿Te gustaría eliminar la categoría junto con sus subcategorías secundarias o reubicarlas en otro grupo principal?",
+        "¿Te gustaría eliminar la categoría junto con sus subcategorías secundarias o reubicarlas en otro grupo principal?",
       validateError: "Error de validación",
       checkDataProvided: "Verificar los datos proporcionados",
 
       //TabsComponent
       rules: "Reglas",
+
+      //LangSelectComponent
+      langChangeHeading: "Idioma cambiado",
+      langChangeDetail: "La página se recargará automáticamente",
     },
     storehousesSave: {
       token_is_dead: "Token expirado. Por favor, vuelve a iniciar sesión",
-      wrong_data_type: "Tipo de datos incorrecto. Por favor, verifica los datos proporcionados",
+      wrong_data_type:
+        "Tipo de datos incorrecto. Por favor, verifica los datos proporcionados",
     },
   },
-}
+};

@@ -8,7 +8,7 @@ class PrintUtil {
   private locales = {
     eng: engLocale,
     es: esLocale,
-    ru: ruLocale
+    ru: ruLocale,
   };
 
   public availableLocales = ["eng", "es", "ru"];
@@ -31,6 +31,10 @@ class PrintUtil {
   public switchTo(locale: string) {
     localStorage.setItem(this.storageKey, locale);
     this.setLocale();
+  }
+
+  public getSelectedLang() {
+    return this.selectedLang;
   }
 
   public localize(key: string, module: string = "default"): string {

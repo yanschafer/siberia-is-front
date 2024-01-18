@@ -5,6 +5,9 @@
   "compilerOptions": {
     "composite": true,
     "noEmit": true,
+    "allowJs": true,
+    "noImplicitAny": false,
+    "checkJs": false,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]

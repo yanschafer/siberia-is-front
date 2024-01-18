@@ -92,7 +92,6 @@ export default {
       name: "Name",
       login: "Login",
       nothingWasFound: "Nothing was found",
-
     },
     role: {
       //RolesView.vue
@@ -274,6 +273,10 @@ export default {
 
       //TabsComponent
       rules: "Rules",
+
+      //LangSelectComponent
+      langChangeHeading: "Language changed",
+      langChangeDetail: "The page will be reloaded automatically",
     },
     storehousesSave: {
       token_is_dead: "Expired token. Please, relogin",
