@@ -12,7 +12,7 @@
           <MDBContainer class="table-container">
             <SearchComponent @search="handleSearch" />
             <TableComponent
-                :info-message="noDataMessage"
+              :info-message="noDataMessage"
               :editableColumns="editableColumns"
               :showEditColumn="true"
               :rows="getFilteredProducts"
@@ -59,8 +59,8 @@ export default {
     return {
       noDataMessage: {
         icon: "IconSearchOff",
-        title: "Nothing was found",
-        text: "Please clarify your search query",
+        title: this.localize("nothingWasFound", "user"),
+        text: this.localize("pleaseClarifyYourSearchQuery", "role"),
       },
       editableColumns: ["price"],
       sidebarFilter: {

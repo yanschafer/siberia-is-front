@@ -19,11 +19,11 @@
       <label for="fileInput" class="file-label">
         <div v-if="isDragging">
           <IconCloudUpload color="#4E4E4E" :size="48" stroke-width="1" />
-          <p class="upload-text mb-0">Release to drop file here.</p>
+          <p class="upload-text mb-0">{{ localize("releaseToDropFileHere") }}</p>
         </div>
         <div v-else-if="!files.length">
           <IconCloudUpload color="#4E4E4E" :size="48" stroke-width="1" />
-          <p class="upload-text mb-0">Drop file here or <u>click here</u> to upload.</p>
+          <p class="upload-text mb-0">{{ localize("dropFileHereOr") }} <u>{{ localize("clickHere") }}</u> {{ localize("toUpload") }}</p>
         </div>
       </label>
 
@@ -53,6 +53,7 @@
 
 <script lang="ts">
 import {IconCloudUpload, IconMapPinFilled} from '@tabler/icons-vue';
+import PrintUtil from "@/utils/localization/print.util";
 export default {
   name: 'FileUploadComponent',
   components: {IconMapPinFilled, IconCloudUpload},
@@ -64,6 +65,9 @@ export default {
     };
   },
   methods: {
+    localize(key, module = "components") {
+          return PrintUtil.localize(key, module);
+    },
     onChange() {
       this.files = [...this.$refs.file.files];
       this.$emit("changed", this.files)
