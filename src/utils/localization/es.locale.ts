@@ -288,6 +288,7 @@ export default {
       notEnoughProductsStorehouses: "No hay suficientes productos",
       noProductInList: "Aún no hay productos en la lista",
       pleaseAddOneFirst: "Por favor, agrega uno primero",
+      productAlreadyInList: "El producto ya esta listado",
     },
     filters: {
       //FiltersSidebarComponent.vue
@@ -325,6 +326,15 @@ export default {
       dropFileHereOr: "Suelta el archivo aquí o",
       clickHere: "haz clic aquí",
       toUpload: "para cargar",
+
+      //NotificationComponent.vue
+      clearAllNotifications: "LIMPIAR TODO",
+      successNotiHeading: "Éxito",
+      successNotiText: "Mensaje Inicial de Éxito",
+      infoNotiHeading: "Información",
+      infoNotiText: "Mensaje Inicial de Información",
+      errorNotiHeading: "Error",
+      errorNotiText: "Mensaje de Error",
     },
 
     utils: {
@@ -378,6 +388,10 @@ export default {
       toastErrorCreationCollection: "Error al crear la colección",
       collectionRemoveSuccessToast: "La colección ha sido eliminada",
       collectionUpdatedSuccessToast: "La colección ha sido actualizada",
+
+      failedBadParent: "Seleccione otra categoría como padre",
+      checkBoxParentValueRemove: "Eliminar hijos",
+      checkBoxParentValueMoveToNew: "Mover hijos a nuevo padre",
 
       //auth-check.store
       Brands: "Marcas",

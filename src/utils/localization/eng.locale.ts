@@ -286,6 +286,7 @@ export default {
       notEnoughProductsStorehouses: "Not enough products",
       noProductInList: "No product yet in the list",
       pleaseAddOneFirst: "Please add one first",
+      productAlreadyInList: "Product already in list.",
     },
     filters: {
       //FiltersSidebarComponent.vue
@@ -323,6 +324,15 @@ export default {
       dropFileHereOr: "Drop file here or",
       clickHere: "click here",
       toUpload: "to upload.",
+
+      //NotificationComponent.vue
+      clearAllNotifications: "CLEAR ALL",
+      successNotiHeading: "Success",
+      successNotiText: "Initial Success Message",
+      infoNotiHeading: "Info",
+      infoNotiText: "Initial Info Message",
+      errorNotiHeading: "Error",
+      errorNotiText: "Error message",
     },
     utils: {
       //api-model.util.ts
@@ -373,6 +383,10 @@ export default {
       toastErrorCreationCollection: "Collection creation failed",
       collectionRemoveSuccessToast: "Collection is removed",
       collectionUpdatedSuccessToast: "Collection is updated",
+
+      failedBadParent: "Select different category for new parent",
+      checkBoxParentValueRemove: "Remove children",
+      checkBoxParentValueMoveToNew: "Move children to new parent",
 
       //auth-check.store
       Brands: "Brands",

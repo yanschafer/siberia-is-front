@@ -32,7 +32,10 @@ export default {
   created() {
     const filtersStore = useFiltersStore();
     filtersStore.$onAction(({ name }) => {
-      if (name == "clearFilter") this.value = null;
+      if (name == "clearFilter") {
+        this.value = null;
+        this.handleChange();
+      }
     });
   },
   methods: {

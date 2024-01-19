@@ -311,8 +311,8 @@ export default {
         false,
         true,
         {
-          true: "Remove children",
-          false: "Move children to new parent",
+          true: this.localize("checkBoxParentValueRemove"),
+          false: this.localize("checkBoxParentValueMoveToNew"),
         },
       );
     },

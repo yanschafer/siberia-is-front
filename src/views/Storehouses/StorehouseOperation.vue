@@ -27,7 +27,7 @@
     <MDBCol class="col-auto">
       <MDBBtn class="utility-btn btn-black" @click="add">+</MDBBtn>
     </MDBCol>
-    <MDBCol>
+    <MDBCol class="d-flex gap-2">
       <MDBBtn class="utility-btn btn-black" @click="cancel">{{
         localize("cancelCapslock", "default")
       }}</MDBBtn>
@@ -172,6 +172,15 @@ export default {
       });
       if (validateRes !== true) {
         validator.showErrorToast(this.$toast);
+        return;
+      }
+
+      const alreadyInList =
+        this.addedList.filter((el) => el.id == this.selectedProduct.id)
+          .length != 0;
+
+      if (alreadyInList) {
+        this.showErrorToast(this.localize("productAlreadyInList"));
         return;
       }
 

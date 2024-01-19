@@ -315,6 +315,7 @@ export default {
       notEnoughProductsStorehouses: "Не достаточно товаров",
       noProductInList: "В списке еще нет товаров",
       pleaseAddOneFirst: "Пожалуйста, начните с добавления товара.",
+      productAlreadyInList: "Продукт уже есть в списке.",
     },
     filters: {
       //FiltersSidebarComponent.vue
@@ -352,6 +353,15 @@ export default {
       dropFileHereOr: "Перетащите файл в это окно, или",
       clickHere: "нажмите здесь",
       toUpload: "для загрузки.",
+
+      //NotificationComponent.vue
+      clearAllNotifications: "ОЧИСТИТЬ ВСЕ",
+      successNotiHeading: "Успешно!",
+      successNotiText: "Текст успешного уведомления",
+      infoNotiHeading: "Инфо",
+      infoNotiText: "Текст информационного сообщения",
+      errorNotiHeading: "Ошибка",
+      errorNotiText: "Текст сообщения об ошибке",
     },
     utils: {
       //api-model.util.ts
@@ -403,6 +413,10 @@ export default {
       toastErrorCreationCollection: "Ошибка создания коллекции",
       collectionRemoveSuccessToast: "Коллекция удалена",
       collectionUpdatedSuccessToast: "Коллекция обновлена",
+
+      failedBadParent: "Выберите другую категории в качестве родительской",
+      checkBoxParentValueRemove: "Удалить дочерние",
+      checkBoxParentValueMoveToNew: "Перенести в новую родительскую группу",
 
       //auth-check.store
       Brands: "Бренды",

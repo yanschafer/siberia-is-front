@@ -286,6 +286,36 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
+.p-inputgroup-addon {
+  border: 0;
+  background-color: #f8f8f8;
+  border-bottom: 2px solid #cecece;
+}
+.p-tree
+  .p-tree-container
+  .p-treenode
+  .p-treenode-content.p-highlight
+  .p-tree-toggler,
+.p-tree
+  .p-tree-container
+  .p-treenode
+  .p-treenode-content.p-highlight
+  .p-treenode-icon {
+  color: #121221;
+}
+.p-treeselect:focus {
+  box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0) !important;
+  transition: all 0.3s ease-in-out;
+  border-bottom: 2px solid black;
+}
+.p-treeselect:focus-visible {
+  box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0) !important;
+  transition: all 0.3s ease-in-out;
+  border-bottom: 2px solid black;
+}
+.p-treeselect-label {
+  color: black;
+}
 </style>
 
 <style scoped></style>

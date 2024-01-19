@@ -12,6 +12,7 @@
       <InputText
         v-else
         class="input-wrapper animate__animated animate__fadeIn username-input"
+        :class="{ 'p-invalid': !validate.name }"
         type="text"
         v-model="newStorehouseName"
       />
@@ -22,6 +23,7 @@
       <InputText
         v-else
         class="input-wrapper animate__animated animate__fadeIn username-input"
+        :class="{ 'p-invalid': !validate.address }"
         type="text"
         v-model="newStorehouseAdress"
       />

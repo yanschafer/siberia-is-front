@@ -30,9 +30,17 @@ export default {
   created() {
     const filtersStore = useFiltersStore();
     filtersStore.$onAction(({ name }) => {
-      if (name == "clearFilter") this.dateRange = [];
+      if (name == "clearFilter") {
+        this.dateRange = [];
+        this.handleChange();
+      }
     });
     this.$watch("dateRange", () => {
+      this.handleChange();
+    });
+  },
+  methods: {
+    handleChange() {
       const min = this.dateRange[0];
       const max = this.dateRange[1];
 
@@ -45,14 +53,9 @@ export default {
       else maxTimestamp += 23 * 60 * 60 * 1000 + 59 * 60 * 1000;
 
       this.$emit("change", { min: minTimestamp, max: maxTimestamp });
-    });
-  },
-  methods: {
+    },
     localize(key, module = "filters") {
       return PrintUtil.localize(key, module);
-    },
-    handleChange() {
-      loggerUtil.debug(this.min, this.max);
     },
   },
 };

@@ -115,6 +115,12 @@ export default {
         checkbox: this.checkboxValue,
       };
 
+      loggerUtil.debug(
+        this.inputError,
+        this.selectedDropdownItem,
+        this.checkboxValue,
+      );
+
       if (this.showInput && this.inputValue == "") {
         this.$toast.add({
           severity: "error",
