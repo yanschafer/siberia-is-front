@@ -10,7 +10,12 @@
     v-model:selectionKeys="selectedKey"
     v-if="nodes.length"
   >
-    <Column class="name-col" field="label" header="NAME" expander></Column>
+    <Column
+      class="name-col"
+      field="label"
+      :header="localize('nameCapslock', 'default')"
+      expander
+    ></Column>
     <Column
       style="justify-content: center"
       class="table-header"
