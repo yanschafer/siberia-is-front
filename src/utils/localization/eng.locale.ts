@@ -323,6 +323,15 @@ export default {
       dropFileHereOr: "Drop file here or",
       clickHere: "click here",
       toUpload: "to upload.",
+
+      //NotificationComponent.vue
+      clearAllNotifications: "CLEAR ALL",
+      successNotiHeading: "Success",
+      successNotiText: "Initial Success Message",
+      infoNotiHeading: "Info",
+      infoNotiText: "Initial Info Message",
+      errorNotiHeading: "Error",
+      errorNotiText: "Error message",
     },
     utils: {
       //api-model.util.ts

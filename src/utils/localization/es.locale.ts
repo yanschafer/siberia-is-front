@@ -325,6 +325,15 @@ export default {
       dropFileHereOr: "Suelta el archivo aquí o",
       clickHere: "haz clic aquí",
       toUpload: "para cargar",
+
+      //NotificationComponent.vue
+      clearAllNotifications: "LIMPIAR TODO",
+      successNotiHeading: "Éxito",
+      successNotiText: "Mensaje Inicial de Éxito",
+      infoNotiHeading: "Información",
+      infoNotiText: "Mensaje Inicial de Información",
+      errorNotiHeading: "Error",
+      errorNotiText: "Mensaje de Error",
     },
 
     utils: {

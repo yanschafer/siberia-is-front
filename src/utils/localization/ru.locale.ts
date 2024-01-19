@@ -352,6 +352,15 @@ export default {
       dropFileHereOr: "Перетащите файл в это окно, или",
       clickHere: "нажмите здесь",
       toUpload: "для загрузки.",
+
+      //NotificationComponent.vue
+      clearAllNotifications: "ОЧИСТИТЬ ВСЕ",
+      successNotiHeading: "Успешно!",
+      successNotiText: "Текст успешного уведомления",
+      infoNotiHeading: "Инфо",
+      infoNotiText: "Текст информационного сообщения",
+      errorNotiHeading: "Ошибка",
+      errorNotiText: "Текст сообщения об ошибке",
     },
     utils: {
       //api-model.util.ts

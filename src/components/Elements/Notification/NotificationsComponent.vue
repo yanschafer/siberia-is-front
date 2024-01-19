@@ -27,7 +27,7 @@
           class="btn-black"
           :disabled="notificationMessages.length === 0"
         >
-          Clear
+          {{ localize("clearAllNotifications") }}
         </MDBBtn>
       </MDBRow>
     </OverlayPanel>
@@ -50,6 +50,7 @@ import OverlayPanel from "primevue/overlaypanel";
 import Button from "primevue/button";
 import Toast from "primevue/toast";
 import NotificationMessageComponent from "@/components/Elements/Notification/NotificationMessageComponent.vue";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "NotificationsComponent",
@@ -71,38 +72,38 @@ export default {
       notificationMessages: [
         {
           severity: "success",
-          summary: "Success Message",
-          text: "Initial Success Message",
+          summary: this.localize("successNotiHeading", "components"),
+          text: this.localize("successNotiText", "components"),
           date: "2022-01-01",
         },
         {
           severity: "info",
-          summary: "Info message",
-          text: "Initial Info Message",
+          summary: this.localize("infoNotiHeading", "components"),
+          text: this.localize("infoNotiHeading", "components"),
           date: "2022-01-01",
         },
         {
           severity: "error",
-          summary: "Error message",
-          text: "Ошибка",
+          summary: this.localize("errorNotiHeading", "components"),
+          text: this.localize("errorNotiText", "components"),
           date: "2022-01-01",
         },
         {
           severity: "error",
-          summary: "Error message",
-          text: "Ошибка",
+          summary: this.localize("errorNotiHeading", "components"),
+          text: this.localize("errorNotiText", "components"),
           date: "2022-01-01",
         },
         {
           severity: "error",
-          summary: "Error message",
-          text: "Ошибка",
+          summary: this.localize("errorNotiHeading", "components"),
+          text: this.localize("errorNotiText", "components"),
           date: "2022-01-01",
         },
         {
           severity: "error",
-          summary: "Error message",
-          text: "Ошибка",
+          summary: this.localize("errorNotiHeading", "components"),
+          text: this.localize("errorNotiText", "components"),
           date: "2022-01-01",
         },
       ],
@@ -120,6 +121,9 @@ export default {
     },
   },
   methods: {
+    localize(key, module = "components") {
+      return PrintUtil.localize(key, module);
+    },
     handleNotificationClose(closedMessage) {
       // Удалить закрытое уведомление из массива
       this.notificationMessages = this.notificationMessages.filter(
