@@ -51,7 +51,10 @@ export default {
   created() {
     const filtersStore = useFiltersStore();
     filtersStore.$onAction(({ name }) => {
-      if (name == "clearFilter") this.min = this.max = null;
+      if (name == "clearFilter") {
+        this.min = this.max = null;
+        this.handleChange();
+      }
     });
   },
   methods: {

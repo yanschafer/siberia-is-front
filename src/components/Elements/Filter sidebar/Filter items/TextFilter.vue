@@ -22,14 +22,17 @@ export default {
     value: null,
   }),
   methods: {
-    handleOnchange(event) {
+    handleOnchange() {
       this.$emit("change", this.value);
     },
   },
   created() {
     const filtersStore = useFiltersStore();
     filtersStore.$onAction(({ name }) => {
-      if (name == "clearFilter") this.value = null;
+      if (name == "clearFilter") {
+        this.value = null;
+        this.handleOnchange();
+      }
     });
   },
 };

@@ -65,6 +65,11 @@ export default {
     }
     this.addNew = this.$refs.addNew;
     this.$watch("modelValue", () => {
+      loggerUtil.debug(this.modelValue);
+      if (this.modelValue == null) {
+        this.selectedValue = {};
+        return;
+      }
       if (this.modelValue[0].id) return;
       loggerUtil.debug("Model value", this.modelValue);
       this.selectedValue = { [this.modelValue]: true };
