@@ -134,7 +134,7 @@ export const useDialogStore = defineStore({
         this.methodOnClose();
         toast.add({
           severity: "success",
-          summary: printUtil.localize("success", "success"),
+          summary: printUtil.localize("success", "storehouses"),
           detail: this.toastSuccessText,
           life: 3000,
         });
