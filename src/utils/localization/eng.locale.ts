@@ -375,6 +375,10 @@ export default {
       collectionRemoveSuccessToast: "Collection is removed",
       collectionUpdatedSuccessToast: "Collection is updated",
 
+      failedBadParent: "Select different category for new parent",
+      checkBoxParentValueRemove: "Remove children",
+      checkBoxParentValueMoveToNew: "Move children to new parent",
+
       //auth-check.store
       Brands: "Brands",
       Collections: "Collections",

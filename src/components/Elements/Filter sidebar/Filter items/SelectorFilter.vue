@@ -35,7 +35,10 @@ export default {
   created() {
     const filtersStore = useFiltersStore();
     filtersStore.$onAction(({ name }) => {
-      if (name == "clearFilter") this.selected = [];
+      if (name == "clearFilter") {
+        this.selected = [];
+        this.$emit("change", []);
+      }
     });
   },
   methods: {

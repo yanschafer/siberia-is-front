@@ -405,6 +405,10 @@ export default {
       collectionRemoveSuccessToast: "Коллекция удалена",
       collectionUpdatedSuccessToast: "Коллекция обновлена",
 
+      failedBadParent: "Выберите другую категории в качестве родительской",
+      checkBoxParentValueRemove: "Удалить дочерние",
+      checkBoxParentValueMoveToNew: "Перенести в новую родительскую группу",
+
       //auth-check.store
       Brands: "Бренды",
       Collections: "Коллекции",

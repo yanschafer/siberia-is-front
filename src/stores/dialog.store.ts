@@ -107,7 +107,15 @@ export const useDialogStore = defineStore({
         res = await this.model.update(this.update.id, data);
       } else if (this.remove) {
         const data = this.transformMethod(this.$state);
-        if (data.transferChildrenTo == this.remove.id) return null;
+        if (data.transferChildrenTo == this.remove.id) {
+          toast.add({
+            severity: "error",
+            summary: printUtil.localize("failed", "storehouses"),
+            detail: printUtil.localize("failedBadParent", "assortment"),
+            life: 3000,
+          });
+          return null;
+        }
         res = await this.model.remove(this.remove.id, data);
       } else res = await this.model.create(this.value);
 
