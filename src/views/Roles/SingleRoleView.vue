@@ -300,7 +300,11 @@ export default {
             el.getError().showServerErrorToast(this.$toast, this.$nextTick);
           }
         });
-      } else this.showSuccessToast();
+      } else {
+        const loadRes = await this.rolesStore.loadRolesList();
+        loadRes.toastIfError(this.$toast, this.$nextTick);
+        this.showSuccessToast();
+      }
     },
     async usersRemoved(removedUsers) {
       const result = await Promise.all(
@@ -314,7 +318,11 @@ export default {
             el.getError().showServerErrorToast(this.$toast, this.$nextTick);
           }
         });
-      } else this.showSuccessToast();
+      } else {
+        const loadRes = await this.rolesStore.loadRolesList();
+        loadRes.toastIfError(this.$toast, this.$nextTick);
+        this.showSuccessToast();
+      }
     },
   },
   computed: {
