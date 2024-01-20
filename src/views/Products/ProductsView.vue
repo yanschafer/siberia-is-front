@@ -214,8 +214,21 @@ export default {
         });
         return;
       }
+      const newPrice = parseFloat(row.price);
+      if (
+        Number.isNaN(newPrice) ||
+        String(newPrice).length < String(row.price).length
+      ) {
+        this.$toast.add({
+          severity: "error",
+          summary: this.localize("updateFailed"),
+          detail: this.localize("badPriceProvided"),
+          life: 3000,
+        });
+        return;
+      }
       const updated = await this.productsStore.updateProduct(row.id, {
-        commonPrice: row.price,
+        distributorPrice: row.price,
       });
       if (!updated.success) {
         const error = updated.getError();

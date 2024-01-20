@@ -53,6 +53,8 @@ export default {
       nothingFoundClarifyQuery: "Пожалуйста, уточните поисковый запрос.",
       rulesUpdatedToast: "Роли обновлены",
       rulesUpdatedToastDetails: "Ваша роль была обновлена администратором.",
+      sessionExpired: "Сессия истекла",
+      sessionExpiredDetails: "Попробуйте авторизоваться снова",
     },
     router: {
       panelName: "Siberia Panel",
@@ -491,8 +493,8 @@ export default {
       selectStorehousePlaceholder: "Выберите склад",
       save: "Сохранить",
       productsIn: "Товары в",
-      from: "от",
-      to: "к",
+      from: "из",
+      to: "в",
       "Change status": "Изменить статус",
       Cancel: "Отмена",
 

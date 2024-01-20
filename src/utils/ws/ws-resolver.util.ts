@@ -25,7 +25,7 @@ export default class WsResolverUtil {
   };
 
   public close() {
-    this.socket?.close(3488);
+    if (this.socket) this.socket?.close(3488);
     this.socket = null;
   }
 

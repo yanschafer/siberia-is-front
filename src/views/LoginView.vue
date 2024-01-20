@@ -1,5 +1,6 @@
 <template>
   <section>
+    <Toast ref="toast" />
     <MDBContainer
       class="animate__animated animate__fadeIn d-flex flex-column justify-content-center align-content-center align-items-center form-container"
     >
@@ -38,19 +39,21 @@
 
 <script lang="ts">
 import { MDBContainer, MDBInput, MDBBtn } from "mdb-vue-ui-kit";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import PrintUtil from "@/utils/localization/print.util";
 import AuthModel from "@/api/modules/auth/models/auth.model";
 import AuthInputDto from "@/api/modules/auth/dto/login/auth-input.dto";
 import Router from "@/router";
 import ApiModelUtil from "@/utils/api-model.util";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
-
+import LoggerUtil from "@/utils/logger/logger.util";
+import Toast from "primevue/toast";
 export default {
   components: {
     MDBContainer,
     MDBInput,
     MDBBtn,
+    Toast,
   },
   data: () => ({
     username: "",
@@ -60,6 +63,31 @@ export default {
   }),
   created() {
     this.router = useRouter();
+  },
+  mounted() {
+    const authCheckStore = useAuthCheckStore();
+    if (authCheckStore.showKickedOutToast) {
+      this.$toast.add({
+        severity: "error",
+        summary: PrintUtil.localize("sessionExpired"),
+        detail: PrintUtil.localize("sessionExpiredDetails"),
+        life: 3000,
+      });
+      authCheckStore.showKickedOutToast = false;
+    }
+    authCheckStore.$onAction(({ name }) => {
+      LoggerUtil.debug("On action");
+      if (name == "logout")
+        if (authCheckStore.showKickedOutToast) {
+          this.$toast.add({
+            severity: "error",
+            summary: PrintUtil.localize("sessionExpired"),
+            detail: PrintUtil.localize("sessionExpiredDetails"),
+            life: 3000,
+          });
+          authCheckStore.showKickedOutToast = false;
+        }
+    });
   },
   methods: {
     async login() {

@@ -88,6 +88,7 @@ import loggerUtil from "@/utils/logger/logger.util";
 import TransactionSimpleDto from "@/api/modules/transaction/dto/transaction-simple.dto";
 import ApiResponseDto from "@/api/dto/api-response.dto";
 import PrintUtil from "@/utils/localization/print.util";
+import TokenUtil from "@/utils/token.util";
 
 export default {
   name: "SingleOperationView",
@@ -272,7 +273,9 @@ export default {
       return this.status;
     },
     storehousesList() {
-      return this.storehousesStore.getStorehouseList;
+      return this.storehousesStore.getStorehouseList.filter((el) =>
+        TokenUtil.hasInProgressAccessToStock(el.id),
+      );
     },
     selectedOperation() {
       return this.operationStore.getSelectedOperation;

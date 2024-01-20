@@ -22,6 +22,8 @@ export default {
       rulesUpdatedToast: "Reglas actualizadas",
       rulesUpdatedToastDetails:
         "Tus reglas fueron actualizadas por el administrador",
+      sessionExpired: "Sesión expirada.",
+      sessionExpiredDetails: "Por favor, intenta iniciar sesión nuevamente.",
     },
     router: {
       panelName: "Panel de Siberia",

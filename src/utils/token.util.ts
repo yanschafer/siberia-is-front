@@ -1,6 +1,7 @@
 import TokenPairDto from "@/api/modules/auth/dto/token-pair.dto";
 import AuthorizedUserDto from "@/api/modules/auth/dto/authorized-user.dto";
 import UserDto from "@/api/modules/user/dto/user.dto";
+import { appConf } from "@/api/conf/app.conf";
 
 class TokenUtil {
   private accessToken: string | null = null;
@@ -101,6 +102,18 @@ class TokenUtil {
     localStorage.removeItem(this.accessTokenKey);
     localStorage.removeItem(this.refreshTokenKey);
     localStorage.removeItem(this.authorizedUserKey);
+  }
+
+  hasInProgressAccessToStock(stockId) {
+    if (this.authorizedUserDto)
+      return (
+        this.authorizedUserDto.rules.filter(
+          (el) =>
+            el.stockId == stockId &&
+            el.ruleId == appConf.rules.setRequestInProgress,
+        ).length > 0
+      );
+    else return false;
   }
 }
 

@@ -86,7 +86,11 @@ export default class ApiModelUtil {
         refreshResult,
       );
       TokenUtil.logout();
-      window.location = "/login";
+      NotificationSocketModel.close();
+      const authCheckStore = useAuthCheckStore();
+      authCheckStore.showKickedOutToast = true;
+      authCheckStore.logout();
+      router.push({ name: "login" });
       return new ApiResponseDto<T>(false, null, refreshResult.getError());
     }
   }

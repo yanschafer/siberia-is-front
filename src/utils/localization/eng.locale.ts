@@ -21,6 +21,8 @@ export default {
       nothingFoundClarifyQuery: "Please clarify your search query.",
       rulesUpdatedToast: "Rules updated",
       rulesUpdatedToastDetails: "Your rules were updated by administrator",
+      sessionExpired: "Session expired",
+      sessionExpiredDetails: "Try to re-login",
     },
     router: {
       panelName: "Siberia Panel",
