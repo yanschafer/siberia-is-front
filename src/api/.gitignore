@@ -1,1 +1,4 @@
 /conf/app.conf.ts
+/conf/app.local.conf.ts
+/conf/app.dudosyka.conf.ts
+/conf/app.production.conf.ts
