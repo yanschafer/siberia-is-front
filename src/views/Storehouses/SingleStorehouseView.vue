@@ -50,7 +50,7 @@
       <MDBRow
         class="d-flex flex-row w-100 align-items-center align-self-center gap-3 pt-4"
       >
-        <h1 class="storehouse-heading">Products in stock</h1>
+        <h1 class="storehouse-heading">{{ localize("productsInStock") }}</h1>
         <template v-if="!newArrival && !newSale && !newRequest">
           <MDBBtn
             v-if="arrivalAvailable"

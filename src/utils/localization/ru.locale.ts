@@ -180,9 +180,9 @@ export default {
       "Category managing": "Управление категориями",
       "Products managing": "Управление товарами",
       "Stock managing": "Управление складами",
-      "Arrival managing": "Управление приходом",
-      "Create arrivals": "Регистрация прихода",
-      "Approve and cancel arrivals": "Подтвердить и отменить приход",
+      "Arrival managing": "Управление поступлением",
+      "Create arrivals": "Регистрация поступления",
+      "Approve and cancel arrivals": "Подтвердить и отменить поступлеие",
       "Sales managing": "Управление продажами",
       "Create sales": "Регистрация продажи",
       "Approve and cancel sales": "Подтвердить или отменить продажу",
@@ -201,7 +201,7 @@ export default {
       quantityPerPackageCapslock: "КОЛ-ВО В УПАКОВКЕ",
       distributionPriceCapslock: "РОЗНИЧНАЯ ЦЕНА",
       professionalPriceCapslock: "ПРОФЕССИОНАЛЬНАЯ ЦЕНА",
-      defaultPriceCapslock: "ЦЕНА ПО УМОЛЧАНИЯ",
+      defaultPriceCapslock: "ЦЕНА ПО УМОЛЧАНИЮ",
       selectACategory: "Выберите категорию",
       selectABrand: "Выберите бренд",
       selectACollection: "Выберите коллекцию",
@@ -249,7 +249,7 @@ export default {
       brandCapslock: "БРЕНД",
       openInNewWindowCapslock: "ОТКРЫТЬ В НОВОЙ ВКЛАДКЕ",
       quantityCapslock: "КОЛ-ВО",
-      lastTimeOrderedCapslock: "ВРЕМЯ ПОСЛЕДНЕЙ ЗАКУПКИ",
+      lastTimeOrderedCapslock: "ДАТА ПОСЛЕДНЕЙ ЗАКУПКИ",
       lastPriceOrderedCapslock: "СТОИМОСТЬ ПРИ ПОСЛЕДНЕЙ ЗАКУПКЕ",
       newColorNameCapslock: "НОВЫЙ ЦВЕТ",
       expirationDateCapslock: "ГОДЕН ДО",
@@ -284,7 +284,7 @@ export default {
       newArrivalCapslock: "+ НОВОЕ ПОСТУПЛЕНИЕ",
       newSaleCapslock: "+ НОВАЯ ПРОДАЖА",
       newRequestCapslock: "+ НОВЫЙ ЗАПРОС ТОВАРОВ",
-      newArrivalRegistration: "Регистрация прихода",
+      newArrivalRegistration: "Регистрация поступления",
       newSaleRegistration: "Регистрация продажи",
       newRequestRegistration: "Регистрация запроса",
       confirmDeletion: "Подтвердите удаление",
@@ -302,6 +302,7 @@ export default {
       noStorehouseAvailable: "Нет доступных складов",
       tryToEditStorehouse:
         "Попробуйте отредактировать доступные склады во вкладке 'Пользователи', или сообщите администратору.",
+      productsInStock: "Товары в наличии",
 
       //storehouse.store.ts
       addressCapslock: "АДРЕС",
@@ -451,7 +452,7 @@ export default {
       "Transaction event": "Событие операции",
     },
     operations: {
-      Arrival: "Приход",
+      Arrival: "Поступление",
       Sale: "Продажа",
       Request: "Запрос",
 

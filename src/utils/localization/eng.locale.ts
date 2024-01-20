@@ -273,6 +273,7 @@ export default {
       noStorehouseAvailable: "No storehouse available",
       tryToEditStorehouse:
         "Try to edit available storehouses in users managing tab, or report to your administrator",
+      productsInStock: "Products in stock",
 
       //storehouse.store.ts
       addressCapslock: "ADDRESS",
