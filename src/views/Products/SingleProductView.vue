@@ -338,6 +338,7 @@ import InputText from "primevue/inputtext";
 import ValidatorUtil from "@/utils/validator/validator.util";
 import ValidateRule from "@/utils/validator/validate-rule";
 import Panel from "primevue/panel";
+import LoggerUtil from "@/utils/logger/logger.util";
 export default {
   name: "SingleProductView",
   components: {
@@ -722,7 +723,10 @@ export default {
       return this.productStore.getSelectedProduct || {};
     },
     imageSource() {
-      return FilesResolverUtil.getStreamUrl(this.selectedProduct.photo || "");
+      LoggerUtil.debug(this.selectedProduct.photo);
+      if (this.selectedProduct.photo && this.selectedProduct.photo != "")
+        return FilesResolverUtil.getStreamUrl(this.selectedProduct.photo || "");
+      else return FilesResolverUtil.getStreamUrl("fileNotFound.jpeg");
     },
     productName() {
       return this.selectedProduct.name || "";

@@ -104,6 +104,7 @@ export const useAuthCheckStore = defineStore({
     hasAccessToHistory: true,
     assortmentTabs: [...availableAssortmentTabs],
     canEditUsersInRole: true,
+    showKickedOutToast: false,
   }),
   getters: {
     getSidebarItems() {
@@ -117,6 +118,9 @@ export const useAuthCheckStore = defineStore({
     },
     getCanEditUsersInRole() {
       return this.canEditUsersInRole;
+    },
+    getShowKickedOutToast() {
+      return this.showKickedOutToast;
     },
   },
   actions: {
@@ -134,5 +138,6 @@ export const useAuthCheckStore = defineStore({
         appConf.rules.userManaging,
       );
     },
+    logout() {},
   },
 });

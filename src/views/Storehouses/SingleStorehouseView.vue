@@ -308,14 +308,14 @@ export default {
       this.$toast.add({
         severity: "success",
         summary: this.localize("success"),
-        detail: `${type} ${this.localize("created")}`,
+        detail: `${this.localize(type, "operations")} ${this.localize("created")}`,
         life: 3000,
       });
       if (autoApproved) {
         this.$toast.add({
           severity: "success",
           summary: this.localize("success"),
-          detail: `${type} ${this.localize("autoApproved")}`,
+          detail: `${this.localize(type, "operations")} ${this.localize("autoApproved")}`,
           life: 3000,
         });
       }

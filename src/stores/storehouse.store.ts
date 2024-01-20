@@ -93,8 +93,8 @@ export const useStorehousesStore = defineStore({
           TransactionType.INCOME,
           products.map((el) => ({
             productId: el.id,
-            amount: parseInt(String(el.quantity)),
-            price: parseInt(String(el.price)),
+            amount: parseFloat(String(el.quantity)),
+            price: parseFloat(String(el.price)),
           })),
         ),
       );
@@ -120,7 +120,7 @@ export const useStorehousesStore = defineStore({
           products.map((el) => ({
             productId: el.id,
             amount: parseInt(String(el.quantity)),
-            price: parseInt(String(el.price)),
+            price: parseFloat(String(el.price)),
           })),
         ),
       );
@@ -143,7 +143,7 @@ export const useStorehousesStore = defineStore({
           products.map((el) => ({
             productId: el.id,
             amount: parseInt(String(el.quantity)),
-            price: parseInt(String(el.price)),
+            price: parseFloat(String(el.price)),
           })),
         ),
       );

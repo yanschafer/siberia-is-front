@@ -70,6 +70,14 @@ export default {
         this.selectedValue = {};
         return;
       }
+      if (typeof this.modelValue == "object" && this.modelValue.length == 0) {
+        this.selectedValue = {};
+        return;
+      }
+      if (!Number.isNaN(parseInt(String(this.modelValue)))) {
+        this.selectedValue = { [this.modelValue]: true };
+        return;
+      }
       if (this.modelValue[0].id) return;
       loggerUtil.debug("Model value", this.modelValue);
       this.selectedValue = { [this.modelValue]: true };

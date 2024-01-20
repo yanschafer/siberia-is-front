@@ -194,6 +194,13 @@ export default {
 
     this.roleLoadRes.toastIfError(this.$toast, this.$nextTick);
     this.usersLoadRes.toastIfError(this.$toast, this.$nextTick);
+
+    this.authCheckStore.$onAction(async ({ name }) => {
+      if (name == "refresh") {
+        const loaded = await this.rolesStore.loadSelectedRole(this.id);
+        loaded.toastIfError(this.$toast, this.$nextTick);
+      }
+    });
   },
   methods: {
     clearValidationErrors() {

@@ -52,6 +52,7 @@ import { useRulesStore } from "@/stores/rules.store";
 import { useStorehousesStore } from "@/stores/storehouse.store";
 import loggerUtil from "@/utils/logger/logger.util";
 import PrintUtil from "@/utils/localization/print.util";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export default defineComponent({
   components: {
@@ -115,6 +116,7 @@ export default defineComponent({
       return PrintUtil.localize(key, module);
     },
     showSuccessToast(type) {
+      LoggerUtil.debug(type);
       this.$toast.add({
         severity: "success",
         summary: this.localize("success", "storehouses"),
@@ -145,7 +147,7 @@ export default defineComponent({
       if (!result.success) {
         result.getError().showServerErrorToast(this.$toast, this.$nextTick);
       } else {
-        this.showSuccessToast(this.localize("removed", "components"));
+        this.showSuccessToast("removed");
       }
     },
     async ruleSelected({ roleId, linkedRule }) {
@@ -163,7 +165,7 @@ export default defineComponent({
       if (!result.success) {
         result.getError().showServerErrorToast(this.$toast, this.$nextTick);
       } else {
-        this.showSuccessToast(this.localize("added", "components"));
+        this.showSuccessToast("added");
       }
     },
   },

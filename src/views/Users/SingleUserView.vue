@@ -144,6 +144,7 @@ import PrintUtil from "@/utils/localization/print.util";
 import ValidateRule from "@/utils/validator/validate-rule";
 import ValidatorUtil from "@/utils/validator/validator.util";
 import loggerUtil from "@/utils/logger/logger.util";
+import { useAuthCheckStore } from "@/stores/auth-check.store";
 export default {
   name: "SingleUserView",
   components: {
@@ -242,6 +243,7 @@ export default {
     const userStore = useUsersStore();
     const rolesStore = useRolesStore();
     const modalStore = useModalStore();
+    const authCheckStore = useAuthCheckStore();
     const route = useRoute();
     const router = useRouter();
 
@@ -254,6 +256,7 @@ export default {
         parseInt(route.params.id.toString()),
       ),
       rolesLoadRes: await rolesStore.loadRolesList(),
+      authCheckStore,
     };
   },
   created() {
@@ -274,6 +277,13 @@ export default {
       .addRule("name", userNameValidateRule)
       .addRule("login", loginValidateRule)
       .addRule("password", passwordRule);
+
+    this.authCheckStore.$onAction(async ({ name }) => {
+      if (name == "refresh") {
+        const loaded = await this.userStore.loadSelectedUser(this.id);
+        loaded.toastIfError(this.$toast, this.$nextTick);
+      }
+    });
   },
   methods: {
     clearValidationErrors() {
