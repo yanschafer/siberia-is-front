@@ -4,7 +4,10 @@
     @approved="removeAndCloseModal"
     @close="closeModal"
   />
-  <div class="animate__animated animate__fadeIn">
+  <ScrollPanel
+    style="height: 80vh; width: 88vw"
+    class="main-area animate__animated animate__fadeIn"
+  >
     <Panel class="animate__animated animate__fadeIn">
       <MDBRow class="d-flex flex-row gap-5 header-row">
         <MDBCol v-if="!editing" class="col-auto">
@@ -309,7 +312,7 @@
         </MDBCol>
       </MDBRow>
     </MDBContainer>
-  </div>
+  </ScrollPanel>
 </template>
 <script lang="ts">
 import FileUpload from "primevue/fileupload";
@@ -338,6 +341,7 @@ import InputText from "primevue/inputtext";
 import ValidatorUtil from "@/utils/validator/validator.util";
 import ValidateRule from "@/utils/validator/validate-rule";
 import Panel from "primevue/panel";
+import ScrollPanel from "primevue/scrollpanel";
 import LoggerUtil from "@/utils/logger/logger.util";
 export default {
   name: "SingleProductView",
@@ -356,6 +360,7 @@ export default {
     MDBRow,
     MDBCol,
     MDBBtn,
+    ScrollPanel,
   },
   props: {
     id: {
