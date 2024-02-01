@@ -31,6 +31,7 @@ import FiltersSidebarComponent from "@/components/Elements/Filter sidebar/Filter
 import loggerUtil from "@/utils/logger/logger.util";
 import { IconSearchOff } from "@tabler/icons-vue";
 import PrintUtil from "@/utils/localization/print.util";
+import { useFiltersStore } from "@/stores/filters.store";
 
 export default {
   name: "HistoryView",
@@ -47,28 +48,6 @@ export default {
         icon: "IconSearchOff",
         title: this.localize("nothingFound", "default"),
         text: this.localize("nothingFoundClarifyQuery", "default"),
-      },
-      filtersInput: {
-        author: {
-          title: this.localize("Author"),
-          type: FilterType.TEXT,
-          value: null,
-        },
-        range: {
-          title: this.localize("DateRange"),
-          type: FilterType.DATE,
-          value: { min: null, max: null },
-        },
-        eventTypeId: {
-          title: this.localize("EventType"),
-          type: FilterType.SELECT,
-          items: this.historyStore.getEventTypes,
-        },
-        eventObjectTypeId: {
-          title: this.localize("EventObjectType"),
-          type: FilterType.SELECT,
-          items: this.historyStore.getEventObjectTypes,
-        },
       },
     };
   },
@@ -87,11 +66,36 @@ export default {
     };
   },
   created() {
+    useFiltersStore().setFilters({
+      author: {
+        title: this.localize("Author"),
+        type: FilterType.TEXT,
+        value: null,
+      },
+      range: {
+        title: this.localize("DateRange"),
+        type: FilterType.DATE,
+        value: { min: null, max: null },
+      },
+      eventTypeId: {
+        title: this.localize("EventType"),
+        type: FilterType.SELECT,
+        items: this.historyStore.getEventTypes,
+      },
+      eventObjectTypeId: {
+        title: this.localize("EventObjectType"),
+        type: FilterType.SELECT,
+        items: this.historyStore.getEventObjectTypes,
+      },
+    });
     this.loadListRes.toastIfError(this.$toast, this.$nextTick);
     this.loadEventTypesRes.toastIfError(this.$toast, this.$nextTick);
     this.loadEventObjectsRes.toastIfError(this.$toast, this.$nextTick);
   },
   computed: {
+    filtersInput() {
+      return useFiltersStore().getFilters;
+    },
     filteredHistory() {
       const searchTerm = this.historyStore.getSearchTerm;
       let res = [];

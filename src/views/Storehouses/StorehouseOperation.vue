@@ -11,7 +11,7 @@
     <MDBCol class="col-auto">
       <MDBInput
         class="input-wrapper animate__animated animate__fadeIn username-input"
-        type="text"
+        type="number"
         :placeholder="localize('quantity')"
         v-model="quantity"
       />
@@ -19,7 +19,7 @@
     <MDBCol v-if="showPrice" class="col-auto">
       <MDBInput
         class="input-wrapper animate__animated animate__fadeIn username-input"
-        type="text"
+        type="number"
         :placeholder="localize('price')"
         v-model="price"
       />
@@ -60,6 +60,7 @@ import ValidateRule from "@/utils/validator/validate-rule";
 import loggerUtil from "@/utils/logger/logger.util";
 import InputText from "primevue/inputtext";
 import SearchComponent from "@/components/Inputs/SearchComponent.vue";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "StorehouseOperation",
@@ -119,6 +120,7 @@ export default {
     };
   },
   created() {
+    LoggerUtil.debug(this.amountValidation, this.needValidation);
     if (this.showPrice)
       this.addedColumns.push({
         field: "price",
@@ -185,7 +187,10 @@ export default {
       }
 
       if (this.needValidation) {
-        if (this.amountValidation[this.selectedProduct.id] < this.quantity) {
+        if (
+          this.amountValidation[this.selectedProduct.id] < this.quantity ||
+          !this.amountValidation[this.selectedProduct.id]
+        ) {
           this.showErrorToast(this.localize("notEnoughProductsStorehouses"));
           return;
         }

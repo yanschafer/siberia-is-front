@@ -85,12 +85,8 @@ export const useUsersStore = defineStore({
       return await userModel.create(createUserDto);
     },
     async updateIfCurrent(userId: number) {
-      const apiModelUtil = new ApiModelUtil("");
       if (userId == TokenUtil.getAuthorizedId()) {
-        const refreshed = await apiModelUtil.refresh();
-        if (refreshed.success) {
-          TokenUtil.login(refreshed.getData());
-        }
+        await ApiModelUtil.refreshInterface();
       }
     },
     async appendRule(userId: number, rules: LinkedRuleInputDto[]) {

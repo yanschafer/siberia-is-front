@@ -67,7 +67,7 @@ export default {
 
       storehouses: "склады",
       NewStorehouse: "Создание склада",
-      Storehouse: "Склады",
+      Storehouse: "Склад",
 
       users: "пользователи",
       NewUser: "Новый пользователь",
@@ -137,6 +137,7 @@ export default {
 
       profileHeader: "Профиль",
       logout: "Выйти",
+      removeUserManagingRule: "Вы уверены что хотите убрать это правило?",
     },
     role: {
       //RolesView.vue
@@ -176,7 +177,7 @@ export default {
 
       "User managing": "Управление пользователями",
       "Rbac managing": "Управление ролями",
-      "Check logs": "Проверьте логи",
+      "Check logs": "Просмотр логов",
       "Brand managing": "Управление брендами",
       "Collection managing": "Управление коллекциями",
       "Category managing": "Управление категориями",
@@ -193,6 +194,14 @@ export default {
       "Approve and cancel requests": "Подтверждение или отмена запроса",
       "Get request in process": "Запрос в процессе",
       "Approve request delivery": "Подтверждение доставки запроса",
+      "Concrete stock managing": "Управление конкретных складов",
+      "Concrete stock view": "Просмотр конкретных скаладов",
+      "Create stocks": "Создание складов",
+      "Create products": "Создание продуктов",
+      "Stock data managing": "Управление данными складов",
+      "Update stock data": "Изменение данных складов",
+      "View stock data": "Просмотр складов",
+      "View products list": "Просмотр товаров",
     },
     products: {
       //CreateProduct.vue

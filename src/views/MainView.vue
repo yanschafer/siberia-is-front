@@ -61,7 +61,6 @@ export default {
   methods: {
     updatePageTitleAndContent() {
       const routeNames = this.route.matched.map((route) => {
-        loggerUtil.debug(route);
         return route.meta.name;
       });
       const currentPageName = routeNames.pop() || "dashboard";
@@ -72,6 +71,7 @@ export default {
       } else {
         this.pageTitle = "Dashboard";
       }
+
       this.showAddBtn = this.route.meta.showAddBtn;
       this.addBtnRoute = this.route.meta.addBtnRoute;
     },

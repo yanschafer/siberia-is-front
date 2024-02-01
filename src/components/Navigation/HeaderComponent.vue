@@ -10,7 +10,7 @@
         </h1>
         <MDBBtn
           @click="navigate"
-          v-if="showAddButton"
+          v-if="showAddButton && addButtonAvailable"
           class="animate__animated animate__fadeInUp utility-btn"
           outline="black"
           >{{ addButtonLabel }}</MDBBtn
@@ -188,6 +188,17 @@ export default defineComponent({
   computed: {
     hasAccessToHistory() {
       return this.authCheckStore.getHasAccessToHistory;
+    },
+    addButtonAvailable() {
+      const authCheckStore = useAuthCheckStore();
+      let addBtnAvailable = true;
+      if (this.$route.name == "products") {
+        addBtnAvailable = authCheckStore.getHasAccessToProductsManaging;
+      }
+      if (this.$route.name == "storehouses") {
+        addBtnAvailable = authCheckStore.getHasAccessToStockManaging;
+      }
+      return addBtnAvailable;
     },
   },
   setup() {

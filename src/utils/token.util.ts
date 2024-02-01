@@ -59,6 +59,10 @@ class TokenUtil {
     } else return false;
   }
 
+  getAuthorized() {
+    return this.authorizedUserDto;
+  }
+
   getAuthorizedId() {
     if (this.authorizedUserDto) return this.authorizedUserDto.id;
     else return null;

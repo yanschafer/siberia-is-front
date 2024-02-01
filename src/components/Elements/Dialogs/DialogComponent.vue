@@ -38,9 +38,7 @@
       <MDBRow
         class="btn-row d-flex flex-row align-items-center justify-content-center"
       >
-        <MDBBtn class="btn-black save-btn" @click="save">{{
-          saveButtonText
-        }}</MDBBtn>
+        <MDBBtn class="btn-black save-btn" @click="save">{{ btnTitle }}</MDBBtn>
       </MDBRow>
     </MDBContainer>
   </Dialog>
@@ -89,6 +87,9 @@ export default {
     });
     this.$watch("isVisible", () => {
       this.inputError = false;
+      this.inputValue = "";
+      this.selectedDropdownItem = null;
+      this.checkboxValue = false;
       if (this.dialogStore.update) {
         this.inputValue = this.dialogStore.update.input;
         this.selectedDropdownItem = this.dialogStore.update.selected;
@@ -156,6 +157,11 @@ export default {
     },
     inputName() {
       return this.dialogStore.dialogData.inputName;
+    },
+    btnTitle() {
+      return this.showCheckbox
+        ? this.localize("deleteCapslock", "default")
+        : this.localize("saveCapslock", "default");
     },
     selectorVisible() {
       const showSelect = this.dialogStore.dialogData.showSelect;

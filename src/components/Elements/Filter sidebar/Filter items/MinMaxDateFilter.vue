@@ -14,6 +14,7 @@ import loggerUtil from "@/utils/logger/logger.util";
 import PrintUtil from "@/utils/localization/print.util";
 import Calendar from "primevue/calendar";
 import { useFiltersStore } from "@/stores/filters.store";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "MinMaxDateFilter",
@@ -25,9 +26,26 @@ export default {
   }),
   props: {
     title: String,
+    defaultValue: {
+      type: Object,
+      default: {},
+    },
   },
   emits: ["change"],
   created() {
+    this.dateRange = [];
+    if (
+      Object.keys(this.defaultValue).includes("min") &&
+      this.defaultValue.min != null
+    ) {
+      this.dateRange.push(new Date(this.defaultValue.min));
+    }
+    if (
+      Object.keys(this.defaultValue).includes("max") &&
+      this.defaultValue.max != null
+    ) {
+      this.dateRange.push(new Date(this.defaultValue.max));
+    }
     const filtersStore = useFiltersStore();
     filtersStore.$onAction(({ name }) => {
       if (name == "clearFilter") {

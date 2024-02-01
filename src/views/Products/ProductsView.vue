@@ -3,10 +3,7 @@
     <template v-if="!isIdProvided">
       <MDBContainer class="d-flex container-content">
         <MDBCol class="col-auto">
-          <FiltersSidebarComponent
-            :filters-input="sidebarFilter"
-            @start-search="handleFiltersSearch"
-          />
+          <FiltersSidebarComponent @start-search="handleFiltersSearch" />
         </MDBCol>
         <MDBCol class="col-auto">
           <MDBContainer class="table-container">
@@ -45,6 +42,8 @@ import { FilterType } from "@/api/conf/app.conf";
 import loggerUtil from "@/utils/logger/logger.util";
 import FieldSearchWrapperDto from "@/utils/crud/dto/field-search-wrapper.dto";
 import PrintUtil from "@/utils/localization/print.util";
+import LoggerUtil from "@/utils/logger/logger.util";
+import { useFiltersStore } from "@/stores/filters.store";
 
 export default {
   name: "ProductsView",
@@ -63,70 +62,6 @@ export default {
         text: this.localize("pleaseClarifyYourSearchQuery", "role"),
       },
       editableColumns: ["price"],
-      sidebarFilter: {
-        vendorCode: {
-          title: this.localize("vendorCode"),
-          type: FilterType.TEXT,
-          value: null,
-        },
-        name: {
-          title: this.localize("name"),
-          type: FilterType.TEXT,
-          value: null,
-        },
-        description: {
-          title: this.localize("description"),
-          type: FilterType.TEXT,
-          value: null,
-        },
-        color: {
-          title: this.localize("color"),
-          type: FilterType.TEXT,
-          value: null,
-        },
-        purchasePrice: {
-          title: this.localize("purchasePrice"),
-          type: FilterType.NUMBER,
-          value: { min: null, max: null },
-        },
-        distributorPrice: {
-          title: this.localize("distributorPrice"),
-          type: FilterType.NUMBER,
-          value: { min: null, max: null },
-        },
-        professionalPrice: {
-          title: this.localize("professionalPrice"),
-          type: FilterType.NUMBER,
-          value: { min: null, max: null },
-        },
-        commonPrice: {
-          title: this.localize("commonPrice"),
-          type: FilterType.NUMBER,
-          value: { min: null, max: null },
-        },
-        amountInBox: {
-          title: this.localize("amountInBox"),
-          type: FilterType.NUMBER,
-          value: { min: null, max: null },
-        },
-        brand: {
-          title: this.localize("brand"),
-          items: this.brandStore.getBrandList,
-          type: FilterType.SELECT,
-          value: null,
-        },
-        collection: {
-          title: this.localize("collection"),
-          items: this.collectionStore.getCollectionList,
-          type: FilterType.SELECT,
-        },
-        category: {
-          title: this.localize("category"),
-          items: this.categoryStore.getCategoryList,
-          tree: true,
-          type: FilterType.SELECT,
-        },
-      },
     };
   },
 
@@ -135,10 +70,12 @@ export default {
     const brandStore = useBrandStore();
     const categoryStore = useCategoriesStore();
     const collectionStore = useCollectionStore();
+    const filtersStore = useFiltersStore();
     const route = useRoute();
     const router = useRouter();
 
     return {
+      filtersStore,
       brandStore,
       collectionStore,
       categoryStore,
@@ -152,6 +89,70 @@ export default {
     };
   },
   created() {
+    this.filtersStore.setFilters({
+      vendorCode: {
+        title: this.localize("vendorCode"),
+        type: FilterType.TEXT,
+        value: null,
+      },
+      name: {
+        title: this.localize("name"),
+        type: FilterType.TEXT,
+        value: null,
+      },
+      description: {
+        title: this.localize("description"),
+        type: FilterType.TEXT,
+        value: null,
+      },
+      color: {
+        title: this.localize("color"),
+        type: FilterType.TEXT,
+        value: null,
+      },
+      purchasePrice: {
+        title: this.localize("purchasePrice"),
+        type: FilterType.NUMBER,
+        value: { min: null, max: null },
+      },
+      distributorPrice: {
+        title: this.localize("distributorPrice"),
+        type: FilterType.NUMBER,
+        value: { min: null, max: null },
+      },
+      professionalPrice: {
+        title: this.localize("professionalPrice"),
+        type: FilterType.NUMBER,
+        value: { min: null, max: null },
+      },
+      commonPrice: {
+        title: this.localize("commonPrice"),
+        type: FilterType.NUMBER,
+        value: { min: null, max: null },
+      },
+      amountInBox: {
+        title: this.localize("amountInBox"),
+        type: FilterType.NUMBER,
+        value: { min: null, max: null },
+      },
+      brand: {
+        title: this.localize("brand"),
+        items: this.brandStore.getBrandList,
+        type: FilterType.SELECT,
+        value: null,
+      },
+      collection: {
+        title: this.localize("collection"),
+        items: this.collectionStore.getCollectionList,
+        type: FilterType.SELECT,
+      },
+      category: {
+        title: this.localize("category"),
+        items: this.categoryStore.getCategoryList,
+        tree: true,
+        type: FilterType.SELECT,
+      },
+    });
     this.loadProductListRes.toastIfError(this.$toast, this.$nextTick);
     this.loadBrandListRes.toastIfError(this.$toast, this.$nextTick);
     this.loadCollectionListRes.toastIfError(this.$toast, this.$nextTick);

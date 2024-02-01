@@ -9,28 +9,33 @@
         <div class="top-gradient-overlay"></div>
         <template v-for="(filter, index) in filters">
           <TextFilter
+            :default-value="filter.value"
             v-if="isText(filter)"
             :title="filter.title"
             @change="handleFilterChange(filter, $event)"
           />
           <selector-filter
+            :default-value="filter.value"
             v-if="isSelect(filter)"
             :title="filter.title"
             :items="filter.items"
             @change="handleFilterChange(filter, $event)"
           />
           <tree-selector-filter
+            :default-value="filter.value"
             v-if="isTreeSelect(filter)"
             :title="filter.title"
             :items="filter.items"
             @change="handleFilterChange(filter, $event)"
           />
           <min-max-filter
+            :default-value="filter.value"
             v-if="isNumber(filter)"
             :title="filter.title"
             @change="handleFilterChange(filter, $event)"
           />
           <min-max-date-filter
+            :default-value="filter.value"
             v-if="isDate(filter)"
             :title="filter.title"
             @change="handleFilterChange(filter, $event)"
@@ -92,10 +97,10 @@ export default {
     MDBBtn,
   },
   props: {
-    filtersInput: {
-      type: Object,
-      default: {},
-    },
+    // filtersInput: {
+    //   type: Object,
+    //   default: {},
+    // },
   },
   emits: ["startSearch"],
   data() {
@@ -105,6 +110,11 @@ export default {
       collapsed: true,
       textFilterValue: null,
     };
+  },
+  computed: {
+    filtersInput() {
+      return useFiltersStore().getFilters;
+    },
   },
   created() {
     this.filters = Object.keys(this.filtersInput).map((key) => {

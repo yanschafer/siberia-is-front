@@ -10,12 +10,17 @@
 import InputText from "primevue/inputtext";
 import loggerUtil from "@/utils/logger/logger.util";
 import { useFiltersStore } from "@/stores/filters.store";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export default {
   components: { InputText },
   name: "TextFilter",
   props: {
     title: String,
+    defaultValue: {
+      default: "",
+      type: String,
+    },
   },
   emits: ["change"],
   data: () => ({
@@ -27,6 +32,7 @@ export default {
     },
   },
   created() {
+    this.value = this.defaultValue;
     const filtersStore = useFiltersStore();
     filtersStore.$onAction(({ name }) => {
       if (name == "clearFilter") {

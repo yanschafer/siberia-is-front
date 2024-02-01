@@ -74,8 +74,8 @@ export const useStorehousesStore = defineStore({
         };
         this.storehousesRows = this.storehousesRows.map((el) => {
           if (el.id == storehouseId) {
-            el.name = updateStorehouseDto.name;
-            el.address = updateStorehouseDto.address;
+            el.name = saveResult.getData().name;
+            el.address = saveResult.getData().address;
           }
           return el;
         });
