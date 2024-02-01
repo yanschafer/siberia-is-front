@@ -105,8 +105,8 @@ export default {
 
       //ProfileComponent
       profileHeader: "Profile",
-
       logout: "Log out",
+      removeUserManagingRule: "Are you sure you want to remove this rule?",
     },
     role: {
       //RolesView.vue
@@ -151,7 +151,9 @@ export default {
       "Collection managing": "Collections managing",
       "Category managing": "Categories managing",
       "Products managing": "Products managing",
+      "Create products": "Products creation",
       "Stock managing": "Storehouses managing",
+      "Create stocks": "Stocks creation",
       "Arrival managing": "Arrival managing",
       "Create arrivals": "Create arrivals",
       "Approve and cancel arrivals": "Approve and cancel arrivals",
@@ -163,6 +165,12 @@ export default {
       "Approve and cancel requests": "Approve and cancel requests",
       "Get request in process": "Get request in process",
       "Approve request delivery": "Approve request delivery",
+      "Concrete stock managing": "Concrete stock managing",
+      "Concrete stock view": "Concrete stock view",
+      "Stock data managing": "Stock data managing",
+      "Update stock data": "Update stock data",
+      "View stock data": "View stock data",
+      "View products list": "View products",
     },
     products: {
       //CreateProduct.vue

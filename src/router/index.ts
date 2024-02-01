@@ -3,6 +3,7 @@ import TokenUtil from "@/utils/token.util";
 import { appConf } from "@/api/conf/app.conf";
 import LoggerUtil from "@/utils/logger/logger.util";
 import PrintUtil from "@/utils/localization/print.util";
+import app from "@/App.vue";
 
 /*
 user-managing = "1"
@@ -66,7 +67,10 @@ const routes = [
         name: "products",
         component: () => import("@/views/Products/ProductsView.vue"),
         meta: {
-          ruleId: [appConf.rules.productsManaging],
+          ruleId: [
+            appConf.rules.productsManaging,
+            appConf.rules.viewProductsList,
+          ],
           showAddBtn: true,
           addBtnRoute: "New product",
           name: PrintUtil.localize("products", "router"),
@@ -99,7 +103,7 @@ const routes = [
         component: () => import("@/views/Storehouses/StorehousesView.vue"),
         meta: {
           name: PrintUtil.localize("storehouses", "router"),
-          ruleId: [appConf.rules.stockManaging],
+          ruleId: [appConf.rules.stockManaging, appConf.rules.viewStockData],
           showAddBtn: true,
           addBtnRoute: "New storehouse",
         },
@@ -265,7 +269,7 @@ router.beforeEach((to, from, next) => {
     ) {
       next("/dashboard");
       return;
-    } else LoggerUtil.debug(to, to.meta);
+    }
   }
 
   if (to.name == "Storehouse") {

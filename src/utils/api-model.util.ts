@@ -43,7 +43,16 @@ export default class ApiModelUtil {
     );
   }
 
+  private async getAuthorized() {
+    const authorizedUserDto = await this.authorizedRequest<AuthorizedUserDto>(
+      new ApiRequestDto("/auth/authorized", "GET"),
+    );
+    TokenUtil.setAuthorized(authorizedUserDto.getData());
+    LoggerUtil.debugPrefixed("API_MODEL", "Refresh succeed.");
+  }
+
   async refresh(): Promise<ApiResponseDto<TokenPairDto>> {
+    LoggerUtil.debug("Refresh");
     const refreshToken = TokenUtil.getRefresh();
     this.baseEndpointBuffer = this.baseEndpoint;
     this.baseEndpoint = "";
@@ -63,11 +72,7 @@ export default class ApiModelUtil {
       );
     if (res.success) {
       TokenUtil.login(res.getData());
-      const authorizedUserDto = await this.authorizedRequest<AuthorizedUserDto>(
-        new ApiRequestDto("/auth/authorized", "GET"),
-      );
-      TokenUtil.setAuthorized(authorizedUserDto.getData());
-      LoggerUtil.debugPrefixed("API_MODEL", "Refresh succeed.");
+      await this.getAuthorized();
     }
     return res;
   }
@@ -80,11 +85,6 @@ export default class ApiModelUtil {
       this.onRefresh = null;
       return afterRefresh;
     } else {
-      LoggerUtil.debugPrefixed(
-        "API_MODEL",
-        "Refresh failed with: ",
-        refreshResult,
-      );
       TokenUtil.logout();
       NotificationSocketModel.close();
       const authCheckStore = useAuthCheckStore();
@@ -186,6 +186,28 @@ export default class ApiModelUtil {
     return await result;
   }
 
+  public static async refreshInterface() {
+    const authCheckStore = useAuthCheckStore();
+    await new ApiModelUtil("").getAuthorized();
+    const route = router.currentRoute._value;
+    if (route && route.meta && route.meta.ruleId) {
+      if (
+        !route.meta.ruleId.some((el) =>
+          TokenUtil.hasAccessTo(parseInt(el.toString())),
+        )
+      ) {
+        router.push({ name: "dashboard" });
+      }
+      if (route.name == "Storehouse") {
+        if (route.params && route.params.id) {
+          if (!TokenUtil.hasAnyAccessToStock(route.params.id))
+            router.push({ name: "storehouses" });
+        }
+      }
+    }
+    authCheckStore.refresh();
+  }
+
   initSockets(toast) {
     NotificationSocketModel.setNewRulesUpdateCallback(async () => {
       if (toast) {
@@ -196,29 +218,7 @@ export default class ApiModelUtil {
           life: 3000,
         });
       }
-      loggerUtil.debugPrefixed(
-        "WebSocket",
-        "Start processing update-rules event",
-      );
-      const authCheckStore = useAuthCheckStore();
-      await new ApiModelUtil("").refresh();
-      const route = router.currentRoute._value;
-      if (route && route.meta && route.meta.ruleId) {
-        if (
-          !route.meta.ruleId.some((el) =>
-            TokenUtil.hasAccessTo(parseInt(el.toString())),
-          )
-        ) {
-          router.push({ name: "dashboard" });
-        }
-        if (route.name == "Storehouse") {
-          if (route.params && route.params.id) {
-            if (!TokenUtil.hasAnyAccessToStock(route.params.id))
-              router.push({ name: "storehouses" });
-          }
-        }
-      }
-      authCheckStore.refresh();
+      await ApiModelUtil.refreshInterface();
     });
     NotificationSocketModel.init();
   }

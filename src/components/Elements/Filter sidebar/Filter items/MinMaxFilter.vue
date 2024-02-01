@@ -42,6 +42,10 @@ export default {
   name: "MinMaxFilter",
   props: {
     title: String,
+    defaultValue: {
+      type: Object,
+      default: {},
+    },
   },
   emits: ["change"],
   data: () => ({
@@ -49,6 +53,12 @@ export default {
     max: null,
   }),
   created() {
+    if (Object.keys(this.defaultValue).includes("min")) {
+      this.min = this.defaultValue.min;
+    }
+    if (Object.keys(this.defaultValue).includes("max")) {
+      this.max = this.defaultValue.max;
+    }
     const filtersStore = useFiltersStore();
     filtersStore.$onAction(({ name }) => {
       if (name == "clearFilter") {

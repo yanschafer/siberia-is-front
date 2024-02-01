@@ -28,13 +28,13 @@
         v-model="newStorehouseAdress"
       />
       <MDBBtn
-        v-if="!editing"
+        v-if="!editing && editBtnAvailable"
         @click="startEditing"
         class="utility-btn"
         outline="black"
         >{{ localize("editStorehouse") }}</MDBBtn
       >
-      <MDBCol v-else class="d-flex justify-content-start gap-2">
+      <MDBCol v-if="editing" class="d-flex justify-content-start gap-2">
         <MDBBtn @click="cancelEditing" class="utility-btn" outline="black">{{
           localize("cancelCapslock", "default")
         }}</MDBBtn>
@@ -270,6 +270,9 @@ export default {
         obj[el.id] = el.quantity;
       });
       return obj;
+    },
+    editBtnAvailable() {
+      return this.authCheckStore.getHasAccessToStockManaging;
     },
   },
   methods: {

@@ -1,6 +1,6 @@
 <template>
   <ModalComponent
-    v-if="modalStore.getIsVisible"
+    v-if="modalStore.getIsVisible && !modalStore.getIsNested"
     @approved="removeAndCloseModal"
     @close="closeModal"
   />
@@ -312,9 +312,11 @@ export default {
       });
     },
     closeModal() {
+      if (this.modalStore.getIsNested) return;
       this.modalStore.hide();
     },
     async removeAndCloseModal() {
+      if (this.modalStore.getIsNested) return;
       const removed = await this.userStore.remove(this.id);
       if (removed.success) {
         this.modalStore.hide();

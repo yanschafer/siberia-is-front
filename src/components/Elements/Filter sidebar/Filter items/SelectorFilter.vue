@@ -3,7 +3,7 @@
     <span class="filtername">{{ title }}</span>
     <MultiSelectComponent
       v-model="selected"
-      :start-items="[]"
+      :start-items="startItems"
       :options="items"
       option-label="name"
       :placeholder="title"
@@ -18,6 +18,7 @@
 import SelectComponent from "../../Selectors/SelectComponent.vue";
 import MultiSelectComponent from "@/components/Elements/Selectors/MultiSelectComponent.vue";
 import { useFiltersStore } from "@/stores/filters.store";
+import LoggerUtil from "@/utils/logger/logger.util";
 export default {
   components: { MultiSelectComponent, SelectComponent },
   name: "SelectorFilter",
@@ -27,12 +28,18 @@ export default {
       type: Array,
       default: [],
     },
+    defaultValue: {
+      type: Array,
+      default: [],
+    },
   },
   emits: ["change"],
   data: () => ({
+    startItems: [],
     selected: [],
   }),
   created() {
+    if (this.defaultValue) this.startItems = this.defaultValue;
     const filtersStore = useFiltersStore();
     filtersStore.$onAction(({ name }) => {
       if (name == "clearFilter") {
@@ -43,6 +50,7 @@ export default {
   },
   methods: {
     handleChange(items) {
+      LoggerUtil.debug(items);
       this.$emit("change", items);
     },
   },

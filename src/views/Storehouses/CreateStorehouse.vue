@@ -35,6 +35,8 @@ import { useStorehousesStore } from "@/stores/storehouse.store";
 import PrintUtil from "@/utils/localization/print.util";
 import ValidatorUtil from "@/utils/validator/validator.util";
 import ValidateRule from "@/utils/validator/validate-rule";
+import loggerUtil from "@/utils/logger/logger.util";
+import ApiModelUtil from "@/utils/api-model.util";
 
 export default {
   name: "CreateStorehouse",
@@ -107,7 +109,11 @@ export default {
       const created = await this.storehouseStore.create(newStorehouse);
       if (created.success) {
         this.showSuccessToast();
-        this.router.push({ name: "storehouses" });
+        await ApiModelUtil.refreshInterface();
+        this.router.push({
+          name: "Storehouse",
+          params: { id: created.getData().id },
+        });
       } else {
         created.toastIfError(this.$toast, this.$nextTick);
       }

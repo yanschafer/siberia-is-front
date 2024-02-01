@@ -25,7 +25,7 @@
         <MDBCol class="d-flex flex-column justify-content-center">
           <MDBRow
             style="padding-left: 12px; margin-bottom: 1rem"
-            v-if="!editing"
+            v-if="!editing && editBtnAvailable"
             class="d-flex d-flex justify-content-end"
           >
             <MDBBtn @click="startEditing" class="utility-btn" outline="black">{{
@@ -35,7 +35,7 @@
           <MDBCol
             style="margin-bottom: 1rem"
             class="animate__animated animate__flipInX animate__faster gap-3 d-flex justify-content-end"
-            v-else
+            v-if="editing"
           >
             <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
               localize("deleteCapslock", "default")
@@ -343,6 +343,7 @@ import ValidateRule from "@/utils/validator/validate-rule";
 import Panel from "primevue/panel";
 import ScrollPanel from "primevue/scrollpanel";
 import LoggerUtil from "@/utils/logger/logger.util";
+import { useAuthCheckStore } from "@/stores/auth-check.store";
 export default {
   name: "SingleProductView",
   components: {
@@ -462,6 +463,7 @@ export default {
     };
   },
   async setup() {
+    const authCheckStore = useAuthCheckStore();
     const productStore = useProductsStore();
     const brandStore = useBrandStore();
     const collectionStore = useCollectionStore();
@@ -471,6 +473,7 @@ export default {
     const router = useRouter();
 
     return {
+      authCheckStore,
       productStore,
       brandStore,
       categoriesStore,
@@ -560,7 +563,7 @@ export default {
     },
     confirmDeletion() {
       this.modalStore.show({
-        title: "Confirm deletion",
+        title: this.localize("confirmDeletion", "default"),
         text: this.modalText,
         disclaimer: this.localize(
           "thisActionCannotBeUndoneThisProductDataWillBeLost",
@@ -846,6 +849,9 @@ export default {
     },
     defaultMarkup() {
       return this.selectedProduct.defaultMarkup || "";
+    },
+    editBtnAvailable() {
+      return this.authCheckStore.getHasAccessToProductsManaging;
     },
   },
 };

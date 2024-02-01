@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import PrintUtil from "@/utils/localization/print.util";
 import { appConf } from "@/api/conf/app.conf";
 import TokenUtil from "@/utils/token.util";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 const availableSidebarItems = [
   {
@@ -24,7 +25,7 @@ const availableSidebarItems = [
     disabled: false,
     active: true,
     route: "products",
-    rule: [appConf.rules.productsManaging],
+    rule: [appConf.rules.productsManaging, appConf.rules.viewProductsList],
   },
   {
     name: PrintUtil.localize("Assortments", "sidebar"),
@@ -50,7 +51,7 @@ const availableSidebarItems = [
     disabled: false,
     active: false,
     route: "storehouses",
-    rule: [appConf.rules.stockManaging],
+    rule: [appConf.rules.stockManaging, appConf.rules.viewStockData],
   },
   {
     name: PrintUtil.localize("Users", "sidebar"),
@@ -102,6 +103,8 @@ export const useAuthCheckStore = defineStore({
   state: () => ({
     sidebarItems: [...availableSidebarItems],
     hasAccessToHistory: true,
+    hasAccessToProductsManaging: false,
+    hasAccessToStockManaging: false,
     assortmentTabs: [...availableAssortmentTabs],
     canEditUsersInRole: true,
     showKickedOutToast: false,
@@ -122,9 +125,16 @@ export const useAuthCheckStore = defineStore({
     getShowKickedOutToast() {
       return this.showKickedOutToast;
     },
+    getHasAccessToProductsManaging() {
+      return this.hasAccessToProductsManaging;
+    },
+    getHasAccessToStockManaging() {
+      return this.hasAccessToStockManaging;
+    },
   },
   actions: {
     refresh() {
+      LoggerUtil.debug(TokenUtil.getAuthorized());
       this.sidebarItems = availableSidebarItems.filter((el) => {
         if (el.rule === true) return true;
         const a = [];
@@ -136,6 +146,12 @@ export const useAuthCheckStore = defineStore({
       );
       this.canEditUsersInRole = TokenUtil.hasAccessTo(
         appConf.rules.userManaging,
+      );
+      this.hasAccessToProductsManaging = TokenUtil.hasAccessTo(
+        appConf.rules.productsManaging,
+      );
+      this.hasAccessToStockManaging = TokenUtil.hasAccessTo(
+        appConf.rules.stockManaging,
       );
     },
     logout() {},

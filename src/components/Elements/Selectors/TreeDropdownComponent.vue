@@ -34,6 +34,7 @@ import loggerUtil from "@/utils/logger/logger.util";
 import { ref } from "vue";
 import { useProductsStore } from "@/stores/products.store";
 import PrintUtil from "@/utils/localization/print.util";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "TreeDropdownComponent",
@@ -60,7 +61,18 @@ export default {
     };
   },
   mounted() {
-    if (this.modelValue) {
+    if (
+      this.multiselect &&
+      this.modelValue &&
+      typeof this.modelValue == "object" &&
+      this.modelValue.length > 0
+    ) {
+      this.selectedValue = {};
+      const values = this.modelValue.forEach((el) => {
+        this.selectedValue[el.id] = true;
+      });
+      LoggerUtil.debug(this.selectedValue);
+    } else if (this.modelValue) {
       this.selectedValue = { [this.modelValue]: true };
     }
     this.addNew = this.$refs.addNew;

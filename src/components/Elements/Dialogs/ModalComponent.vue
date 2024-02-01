@@ -41,10 +41,16 @@ import PrintUtil from "@/utils/localization/print.util";
 export default defineComponent({
   name: "ModalComponent",
   components: { MDBCol, MDBRow, MDBContainer, MDBBtn },
-  emits: ["close", "approved"],
+  emits: ["close", "closeNested", "approved"],
   data: () => ({
     store: useModalStore(),
   }),
+  props: {
+    nested: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
     isVisible() {
       return this.store.getIsVisible;
@@ -65,7 +71,8 @@ export default defineComponent({
     },
     close() {
       this.store.hide();
-      this.$emit("close");
+      if (!this.nested) this.$emit("close");
+      else this.$emit("closeNested");
     },
     closeAndApprove() {
       this.store.hide();

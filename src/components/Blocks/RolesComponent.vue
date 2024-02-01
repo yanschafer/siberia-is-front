@@ -1,4 +1,10 @@
 <template>
+  <ModalComponent
+    v-if="modalStore.getIsVisible && modalStore.getIsNested"
+    :nested="true"
+    @approved="removeAndCloseModal"
+    @close-nested="closeModal"
+  />
   <MDBAccordion v-model="activeItem" borderless>
     <MDBAccordionItem
       style="width: max-content; padding: 0.1rem !important"
@@ -61,11 +67,18 @@ import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.d
 import loggerUtil from "@/utils/logger/logger.util";
 import MultiSelectComponent from "@/components/Elements/Selectors/MultiSelectComponent.vue";
 import PrintUtil from "@/utils/localization/print.util";
+import { useModalStore } from "@/stores/modal.store";
+import ModalComponent from "@/components/Elements/Dialogs/ModalComponent.vue";
+import LoggerUtil from "@/utils/logger/logger.util";
+import ApiModelUtil from "@/utils/api-model.util";
+import TokenUtil from "@/utils/token.util";
+import { useUsersStore } from "@/stores/user.store";
 
 export default {
   name: "RolesComponent",
   components: {
     MultiSelectComponent,
+    ModalComponent,
     MDBContainer,
     MDBAccordion,
     MDBAccordionItem,
@@ -92,6 +105,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    rulesWithConfirmation: {
+      type: Array,
+      default: [],
+    },
   },
   data() {
     return {
@@ -106,6 +123,13 @@ export default {
     };
   },
   emits: ["newRuleSelected", "ruleRemoved"],
+  setup() {
+    const modalStore = useModalStore();
+
+    return {
+      modalStore,
+    };
+  },
   created() {
     this.selectedRules = this.role?.rules.map((el) => el.ruleId);
     this.lastCheckboxSelected = [...this.selectedRules];
@@ -140,6 +164,24 @@ export default {
     localize(key, module = "role") {
       return PrintUtil.localize(key, module);
     },
+    closeModal() {
+      this.selectedRules = [...this.lastCheckboxSelected];
+    },
+    removeAndCloseModal() {
+      const removedItem = this.lastCheckboxSelected.filter(
+        (el) => !this.selectedRules.includes(el),
+      );
+      if (removedItem.length > 0) {
+        this.emit("remove", {
+          roleId: this.role.id,
+          rule: removedItem[0],
+          stockId: null,
+        });
+      }
+      ApiModelUtil.refreshInterface();
+      this.lastCheckboxSelected = [...this.selectedRules];
+      this.modalStore.hide();
+    },
     emit(type, { roleId, rule, stockId }) {
       let linkedRule: LinkedRuleInputDto[] = [];
       if (typeof stockId == "object" && stockId != null)
@@ -152,11 +194,27 @@ export default {
       });
     },
     checkboxChanges() {
+      let modalWindowOpened = false;
       if (this.lastCheckboxSelected.length > this.selectedRules.length) {
         const removedItem = this.lastCheckboxSelected.filter(
           (el) => !this.selectedRules.includes(el),
         );
-        if (removedItem.length > 0) {
+        if (
+          this.$route.name == "User" &&
+          TokenUtil.getAuthorizedId() == useUsersStore().getSelectedUser.id &&
+          removedItem.length > 0 &&
+          removedItem[0] == appConf.rules.userManaging
+        ) {
+          modalWindowOpened = true;
+          this.modalStore.show(
+            {
+              title: this.localize("confirmDeletion", "default"),
+              text: this.localize("removeUserManagingRule", "user"),
+              disclaimer: "",
+            },
+            true,
+          );
+        } else if (removedItem.length > 0) {
           this.emit("remove", {
             roleId: this.role.id,
             rule: removedItem[0],
@@ -175,7 +233,11 @@ export default {
           });
         }
       }
-      this.lastCheckboxSelected = [...this.selectedRules];
+      //If confirmation modal was opened, we must not clear selection
+      if (!modalWindowOpened) {
+        ApiModelUtil.refreshInterface();
+        this.lastCheckboxSelected = [...this.selectedRules];
+      }
     },
     categoryItems(categoryIndex: number) {
       const category =

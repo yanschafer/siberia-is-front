@@ -109,6 +109,7 @@ export default {
       //ProfileComponent
       profileHeader: "Perfil",
       logout: "Cerrar sesión",
+      removeUserManagingRule: "¿Está seguro de que desea eliminar esta regla?",
     },
     role: {
       // RolesView.vue
@@ -165,6 +166,14 @@ export default {
       "Approve and cancel requests": "Aprobar y cancelar solicitudes",
       "Get request in process": "Obtener solicitud en proceso",
       "Approve request delivery": "Aprobar la entrega de la solicitud",
+      "Concrete stock managing": "Gestión de inventario de concreto",
+      "Concrete stock view": "Visualización de un almacén específico",
+      "Create stocks": "Creación de un almacén",
+      "Create products": "Creación de un producto",
+      "Stock data managing": "Gestión de datos de almacén",
+      "Update stock data": "Modificar datos de almacén",
+      "View stock data": "Ver almacenes",
+      "View products list": "Ver productos",
     },
     products: {
       //CreateProduct.vue
