@@ -3,19 +3,16 @@
     <template v-if="!isIdProvided">
       <MDBContainer class="d-flex container-content">
         <MDBCol class="col-auto">
-          <FiltersSidebarComponent
-              :filters-input="filtersInput"
-              @start-search="handleFiltersSearch"
-          />
+          <FiltersSidebarComponent @start-search="handleFiltersSearch" />
         </MDBCol>
         <MDBCol class="col-auto">
           <SearchComponent @search="handleSearch" />
           <TableComponent
-              :infoMessage="noDataMessage"
-              :rows="filteredUsers"
-              :columns="usersStore.usersColumns"
-              :searchTerm="usersStore.searchTerm"
-              @rowClick="handleRowClick"
+            :infoMessage="noDataMessage"
+            :rows="filteredUsers"
+            :columns="usersStore.usersColumns"
+            :searchTerm="usersStore.searchTerm"
+            @rowClick="handleRowClick"
           />
         </MDBCol>
       </MDBContainer>
@@ -37,6 +34,7 @@ import { FilterType } from "@/api/conf/app.conf";
 import { useToast } from "primevue/usetoast";
 import loggerUtil from "@/utils/logger/logger.util";
 import PrintUtil from "@/utils/localization/print.util";
+import { useFiltersStore } from "@/stores/filters.store";
 
 export default {
   name: "UsersView",
@@ -47,34 +45,24 @@ export default {
     SearchComponent,
     TableComponent,
   },
-  data (){
-      return{
-          noDataMessage: {
-              icon: "IconSearchOff",
-              title: this.localize("nothingWasFound"),
-              text: this.localize("pleaseClarifyYourSearchQuery", "role"),
-          },
-          filtersInput: {
-              name: {
-                  title: this.localize("name"),
-                  type: FilterType.TEXT,
-                  value: null,
-              },
-              login: {
-                  title: this.localize("login"),
-                  type: FilterType.TEXT,
-                  value: null,
-              },
-          },
-      }
+  data() {
+    return {
+      noDataMessage: {
+        icon: "IconSearchOff",
+        title: this.localize("nothingWasFound"),
+        text: this.localize("pleaseClarifyYourSearchQuery", "role"),
+      },
+    };
   },
   async setup() {
     const usersStore = useUsersStore();
+    const filtersStore = useFiltersStore();
     const route = useRoute();
     const router = useRouter();
 
     const loadRes = await usersStore.loadUsersList();
     return {
+      filtersStore,
       usersStore,
       router,
       route,
@@ -83,17 +71,32 @@ export default {
   },
   mounted() {
     this.loadRes.toastIfError(this.$toast, this.$nextTick);
+    this.filtersStore.setFilters({
+      name: {
+        title: this.localize("name"),
+        type: FilterType.TEXT,
+        value: null,
+      },
+      login: {
+        title: this.localize("login"),
+        type: FilterType.TEXT,
+        value: null,
+      },
+    });
   },
   computed: {
+    filtersInput() {
+      return this.filtersStore.getFilters;
+    },
     filteredUsers() {
       const searchTerm = this.usersStore.getSearchTerm;
       if (searchTerm.trim() === "") {
         return this.usersStore.getUserList;
       } else {
         return this.usersStore.getUserList.filter((row) =>
-            Object.values(row).some((value) =>
-                String(value).toLowerCase().includes(searchTerm.toLowerCase()),
-            ),
+          Object.values(row).some((value) =>
+            String(value).toLowerCase().includes(searchTerm.toLowerCase()),
+          ),
         );
       }
     },
@@ -106,7 +109,7 @@ export default {
   },
   methods: {
     localize(key, module = "user") {
-          return PrintUtil.localize(key, module);
+      return PrintUtil.localize(key, module);
     },
     handleSearch(searchTerm) {
       this.usersStore.searchTerm = searchTerm;
