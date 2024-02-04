@@ -40,11 +40,15 @@ export default {
     },
   },
   setup(props, { emit }) {
-    const selectedItem = ref(props.modelValue);
+    let selectedItem = null;
     const handleChange = (event) => {
-      LoggerUtil.debug(event);
-      selectedItem.value = event.value;
-      emit("update:modelValue", event.value);
+      if (selectedItem && selectedItem.id == event.value.id) {
+        selectedItem = null;
+        emit("update:modelValue", null);
+      } else {
+        selectedItem = event.value;
+        emit("update:modelValue", event.value);
+      }
     };
     return {
       selectedItem,
