@@ -2,10 +2,7 @@
   <template v-if="!isIdProvided">
     <MDBContainer class="d-flex container-content">
       <MDBCol class="col-auto">
-        <FiltersSidebarComponent
-          :filters-input="filtersInput"
-          @start-search="handleSearchStart"
-        />
+        <FiltersSidebarComponent @start-search="handleSearchStart" />
       </MDBCol>
       <MDBCol class="content-col">
         <TableComponent
@@ -53,10 +50,12 @@ export default {
   },
   async setup() {
     const historyStore = useHistoryStore();
+    const filtersStore = useFiltersStore();
     const route = useRoute();
     const router = useRouter();
 
     return {
+      filtersStore,
       historyStore,
       route,
       router,
@@ -66,7 +65,7 @@ export default {
     };
   },
   created() {
-    useFiltersStore().setFilters({
+    this.filtersStore.setFilters({
       author: {
         title: this.localize("Author"),
         type: FilterType.TEXT,

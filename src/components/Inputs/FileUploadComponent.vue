@@ -1,29 +1,34 @@
 <template>
   <div class="main">
     <div
-        class="dropzone-container"
-        @dragover="dragover"
-        @dragleave="dragleave"
-        @drop="drop"
+      class="dropzone-container"
+      @dragover="dragover"
+      @dragleave="dragleave"
+      @drop="drop"
     >
       <input
-          type="file"
-          name="file"
-          id="fileInput"
-          class="hidden-input"
-          @change="onChange"
-          ref="file"
-          accept=".pdf,.jpg,.jpeg,.png"
+        type="file"
+        name="file"
+        id="fileInput"
+        class="hidden-input"
+        @change="onChange"
+        ref="file"
+        accept=".jpg,.jpeg,.png"
       />
 
       <label for="fileInput" class="file-label">
         <div v-if="isDragging">
           <IconCloudUpload color="#4E4E4E" :size="48" stroke-width="1" />
-          <p class="upload-text mb-0">{{ localize("releaseToDropFileHere") }}</p>
+          <p class="upload-text mb-0">
+            {{ localize("releaseToDropFileHere") }}
+          </p>
         </div>
         <div v-else-if="!files.length">
           <IconCloudUpload color="#4E4E4E" :size="48" stroke-width="1" />
-          <p class="upload-text mb-0">{{ localize("dropFileHereOr") }} <u>{{ localize("clickHere") }}</u> {{ localize("toUpload") }}</p>
+          <p class="upload-text mb-0">
+            {{ localize("dropFileHereOr") }} <u>{{ localize("clickHere") }}</u>
+            {{ localize("toUpload") }}
+          </p>
         </div>
       </label>
 
@@ -37,10 +42,10 @@
           </div>
           <div>
             <button
-                class="btn btn-delete"
-                type="button"
-                @click="remove(files.indexOf(file))"
-                title="Remove file"
+              class="btn btn-delete"
+              type="button"
+              @click="remove(files.indexOf(file))"
+              title="Remove file"
             >
               <b>&times;</b>
             </button>
@@ -52,28 +57,42 @@
 </template>
 
 <script lang="ts">
-import {IconCloudUpload, IconMapPinFilled} from '@tabler/icons-vue';
+import { IconCloudUpload, IconMapPinFilled } from "@tabler/icons-vue";
 import PrintUtil from "@/utils/localization/print.util";
+import LoggerUtil from "@/utils/logger/logger.util";
 export default {
-  name: 'FileUploadComponent',
-  components: {IconMapPinFilled, IconCloudUpload},
+  name: "FileUploadComponent",
+  components: { IconMapPinFilled, IconCloudUpload },
   emits: ["changed"],
+  props: {
+    initValue: {
+      type: Array,
+      default: [],
+    },
+  },
   data() {
     return {
       isDragging: false,
+      initializerRemoved: false,
       files: [],
     };
   },
+  mounted() {
+    this.files = this.initValue.map((el) => el.file);
+    LoggerUtil.debug("Loaded into component", this.files);
+  },
   methods: {
     localize(key, module = "components") {
-          return PrintUtil.localize(key, module);
+      return PrintUtil.localize(key, module);
     },
     onChange() {
       this.files = [...this.$refs.file.files];
-      this.$emit("changed", this.files)
+      this.$emit("changed", this.files);
     },
-
     generateThumbnail(file) {
+      if (this.initValue.length && !this.initializerRemoved) {
+        return this.initValue[0].src;
+      }
       let fileSrc = URL.createObjectURL(file);
       setTimeout(() => {
         URL.revokeObjectURL(fileSrc);
@@ -83,25 +102,23 @@ export default {
 
     makeName(name) {
       return (
-          name.split(".")[0].substring(0, 3) +
-          "..." +
-          name.split(".")[name.split(".").length - 1]
+        name.split(".")[0].substring(0, 3) +
+        "..." +
+        name.split(".")[name.split(".").length - 1]
       );
     },
-
     remove(i) {
+      if (this.initValue?.length) this.initializerRemoved = true;
       this.files.splice(i, 1);
+      this.$emit("changed", this.files);
     },
-
     dragover(e) {
       e.preventDefault();
       this.isDragging = true;
     },
-
     dragleave() {
       this.isDragging = false;
     },
-
     drop(e) {
       e.preventDefault();
       this.$refs.file.files = e.dataTransfer.files;
@@ -172,6 +189,6 @@ export default {
 .btn-delete:hover {
   padding: 0;
   font-size: 1.5rem;
-  box-shadow: none!important;
+  box-shadow: none !important;
 }
 </style>

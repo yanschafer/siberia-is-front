@@ -11,7 +11,12 @@
     <Panel class="animate__animated animate__fadeIn">
       <MDBRow class="d-flex flex-row gap-5 header-row">
         <MDBCol v-if="!editing" class="col-auto">
-          <img class="product-img" :src="imageSource" :alt="productName" />
+          <img
+            id="product-image"
+            class="product-img"
+            :src="imageSource"
+            :alt="productName"
+          />
         </MDBCol>
         <MDBCol
           v-else
@@ -19,7 +24,10 @@
           class="col-auto animate__animated animate__flipInX animate__faster"
         >
           <div class="product-img">
-            <FileUploadComponent @changed="fileUploaded" />
+            <FileUploadComponent
+              :init-value="selectedFile"
+              @changed="fileUploaded"
+            />
           </div>
         </MDBCol>
         <MDBCol class="d-flex flex-column justify-content-center">
@@ -460,6 +468,8 @@ export default {
         link: true,
       },
       validator: new ValidatorUtil(),
+      selectedFile: [],
+      fileChangedWhileEditing: false,
     };
   },
   async setup() {
@@ -602,6 +612,12 @@ export default {
       loadRes.toastIfError(this.$toast, this.$nextTick);
     },
     async fileUploaded(files: File[]) {
+      if (!files.length) {
+        if (this.editing) this.fileChangedWhileEditing = true;
+        this.photoName = "";
+        this.photoBase64 = "";
+        return;
+      }
       const file = files[0];
       const encoded = await encoderUtil.encode(file);
       if (encoded == null) {
@@ -616,7 +632,33 @@ export default {
       this.photoBase64 = encoded || "";
       this.photoName = file.name;
     },
-    startEditing() {
+    async startEditing() {
+      if (this.imageName) {
+        const file = (await new Promise(async (resolve, reject) => {
+          const blob = await fetch(this.imageSource).then(
+            async (res) => await res.blob(),
+          );
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          LoggerUtil.debug("start loading");
+          reader.onload = () => {
+            resolve({
+              src: this.imageSource,
+              file: new File([reader.result], this.imageName),
+            });
+          };
+          reader.onerror = reject;
+        }).catch((_) => {
+          LoggerUtil.debug("error while loading");
+          LoggerUtil.debug(_);
+          null;
+        })) as File | null;
+        this.selectedFile = file ? [file] : [];
+      } else {
+        this.selectedFile = [];
+      }
+      LoggerUtil.debug("continue editing initialization", this.selectedFile);
+      this.fileChangedWhileEditing = false;
       this.editing = true;
       this.newCategory = String(this.categoryId);
       this.newBrand = this.selectedProduct.brand;
@@ -652,6 +694,7 @@ export default {
       this.clearValidationErrors();
       const brandId = this.newBrand ? this.newBrand.id : null;
       const collectionId = this.newCollection ? this.newCollection.id : null;
+      // LoggerUtil.debug(this.newCategory, this.categoryId, this.category);
       const categoryId = parseInt(String(this.newCategory));
       const expirationDate = parseInt(this.newExpirationDate) * 24 * 60 * 1000;
       const data = new ProductUpdateDto(
@@ -735,6 +778,11 @@ export default {
       if (this.selectedProduct.photo && this.selectedProduct.photo != "")
         return FilesResolverUtil.getStreamUrl(this.selectedProduct.photo || "");
       else return FilesResolverUtil.getStreamUrl("fileNotFound.jpeg");
+    },
+    imageName() {
+      if (this.selectedProduct.photo && this.selectedProduct.photo != "")
+        return this.selectedProduct.photo;
+      else return null;
     },
     productName() {
       return this.selectedProduct.name || "";

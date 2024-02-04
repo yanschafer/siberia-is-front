@@ -2,10 +2,7 @@
   <template v-if="!isIdProvided">
     <MDBContainer class="d-flex container-content">
       <MDBCol class="col-auto">
-        <FiltersSidebarComponent
-          :filters-input="filtersInput"
-          @start-search="handleFiltersSearch"
-        />
+        <FiltersSidebarComponent @start-search="handleFiltersSearch" />
       </MDBCol>
       <MDBCol class="content-col">
         <TableComponent
@@ -32,6 +29,7 @@ import { MDBContainer, MDBCol } from "mdb-vue-ui-kit";
 import FiltersSidebarComponent from "@/components/Elements/Filter sidebar/FiltersSidebarComponent.vue";
 import { useStorehousesStore } from "@/stores/storehouse.store";
 import PrintUtil from "@/utils/localization/print.util";
+import { useFiltersStore } from "@/stores/filters.store";
 export default {
   name: "OperationsView",
   components: {
@@ -53,41 +51,17 @@ export default {
         [TransactionType.OUTCOME]: "Sale",
         [TransactionType.TRANSFER]: "Request",
       },
-      filtersInput: {
-        status: {
-          title: "Operation status",
-          type: FilterType.SELECT,
-          items: this.operationStore.getStatusList,
-        },
-        type: {
-          title: "Operation type",
-          type: FilterType.SELECT,
-          items: [
-            { id: TransactionType.INCOME, name: "Arrival" },
-            { id: TransactionType.OUTCOME, name: "Sale" },
-            { id: TransactionType.TRANSFER, name: "Request" },
-          ],
-        },
-        to: {
-          title: "Storehouse TO",
-          type: FilterType.SELECT,
-          items: this.stockStore.getStorehouseList,
-        },
-        from: {
-          title: "Storehouse FROM",
-          type: FilterType.SELECT,
-          items: this.stockStore.getStorehouseList,
-        },
-      },
     };
   },
   async setup() {
     const operationStore = useOperationStore();
     const stockStore = useStorehousesStore();
+    const filtersStore = useFiltersStore();
     const route = useRoute();
     const router = useRouter();
 
     return {
+      filtersStore,
       operationStore,
       stockStore,
       route,
@@ -101,8 +75,41 @@ export default {
     this.loadOperationsRes.toastIfError(this.$toast, this.$nextTick);
     this.loadStocksRes.toastIfError(this.$toast, this.$nextTick);
     this.loadStatusesRes.toastIfError(this.$toast, this.$nextTick);
+    this.filtersStore.setFilters({
+      status: {
+        title: "Operation status",
+        type: FilterType.SELECT,
+        items: this.operationStore.getStatusList,
+        value: null,
+      },
+      type: {
+        title: "Operation type",
+        type: FilterType.SELECT,
+        items: [
+          { id: TransactionType.INCOME, name: "Arrival" },
+          { id: TransactionType.OUTCOME, name: "Sale" },
+          { id: TransactionType.TRANSFER, name: "Request" },
+        ],
+        value: null,
+      },
+      to: {
+        title: "Storehouse TO",
+        type: FilterType.SELECT,
+        items: this.stockStore.getStorehouseList,
+        value: null,
+      },
+      from: {
+        title: "Storehouse FROM",
+        type: FilterType.SELECT,
+        items: this.stockStore.getStorehouseList,
+        value: null,
+      },
+    });
   },
   computed: {
+    filtersInput() {
+      return this.filtersStore.getFilters;
+    },
     filteredOperations() {
       const searchTerm = this.operationStore.getSearchTerm;
       let data = [];
