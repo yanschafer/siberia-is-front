@@ -274,6 +274,7 @@ export default {
       messageForUser: "Are you sure you want to delete storehouse named",
       changesWereSaved: "Changes were saved",
       success: "Success",
+      operation: "Operation",
       created: "created",
       autoApproved: "auto-approved",
       failed: "Failed",

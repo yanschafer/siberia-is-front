@@ -116,7 +116,7 @@ export default {
     const storehouseStore = useStorehousesStore();
     return {
       storehouseStore,
-      productList: await productStore.getProductList,
+      productStore,
     };
   },
   created() {
@@ -129,6 +129,14 @@ export default {
     this.storehouseStore.$onAction(({ name }) => {
       if (name == "operationSucceed") this.addedList = [];
     });
+  },
+  computed: {
+    productList() {
+      if (!this.needValidation) return this.productStore.getProductList;
+      return this.productStore.getProductList.filter(
+        (el) => this.amountValidation[el.id],
+      );
+    },
   },
   methods: {
     handleRowDelete(data) {

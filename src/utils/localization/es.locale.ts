@@ -277,6 +277,7 @@ export default {
       messageForUser: "¿Estás seguro de que deseas eliminar el almacén llamado",
       changesWereSaved: "Los cambios fueron guardados",
       success: "Éxito",
+      operation: "Operación",
       created: "creado",
       autoApproved: "autoaprobado",
       failed: "Fallido",
@@ -295,7 +296,8 @@ export default {
       selectAProduct: "Seleccionar un producto",
       quantity: "Cantidad",
       price: "Precio",
-      quantityAndProductMustBeSelected: "Debe seleccionar Cantidad y Producto",
+      quantityAndProductMustBeSelected:
+        "Cantidad y Producto deben ser seleccionados",
       priceMustBeSelected: "Debe seleccionar el Precio",
       notEnoughProductsStorehouses: "No hay suficientes productos",
       noProductInList: "Aún no hay productos en la lista",
