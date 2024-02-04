@@ -64,13 +64,10 @@ import {
 import MultiSelect from "primevue/multiselect";
 import { appConf } from "@/api/conf/app.conf";
 import LinkedRuleInputDto from "@/api/modules/rbac/dto/rules/linked-rule-input.dto";
-import loggerUtil from "@/utils/logger/logger.util";
 import MultiSelectComponent from "@/components/Elements/Selectors/MultiSelectComponent.vue";
 import PrintUtil from "@/utils/localization/print.util";
 import { useModalStore } from "@/stores/modal.store";
 import ModalComponent from "@/components/Elements/Dialogs/ModalComponent.vue";
-import LoggerUtil from "@/utils/logger/logger.util";
-import ApiModelUtil from "@/utils/api-model.util";
 import TokenUtil from "@/utils/token.util";
 import { useUsersStore } from "@/stores/user.store";
 
@@ -178,7 +175,6 @@ export default {
           stockId: null,
         });
       }
-      ApiModelUtil.refreshInterface();
       this.lastCheckboxSelected = [...this.selectedRules];
       this.modalStore.hide();
     },
@@ -235,7 +231,6 @@ export default {
       }
       //If confirmation modal was opened, we must not clear selection
       if (!modalWindowOpened) {
-        ApiModelUtil.refreshInterface();
         this.lastCheckboxSelected = [...this.selectedRules];
       }
     },

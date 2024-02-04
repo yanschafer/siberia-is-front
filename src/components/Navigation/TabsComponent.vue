@@ -51,6 +51,7 @@ import LinkedRuleDto from "@/api/modules/rbac/dto/rules/linked-rule.dto";
 import { useRulesStore } from "@/stores/rules.store";
 import { useStorehousesStore } from "@/stores/storehouse.store";
 import PrintUtil from "@/utils/localization/print.util";
+import ApiModelUtil from "@/utils/api-model.util";
 
 export default defineComponent({
   components: {
@@ -143,6 +144,7 @@ export default defineComponent({
       if (!result.success) {
         result.getError().showServerErrorToast(this.$toast, this.$nextTick);
       } else {
+        await ApiModelUtil.refreshInterface();
         this.showSuccessToast("removed");
       }
     },
@@ -160,6 +162,7 @@ export default defineComponent({
       if (!result.success) {
         result.getError().showServerErrorToast(this.$toast, this.$nextTick);
       } else {
+        await ApiModelUtil.refreshInterface();
         this.showSuccessToast("added");
       }
     },

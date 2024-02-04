@@ -76,7 +76,7 @@
         :key="index"
       >
         <router-link
-          v-if="breadcrumb.path !== '/dashboard'"
+          v-if="breadcrumb.path !== '/dashboard' && notLast(index)"
           :to="{ path: breadcrumb.path }"
           >{{ breadcrumb.name }}</router-link
         >
@@ -183,6 +183,9 @@ export default defineComponent({
     },
     handleClickOperations() {
       this.$router.push({ name: "Operations" });
+    },
+    notLast(index) {
+      return this.breadcrumbs?.length - 1 > index;
     },
   },
   computed: {
