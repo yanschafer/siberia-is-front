@@ -314,11 +314,6 @@ export default {
       max: "máx",
     },
     components: {
-      //MaintenanceMode
-      maintenanceHeading: "Trabajos de mantenimiento",
-      maintenanceText:
-        "Estamos realizando trabajos de mantenimiento en el sistema. Por favor, vuelva más tarde.",
-
       //SearchComponent.vue
       search: "Buscar",
 
