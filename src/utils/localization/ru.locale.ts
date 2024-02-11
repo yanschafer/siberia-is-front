@@ -340,6 +340,11 @@ export default {
       max: "макс",
     },
     components: {
+      //MaintenanceMode.vue
+      maintenanceHeading: "Технические работы",
+      maintenanceText:
+        "Мы проводим технические работы в системе. Пожалуйста, зайдите позже.",
+
       //SearchComponent.vue
       search: "Поиск",
 

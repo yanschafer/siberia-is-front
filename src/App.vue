@@ -1,18 +1,26 @@
 <script lang="ts">
+import { defineComponent, ref } from "vue";
 import { RouterView } from "vue-router";
+import MaintenanceMode from "@/components/Elements/Dialogs/MaintenanceMode.vue";
 import TokenUtil from "@/utils/token.util";
 import ApiModelUtil from "@/utils/api-model.util";
 
-export default {
-  components: { RouterView },
+export default defineComponent({
+  components: { RouterView, MaintenanceMode },
+  setup() {
+    const isMaintenanceMode = ref(true);
+
+    return { isMaintenanceMode };
+  },
   created() {
     if (TokenUtil.isAuthorized()) new ApiModelUtil("").initSockets(this.$toast);
   },
-};
+});
 </script>
 
 <template>
-  <RouterView />
+  <MaintenanceMode v-if="isMaintenanceMode" />
+  <RouterView v-else />
 </template>
 
 <style>

@@ -310,6 +310,11 @@ export default {
       max: "max",
     },
     components: {
+      //MaintenanceMode
+      maintenanceHeading: "Maintenance Work",
+      maintenanceText:
+        "We are performing maintenance work on the system. Please check back later.",
+
       //SearchComponent.vue
       search: "Search",
 
