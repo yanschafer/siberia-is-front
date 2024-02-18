@@ -7,6 +7,7 @@
     optionLabel="name"
     :placeholder="placeholder"
     class="w-full md:w-14rem"
+    :virtualScrollerOptions="{ itemSize: 38 }"
   >
   </Dropdown>
 </template>
