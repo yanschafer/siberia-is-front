@@ -13,19 +13,33 @@
       <span class="user-roles-heading">{{ localize("dateCapslock") }}</span>
       <span class="username">{{ date }}</span>
     </MDBRow>
+    <Button class="btn btn-danger utility-btn">Discard changes</Button>
   </MDBContainer>
-  <MDBContainer class="pt-4"> {{ description }} </MDBContainer>
+  <MDBContainer class="pt-4">
+    {{ description }}
+    <BeforeAfterComponent />
+  </MDBContainer>
 </template>
+
 <script lang="ts">
 import { MDBBadge, MDBBtn, MDBCol, MDBContainer, MDBRow } from "mdb-vue-ui-kit";
 import TabsComponent from "@/components/Navigation/TabsComponent.vue";
 import { useHistoryStore } from "@/stores/history.store";
 import { useRoute } from "vue-router";
 import PrintUtil from "@/utils/localization/print.util";
+import BeforeAfterComponent from "@/views/History/BeforeAfterComponent.vue";
 
 export default {
   name: "SingleHistoryView",
-  components: { MDBCol, TabsComponent, MDBRow, MDBContainer, MDBBadge, MDBBtn },
+  components: {
+    BeforeAfterComponent,
+    MDBCol,
+    TabsComponent,
+    MDBRow,
+    MDBContainer,
+    MDBBadge,
+    MDBBtn,
+  },
   props: {
     id: {
       type: Number,
