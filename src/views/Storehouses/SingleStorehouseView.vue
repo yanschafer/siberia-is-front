@@ -51,7 +51,7 @@
         class="d-flex flex-row w-100 align-items-center align-self-center gap-3 pt-4"
       >
         <h1 class="storehouse-heading">{{ localize("productsInStock") }}</h1>
-        <template v-if="!newArrival && !newSale && !newRequest">
+        <template v-if="!newArrival && !newSale && !newRequest && !newWriteOff">
           <MDBBtn
             v-if="arrivalAvailable"
             @click="addNewArrival"
@@ -72,6 +72,13 @@
             class="utility-btn"
             outline="black"
             >{{ localize("newRequestCapslock") }}</MDBBtn
+          >
+          <MDBBtn
+            v-if="requestAvailable"
+            @click="addWriteOff"
+            class="utility-btn"
+            outline="black"
+            >- WRITE-OFF</MDBBtn
           >
           <SearchComponent class="search" @search="handleSearch" />
           <TableComponent
@@ -104,6 +111,13 @@
               :show-price="false"
               @cancel="newRequest = false"
               @save="saveNewRequest"
+            ></StorehouseOperation>
+          </template>
+          <template v-else-if="newWriteOff">
+            <StorehouseOperation
+              :title="'New write-off registration'"
+              @cancel="newWriteOff = false"
+              @save="saveNewArrival"
             ></StorehouseOperation>
           </template>
         </template>
@@ -163,6 +177,7 @@ export default {
   },
   data() {
     return {
+      newWriteOff: false,
       newArrival: false,
       newSale: false,
       modalTitle: this.localize("confirmDeletion"),
@@ -324,6 +339,7 @@ export default {
       }
     },
     addNewArrival() {
+      this.newWriteOff = false;
       this.newArrival = true;
       this.newSale = false;
       this.newRequest = false;
@@ -342,6 +358,7 @@ export default {
       }
     },
     addNewSale() {
+      this.newWriteOff = false;
       this.newArrival = false;
       this.newSale = true;
       this.newRequest = false;
@@ -369,6 +386,7 @@ export default {
       }
     },
     addNewRequest() {
+      this.newWriteOff = false;
       this.newArrival = false;
       this.newSale = false;
       this.newRequest = true;
@@ -385,6 +403,12 @@ export default {
       } else {
         res.toastIfError(this.$toast, this.$nextTick);
       }
+    },
+    addWriteOff() {
+      this.newWriteOff = true;
+      this.newArrival = false;
+      this.newSale = false;
+      this.newRequest = false;
     },
     handleSearch(searchTerm) {
       this.searchTerm = searchTerm;

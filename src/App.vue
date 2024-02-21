@@ -37,9 +37,7 @@ export default {
   border-radius: 10px;
   border: 3px solid #ffffff;
 }
-* {
-  font-family: "Lato", sans-serif;
-}
+
 #app {
   width: 100vw !important;
   overflow: hidden;

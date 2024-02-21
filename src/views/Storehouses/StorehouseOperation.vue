@@ -6,6 +6,8 @@
         :placeholder="placeholder"
         :items="productList"
         v-model="selectedProduct"
+        :showBadge="true"
+        :filter="true"
       />
     </MDBCol>
     <MDBCol class="col-auto">

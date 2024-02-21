@@ -8,17 +8,25 @@
     :placeholder="placeholder"
     class="w-full md:w-14rem"
   >
+    <template #option="slotProps">
+      <div class="selector-option align-items-center justify-content-between">
+        <div>{{ slotProps.option.name }}</div>
+        <Badge v-if="showBadge" value="SKU" class="ml-2"></Badge>
+      </div>
+    </template>
   </Dropdown>
 </template>
 
 <script lang="ts">
 import Dropdown from "primevue/dropdown";
+import Badge from "primevue/badge";
 import { ref } from "vue";
-import LoggerUtil from "@/utils/logger/logger.util";
+
 export default {
   name: "SelectComponent",
   components: {
     Dropdown,
+    Badge,
   },
   props: {
     items: {
@@ -38,17 +46,16 @@ export default {
     placeholder: {
       type: String,
     },
+    showBadge: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props, { emit }) {
-    let selectedItem = null;
+    let selectedItem = ref(null);
     const handleChange = (event) => {
-      if (selectedItem && selectedItem.id == event.value.id) {
-        selectedItem = null;
-        emit("update:modelValue", null);
-      } else {
-        selectedItem = event.value;
-        emit("update:modelValue", event.value);
-      }
+      selectedItem.value = event.value;
+      emit("update:modelValue", event.value);
     };
     return {
       selectedItem,
@@ -56,10 +63,14 @@ export default {
     };
   },
   mounted() {
-    this.$watch("modelValue", () => {
-      this.selectedItem = this.modelValue;
+    this.$watch("modelValue", (newValue) => {
+      this.selectedItem.value = newValue;
     });
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.selector-option {
+  display: flex;
+}
+</style>
