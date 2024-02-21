@@ -8,43 +8,58 @@
     <MDBContainer
       class="animate__animated animate__fadeIn storehouse-info d-flex flex-column gap-3"
     >
-      <h1 v-if="!editing" class="storehouse-heading">{{ storehouseName }}</h1>
-      <InputText
-        v-else
-        class="input-wrapper animate__animated animate__fadeIn username-input"
-        :class="{ 'p-invalid': !validate.name }"
-        type="text"
-        v-model="newStorehouseName"
-      />
-      <span v-if="!editing" class="storehouse-adress">
-        <IconMapPinFilled color="#4E4E4E" :size="24" stroke-width="1" />
-        {{ storehouseAddress }}
-      </span>
-      <InputText
-        v-else
-        class="input-wrapper animate__animated animate__fadeIn username-input"
-        :class="{ 'p-invalid': !validate.address }"
-        type="text"
-        v-model="newStorehouseAdress"
-      />
-      <MDBBtn
-        v-if="!editing && editBtnAvailable"
-        @click="startEditing"
-        class="utility-btn"
-        outline="black"
-        >{{ localize("editStorehouse") }}</MDBBtn
-      >
-      <MDBCol v-if="editing" class="d-flex justify-content-start gap-2">
-        <MDBBtn @click="cancelEditing" class="utility-btn" outline="black">{{
-          localize("cancelCapslock", "default")
-        }}</MDBBtn>
-        <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
-          localize("deleteStorehouseCapslock")
-        }}</MDBBtn>
-        <MDBBtn @click="saveChanges" class="utility-btn btn-black">{{
-          localize("saveCapslock", "default")
-        }}</MDBBtn>
-      </MDBCol>
+      <MDBRow class="d-flex flex-row justify-content-around w-100">
+        <MDBCol>
+          <h1 v-if="!editing" class="storehouse-heading">
+            {{ storehouseName }}
+          </h1>
+          <InputText
+            v-else
+            class="input-wrapper animate__animated animate__fadeIn username-input"
+            :class="{ 'p-invalid': !validate.name }"
+            type="text"
+            v-model="newStorehouseName"
+          />
+          <span v-if="!editing" class="storehouse-adress">
+            <IconMapPinFilled color="#4E4E4E" :size="24" stroke-width="1" />
+            {{ storehouseAddress }}
+          </span>
+          <InputText
+            v-else
+            class="input-wrapper animate__animated animate__fadeIn username-input"
+            :class="{ 'p-invalid': !validate.address }"
+            type="text"
+            v-model="newStorehouseAdress"
+          />
+          <MDBBtn
+            v-if="!editing && editBtnAvailable"
+            @click="startEditing"
+            class="utility-btn"
+            outline="black"
+            >{{ localize("editStorehouse") }}</MDBBtn
+          >
+          <MDBCol v-if="editing" class="d-flex justify-content-start gap-2">
+            <MDBBtn
+              @click="cancelEditing"
+              class="utility-btn"
+              outline="black"
+              >{{ localize("cancelCapslock", "default") }}</MDBBtn
+            >
+            <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
+              localize("deleteStorehouseCapslock")
+            }}</MDBBtn>
+            <MDBBtn @click="saveChanges" class="utility-btn btn-black">{{
+              localize("saveCapslock", "default")
+            }}</MDBBtn>
+          </MDBCol>
+        </MDBCol>
+        <MDBCol class="d-flex flex-row justify-content-end">
+          <img
+            class="qr"
+            src="https://gorcom36.ru/upload/iblock/c1f/qrcodecurves.png"
+          />
+        </MDBCol>
+      </MDBRow>
     </MDBContainer>
     <MDBContainer class="d-flex flex-column gap-3">
       <MDBRow
@@ -535,5 +550,8 @@ export default {
   overflow-x: hidden;
   height: 100%;
   max-height: 80vh;
+}
+.qr {
+  width: 20%;
 }
 </style>

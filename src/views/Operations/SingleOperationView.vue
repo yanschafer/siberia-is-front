@@ -1,59 +1,71 @@
 <template>
   <MDBContainer class="single-user-info d-flex flex-column gap-3">
-    <MDBRow class="d-flex">
-      <MDBRow class="w-auto">
-        <h1 class="username-heading">
-          {{ operation }}
-          <template v-if="from !== ''"
-            >{{ localize("from") }} "{{ from }}"</template
-          >
-          <template v-if="to !== ''"> {{ localize("to") }} "{{ to }}"</template>
-        </h1>
-      </MDBRow>
-    </MDBRow>
-    <MDBRow class="d-flex flex-nowrap">
-      <MDBCol class="col-auto">
-        <span class="user-roles-heading"
-          >{{ localize("statusCapslock") }}:
-        </span>
-        <span class="username">{{ status }}</span>
-      </MDBCol>
-      <template v-if="haveAvailableStatuses">
-        <MDBCol class="col-auto">
-          <MDBBtn class="utility-btn" @click="toggleStatusChange">
-            {{ changeStatusTitle }}
-          </MDBBtn>
-        </MDBCol>
-        <template v-if="isStatusOnSelect">
+    <MDBRow class="d-flex flex-row justify-content-around w-100">
+      <MDBCol>
+        <MDBRow class="d-flex">
+          <MDBRow class="w-auto">
+            <h1 class="username-heading">
+              {{ operation }}
+              <template v-if="from !== ''"
+                >{{ localize("from") }} "{{ from }}"</template
+              >
+              <template v-if="to !== ''">
+                {{ localize("to") }} "{{ to }}"</template
+              >
+            </h1>
+          </MDBRow>
+        </MDBRow>
+        <MDBRow class="d-flex flex-nowrap">
           <MDBCol class="col-auto">
-            <span class="user-roles-heading">{{
-              localize("statusCapslock")
-            }}</span>
-            <SelectComponent
-              v-model="selectedStatus"
-              @change="handleStatusChange"
-              :placeholder="statusPlaceholder"
-              :filter="false"
-              :items="availableStatuses"
-            />
+            <span class="user-roles-heading"
+              >{{ localize("statusCapslock") }}:
+            </span>
+            <span class="username">{{ status }}</span>
           </MDBCol>
-          <MDBCol class="col-auto" v-if="selectedStatusNeedStock">
-            <span class="user-roles-heading">{{
-              localize("storehouseCapslock")
-            }}</span>
-            <SelectComponent
-              v-model="selectedStorehouse"
-              @click="handleStorehouseChange"
-              :placeholder="storehousesPlaceholder"
-              :filter="true"
-              :items="storehousesList"
-            />
-          </MDBCol>
-          <MDBBtn class="utility-btn" @click="saveStatus">
-            {{ localize("save") }}
-          </MDBBtn>
-        </template>
-      </template>
+          <template v-if="haveAvailableStatuses">
+            <MDBCol class="col-auto">
+              <MDBBtn class="utility-btn" @click="toggleStatusChange">
+                {{ changeStatusTitle }}
+              </MDBBtn>
+            </MDBCol>
+            <template v-if="isStatusOnSelect">
+              <MDBCol class="col-auto">
+                <span class="user-roles-heading">{{
+                  localize("statusCapslock")
+                }}</span>
+                <SelectComponent
+                  v-model="selectedStatus"
+                  @change="handleStatusChange"
+                  :placeholder="statusPlaceholder"
+                  :filter="false"
+                  :items="availableStatuses"
+                />
+              </MDBCol>
+              <MDBCol class="col-auto" v-if="selectedStatusNeedStock">
+                <span class="user-roles-heading">{{
+                  localize("storehouseCapslock")
+                }}</span>
+                <SelectComponent
+                  v-model="selectedStorehouse"
+                  @click="handleStorehouseChange"
+                  :placeholder="storehousesPlaceholder"
+                  :filter="true"
+                  :items="storehousesList"
+                />
+              </MDBCol>
+              <MDBBtn class="utility-btn" @click="saveStatus">
+                {{ localize("save") }}
+              </MDBBtn>
+            </template>
+          </template>
+        </MDBRow>
+      </MDBCol>
+      <MDBCol class="d-flex flex-row justify-content-end">
+        <img
+          class="qr"
+          src="https://gorcom36.ru/upload/iblock/c1f/qrcodecurves.png"
+        />
+      </MDBCol>
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="mt-4">
@@ -340,5 +352,8 @@ export default {
 }
 :deep(.nav-link) {
   font-weight: 600 !important;
+}
+.qr {
+  width: 20%;
 }
 </style>

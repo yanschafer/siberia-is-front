@@ -15,6 +15,7 @@
           outline="black"
           >{{ addButtonLabel }}</MDBBtn
         >
+        <!-- TODO Разбить по компонентам модалку  -->
         <MDBBtn
           v-if="showUploadButton && addButtonAvailable"
           class="animate__animated animate__fadeInUp utility-btn"
@@ -84,7 +85,6 @@
         </MDBTooltip>
       </MDBContainer>
     </MDBContainer>
-
     <MDBBreadcrumb class="breadcrumbs breadcrumb-with-mdb-icon">
       <MDBBreadcrumbItem
         v-for="(breadcrumb, index) in breadcrumbs"
