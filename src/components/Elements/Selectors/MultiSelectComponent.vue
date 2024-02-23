@@ -8,15 +8,20 @@
     class="w-full md:w-20rem"
     @change="handleChange"
     :disabled="disabled"
+    :selectAll="selectAll"
+    @selectall-change="handleSelectAll($event)"
+    :virtualScrollerOptions="{ itemSize: 44 }"
   />
 </template>
 <script lang="ts">
 import MultiSelect from "primevue/multiselect";
+import LoggerUtil from "@/utils/logger/logger.util";
 export default {
   components: { MultiSelect },
   data: () => ({
     lastItems: [],
     items: [],
+    selectAll: false,
   }),
   props: {
     startItems: Array,
@@ -28,8 +33,10 @@ export default {
   },
   emits: ["itemsAdded", "itemsRemoved", "itemsChanged"],
   created() {
+    if (this.startItems)
+      this.selectAll = this.options?.length == this.startItems?.length;
     this.items = [...this.startItems];
-    this.lastItems = [...this.startItems];
+    this.updateLastItems();
   },
   mounter() {
     this.$watch("modelValue", () => {
@@ -40,24 +47,69 @@ export default {
     listContains(list, item) {
       return list.filter((el) => el.id == item).length > 0;
     },
+    updateLastItems() {
+      this.items.forEach((el) => {
+        this.lastItems[el.id] = true;
+      });
+    },
+    getAddedItems() {
+      const items = [];
+      this.items.forEach((el) => {
+        if (!this.lastItems[el.id]) {
+          this.lastItems[el.id] = true;
+          items.push(el.id);
+          return true;
+        }
+        return false;
+      });
+      return items;
+    },
+    getRemovedItems() {
+      const items = { ...this.lastItems };
+      this.lastItems = {};
+      this.items.forEach((el) => {
+        this.lastItems[el.id] = true;
+        delete items[el.id];
+      });
+      return Object.keys(items);
+    },
+    handleSelectAll(event) {
+      this.selectAll = event.checked;
+      LoggerUtil.debug("Handle select all");
+      if (event.checked) {
+        this.items = [];
+        const added = [];
+        this.options.forEach((el) => {
+          if (!this.lastItems[el.id]) {
+            added.push(el.id);
+            this.lastItems[el.id] = true;
+          }
+          this.items.push(el);
+        });
+        this.$emit("itemsAdded", added);
+        LoggerUtil.debug("For each stopped", added, this.lastItems);
+      } else {
+        if (this.items.length == 0) return;
+        const removedItems = this.items.map((el) => el.id);
+        this.items = [];
+        this.lastItems = {};
+        this.$emit("itemsRemoved", removedItems);
+      }
+    },
     async handleChange() {
-      if (this.lastItems.length > this.items.length) {
-        const removedItems = this.lastItems
-          .filter((el) => !this.listContains(this.items, el.id))
-          .map((el) => el.id);
+      if (Object.keys(this.lastItems).length > this.items.length) {
+        const removedItems = this.getRemovedItems();
         if (removedItems.length > 0) {
           this.$emit("itemsRemoved", removedItems);
         }
       } else {
-        const addedItems = this.items
-          .filter((el) => !this.listContains(this.lastItems, el.id))
-          .map((el) => el.id);
+        const addedItems = this.getAddedItems();
         if (addedItems.length > 0) {
           this.$emit("itemsAdded", addedItems);
         }
       }
+      LoggerUtil.debug(this.items, this.lastItems);
       this.$emit("itemsChanged", this.items);
-      this.lastItems = [...this.items];
     },
   },
 };

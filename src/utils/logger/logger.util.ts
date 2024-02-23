@@ -29,7 +29,8 @@ class LoggerUtil {
     if (this.level < mode) return;
 
     console.log("LOG: ", prefix);
-    console.log("FROM: ", this.parseStacktrace(new Error().stack));
+    if (appConf.showStackTrace)
+      console.log("FROM: ", this.parseStacktrace(new Error().stack));
     message[0].forEach((el) => console.log(el));
     console.log("------------------");
   }
