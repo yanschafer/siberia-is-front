@@ -6,6 +6,7 @@
       <HeaderComponent
         :add-btn-route="addBtnRoute"
         :show-add-button="showAddBtn"
+        :show-upload-button="showUploadBtn"
         :title="pageTitle"
         :breadcrumbs="navBreadcrumbs"
       />
@@ -45,6 +46,7 @@ export default {
       router: useRouter(),
       pageTitle: "",
       showAddBtn: false,
+      showUploadBtn: true,
       addBtnRoute: "",
     };
   },

@@ -8,50 +8,65 @@
     <MDBContainer
       class="animate__animated animate__fadeIn storehouse-info d-flex flex-column gap-3"
     >
-      <h1 v-if="!editing" class="storehouse-heading">{{ storehouseName }}</h1>
-      <InputText
-        v-else
-        class="input-wrapper animate__animated animate__fadeIn username-input"
-        :class="{ 'p-invalid': !validate.name }"
-        type="text"
-        v-model="newStorehouseName"
-      />
-      <span v-if="!editing" class="storehouse-adress">
-        <IconMapPinFilled color="#4E4E4E" :size="24" stroke-width="1" />
-        {{ storehouseAddress }}
-      </span>
-      <InputText
-        v-else
-        class="input-wrapper animate__animated animate__fadeIn username-input"
-        :class="{ 'p-invalid': !validate.address }"
-        type="text"
-        v-model="newStorehouseAdress"
-      />
-      <MDBBtn
-        v-if="!editing && editBtnAvailable"
-        @click="startEditing"
-        class="utility-btn"
-        outline="black"
-        >{{ localize("editStorehouse") }}</MDBBtn
-      >
-      <MDBCol v-if="editing" class="d-flex justify-content-start gap-2">
-        <MDBBtn @click="cancelEditing" class="utility-btn" outline="black">{{
-          localize("cancelCapslock", "default")
-        }}</MDBBtn>
-        <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
-          localize("deleteStorehouseCapslock")
-        }}</MDBBtn>
-        <MDBBtn @click="saveChanges" class="utility-btn btn-black">{{
-          localize("saveCapslock", "default")
-        }}</MDBBtn>
-      </MDBCol>
+      <MDBRow class="d-flex flex-row justify-content-around w-100">
+        <MDBCol>
+          <h1 v-if="!editing" class="storehouse-heading">
+            {{ storehouseName }}
+          </h1>
+          <InputText
+            v-else
+            class="input-wrapper animate__animated animate__fadeIn username-input"
+            :class="{ 'p-invalid': !validate.name }"
+            type="text"
+            v-model="newStorehouseName"
+          />
+          <span v-if="!editing" class="storehouse-adress">
+            <IconMapPinFilled color="#4E4E4E" :size="24" stroke-width="1" />
+            {{ storehouseAddress }}
+          </span>
+          <InputText
+            v-else
+            class="input-wrapper animate__animated animate__fadeIn username-input"
+            :class="{ 'p-invalid': !validate.address }"
+            type="text"
+            v-model="newStorehouseAdress"
+          />
+          <MDBBtn
+            v-if="!editing && editBtnAvailable"
+            @click="startEditing"
+            class="utility-btn"
+            outline="black"
+            >{{ localize("editStorehouse") }}</MDBBtn
+          >
+          <MDBCol v-if="editing" class="d-flex justify-content-start gap-2">
+            <MDBBtn
+              @click="cancelEditing"
+              class="utility-btn"
+              outline="black"
+              >{{ localize("cancelCapslock", "default") }}</MDBBtn
+            >
+            <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
+              localize("deleteStorehouseCapslock")
+            }}</MDBBtn>
+            <MDBBtn @click="saveChanges" class="utility-btn btn-black">{{
+              localize("saveCapslock", "default")
+            }}</MDBBtn>
+          </MDBCol>
+        </MDBCol>
+        <MDBCol class="d-flex flex-row justify-content-end">
+          <img
+            class="qr"
+            src="https://gorcom36.ru/upload/iblock/c1f/qrcodecurves.png"
+          />
+        </MDBCol>
+      </MDBRow>
     </MDBContainer>
     <MDBContainer class="d-flex flex-column gap-3">
       <MDBRow
         class="d-flex flex-row w-100 align-items-center align-self-center gap-3 pt-4"
       >
         <h1 class="storehouse-heading">{{ localize("productsInStock") }}</h1>
-        <template v-if="!newArrival && !newSale && !newRequest">
+        <template v-if="!newArrival && !newSale && !newRequest && !newWriteOff">
           <MDBBtn
             v-if="arrivalAvailable"
             @click="addNewArrival"
@@ -72,6 +87,13 @@
             class="utility-btn"
             outline="black"
             >{{ localize("newRequestCapslock") }}</MDBBtn
+          >
+          <MDBBtn
+            v-if="requestAvailable"
+            @click="addWriteOff"
+            class="utility-btn"
+            outline="black"
+            >- WRITE-OFF</MDBBtn
           >
           <SearchComponent class="search" @search="handleSearch" />
           <TableComponent
@@ -104,6 +126,13 @@
               :show-price="false"
               @cancel="newRequest = false"
               @save="saveNewRequest"
+            ></StorehouseOperation>
+          </template>
+          <template v-else-if="newWriteOff">
+            <StorehouseOperation
+              :title="'New write-off registration'"
+              @cancel="newWriteOff = false"
+              @save="saveNewArrival"
             ></StorehouseOperation>
           </template>
         </template>
@@ -163,6 +192,7 @@ export default {
   },
   data() {
     return {
+      newWriteOff: false,
       newArrival: false,
       newSale: false,
       modalTitle: this.localize("confirmDeletion"),
@@ -324,6 +354,7 @@ export default {
       }
     },
     addNewArrival() {
+      this.newWriteOff = false;
       this.newArrival = true;
       this.newSale = false;
       this.newRequest = false;
@@ -342,6 +373,7 @@ export default {
       }
     },
     addNewSale() {
+      this.newWriteOff = false;
       this.newArrival = false;
       this.newSale = true;
       this.newRequest = false;
@@ -369,6 +401,7 @@ export default {
       }
     },
     addNewRequest() {
+      this.newWriteOff = false;
       this.newArrival = false;
       this.newSale = false;
       this.newRequest = true;
@@ -385,6 +418,12 @@ export default {
       } else {
         res.toastIfError(this.$toast, this.$nextTick);
       }
+    },
+    addWriteOff() {
+      this.newWriteOff = true;
+      this.newArrival = false;
+      this.newSale = false;
+      this.newRequest = false;
     },
     handleSearch(searchTerm) {
       this.searchTerm = searchTerm;
@@ -511,5 +550,8 @@ export default {
   overflow-x: hidden;
   height: 100%;
   max-height: 80vh;
+}
+.qr {
+  width: 20%;
 }
 </style>

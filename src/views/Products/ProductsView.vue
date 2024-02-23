@@ -1,29 +1,61 @@
 <template>
-  <div class="container-fluid" style="padding: 0">
-    <template v-if="!isIdProvided">
-      <MDBContainer class="d-flex container-content">
-        <MDBCol class="col-auto">
-          <FiltersSidebarComponent @start-search="handleFiltersSearch" />
-        </MDBCol>
-        <MDBCol class="col-auto">
-          <MDBContainer class="table-container">
-            <SearchComponent @search="handleSearch" />
-            <TableComponent
-              :info-message="noDataMessage"
-              :editableColumns="editableColumns"
-              :showEditColumn="true"
-              :rows="getFilteredProducts"
-              :columns="productsStore.productColumns"
-              :searchTerm="productsStore.searchTerm"
-              @rowClick="handleRowClick"
-              @row-edit-save="handleRowEdit"
-            />
+  <ScrollPanel
+    style="height: 80vh; width: 88vw"
+    class="main-area animate__animated animate__fadeIn"
+  >
+    <TabView>
+      <TabPanel header="Single products">
+        <template v-if="!isIdProvided">
+          <MDBContainer class="d-flex container-content">
+            <MDBCol class="col-auto">
+              <FiltersSidebarComponent @start-search="handleFiltersSearch" />
+            </MDBCol>
+            <MDBCol class="col-auto">
+              <MDBContainer class="table-container">
+                <SearchComponent @search="handleSearch" />
+                <TableComponent
+                  :info-message="noDataMessage"
+                  :editableColumns="editableColumns"
+                  :showEditColumn="true"
+                  :rows="getFilteredProducts"
+                  :columns="productsStore.productColumns"
+                  :searchTerm="productsStore.searchTerm"
+                  @rowClick="handleRowClick"
+                  @row-edit-save="handleRowEdit"
+                />
+              </MDBContainer>
+            </MDBCol>
           </MDBContainer>
-        </MDBCol>
-      </MDBContainer>
-    </template>
-    <router-view v-if="isIdProvided" :id="routeIdParam" />
-  </div>
+        </template>
+        <router-view v-if="isIdProvided" :id="routeIdParam" />
+      </TabPanel>
+      <TabPanel header="Groupped products">
+        <MDBContainer class="d-flex container-content">
+          <MDBCol class="col-auto">
+            <!-- TODO Выключить ненужные фильтры/убрать колонку фильтров для групп -->
+            <FiltersSidebarComponent @start-search="handleFiltersSearch" />
+          </MDBCol>
+          <MDBCol class="col-auto">
+            <MDBContainer class="table-container">
+              <SearchComponent @search="handleSearch" />
+              <!-- TODO Вывести правильную колонку для групп, добавить метод для удаления (row-delete) -->
+              <!-- TODO Переход на(хуй хаха) SingleProductGroupView.vue при клике на(хуй хаха) ряд -->
+              <TableComponent
+                :info-message="noDataMessage"
+                :enable-delete="true"
+                :showEditColumn="false"
+                :rows="getFilteredProducts"
+                :columns="productsStore.productColumns"
+                :searchTerm="productsStore.searchTerm"
+                @rowClick="handleRowClick"
+                @row-delete=""
+              />
+            </MDBContainer>
+          </MDBCol>
+        </MDBContainer>
+      </TabPanel>
+    </TabView>
+  </ScrollPanel>
 </template>
 
 <script lang="ts">
@@ -44,6 +76,9 @@ import FieldSearchWrapperDto from "@/utils/crud/dto/field-search-wrapper.dto";
 import PrintUtil from "@/utils/localization/print.util";
 import LoggerUtil from "@/utils/logger/logger.util";
 import { useFiltersStore } from "@/stores/filters.store";
+import ScrollPanel from "primevue/scrollpanel";
+import TabView from "primevue/tabview";
+import TabPanel from "primevue/tabpanel";
 
 export default {
   name: "ProductsView",
@@ -53,6 +88,9 @@ export default {
     FiltersSidebarComponent,
     MDBCol,
     MDBContainer,
+    ScrollPanel,
+    TabView,
+    TabPanel,
   },
   data() {
     return {
@@ -256,5 +294,10 @@ export default {
 }
 .table-container {
   width: 83vw;
+  overflow-x: hidden !important;
+}
+.main-area {
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
 }
 </style>

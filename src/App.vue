@@ -37,9 +37,7 @@ export default {
   border-radius: 10px;
   border: 3px solid #ffffff;
 }
-* {
-  font-family: "Lato", sans-serif;
-}
+
 #app {
   width: 100vw !important;
   overflow: hidden;
@@ -126,8 +124,8 @@ ul {
   border-radius: 29px !important;
   border: 2px solid #eee !important;
   background: #fff !important;
-  width: 100% !important;
-  max-width: 35rem !important;
+  width: 100%;
+  max-width: 80vw !important;
   box-shadow: 0px 4px 28.3px 4px rgba(0, 0, 0, 0.06) !important;
 }
 .p-dialog-header {

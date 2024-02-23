@@ -15,6 +15,22 @@
           outline="black"
           >{{ addButtonLabel }}</MDBBtn
         >
+        <!-- TODO Разбить по компонентам модалку  -->
+        <MDBBtn
+          v-if="showUploadButton && addButtonAvailable"
+          class="animate__animated animate__fadeInUp utility-btn"
+          outline="black"
+          @click="uploadVisible = true"
+          >UPLOAD</MDBBtn
+        >
+        <Dialog
+          v-model:visible="uploadVisible"
+          modal
+          header="Upload products from a file"
+        >
+          <FileUploadModalComponent />
+          <TableComponent />
+        </Dialog>
       </MDBContainer>
       <MDBContainer
         class="d-flex gap-4 flex-row align-items-center justify-content-end"
@@ -69,7 +85,6 @@
         </MDBTooltip>
       </MDBContainer>
     </MDBContainer>
-
     <MDBBreadcrumb class="breadcrumbs breadcrumb-with-mdb-icon">
       <MDBBreadcrumbItem
         v-for="(breadcrumb, index) in breadcrumbs"
@@ -110,6 +125,7 @@ import {
   IconAlertTriangle,
   IconBell,
 } from "@tabler/icons-vue";
+import Dialog from "primevue/dialog";
 import { ref } from "vue";
 import NotificationsComponent from "@/components/Elements/Notification/NotificationsComponent.vue";
 import TokenUtil from "@/utils/token.util";
@@ -119,10 +135,17 @@ import PrintUtil from "@/utils/localization/print.util";
 import ApiModelUtil from "@/utils/api-model.util";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
 import ProfileComponent from "@/components/Elements/Profile/ProfileComponent.vue";
+import FileUploadComponent from "@/components/Inputs/FileUploadComponent.vue";
+import FileUploadModalComponent from "@/components/Inputs/FileUploadModalComponent.vue";
+import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 
 export default defineComponent({
   name: "HeaderComponent",
   components: {
+    TableComponent,
+    FileUploadModalComponent,
+    FileUploadComponent,
+    Dialog,
     ProfileComponent,
     IconHome2,
     MDBTooltip,
@@ -150,6 +173,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    showUploadButton: {
+      type: Boolean,
+      default: false,
+    },
     addBtnRoute: {
       type: String,
       default: "",
@@ -170,6 +197,11 @@ export default defineComponent({
       type: Array as PropType<Array<{ name: string; path: string }>>,
       default: () => [],
     },
+  },
+  data() {
+    return {
+      uploadVisible: false,
+    };
   },
   methods: {
     localize(key, module = "header") {
@@ -277,5 +309,9 @@ export default defineComponent({
 }
 .fix-margin {
   margin-left: 0 !important;
+}
+
+:deep(.p-dialog) {
+  max-width: 80vw !important;
 }
 </style>
