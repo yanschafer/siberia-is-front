@@ -20,14 +20,11 @@
 
 <script lang="ts">
 import Dropdown from "primevue/dropdown";
-import Badge from "primevue/badge";
-import { ref } from "vue";
 
 export default {
   name: "SelectComponent",
   components: {
     Dropdown,
-    Badge,
   },
   props: {
     items: {
@@ -53,10 +50,15 @@ export default {
     },
   },
   setup(props, { emit }) {
-    let selectedItem = ref(null);
+    let selectedItem = null;
     const handleChange = (event) => {
-      selectedItem.value = event.value;
-      emit("update:modelValue", event.value);
+      if (selectedItem && selectedItem.id == event.value.id) {
+        selectedItem = null;
+        emit("update:modelValue", null);
+      } else {
+        selectedItem = event.value;
+        emit("update:modelValue", event.value);
+      }
     };
     return {
       selectedItem,
@@ -64,8 +66,8 @@ export default {
     };
   },
   mounted() {
-    this.$watch("modelValue", (newValue) => {
-      this.selectedItem.value = newValue;
+    this.$watch("modelValue", () => {
+      this.selectedItem = this.modelValue;
     });
   },
 };
