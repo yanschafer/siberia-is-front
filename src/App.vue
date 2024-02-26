@@ -313,6 +313,11 @@ input::-webkit-inner-spin-button {
 .p-treeselect-label {
   color: black;
 }
+.p-toast,
+.p-toast-top-right,
+.p-ripple-disabled {
+  top: 85px !important;
+}
 </style>
 
 <style scoped></style>
