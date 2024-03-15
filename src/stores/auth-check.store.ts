@@ -43,6 +43,21 @@ const availableSidebarItems = [
     ],
   },
   {
+    name: "Media",
+    icon: "IconPhoto",
+    iconColor: "#B8B8B8",
+    iconSize: 24,
+    strokeWidth: 1,
+    disabled: false,
+    active: true,
+    route: "media",
+    rule: [
+      appConf.rules.brandManaging,
+      appConf.rules.collectionManaging,
+      appConf.rules.categoryManaging,
+    ],
+  },
+  {
     name: PrintUtil.localize("Storehouses", "sidebar"),
     icon: "IconBuildingWarehouse",
     iconColor: "#B8B8B8",

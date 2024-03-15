@@ -55,6 +55,7 @@ import {
   IconUsersGroup,
   IconLogout2,
   IconUser,
+  IconPhoto,
 } from "@tabler/icons-vue";
 import TokenUtil from "@/utils/token.util";
 import Router from "@/router";
@@ -76,6 +77,7 @@ export default {
     IconLogout2,
     IconUser,
     IconDashboard,
+    IconPhoto,
   },
   props: {
     sidebarItems: {

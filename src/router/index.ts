@@ -63,6 +63,15 @@ const routes = [
         },
       },
       {
+        path: "/media",
+        name: "media",
+        component: () => import("@/views/Media/MediaView.vue"),
+        meta: {
+          showAddBtn: false,
+          name: "Media",
+        },
+      },
+      {
         path: "/products",
         name: "products",
         component: () => import("@/views/Products/ProductsView.vue"),
