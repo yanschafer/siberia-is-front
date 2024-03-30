@@ -210,7 +210,7 @@ export default {
       linkCapslock: "ССЫЛКА",
       colorCapslock: "ЦВЕТ",
       quantityPerPackageCapslock: "КОЛ-ВО В УПАКОВКЕ",
-      distributionPriceCapslock: "РОЗНИЧНАЯ ЦЕНА",
+      distributionPriceCapslock: "РОЗНИЧНЫЙ ПРОЦЕНТ",
       professionalPriceCapslock: "ПРОФЕССИОНАЛЬНАЯ ЦЕНА",
       defaultPriceCapslock: "ЦЕНА ПО УМОЛЧАНИЮ",
       selectACategory: "Выберите категорию",

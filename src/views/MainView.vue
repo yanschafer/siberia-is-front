@@ -6,6 +6,8 @@
       <HeaderComponent
         :add-btn-route="addBtnRoute"
         :show-add-button="showAddBtn"
+        :show-second-add-button="showSecondAddBtn"
+        :second-add-button-route="secondAddBtnRoute"
         :show-upload-button="showUploadBtn"
         :title="pageTitle"
         :breadcrumbs="navBreadcrumbs"
@@ -33,6 +35,7 @@ import { MDBContainer } from "mdb-vue-ui-kit";
 import PrintUtil from "@/utils/localization/print.util";
 import loggerUtil from "@/utils/logger/logger.util";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
+import BreadcrumbDto from "@/router/breadcrumb.dto";
 export default {
   name: "DashboardView",
   components: {
@@ -46,8 +49,10 @@ export default {
       router: useRouter(),
       pageTitle: "",
       showAddBtn: false,
-      showUploadBtn: true,
+      showUploadBtn: false,
       addBtnRoute: "",
+      showSecondAddBtn: false,
+      secondAddBtnRoute: "",
     };
   },
   setup() {
@@ -76,6 +81,9 @@ export default {
 
       this.showAddBtn = this.route.meta.showAddBtn;
       this.addBtnRoute = this.route.meta.addBtnRoute;
+      this.showSecondAddBtn = this.route.meta.showSecondAddBtn;
+      this.secondAddBtnRoute = this.route.meta.secondAddBtnRoute;
+      this.showUploadBtn = this.route.meta.showUploadBtn;
     },
     logout() {
       this.router.push("/");
@@ -86,12 +94,44 @@ export default {
       return this.authCheckStore.getSidebarItems;
     },
     navBreadcrumbs() {
-      const breadcrumbs = this.$route.matched.map((route) => ({
-        name: route.meta.name || "dashboard",
-        path: route.path,
-      }));
+      console.log(this.route.meta);
+      if (this.route.meta.breadcrumbs) {
+        return this.route.meta.breadcrumbs.map((el: BreadcrumbDto) => {
+          if (el.route) {
+            return {
+              name: el.label,
+              path: el.route,
+            };
+          } else if (el.routeParametrized) {
+            let params = {};
+            Object.keys(el.routeParametrized.props).forEach((prop) => {
+              const val = el.routeParametrized?.props[prop];
+              if (val == "nested") {
+                params = {
+                  ...params,
+                  [prop]: this.route.params[prop],
+                };
+              } else {
+                params = {
+                  ...params,
+                  [prop]: val,
+                };
+              }
+            });
 
-      return breadcrumbs;
+            return {
+              name: el.label,
+              path: el.routeParametrized.name,
+              params,
+            };
+          }
+        });
+      } else {
+        return this.$route.matched.map((route) => ({
+          name: route.meta.name || "dashboard",
+          path: route.name,
+        }));
+      }
     },
     shouldDisplayRolesView() {
       const isUsersViewWithoutId =
