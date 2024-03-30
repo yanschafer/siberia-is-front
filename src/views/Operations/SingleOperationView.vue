@@ -60,11 +60,11 @@
           </template>
         </MDBRow>
       </MDBCol>
-      <MDBCol class="d-flex flex-row justify-content-end">
-        <img
-          class="qr"
-          src="https://gorcom36.ru/upload/iblock/c1f/qrcodecurves.png"
-        />
+      <MDBCol
+        v-if="transactionQrUrl && transactionQrUrl != ''"
+        class="d-flex flex-row justify-content-end"
+      >
+        <img class="qr" :src="transactionQrUrl" />
       </MDBCol>
     </MDBRow>
   </MDBContainer>
@@ -101,6 +101,7 @@ import TransactionSimpleDto from "@/api/modules/transaction/dto/transaction-simp
 import ApiResponseDto from "@/api/dto/api-response.dto";
 import PrintUtil from "@/utils/localization/print.util";
 import TokenUtil from "@/utils/token.util";
+import AuthModel from "@/api/modules/auth/models/auth.model";
 
 export default {
   name: "SingleOperationView",
@@ -147,6 +148,7 @@ export default {
     selectedStatus: null,
     selectedStorehouse: null,
     isStatusOnSelect: false,
+    transactionQrUrl: "",
   }),
   async setup() {
     const operationStore = useOperationStore();
@@ -154,6 +156,7 @@ export default {
     const route = useRoute();
 
     return {
+      transactionId: parseInt(route.params.id.toString()),
       operationStore,
       storehousesStore,
       loadStocksRes: await storehousesStore.loadStorehouseList(),
@@ -162,9 +165,14 @@ export default {
       ),
     };
   },
-  created() {
+  async created() {
     this.loadOperationRes.toastIfError(this.$toast, this.$nextTick);
     this.loadStocksRes.toastIfError(this.$toast, this.$nextTick);
+
+    const authModel = new AuthModel();
+    this.transactionQrUrl = await authModel.getTransactionQr(
+      this.transactionId,
+    );
 
     if (this.selectedOperation.type.id != TransactionType.TRANSFER)
       this.productColumns.push({
