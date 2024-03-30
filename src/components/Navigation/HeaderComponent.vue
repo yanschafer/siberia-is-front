@@ -15,6 +15,13 @@
           outline="black"
           >{{ addButtonLabel }}</MDBBtn
         >
+        <MDBBtn
+          @click="navigate"
+          v-if="showSecondAddButton"
+          class="animate__animated animate__fadeInUp utility-btn"
+          outline="black"
+          >{{ secondAddButtonLabel }}</MDBBtn
+        >
         <!-- TODO Разбить по компонентам модалку  -->
         <MDBBtn
           v-if="showUploadButton && addButtonAvailable"
@@ -91,8 +98,14 @@
         :key="index"
       >
         <router-link
-          v-if="breadcrumb.path !== '/dashboard' && notLast(index)"
-          :to="{ path: breadcrumb.path }"
+          v-if="
+            breadcrumb.path !== 'Siberia Panel' &&
+            breadcrumb.path !== 'dashboard' &&
+            breadcrumb.path !== '/dashboard' &&
+            breadcrumb.path !== '/' &&
+            notLast(index)
+          "
+          :to="{ name: breadcrumb.path, params: breadcrumb.params }"
           >{{ breadcrumb.name }}</router-link
         >
         <span v-else>{{ breadcrumb.name }}</span>
@@ -177,13 +190,25 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    showSecondAddButton: {
+      type: Boolean,
+      default: false,
+    },
     addBtnRoute: {
+      type: String,
+      default: "",
+    },
+    secondAddBtnRoute: {
       type: String,
       default: "",
     },
     addButtonLabel: {
       type: String,
       default: PrintUtil.localize("AddBtnLabel", "header"),
+    },
+    secondAddButtonLabel: {
+      type: String,
+      default: PrintUtil.localize("SecondAddBtnLabel", "header"),
     },
     showNotificationIcon: {
       type: Boolean,
@@ -194,7 +219,9 @@ export default defineComponent({
       default: 0,
     },
     breadcrumbs: {
-      type: Array as PropType<Array<{ name: string; path: string }>>,
+      type: Array as PropType<
+        Array<{ name: string; path: string; params: any }>
+      >,
       default: () => [],
     },
   },

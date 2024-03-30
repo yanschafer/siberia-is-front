@@ -6,8 +6,6 @@ import TokenPairDto from "@/api/modules/auth/dto/token-pair.dto";
 import TokenUtil from "@/utils/token.util";
 import LoggerUtil from "@/utils/logger/logger.util";
 import AuthorizedUserDto from "@/api/modules/auth/dto/authorized-user.dto";
-import { useRoute, useRouter } from "vue-router";
-import loggerUtil from "@/utils/logger/logger.util";
 import NotificationSocketModel from "@/api/modules/notification/models/notification-socket.model";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
 import router from "@/router/index";
@@ -49,6 +47,7 @@ export default class ApiModelUtil {
     );
     TokenUtil.setAuthorized(authorizedUserDto.getData());
     LoggerUtil.debugPrefixed("API_MODEL", "Refresh succeed.");
+    return authorizedUserDto;
   }
 
   async refresh(): Promise<ApiResponseDto<TokenPairDto>> {
@@ -159,6 +158,25 @@ export default class ApiModelUtil {
     return await result;
   }
 
+  async plainAuthorizedRequest(
+    request: ApiRequestDto,
+  ): Promise<axios.AxiosResponse<any>> {
+    const requestOptions = this.buildRequestOptions(request);
+    LoggerUtil.debugPrefixed(
+      "API_MODEL",
+      "New request executed",
+      requestOptions,
+    );
+    const accessToken = TokenUtil.getAccess();
+
+    return axios({
+      ...requestOptions,
+      headers: {
+        ...this.buildHeaders(accessToken),
+      },
+    }) as Promise<axios.AxiosResponse<any>> | Promise<axios.AxiosError> | any;
+  }
+
   async authorizedRequest<T>(
     request: ApiRequestDto,
   ): Promise<ApiResponseDto<T>> {
@@ -169,7 +187,7 @@ export default class ApiModelUtil {
       requestOptions,
     );
     const accessToken = TokenUtil.getAccess();
-    // console.log(accessToken)
+
     const result: Promise<ApiResponseDto<T>> = axios<T>({
       ...requestOptions,
       headers: {

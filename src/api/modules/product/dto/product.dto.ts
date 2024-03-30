@@ -15,14 +15,15 @@ export default class ProductDto {
     public cost: number | null,
     public lastPurchaseDate: number | null,
     public distributorPrice: number,
+    public distributorPercent: number,
     public professionalPrice: number,
+    public professionalPercent: number,
     public commonPrice: number,
     public category: CategoryDto | null,
     public collection: CollectionDto | null,
     public color: string,
     public amountInBox: number,
     public expirationDate: number,
-    public link: string
-  ) {
-  }
+    public link: string,
+  ) {}
 }

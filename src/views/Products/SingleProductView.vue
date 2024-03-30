@@ -250,18 +250,23 @@
           >
             {{ localize("distributionPriceCapslock") }}
             <span v-if="!editing" class="field-value">{{
-              distributionPrice
+              distributionPercent
             }}</span>
             <InputText
               v-else
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-              :class="{ 'p-invalid': !validate.distributorPrice }"
+              :class="{ 'p-invalid': !validate.distributorPercent }"
               type="text"
-              v-model="newDistributionPrice"
+              v-model="newDistributionPercent"
             />
           </h5>
-          <!--          <h5 class="field-heading">WITHOUT VAT <span class="field-value">{{ distributionPriceWithoutVat }}</span></h5>-->
-          <!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ distributionMarkup }}</span></h5>-->
+          <h5 class="field-heading">
+            DISTRIBUTION PRICE
+            <span class="field-value">{{ distributionPrice }}</span>
+          </h5>
+          <!--          <h5 class="field-heading">-->
+          <!--            MARKUP <span class="field-value">{{ 0.0 }}</span>-->
+          <!--          </h5>-->
         </MDBCol>
         <MDBCol>
           <h5
@@ -269,17 +274,20 @@
           >
             {{ localize("professionalPriceCapslock") }}
             <span v-if="!editing" class="field-value">{{
-              professionalPrice
+              professionalPercent
             }}</span>
             <InputText
               v-else
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-              :class="{ 'p-invalid': !validate.professionalPrice }"
+              :class="{ 'p-invalid': !validate.professionalPercent }"
               type="text"
-              v-model="newProfessionalPrice"
+              v-model="newProfessionalPercent"
             />
           </h5>
-          <!--          <h5 class="field-heading">WITHOUT VAT <span class="field-value">{{ professionalPriceWithoutVat }}</span></h5>-->
+          <h5 class="field-heading">
+            PROFESSIONAL PRICE
+            <span class="field-value">{{ professionalPrice }}</span>
+          </h5>
           <!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ professionalMarkup }}</span></h5>-->
         </MDBCol>
         <MDBCol>
@@ -352,6 +360,7 @@ import Panel from "primevue/panel";
 import ScrollPanel from "primevue/scrollpanel";
 import LoggerUtil from "@/utils/logger/logger.util";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
+import ProductDto from "@/api/modules/product/dto/product.dto";
 export default {
   name: "SingleProductView",
   components: {
@@ -398,6 +407,8 @@ export default {
       newAmountInBox: null,
       newDistributionPrice: null,
       newProfessionalPrice: null,
+      newDistributionPercent: null,
+      newProfessionalPercent: null,
       newDefaultPrice: null,
       newStatus: null,
       newBrand: null,
@@ -458,7 +469,9 @@ export default {
         name: true,
         description: true,
         distributorPrice: true,
+        distributorPercent: true,
         professionalPrice: true,
+        professionalPercent: true,
         commonPrice: true,
         category: true,
         collection: true,
@@ -508,11 +521,11 @@ export default {
     const brandValidateRule = new ValidateRule().skipIfNull().required();
     const nameValidateRule = new ValidateRule().skipIfNull().required();
     const descriptionValidateRule = new ValidateRule().skipIfNull().required();
-    const distributorPriceValidateRule = new ValidateRule()
+    const distributorPercentValidateRule = new ValidateRule()
       .skipIfNull()
       .required()
       .setMin(0);
-    const professionalPriceValidateRule = new ValidateRule()
+    const professionalPercentValidateRule = new ValidateRule()
       .skipIfNull()
       .required()
       .setMin(0);
@@ -539,8 +552,8 @@ export default {
       .addRule("name", nameValidateRule)
       .addRule("description", descriptionValidateRule)
       .addRule("commonPrice", commonPriceValidateRule)
-      .addRule("distributorPrice", distributorPriceValidateRule)
-      .addRule("professionalPrice", professionalPriceValidateRule)
+      .addRule("distributorPercent", distributorPercentValidateRule)
+      .addRule("professionalPercent", professionalPercentValidateRule)
       .addRule("category", categoryValidateRule)
       .addRule("collection", collectionValidateRule)
       .addRule("color", colorValidateRule)
@@ -560,8 +573,8 @@ export default {
         brand: true,
         name: true,
         description: true,
-        distributorPrice: true,
-        professionalPrice: true,
+        distributorPercent: true,
+        professionalPercent: true,
         commonPrice: true,
         category: true,
         collection: true,
@@ -672,6 +685,8 @@ export default {
       this.newAmountInBox = this.quantityPerPackage;
       this.newDistributionPrice = this.distributionPrice;
       this.newProfessionalPrice = this.professionalPrice;
+      this.newDistributionPercent = this.distributionPercent;
+      this.newProfessionalPercent = this.professionalPercent;
       this.newDefaultPrice = this.defaultPrice;
       this.newExpirationDate = this.expirationDate;
     },
@@ -705,12 +720,12 @@ export default {
         this.getNullIfNoChange(this.newProductName, this.productName),
         this.getNullIfNoChange(this.newDescription, this.productDescription),
         this.getNullIfNoChange(
-          this.newDistributionPrice,
-          this.distributionPrice,
+          this.newDistributionPercent,
+          this.distributionPercent,
         ),
         this.getNullIfNoChange(
-          this.newProfessionalPrice,
-          this.professionalPrice,
+          this.newProfessionalPercent,
+          this.professionalPercent,
         ),
         this.getNullIfNoChange(this.newDefaultPrice, this.defaultPrice),
         this.getNullIfNoChange(categoryId, this.categoryId),
@@ -770,7 +785,7 @@ export default {
     brandList() {
       return this.brandStore.getBrandList;
     },
-    selectedProduct() {
+    selectedProduct(): ProductDto {
       return this.productStore.getSelectedProduct || {};
     },
     imageSource() {
@@ -872,31 +887,37 @@ export default {
       return this.selectedProduct.amountInBox || "";
     },
     distributionPrice() {
-      return this.selectedProduct.distributorPrice || "";
+      let percent, common;
+      if (!this.editing) {
+        percent = this.selectedProduct.distributorPercent || 0.0;
+        common = this.selectedProduct.commonPrice || 0.0;
+      } else {
+        percent = this.newDistributionPercent;
+        common = this.newDefaultPrice;
+      }
+
+      return (percent / 100) * common;
     },
-    distributionPriceWithoutVat() {
-      return this.selectedProduct.distributionPriceWithoutVat || "";
-    },
-    distributionMarkup() {
-      return this.selectedProduct.distributionMarkup || "";
+    distributionPercent() {
+      return this.selectedProduct.distributorPercent || "";
     },
     professionalPrice() {
-      return this.selectedProduct.professionalPrice || "";
+      let percent, common;
+      if (!this.editing) {
+        percent = this.selectedProduct.professionalPercent || 0.0;
+        common = this.selectedProduct.commonPrice || 0.0;
+      } else {
+        percent = this.newProfessionalPercent;
+        common = this.newDefaultPrice;
+      }
+
+      return (percent / 100) * common;
     },
-    professionalPriceWithoutVat() {
-      return this.selectedProduct.professionalPriceWithoutVat || "";
-    },
-    professionalMarkup() {
-      return this.selectedProduct.professionalMarkup || "";
+    professionalPercent() {
+      return this.selectedProduct.professionalPercent || "";
     },
     defaultPrice() {
       return this.selectedProduct.commonPrice || "";
-    },
-    defaultPriceWithoutVat() {
-      return this.selectedProduct.defaultPriceWithoutVat || "";
-    },
-    defaultMarkup() {
-      return this.selectedProduct.defaultMarkup || "";
     },
     editBtnAvailable() {
       return this.authCheckStore.getHasAccessToProductsManaging;

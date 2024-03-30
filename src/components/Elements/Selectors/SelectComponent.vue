@@ -20,11 +20,13 @@
 
 <script lang="ts">
 import Dropdown from "primevue/dropdown";
+import Badge from "primevue/badge";
 
 export default {
   name: "SelectComponent",
   components: {
     Dropdown,
+    Badge,
   },
   props: {
     items: {

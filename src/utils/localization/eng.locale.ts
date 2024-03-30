@@ -179,7 +179,7 @@ export default {
       linkCapslock: "LINK",
       colorCapslock: "COLOR",
       quantityPerPackageCapslock: "QUANTITY PER PACKAGE",
-      distributionPriceCapslock: "DISTRIBUTION PRICE",
+      distributionPriceCapslock: "DISTRIBUTION PERCENT",
       professionalPriceCapslock: "PROFESSIONAL PRICE",
       defaultPriceCapslock: "DEFAULT PRICE",
       selectACategory: "Select a category",

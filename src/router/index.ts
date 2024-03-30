@@ -4,6 +4,7 @@ import { appConf } from "@/api/conf/app.conf";
 import LoggerUtil from "@/utils/logger/logger.util";
 import PrintUtil from "@/utils/localization/print.util";
 import app from "@/App.vue";
+import BreadcrumbDto from "@/router/breadcrumb.dto";
 
 /*
 user-managing = "1"
@@ -82,6 +83,9 @@ const routes = [
           ],
           showAddBtn: true,
           addBtnRoute: "New product",
+          showSecondAddBtn: true,
+          secondAddBtnRoute: "New group",
+          showUploadBtn: true,
           name: PrintUtil.localize("products", "router"),
         },
         children: [
@@ -95,6 +99,22 @@ const routes = [
               name: PrintUtil.localize("Product", "router"),
             },
           },
+          {
+            path: "/group/:id",
+            name: "Group details",
+            component: () =>
+              import("@/views/Products/SingleProductGroupView.vue"),
+            props: true,
+            meta: {
+              breadcrumbs: [
+                new BreadcrumbDto("Siberia panel", "dashboard"),
+                new BreadcrumbDto("Groups", "products"),
+                new BreadcrumbDto("Group", "Group details"),
+              ],
+              showAddBtn: false,
+              name: "Group details",
+            },
+          },
         ],
       },
       {
@@ -104,6 +124,40 @@ const routes = [
         props: true,
         meta: {
           name: PrintUtil.localize("NewProduct", "router"),
+        },
+      },
+      {
+        path: "/group/new",
+        name: "New group",
+        component: () => import("@/views/Products/CreateProduct.vue"),
+        props: true,
+        meta: {
+          breadcrumbs: [
+            new BreadcrumbDto("Siberia panel", "dashboard"),
+            new BreadcrumbDto("Groups", "products"),
+            new BreadcrumbDto("New group", "New group"),
+          ],
+          name: "New group",
+        },
+      },
+      {
+        path: "/group/:id/apply",
+        name: "Group apply",
+        component: () => import("@/views/Products/ApplyChangesView.vue"),
+        props: true,
+        meta: {
+          breadcrumbs: [
+            new BreadcrumbDto("Siberia panel", "dashboard"),
+            new BreadcrumbDto("Groups", "products"),
+            new BreadcrumbDto("Group", null, {
+              name: "Group details",
+              props: {
+                id: "nested",
+              },
+            }),
+            new BreadcrumbDto("Apply", "products"),
+          ],
+          name: "Apply changes",
         },
       },
       {

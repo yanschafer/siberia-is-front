@@ -2,25 +2,8 @@
   <div class="animate__animated animate__fadeIn">
     <Panel class="animate__animated animate__fadeIn" fluid>
       <MDBRow class="d-flex flex-row gap-5 header-row">
-        <MDBCol
-          class="col-auto animate__animated animate__flipInX animate__faster"
-        >
-          <div class="product-img">
-            <img
-              id="product-image"
-              class="product-img"
-              :src="imageSource"
-              :alt="productName"
-            />
-          </div>
-        </MDBCol>
         <MDBCol class="d-flex flex-column justify-content-center">
           <MDBRow>
-            <MDBCol
-              class="d-flex gap-1 align-items-center mb-3 animate__animated animate__flipInX animate__faster"
-            >
-              <h5 class="product-heading">Product name</h5>
-            </MDBCol>
             <MDBCol
               class="animate__animated animate__flipInX animate__faster d-flex gap-2"
             >
@@ -35,10 +18,6 @@
           <MDBRow>
             <MDBCol class="d-flex flex-column gap-3 w-100">
               <h5 class="field-heading d-flex gap-1 align-items-center">
-                {{ localize("skuCapslock") }}
-                <span class="field-value copy-on"> SKU NUMBER </span>
-              </h5>
-              <h5 class="field-heading d-flex gap-1 align-items-center">
                 {{ localize("brandCapslock") }}
                 <SelectComponent
                   :placeholder="placeholderBrand"
@@ -50,16 +29,6 @@
                 <DialogComponentTrigger
                   :button-text="createButtonText"
                   :init-object="initBrandDialog"
-                />
-              </h5>
-              <h5 class="field-heading d-flex gap-1 align-items-center">
-                {{ localize("linkCapslock") }}
-                <InputText
-                  class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-                  :class="{ 'p-invalid': !validate.link }"
-                  type="text"
-                  :placeholder="placeholderLink"
-                  v-model="link"
                 />
               </h5>
               <h5
@@ -94,7 +63,6 @@
         :init-object="initCategoryDialog"
       />
       <h1 class="product-heading d-flex gap-1 align-items-center">
-        {{ localize("productDescription") }}
         <SelectComponent
           :placeholder="placeholderCollection"
           class="animate__animated animate__flipInX animate__faster"
@@ -120,14 +88,6 @@
           />
         </h5>
       </h1>
-      <textarea
-        class="animate__animated animate__flipInX animate__faster username-input"
-        :class="{ 'p-invalid': !validate.description }"
-        id="description"
-        type="textarea"
-        :placeholder="placeholderDescription"
-        v-model="description"
-      />
     </MDBContainer>
     <MDBContainer class="footer-section" fluid>
       <MDBRow>
@@ -148,10 +108,10 @@
             {{ localize("distributionPriceCapslock") }}
             <InputText
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-              :class="{ 'p-invalid': !validate.distributorPrice }"
+              :class="{ 'p-invalid': !validate.distributorPercent }"
               type="text"
-              :placeholder="placeholderDistributionPrice"
-              v-model="distributorPrice"
+              :placeholder="placeholderDistributionPercent"
+              v-model="distributorPercent"
             />
           </h5>
         </MDBCol>
@@ -160,10 +120,10 @@
             {{ localize("professionalPriceCapslock") }}
             <InputText
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-              :class="{ 'p-invalid': !validate.professionalPrice }"
+              :class="{ 'p-invalid': !validate.professionalPercent }"
               type="text"
-              :placeholder="placeholderProfessionalPrice"
-              v-model="professionalPrice"
+              :placeholder="placeholderProfessionalPercent"
+              v-model="professionalPercent"
             />
           </h5>
         </MDBCol>
@@ -207,6 +167,9 @@ import InputText from "primevue/inputtext";
 import Panel from "primevue/panel";
 import LoggerUtil from "@/utils/logger/logger.util";
 import FilesResolverUtil from "@/utils/files-resolver.util";
+import ValidatorUtil from "@/utils/validator/validator.util";
+import MassiveUpdateDto from "@/api/modules/product/dto/groups/massive-update.dto";
+import { useProductGroupStore } from "@/stores/product-group.store";
 
 export default {
   name: "ApplyChangesView",
@@ -229,31 +192,21 @@ export default {
       placeholderCategory: this.localize("selectACategory"),
       placeholderBrand: this.localize("selectABrand"),
       placeholderCollection: this.localize("selectACollection"),
-      placeholderDescription: this.localize("placeholderDescription"),
-      placeholderProductName: this.localize("placeholderProductName"),
-      placeholderVendorCode: this.localize("placeholderVendorCode"),
-      placeholderLink: this.localize("placeholderLink"),
       placeholderColor: this.localize("placeholderColor"),
       placeholderQuantityPerPackage: this.localize("placeholderNumber"),
-      placeholderDistributionPrice: this.localize("placeholderNumber"),
-      placeholderProfessionalPrice: this.localize("placeholderNumber"),
+      placeholderDistributionPercent: "DISTRIBUTOR PERCENT",
+      placeholderProfessionalPercent: "PROFESSIONAL PERCENT",
       placeholderDefaultPrice: this.localize("placeholderNumber"),
       placeholderExpirationDate: this.localize("placeholderExpirationDate"),
-      vendorCode: "",
       brand: null,
-      name: "",
-      description: "",
-      distributorPrice: "",
-      professionalPrice: "",
-      commonPrice: "",
+      distributorPercent: null,
+      professionalPercent: null,
+      commonPrice: null,
       category: null,
       collection: null,
-      color: "",
-      amountInBox: "",
-      expirationDate: "",
-      link: "",
-      photoBase64: "",
-      photoName: "",
+      color: null,
+      amountInBox: null,
+      expirationDate: null,
       initCategoryDialog: {
         header: this.localize("createACategory"),
         showSelect: true,
@@ -300,35 +253,33 @@ export default {
         toastErrorText: this.localize("collectionCreationFailed"),
       },
       validate: {
-        vendorCode: true,
         brand: true,
-        name: true,
-        description: true,
-        distributorPrice: true,
-        professionalPrice: true,
+        distributorPercent: true,
+        professionalPercent: true,
         commonPrice: true,
         category: true,
         collection: true,
         color: true,
         amountInBox: true,
         expirationDate: true,
-        link: true,
       },
       validator: new ValidatorUtil(),
     };
   },
   async setup() {
-    const productStore = useProductsStore();
+    const productGroupStore = useProductGroupStore();
     const brandStore = useBrandStore();
     const collectionStore = useCollectionStore();
     const categoriesStore = useCategoriesStore();
     const router = useRouter();
+    const route = useRoute();
 
     return {
-      productStore,
+      productGroupStore,
       brandStore,
       categoriesStore,
       collectionStore,
+      groupId: parseInt(route.params.id.toString()),
       router,
       loadBrandListRes: await brandStore.loadBrandsList(),
       loadCollectionListRes: await collectionStore.loadCollectionList(),
@@ -340,38 +291,41 @@ export default {
     this.loadCollectionListRes.toastIfError(this.$toast, this.$nextTick);
     this.loadCategoryListRes.toastIfError(this.$toast, this.$nextTick);
 
-    const vendorCodeValidateRule = new ValidateRule().required();
     const brandValidateRule = new ValidateRule().skipIfNull().required();
-    const nameValidateRule = new ValidateRule().required();
-    const descriptionValidateRule = new ValidateRule().required();
-    const distributorPriceValidateRule = new ValidateRule()
+    const distributorPercentValidateRule = new ValidateRule()
+      .skipIfNull()
       .required()
       .setMin(0);
-    const professionalPriceValidateRule = new ValidateRule()
+    const professionalPercentValidateRule = new ValidateRule()
+      .skipIfNull()
       .required()
       .setMin(0);
-    const commonPriceValidateRule = new ValidateRule().required().setMin(0);
-    const categoryValidateRule = new ValidateRule().required();
+    const commonPriceValidateRule = new ValidateRule()
+      .skipIfNull()
+      .required()
+      .setMin(0);
+    const categoryValidateRule = new ValidateRule().skipIfNull().required();
     const collectionValidateRule = new ValidateRule().skipIfNull().required();
-    const colorValidateRule = new ValidateRule().required();
-    const amountInBoxValidateRule = new ValidateRule().required().setMin(0);
-    const expirationDateValidateRule = new ValidateRule().required().setMin(0);
-    const linkValidateRule = new ValidateRule().required();
+    const colorValidateRule = new ValidateRule().skipIfNull().required();
+    const amountInBoxValidateRule = new ValidateRule()
+      .skipIfNull()
+      .required()
+      .setMin(0);
+    const expirationDateValidateRule = new ValidateRule()
+      .skipIfNull()
+      .required()
+      .setMin(0);
 
     this.validator = this.validator
-      .addRule("vendorCode", vendorCodeValidateRule)
       .addRule("brand", brandValidateRule)
-      .addRule("name", nameValidateRule)
-      .addRule("description", descriptionValidateRule)
       .addRule("commonPrice", commonPriceValidateRule)
-      .addRule("distributorPrice", distributorPriceValidateRule)
-      .addRule("professionalPrice", professionalPriceValidateRule)
+      .addRule("distributorPercent", distributorPercentValidateRule)
+      .addRule("professionalPercent", professionalPercentValidateRule)
       .addRule("category", categoryValidateRule)
       .addRule("collection", collectionValidateRule)
       .addRule("color", colorValidateRule)
       .addRule("amountInBox", amountInBoxValidateRule)
-      .addRule("expirationDate", expirationDateValidateRule)
-      .addRule("link", linkValidateRule);
+      .addRule("expirationDate", expirationDateValidateRule);
 
     this.initCategoryDialog.selectItems = this.categoryList;
   },
@@ -381,35 +335,16 @@ export default {
     },
     clearValidationErrors() {
       this.validate = {
-        vendorCode: true,
         brand: true,
-        name: true,
-        description: true,
-        distributorPrice: true,
-        professionalPrice: true,
+        distributorPercent: true,
+        professionalPercent: true,
         commonPrice: true,
         category: true,
         collection: true,
         color: true,
         amountInBox: true,
         expirationDate: true,
-        link: true,
       };
-    },
-    async fileChanged(files: File[]) {
-      const file = files[0];
-      const encoded = await EncoderUtil.encode(file);
-      if (encoded == null) {
-        this.$toast.add({
-          severity: "error",
-          summary: this.localize("failedUpload"),
-          detail: this.localize("photoUploadingFailed"),
-          life: 3000,
-        });
-        return;
-      }
-      this.photoBase64 = encoded;
-      this.photoName = file.name;
     },
     async handleCategoryUpdate() {
       const loadRes = await this.categoriesStore.loadCategoriesList();
@@ -435,26 +370,22 @@ export default {
       this.clearValidationErrors();
       const brandId = this.brand ? this.brand.id : null;
       const collectionId = this.collection ? this.collection.id : null;
-      const categoryId = parseInt(String(this.category));
-      const expirationDate = parseInt(this.expirationDate) * 24 * 60 * 1000;
+      const categoryId = this.category ? parseInt(String(this.category)) : null;
+      const expirationDate =
+        this.expirationDate != null
+          ? parseInt(this.expirationDate) * 24 * 60 * 1000
+          : null;
 
-      const newProductData = new ProductInputDto(
-        this.photoBase64,
-        this.photoName,
-        this.vendorCode,
-        "",
+      const newProductData = new MassiveUpdateDto(
         brandId,
-        this.name,
-        this.description,
-        parseFloat(this.distributorPrice),
-        parseFloat(this.professionalPrice),
-        parseFloat(this.commonPrice),
+        this.distributorPercent,
+        this.professionalPercent,
+        this.commonPrice,
         categoryId,
         collectionId,
         this.color,
-        parseInt(this.amountInBox),
+        this.amountInBox,
         expirationDate,
-        this.link,
       );
 
       const validateRes = this.validator.validate(newProductData);
@@ -465,17 +396,21 @@ export default {
         return;
       }
 
-      const creationResult = await this.productStore.create(newProductData);
+      const creationResult = await this.productGroupStore.applyChanges(
+        this.groupId,
+        newProductData,
+      );
       if (creationResult.success) {
         this.$toast.add({
           severity: "success",
-          summary: this.localize("success", "storehouses"),
-          detail: this.localize("productSuccessfullyCreated"),
+          summary: "Massive update",
+          detail: "Products in group were successfully updated",
           life: 3000,
         });
+
         this.router.push({
-          name: "Product details",
-          params: { id: creationResult.getData().id.toString() },
+          name: "Group details",
+          params: { id: this.groupId },
         });
       } else {
         const error = creationResult.getError();
@@ -497,20 +432,12 @@ export default {
     cancel() {
       this.clearValidationErrors();
       this.router.push({
-        name: "products",
+        name: "Group details",
+        params: { id: this.groupId },
       });
     },
   },
   computed: {
-    productName() {
-      return this.selectedProduct.name || "";
-    },
-    imageSource() {
-      LoggerUtil.debug(this.selectedProduct.photo);
-      if (this.selectedProduct.photo && this.selectedProduct.photo != "")
-        return FilesResolverUtil.getStreamUrl(this.selectedProduct.photo || "");
-      else return FilesResolverUtil.getStreamUrl("fileNotFound.jpeg");
-    },
     categoryList() {
       return this.categoriesStore.getCategoryList;
     },

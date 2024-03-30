@@ -3,9 +3,9 @@
     style="height: 80vh; width: 88vw"
     class="main-area animate__animated animate__fadeIn"
   >
-    <TabView>
-      <TabPanel header="Single products">
-        <template v-if="!isIdProvided">
+    <template v-if="!isIdProvided">
+      <TabView>
+        <TabPanel header="Single products">
           <MDBContainer class="d-flex container-content">
             <MDBCol class="col-auto">
               <FiltersSidebarComponent @start-search="handleFiltersSearch" />
@@ -26,35 +26,35 @@
               </MDBContainer>
             </MDBCol>
           </MDBContainer>
-        </template>
-        <router-view v-if="isIdProvided" :id="routeIdParam" />
-      </TabPanel>
-      <TabPanel header="Groupped products">
-        <MDBContainer class="d-flex container-content">
-          <MDBCol class="col-auto">
-            <!-- TODO Выключить ненужные фильтры/убрать колонку фильтров для групп -->
-            <FiltersSidebarComponent @start-search="handleFiltersSearch" />
-          </MDBCol>
-          <MDBCol class="col-auto">
-            <MDBContainer class="table-container">
-              <SearchComponent @search="handleSearch" />
-              <!-- TODO Вывести правильную колонку для групп, добавить метод для удаления (row-delete) -->
-              <!-- TODO Переход на(хуй хаха) SingleProductGroupView.vue при клике на(хуй хаха) ряд -->
-              <TableComponent
-                :info-message="noDataMessage"
-                :enable-delete="true"
-                :showEditColumn="false"
-                :rows="getFilteredProducts"
-                :columns="productsStore.productColumns"
-                :searchTerm="productsStore.searchTerm"
-                @rowClick="handleRowClick"
-                @row-delete=""
-              />
-            </MDBContainer>
-          </MDBCol>
-        </MDBContainer>
-      </TabPanel>
-    </TabView>
+        </TabPanel>
+        <TabPanel header="Groupped products">
+          <MDBContainer class="d-flex container-content">
+            <!--            <MDBCol class="col-auto">-->
+            <!--              &lt;!&ndash; TODO Выключить ненужные фильтры/убрать колонку фильтров для групп &ndash;&gt;-->
+            <!--              <FiltersSidebarComponent @start-search="handleFiltersSearch" />-->
+            <!--            </MDBCol>-->
+            <MDBCol class="col-auto">
+              <MDBContainer class="table-container">
+                <SearchComponent @search="handleSearch" />
+                <!-- TODO Вывести правильную колонку для групп, добавить метод для удаления (row-delete) -->
+                <!-- TODO Переход на(хуй хаха) SingleProductGroupView.vue при клике на(хуй хаха) ряд -->
+                <TableComponent
+                  :info-message="noDataMessage"
+                  :enable-delete="true"
+                  :showEditColumn="false"
+                  :rows="getFilteredGroups"
+                  :columns="productGroupStore.getColumns"
+                  :searchTerm="productsStore.searchTerm"
+                  @rowClick="handleGroupClick"
+                  @row-delete=""
+                />
+              </MDBContainer>
+            </MDBCol>
+          </MDBContainer>
+        </TabPanel>
+      </TabView>
+    </template>
+    <router-view v-if="isIdProvided" :id="routeIdParam" />
   </ScrollPanel>
 </template>
 
@@ -79,6 +79,7 @@ import { useFiltersStore } from "@/stores/filters.store";
 import ScrollPanel from "primevue/scrollpanel";
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
+import { useProductGroupStore } from "@/stores/product-group.store";
 
 export default {
   name: "ProductsView",
@@ -105,6 +106,7 @@ export default {
 
   async setup() {
     const productsStore = useProductsStore();
+    const productGroupStore = useProductGroupStore();
     const brandStore = useBrandStore();
     const categoryStore = useCategoriesStore();
     const collectionStore = useCollectionStore();
@@ -118,9 +120,11 @@ export default {
       collectionStore,
       categoryStore,
       productsStore,
+      productGroupStore,
       route,
       router,
       loadProductListRes: await productsStore.loadProductList(),
+      loadProductGroupsListRes: await productGroupStore.loadGroupsList(),
       loadBrandListRes: await brandStore.loadBrandsList(),
       loadCollectionListRes: await collectionStore.loadCollectionList(),
       loadCategoryListRes: await categoryStore.loadCategoriesList(),
@@ -192,6 +196,7 @@ export default {
       },
     });
     this.loadProductListRes.toastIfError(this.$toast, this.$nextTick);
+    this.loadProductGroupsListRes.toastIfError(this.$toast, this.$nextTick);
     this.loadBrandListRes.toastIfError(this.$toast, this.$nextTick);
     this.loadCollectionListRes.toastIfError(this.$toast, this.$nextTick);
     this.loadCategoryListRes.toastIfError(this.$toast, this.$nextTick);
@@ -203,6 +208,18 @@ export default {
       if (searchTerm.trim() === "") return this.productsStore.getProductList;
 
       return this.productsStore.getProductList.filter((row) =>
+        Object.values(row).some((value) =>
+          String(value).toLowerCase().includes(searchTerm.toLowerCase()),
+        ),
+      );
+    },
+    getFilteredGroups() {
+      const searchTerm = this.productsStore.getSearchTerm;
+
+      if (searchTerm.trim() === "")
+        return this.productGroupStore.getProductGroupsList;
+
+      return this.productGroupStore.getProductGroupsList.filter((row) =>
         Object.values(row).some((value) =>
           String(value).toLowerCase().includes(searchTerm.toLowerCase()),
         ),
@@ -240,6 +257,12 @@ export default {
     handleRowClick(row) {
       this.router.push({
         name: "Product details",
+        params: { id: row.id.toString() },
+      });
+    },
+    handleGroupClick(row) {
+      this.router.push({
+        name: "Group details",
         params: { id: row.id.toString() },
       });
     },

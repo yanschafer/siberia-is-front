@@ -53,11 +53,11 @@
             }}</MDBBtn>
           </MDBCol>
         </MDBCol>
-        <MDBCol class="d-flex flex-row justify-content-end">
-          <img
-            class="qr"
-            src="https://gorcom36.ru/upload/iblock/c1f/qrcodecurves.png"
-          />
+        <MDBCol
+          v-if="storehouseQrUrl && storehouseQrUrl != ''"
+          class="d-flex flex-row justify-content-end"
+        >
+          <img class="qr" :src="storehouseQrUrl" />
         </MDBCol>
       </MDBRow>
     </MDBContainer>
@@ -165,6 +165,7 @@ import TokenUtil from "@/utils/token.util";
 import loggerUtil from "@/utils/logger/logger.util";
 import InputText from "primevue/inputtext";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
+import AuthModel from "@/api/modules/auth/models/auth.model";
 
 export default {
   name: "SingleStorehouseView",
@@ -230,6 +231,7 @@ export default {
       arrivalAvailable: true,
       saleAvailable: true,
       requestAvailable: true,
+      storehouseQrUrl: "",
     };
   },
   async setup() {
@@ -246,6 +248,7 @@ export default {
       modalStore,
       route,
       router,
+      storehouseId: parseInt(route.params.id.toString()),
       loadProductListRes: await productStore.loadProductList(),
       loadSelectedStorehouse: await storehouseStore.loadSelectedStoreHouse(
         parseInt(route.params.id.toString()),
@@ -253,10 +256,13 @@ export default {
       authCheckStore,
     };
   },
-  created() {
+  async created() {
     this.loadProductListRes.toastIfError(this.$toast, this.$nextTick);
     this.loadSelectedStorehouse.toastIfError(this.$toast, this.$nextTick);
     if (this.loadSelectedStorehouse.success) this.updateMangeButtons();
+
+    const authModel = new AuthModel();
+    this.storehouseQrUrl = await authModel.getStorehouseQr(this.storehouseId);
 
     this.authCheckStore.$onAction(async ({ name }) => {
       if (name == "refresh") {
