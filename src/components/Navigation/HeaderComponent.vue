@@ -152,7 +152,7 @@ import FileUploadComponent from "@/components/Inputs/FileUploadComponent.vue";
 import FileUploadModalComponent from "@/components/Inputs/FileUploadModalComponent.vue";
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 
-export default defineComponent({
+export default {
   name: "HeaderComponent",
   components: {
     TableComponent,
@@ -180,6 +180,24 @@ export default defineComponent({
     IconAlertTriangle,
     IconBell,
   },
+  setup() {
+    const tooltip1 = ref(false);
+    const tooltip2 = ref(false);
+    const tooltip3 = ref(false);
+    const tooltip4 = ref(false);
+    const dropdown24 = ref(false);
+    const router = useRouter();
+
+    return {
+      tooltip1,
+      tooltip2,
+      tooltip3,
+      tooltip4,
+      dropdown24,
+      router,
+      authCheckStore: useAuthCheckStore(),
+    };
+  },
   props: {
     title: String,
     showAddButton: {
@@ -205,6 +223,10 @@ export default defineComponent({
     addButtonLabel: {
       type: String,
       default: PrintUtil.localize("AddBtnLabel", "header"),
+    },
+    addBtnCallback: {
+      type: Object,
+      default: null,
     },
     secondAddButtonLabel: {
       type: String,
@@ -235,6 +257,10 @@ export default defineComponent({
       return PrintUtil.localize(key, module);
     },
     navigate() {
+      if (this.addBtnCallback != null) {
+        this.addBtnCallback();
+        return;
+      }
       this.router.push({ name: this.addBtnRoute || "" });
     },
     handleClickHistory() {
@@ -263,25 +289,7 @@ export default defineComponent({
       return addBtnAvailable;
     },
   },
-  setup() {
-    const tooltip1 = ref(false);
-    const tooltip2 = ref(false);
-    const tooltip3 = ref(false);
-    const tooltip4 = ref(false);
-    const dropdown24 = ref(false);
-    const router = useRouter();
-
-    return {
-      tooltip1,
-      tooltip2,
-      tooltip3,
-      tooltip4,
-      dropdown24,
-      router,
-      authCheckStore: useAuthCheckStore(),
-    };
-  },
-});
+};
 </script>
 
 <style scoped>

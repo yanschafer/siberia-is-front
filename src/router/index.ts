@@ -5,6 +5,7 @@ import LoggerUtil from "@/utils/logger/logger.util";
 import PrintUtil from "@/utils/localization/print.util";
 import app from "@/App.vue";
 import BreadcrumbDto from "@/router/breadcrumb.dto";
+import { useMediaModalStore } from "@/stores/media-modal.store";
 
 /*
 user-managing = "1"
@@ -68,7 +69,11 @@ const routes = [
         name: "media",
         component: () => import("@/views/Media/MediaView.vue"),
         meta: {
-          showAddBtn: false,
+          showAddBtn: true,
+          addBtnCallback: () => {
+            const mediaStore = useMediaModalStore();
+            mediaStore.openUploadModal();
+          },
           name: "Media",
         },
       },
@@ -326,7 +331,7 @@ router.beforeEach((to, from, next) => {
 
   if (to.meta["ruleId"]) {
     if (
-      !to.meta.ruleId.some((el) =>
+      !(to.meta.ruleId as number[]).some((el) =>
         TokenUtil.hasAccessTo(parseInt(el.toString())),
       )
     ) {
