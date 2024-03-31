@@ -7,4 +7,8 @@ export default class GalleryModel extends ApiCrudModelUtil<
   GalleryInputDto,
   GalleryOutputDto,
   GalleryUpdateDto
-> {}
+> {
+  constructor() {
+    super("/gallery");
+  }
+}

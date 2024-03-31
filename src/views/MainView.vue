@@ -9,6 +9,7 @@
         :show-second-add-button="showSecondAddBtn"
         :second-add-button-route="secondAddBtnRoute"
         :show-upload-button="showUploadBtn"
+        :add-btn-callback="addBtnCallback"
         :title="pageTitle"
         :breadcrumbs="navBreadcrumbs"
       />
@@ -36,6 +37,7 @@ import PrintUtil from "@/utils/localization/print.util";
 import loggerUtil from "@/utils/logger/logger.util";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
 import BreadcrumbDto from "@/router/breadcrumb.dto";
+import LoggerUtil from "@/utils/logger/logger.util";
 export default {
   name: "DashboardView",
   components: {
@@ -51,6 +53,7 @@ export default {
       showAddBtn: false,
       showUploadBtn: false,
       addBtnRoute: "",
+      addBtnCallback: null,
       showSecondAddBtn: false,
       secondAddBtnRoute: "",
     };
@@ -81,6 +84,10 @@ export default {
 
       this.showAddBtn = this.route.meta.showAddBtn;
       this.addBtnRoute = this.route.meta.addBtnRoute;
+      if (this.route.meta.addBtnCallback) {
+        LoggerUtil.debug(this.route.meta);
+        this.addBtnCallback = this.route.meta.addBtnCallback;
+      }
       this.showSecondAddBtn = this.route.meta.showSecondAddBtn;
       this.secondAddBtnRoute = this.route.meta.secondAddBtnRoute;
       this.showUploadBtn = this.route.meta.showUploadBtn;

@@ -1,7 +1,11 @@
 <template>
-  <!--TODO Закрытие модалки не работает -->
-  <MediaModalComponent :visible.sync="showModal" :image="currentImage" />
-  <Dialog v-model:visible="uploadVisible" modal header="Upload media content">
+  <MediaModalComponent />
+
+  <Dialog
+    v-model:visible="mediaModalStore.uploadOpen"
+    modal
+    header="Upload media content"
+  >
     <FileUploadModalComponent />
   </Dialog>
   <ScrollPanel
@@ -9,31 +13,28 @@
     class="main-area animate__animated animate__fadeIn"
   >
     <div class="card">
-      <DataView :paginator="true" :rows="6" :value="images" :layout="layout">
+      <DataView :paginator="true" :rows="6" :value="items" :layout="layout">
         <template #header>
           <div
             class="d-flex justify-content-between align-items-center position-sticky header"
           >
-            <Checkbox v-model="checked" :binary="true" />
-            <!--TODO Здесь открывается модалка, повесь ее на кнопку у заголовка роута, а на эту кнопку вывести удаление-->
-            <Button
-              @click="uploadVisible = true"
-              class="btn-danger btn utility-btn"
+            <Checkbox v-model="checked" @change="toggleAll" :binary="true" />
+            <Button @click="deleteSelected" class="btn-danger btn utility-btn"
               >DELETE SELECTED</Button
             >
-            <div class="d-flex flex-row gap-3">
-              <!--TODO DATE SELECTOR-->
+            <!--div class="d-flex flex-row gap-3">
+              TODO DATE SELECTOR
               <SelectComponent
                 model-value=""
                 items=""
                 :placeholder="'File type...'"
               />
-              <!--TODO FILE TYPE SELECTOR-->
+              TODO FILE TYPE SELECTOR
               <SelectComponent model-value="" items="" :placeholder="'Date'" />
               <Button class="btn-outline-black btn utility-btn">FILTER</Button>
-            </div>
+            </div-->
             <div class="d-flex flex-column justify-center">
-              <SearchComponent class="search" />
+              <SearchComponent class="search" v-model="mediaStore.searchTerm" />
             </div>
             <DataViewLayoutOptions v-model="layout" />
           </div>
@@ -49,12 +50,12 @@
               <div
                 class="d-flex flex-column list-row flex-sm-row align-items-center p-4 gap-3"
               >
-                <Checkbox v-model="checked" :binary="true" />
+                <Checkbox v-model="image.selected" :binary="true" />
                 <div @click="openModal(image)" class="image-container">
                   <img
                     class="media-image-list mx-auto d-block"
-                    :src="image.url"
-                    :alt="image.title"
+                    :src="getUrl(image.url)"
+                    :alt="image.name"
                   />
                   <div class="overlay">
                     <svg
@@ -81,20 +82,16 @@
                     <h5 class="m-0 heading-list">FILE NAME</h5>
                     <p class="text-muted m-0">{{ image.name }}</p>
                   </div>
-                  <div class="d-flex flex-column col-2 justify-center">
+                  <!--div class="d-flex flex-column col-2 justify-center">
                     <h5 class="heading-list m-0">USED FOR</h5>
                     <p class="text-muted m-0">Product #1</p>
-                  </div>
+                  </div-->
                   <div class="d-flex flex-column col-2 justify-center">
-                    <h5 class="heading-list m-0">DATE</h5>
-                    <p class="text-muted m-0">24/24/24</p>
-                  </div>
-                  <!--                  <div class="d-flex flex-column col-2 justify-center">-->
-                  <!--                    <h5 class="heading-list m-0">SIZE</h5>-->
-                  <!--                    <p class="text-muted m-0">20KB</p>-->
-                  <!--                  </div>-->
-                  <div class="d-flex flex-column col-2 justify-center">
-                    <Button class="btn btn-danger utility-btn">DELETE</Button>
+                    <Button
+                      @click="removeImage(image)"
+                      class="btn btn-danger utility-btn"
+                      >DELETE</Button
+                    >
                   </div>
                 </div>
               </div>
@@ -113,8 +110,8 @@
                 <div @click="openModal(image)" class="image-container">
                   <img
                     class="img-fluid media-image"
-                    :src="image.url"
-                    :alt="image.title"
+                    :src="getUrl(image.url)"
+                    :alt="image.name"
                   />
                   <div class="overlay">
                     <svg
@@ -142,13 +139,13 @@
                     <div
                       class="d-flex flex-column justify-center align-items-center col-2"
                     >
-                      <Checkbox v-model="checked" :binary="true" />
+                      <Checkbox v-model="image.selected" :binary="true" />
                     </div>
                     <div
                       class="d-flex flex-column justify-center align-items-start col-6"
                     >
-                      <h5 class="m-0 heading-list">FILE NAME</h5>
-                      <p class="text-muted m-0">{{ image.name }}</p>
+                      <h5 class="m-0 heading-list">{{ image.name }}</h5>
+                      <p class="text-muted m-0">{{ image.url }}</p>
                     </div>
                   </div>
                 </div>
@@ -174,6 +171,10 @@ import SelectComponent from "@/components/Elements/Selectors/SelectComponent.vue
 import Checkbox from "primevue/checkbox";
 import FileUploadModalComponent from "@/components/Inputs/FileUploadModalComponent.vue";
 import MediaModalComponent from "@/views/Media/MediaModalComponent.vue";
+import { useMediaStore } from "@/stores/media.store.ts";
+import LoggerUtil from "@/utils/logger/logger.util.ts";
+import { useMediaModalStore } from "@/stores/media-modal.store.ts";
+import FilesResolverUtil from "@/utils/files-resolver.util.ts";
 
 export default {
   components: {
@@ -190,58 +191,95 @@ export default {
     Dialog,
     MediaModalComponent,
   },
+  async setup() {
+    const mediaStore = useMediaStore();
+    const mediaModalStore = useMediaModalStore();
+
+    return {
+      mediaStore,
+      mediaModalStore,
+      loadRes: await mediaStore.loadGallery(),
+    };
+  },
+  async created() {
+    this.loadRes.toastIfError(this.$toast, this.$nextTick);
+  },
   data() {
     return {
       checked: false,
       uploadVisible: false,
-      images: [
-        {
-          name: "Изображение 1",
-          description: "Описание изображения 1",
-          url: "./fedor.png",
-        },
-        {
-          name: "Изображение 2",
-          description: "Описание изображения 2",
-          url: "./fedor.png",
-        },
-        {
-          name: "Изображение 1",
-          description: "Описание изображения 1",
-          url: "./fedor.png",
-        },
-        {
-          name: "Изображение 1",
-          description: "Описание изображения 1",
-          url: "./fedor.png",
-        },
-        {
-          name: "Изображение 1",
-          description: "Описание изображения 1",
-          url: "./fedor.png",
-        },
-        {
-          name: "Изображение 1",
-          description: "Описание изображения 1",
-          url: "./fedor.png",
-        },
-        {
-          name: "Изображение 1",
-          description: "Описание изображения 1",
-          url: "./fedor.png",
-        },
-      ],
       sortOrder: null,
       filters: null,
       layout: "grid",
-      showModal: false,
-      currentImage: null,
+      showUpload: false,
     };
   },
   methods: {
+    getUrl(image) {
+      return FilesResolverUtil.getStreamUrl(image);
+    },
     openModal(image) {
-      this.currentImage = image;
-      this.showModal = true;
+      this.mediaModalStore.openImage(image);
+    },
+    async removeImage(image) {
+      const removeRes = await this.mediaStore.removeImage(image.id);
+
+      if (removeRes.success) {
+        this.$toast.add({
+          severity: "info",
+          summary: "Success",
+          detail: `File '${image.name}' removed`,
+          life: 3000,
+        });
+      } else removeRes.toastIfError(this.$toast, this.$nextTick);
+    },
+    async deleteSelected() {
+      const onDelete = this.items
+        .filter((el) => el.selected)
+        .map((el) => el.id);
+
+      const removeResult = await Promise.all(
+        onDelete.map(
+          async (el) => await this.mediaStore.removeImage(el, false),
+        ),
+      );
+
+      if (removeResult.every((el) => el.success)) {
+        if (this.checked) {
+          this.mediaStore.clearList();
+        } else {
+          this.mediaStore.removeFromList(onDelete);
+        }
+
+        this.$toast.add({
+          severity: "info",
+          summary: "Success",
+          detail: `Files removed`,
+          life: 3000,
+        });
+      }
+    },
+    toggleAll() {
+      this.mediaStore.toggleAll(this.checked);
+    },
+  },
+  computed: {
+    items() {
+      if (this.mediaStore.searchTerm != "")
+        return this.mediaStore.galleryItems.filter((el) => {
+          LoggerUtil.debug(el);
+          return Object.values(el).some((value) => {
+            LoggerUtil.debug(
+              String(value)
+                .toLowerCase()
+                .includes(this.mediaStore.searchTerm.toLowerCase()),
+            );
+            return String(value)
+              .toLowerCase()
+              .includes(this.mediaStore.searchTerm.toLowerCase());
+          });
+        });
+      else return this.mediaStore.galleryItems;
     },
   },
 };
