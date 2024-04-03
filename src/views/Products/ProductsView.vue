@@ -1,4 +1,12 @@
 <template>
+  <Dialog
+    v-model:visible="addToGroupStore.addToGroupOpen"
+    modal
+    :style="{ width: '90vw' }"
+    header="Add product to group"
+  >
+    <AddToGroupComponent />
+  </Dialog>
   <ScrollPanel
     style="height: 80vh; width: 88vw"
     class="main-area animate__animated animate__fadeIn"
@@ -36,6 +44,7 @@
             <MDBCol class="col-auto">
               <MDBContainer class="table-container">
                 <SearchComponent @search="handleSearch" />
+                <Button @click="openAddToGroupModal">Add to Group</Button>
                 <!-- TODO Вывести правильную колонку для групп, добавить метод для удаления (row-delete) -->
                 <!-- TODO Переход на(хуй хаха) SingleProductGroupView.vue при клике на(хуй хаха) ряд -->
                 <TableComponent
@@ -59,6 +68,7 @@
 </template>
 
 <script lang="ts">
+import Dialog from "primevue/dialog";
 import FiltersSidebarComponent from "@/components/Elements/Filter sidebar/FiltersSidebarComponent.vue";
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import SearchComponent from "@/components/Inputs/SearchComponent.vue";
@@ -80,10 +90,16 @@ import ScrollPanel from "primevue/scrollpanel";
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import { useProductGroupStore } from "@/stores/product-group.store";
+import FileUploadModalComponent from "@/components/Inputs/FileUploadModalComponent.vue";
+import AddToGroupComponent from "@/views/Products/AddToGroupComponent.vue";
+import { useAddToGroupModalStore } from "@/stores/add-to-group-modal.store";
 
 export default {
   name: "ProductsView",
   components: {
+    Dialog,
+    AddToGroupComponent,
+    FileUploadModalComponent,
     SearchComponent,
     TableComponent,
     FiltersSidebarComponent,
@@ -113,8 +129,10 @@ export default {
     const filtersStore = useFiltersStore();
     const route = useRoute();
     const router = useRouter();
+    const addToGroupStore = useAddToGroupModalStore();
 
     return {
+      addToGroupStore,
       filtersStore,
       brandStore,
       collectionStore,
@@ -242,6 +260,9 @@ export default {
     },
   },
   methods: {
+    openAddToGroupModal() {
+      this.addToGroupStore.openModal();
+    },
     localize(key, module = "products") {
       return PrintUtil.localize(key, module);
     },

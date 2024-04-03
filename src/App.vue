@@ -318,6 +318,18 @@ input::-webkit-inner-spin-button {
 .p-ripple-disabled {
   top: 85px !important;
 }
+.p-treeselect-label {
+  padding-top: 0.2rem !important;
+  padding-bottom: 0.2rem !important;
+  background-color: #f8f8f8;
+  border-radius: 0;
+  border: 0;
+  border-bottom: 2px solid #cecece;
+  transition: all 0.3s ease-in-out;
+  width: 100%;
+  max-width: fit-content;
+  padding-left: 13px;
+}
 </style>
 
 <style scoped></style>

@@ -1,9 +1,10 @@
 <!-- TableComponent.vue -->
 <template>
   <DataTable
-    class="animate__animated animate__fadeIn"
+    class="animate__animated animate__fadeIn my-custom-table"
     v-if="paginatedRows.length > 0"
     v-model:editingRows="editingRows"
+    v-model:selection="selectedRows"
     editMode="row"
     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink JumpToPageInput"
     :value="paginatedRows"
@@ -22,6 +23,13 @@
       },
     }"
   >
+    <Column
+      v-if="showSelectionColumn"
+      selectionMode="multiple"
+      headerStyle="width: 3rem"
+    >
+      <template #header></template>
+    </Column>
     <Column
       class="animate__animated animate__fadeIn"
       v-for="column in columns"
@@ -119,6 +127,10 @@ export default defineComponent({
     columns: Array,
     searchTerm: String,
     showEditColumn: Boolean,
+    showSelectionColumn: {
+      type: Boolean,
+      default: false,
+    },
     editableColumns: Array,
     enableDelete: Boolean,
     editInputType: {
@@ -145,6 +157,7 @@ export default defineComponent({
       currentPage: 1,
       itemsPerPage: 7,
       editingRows: [],
+      selectedRows: [],
       deleteClick: false,
       noSearchResultIcon: "IconSearchOff",
       noSearchResultTitle: this.localize("nothingFound"),
@@ -260,5 +273,8 @@ export default defineComponent({
 }
 .message-container {
   height: 50vh;
+}
+#header {
+  display: none;
 }
 </style>

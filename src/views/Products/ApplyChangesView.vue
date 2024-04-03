@@ -17,7 +17,7 @@
           </MDBRow>
           <MDBRow>
             <MDBCol class="d-flex flex-column gap-3 w-100">
-              <h5 class="field-heading d-flex gap-1 align-items-center">
+              <h5 class="field-heading d-flex gap-2 mt-3 align-items-center">
                 {{ localize("brandCapslock") }}
                 <SelectComponent
                   :placeholder="placeholderBrand"
@@ -32,7 +32,7 @@
                 />
               </h5>
               <h5
-                class="field-heading d-flex flex-column gap-1 align-items-start"
+                class="field-heading d-flex flex-column gap-3 align-items-start"
               >
                 <span class="field-heading separator">{{
                   localize("expirationDateCapslock")
@@ -51,18 +51,20 @@
       </MDBRow>
     </Panel>
     <MDBContainer class="description-section" fluid>
-      <TreeDropdownComponent
-        :placeholder="placeholderCategory"
-        class="animate__animated animate__flipInX animate__faster"
-        :class="{ 'p-invalid': !validate.category }"
-        :nodes="categoryList"
-        v-model="category"
-      />
-      <DialogComponentTrigger
-        :button-text="createButtonText"
-        :init-object="initCategoryDialog"
-      />
-      <h1 class="product-heading d-flex gap-1 align-items-center">
+      <h1 class="product-heading d-flex gap-3 align-items-center">
+        <TreeDropdownComponent
+          :placeholder="placeholderCategory"
+          class="animate__animated animate__flipInX animate__faster"
+          :class="{ 'p-invalid': !validate.category }"
+          :nodes="categoryList"
+          v-model="category"
+        />
+        <DialogComponentTrigger
+          :button-text="createButtonText"
+          :init-object="initCategoryDialog"
+        />
+      </h1>
+      <h1 class="product-heading d-flex gap-3 align-items-center">
         <SelectComponent
           :placeholder="placeholderCollection"
           class="animate__animated animate__flipInX animate__faster"
@@ -80,7 +82,7 @@
         >
           {{ localize("colorCapslock") }}
           <InputText
-            class="input-wrapper animate__animated animate__fadeIn username-input"
+            class="input-wrapper animate__animated animate__fadeIn username-input mt-2"
             :class="{ 'p-invalid': !validate.color }"
             type="text"
             :placeholder="placeholderColor"
@@ -95,7 +97,7 @@
           <h5 class="field-heading">
             {{ localize("quantityPerPackageCapslock") }}
             <InputText
-              class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+              class="input-wrapper animate__animated animate__flipInX animate__faster username-input mt-2"
               :class="{ 'p-invalid': !validate.amountInBox }"
               type="text"
               :placeholder="placeholderQuantityPerPackage"
@@ -107,7 +109,7 @@
           <h5 class="field-heading">
             {{ localize("distributionPriceCapslock") }}
             <InputText
-              class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+              class="input-wrapper animate__animated animate__flipInX animate__faster username-input mt-2"
               :class="{ 'p-invalid': !validate.distributorPercent }"
               type="text"
               :placeholder="placeholderDistributionPercent"
@@ -119,7 +121,7 @@
           <h5 class="field-heading">
             {{ localize("professionalPriceCapslock") }}
             <InputText
-              class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+              class="input-wrapper animate__animated animate__flipInX animate__faster username-input mt-2"
               :class="{ 'p-invalid': !validate.professionalPercent }"
               type="text"
               :placeholder="placeholderProfessionalPercent"
@@ -131,7 +133,7 @@
           <h5 class="field-heading">
             {{ localize("defaultPriceCapslock") }}
             <InputText
-              class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
+              class="input-wrapper animate__animated animate__flipInX animate__faster username-input mt-2"
               :class="{ 'p-invalid': !validate.commonPrice }"
               type="text"
               :placeholder="placeholderDefaultPrice"
