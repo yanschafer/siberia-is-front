@@ -11,12 +11,9 @@
           <img :src="getUrl(image.url)" alt="Image" class="media-image-full" />
         </div>
       </div>
-    </div>
-
-    <div class="d-flex flex-column justify-center mt-3">
-      <div class="flex-grow-1 d-flex flex-row justify-content-start pl-3">
-        <div class="d-flex flex-row flex-grow-1 gap-4 text-col">
-          <div class="d-flex flex-column justify-center">
+      <div class="d-flex flex-column justify-center items-center mt-3">
+        <div class="d-flex flex-row justify-content-start pl-3">
+          <div class="d-flex flex-col flex-grow-1 text-col">
             <h5 class="m-0 heading-list">{{ image.name }}</h5>
             <p class="text-muted m-0">{{ image.url }}</p>
             <InputText
@@ -24,8 +21,7 @@
               v-if="editMode"
               :placeholder="'Media name...'"
             />
-          </div>
-          <!--div class="d-flex flex-column justify-center">
+            <!--div class="d-flex flex-column justify-center">
             <h5 class="heading-list m-0">USED FOR</h5>
             <p class="text-muted m-0">Product #1</p>
           </div>
@@ -33,39 +29,40 @@
             <h5 class="heading-list m-0">DATE</h5>
             <p class="text-muted m-0">24/24/24</p>
           </div-->
+          </div>
         </div>
-      </div>
-      <h5 class="heading-list m-0">DESCRIPTION</h5>
-      <p v-if="!editMode" class="text-muted m-0">
-        {{ image.description }}
-      </p>
-      <Textarea
-        v-if="editMode"
-        class="text-area"
-        :placeholder="'Description...'"
-        v-model="image.description"
-      ></Textarea>
-      <div
-        v-if="!editMode"
-        class="d-flex flex-row justify-content-start gap-2 mt-3"
-      >
-        <Button @click="startEdit" class="btn btn-outline-black utility-btn"
-          >EDIT</Button
+        <h5 class="heading-list m-0">DESCRIPTION</h5>
+        <p v-if="!editMode" class="text-muted m-0">
+          {{ image.description }}
+        </p>
+        <Textarea
+          v-if="editMode"
+          class="text-area"
+          :placeholder="'Description...'"
+          v-model="image.description"
+        ></Textarea>
+        <div
+          v-if="!editMode"
+          class="d-flex flex-row justify-content-start gap-2 mt-3"
         >
-        <Button @click="removeImage" class="btn btn-danger utility-btn"
-          >DELETE</Button
+          <Button @click="startEdit" class="btn btn-outline-black utility-btn"
+            >EDIT</Button
+          >
+          <Button @click="removeImage" class="btn btn-danger utility-btn"
+            >DELETE</Button
+          >
+        </div>
+        <div
+          v-if="editMode"
+          class="d-flex flex-row justify-content-start gap-2 mt-3"
         >
-      </div>
-      <div
-        v-if="editMode"
-        class="d-flex flex-row justify-content-start gap-2 mt-3"
-      >
-        <Button @click="cancelEdit" class="btn btn-outline-black utility-btn"
-          >CANCEL</Button
-        >
-        <Button @click="saveEdit" class="btn btn-success utility-btn"
-          >SAVE</Button
-        >
+          <Button @click="cancelEdit" class="btn btn-outline-black utility-btn"
+            >CANCEL</Button
+          >
+          <Button @click="saveEdit" class="btn btn-success utility-btn"
+            >SAVE</Button
+          >
+        </div>
       </div>
     </div>
   </Dialog>
@@ -181,6 +178,13 @@ export default {
   padding: 0;
   margin: 0;
   border: 10px solid black;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  max-height: 30rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .photo-col {
   display: flex;

@@ -18,10 +18,14 @@
           <div
             class="d-flex justify-content-between align-items-center position-sticky header"
           >
-            <Checkbox v-model="checked" @change="toggleAll" :binary="true" />
-            <Button @click="deleteSelected" class="btn-danger btn utility-btn"
-              >DELETE SELECTED</Button
+            <div
+              class="d-flex flex-row justify-center align-content-center align-self-center align-items-center gap-2"
             >
+              <Checkbox v-model="checked" @change="toggleAll" :binary="true" />
+              <Button @click="deleteSelected" class="btn-danger btn utility-btn"
+                >DELETE SELECTED</Button
+              >
+            </div>
             <!--div class="d-flex flex-row gap-3">
               TODO DATE SELECTOR
               <SelectComponent
@@ -298,12 +302,19 @@ export default {
   margin-right: 20px;
 }
 .media-image {
-  width: 300px;
-  border-radius: 8px;
+  //width: 300px;
+  //border-radius: 8px;
+  max-width: 100%; /* Максимальная ширина изображения */
+  max-height: 100%; /* Максимальная высота изображения */
+  object-fit: cover; /* Обеспечивает покрытие всей области контейнера, сохраняя пропорции */
+  object-position: center; /* Центрирует изображение в контейнере */
 }
 .media-image-list {
-  width: 70px;
   border-radius: 8px;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 .main-area {
   overflow-x: hidden !important;
@@ -313,6 +324,11 @@ export default {
   position: relative;
   border-radius: 8px;
   overflow: hidden;
+  width: 300px; /* Ширина контейнера */
+  height: 300px; /* Высота контейнера, равная ширине для создания квадрата */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .media-image {
