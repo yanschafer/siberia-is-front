@@ -91,6 +91,10 @@ const routes = [
           showSecondAddBtn: true,
           secondAddBtnRoute: "New group",
           showUploadBtn: true,
+          uploadBtnCallback: () => {
+            const mediaStore = useMediaModalStore();
+            mediaStore.openUploadProducts();
+          },
           name: PrintUtil.localize("products", "router"),
         },
         children: [

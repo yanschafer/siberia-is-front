@@ -1,17 +1,63 @@
+<template>
+  <FileUpload
+    name="demo[]"
+    customUpload
+    @uploader="uploader"
+    :multiple="true"
+    :accept="accept"
+    :maxFileSize="100000000"
+  >
+    <template #empty>
+      <p>Drag and drop files to here to upload.</p>
+    </template>
+  </FileUpload>
+</template>
+
 <script lang="ts">
 import { defineComponent } from "vue";
 import FileUpload from "primevue/fileupload";
 import LoggerUtil from "@/utils/logger/logger.util";
 import { useMediaStore } from "@/stores/media.store";
-import GalleryInputDto from "@/api/modules/gallery/dto/gallery-input.dto";
-import GalleryModel from "@/api/modules/gallery/models/gallery.model";
 import { useMediaModalStore } from "@/stores/media-modal.store";
+import { useProductsStore } from "@/stores/products.store";
 
 export default defineComponent({
   name: "FileUploadModalComponent",
   components: { FileUpload },
+  props: {
+    products: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data: () => ({
+    accept: "image/*",
+  }),
+  created() {
+    if (this.products) this.accept = "text/csv";
+  },
   methods: {
-    async uploader(event) {
+    uploader(event) {
+      if (this.products) this.productUploader(event);
+      else this.photoUploader(event);
+    },
+    async productUploader(event) {
+      await Promise.all(
+        event.files.map(async (file: File) => {
+          const productsStore = useProductsStore();
+          const uploaded = await productsStore.uploadCsv(file);
+          if (uploaded.success) {
+            this.$toast.add({
+              severity: "info",
+              summary: "Success",
+              detail: `File '${file.name}' Uploaded`,
+              life: 3000,
+            });
+          } else uploaded.toastIfError(this.$toast, this.$nextTick);
+        }),
+      );
+    },
+    async photoUploader(event) {
       await Promise.all(
         event.files.map(async (file) => {
           const reader = new FileReader();
@@ -49,21 +95,6 @@ export default defineComponent({
   },
 });
 </script>
-
-<template>
-  <FileUpload
-    name="demo[]"
-    customUpload
-    @uploader="uploader"
-    :multiple="true"
-    accept="image/*"
-    :maxFileSize="100000000"
-  >
-    <template #empty>
-      <p>Drag and drop files to here to upload.</p>
-    </template>
-  </FileUpload>
-</template>
 
 <style scoped>
 :deep(.p-button) {
