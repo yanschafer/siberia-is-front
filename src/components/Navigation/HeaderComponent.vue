@@ -24,20 +24,13 @@
         >
         <!-- TODO Разбить по компонентам модалку  -->
         <MDBBtn
-          v-if="showUploadButton && addButtonAvailable"
+          @click="upload"
+          v-if="showUploadButton"
           class="animate__animated animate__fadeInUp utility-btn"
           outline="black"
-          @click="uploadVisible = true"
           >UPLOAD</MDBBtn
         >
-        <Dialog
-          v-model:visible="uploadVisible"
-          modal
-          header="Upload products from a file"
-        >
-          <FileUploadModalComponent />
-          <TableComponent />
-        </Dialog>
+        <ProductsUploadModalComponent />
       </MDBContainer>
       <MDBContainer
         class="d-flex gap-4 flex-row align-items-center justify-content-end"
@@ -138,30 +131,25 @@ import {
   IconAlertTriangle,
   IconBell,
 } from "@tabler/icons-vue";
-import Dialog from "primevue/dialog";
 import { ref } from "vue";
 import NotificationsComponent from "@/components/Elements/Notification/NotificationsComponent.vue";
-import TokenUtil from "@/utils/token.util";
-import { appConf } from "@/api/conf/app.conf";
 import { useRouter } from "vue-router";
 import PrintUtil from "@/utils/localization/print.util";
-import ApiModelUtil from "@/utils/api-model.util";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
 import ProfileComponent from "@/components/Elements/Profile/ProfileComponent.vue";
 import FileUploadComponent from "@/components/Inputs/FileUploadComponent.vue";
 import FileUploadModalComponent from "@/components/Inputs/FileUploadModalComponent.vue";
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
+import ProductsUploadModalComponent from "@/components/Inputs/ProductsUploadModalComponent.vue";
 
 export default {
   name: "HeaderComponent",
   components: {
+    ProductsUploadModalComponent,
     TableComponent,
     FileUploadModalComponent,
     FileUploadComponent,
-    Dialog,
     ProfileComponent,
-    IconHome2,
-    MDBTooltip,
     NotificationsComponent,
     MDBContainer,
     MDBRow,
@@ -179,6 +167,7 @@ export default {
     IconExclamationCircle,
     IconAlertTriangle,
     IconBell,
+    MDBTooltip,
   },
   setup() {
     const tooltip1 = ref(false);
@@ -208,6 +197,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    uploadBtnCallback: {
+      type: Function,
+      default: null,
+    },
     showSecondAddButton: {
       type: Boolean,
       default: false,
@@ -225,7 +218,7 @@ export default {
       default: PrintUtil.localize("AddBtnLabel", "header"),
     },
     addBtnCallback: {
-      type: Object,
+      type: Function,
       default: null,
     },
     secondAddButtonLabel: {
@@ -247,11 +240,6 @@ export default {
       default: () => [],
     },
   },
-  data() {
-    return {
-      uploadVisible: false,
-    };
-  },
   methods: {
     localize(key, module = "header") {
       return PrintUtil.localize(key, module);
@@ -262,6 +250,11 @@ export default {
         return;
       }
       this.router.push({ name: this.addBtnRoute || "" });
+    },
+    upload() {
+      if (this.uploadBtnCallback != null) {
+        this.uploadBtnCallback();
+      }
     },
     handleClickHistory() {
       this.$router.push({ name: "History" });

@@ -9,6 +9,7 @@
         :show-second-add-button="showSecondAddBtn"
         :second-add-button-route="secondAddBtnRoute"
         :show-upload-button="showUploadBtn"
+        :upload-btn-callback="uploadBtnCallback"
         :add-btn-callback="addBtnCallback"
         :title="pageTitle"
         :breadcrumbs="navBreadcrumbs"
@@ -52,6 +53,7 @@ export default {
       pageTitle: "",
       showAddBtn: false,
       showUploadBtn: false,
+      uploadBtnCallback: null,
       addBtnRoute: "",
       addBtnCallback: null,
       showSecondAddBtn: false,
@@ -85,8 +87,10 @@ export default {
       this.showAddBtn = this.route.meta.showAddBtn;
       this.addBtnRoute = this.route.meta.addBtnRoute;
       if (this.route.meta.addBtnCallback) {
-        LoggerUtil.debug(this.route.meta);
         this.addBtnCallback = this.route.meta.addBtnCallback;
+      }
+      if (this.route.meta.uploadBtnCallback) {
+        this.uploadBtnCallback = this.route.meta.uploadBtnCallback;
       }
       this.showSecondAddBtn = this.route.meta.showSecondAddBtn;
       this.secondAddBtnRoute = this.route.meta.secondAddBtnRoute;
