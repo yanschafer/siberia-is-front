@@ -48,6 +48,7 @@
             <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
               localize("deleteCapslock", "default")
             }}</MDBBtn>
+            <MediaMiniModalComponent />
             <MDBBtn
               @click="cancelEditing"
               class="utility-btn"
@@ -361,9 +362,11 @@ import ScrollPanel from "primevue/scrollpanel";
 import LoggerUtil from "@/utils/logger/logger.util";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
 import ProductDto from "@/api/modules/product/dto/product.dto";
+import MediaMiniModalComponent from "@/views/Media/MediaMiniModalComponent.vue";
 export default {
   name: "SingleProductView",
   components: {
+    MediaMiniModalComponent,
     DialogComponentTrigger,
     FileUpload,
     ModalComponent,
