@@ -12,6 +12,8 @@ export const useProductsStore = defineStore({
   id: "products",
   state: () => ({
     searchTerm: "",
+    miniGalleryVisible: false,
+    miniGallerySelected: [],
     productRows: [],
     productColumns: [
       { field: "name", header: PrintUtil.localize("nameCapslock", "default") },

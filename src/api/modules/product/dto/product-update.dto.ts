@@ -1,7 +1,6 @@
 export default class ProductUpdateDto {
   constructor(
-    public photoBase64: string | null,
-    public photoName: string | null,
+    public photo: number[] | null,
     public vendorCode: string | null,
     public brand: number | null,
     public name: string | null,
