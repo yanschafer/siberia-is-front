@@ -12,6 +12,7 @@
     class="main-area animate__animated animate__fadeIn"
   >
     <template v-if="!isIdProvided">
+      <TabsNavComponent />
       <TabView>
         <TabPanel header="Single products">
           <MDBContainer class="d-flex container-content">
@@ -93,10 +94,12 @@ import { useProductGroupStore } from "@/stores/product-group.store";
 import FileUploadModalComponent from "@/components/Inputs/FileUploadModalComponent.vue";
 import AddToGroupComponent from "@/views/Products/AddToGroupComponent.vue";
 import { useAddToGroupModalStore } from "@/stores/add-to-group-modal.store";
+import TabsNavComponent from "@/components/Navigation/TabsNavComponent.vue";
 
 export default {
   name: "ProductsView",
   components: {
+    TabsNavComponent,
     Dialog,
     AddToGroupComponent,
     FileUploadModalComponent,
