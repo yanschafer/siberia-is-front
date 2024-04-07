@@ -23,12 +23,10 @@
           style="padding-left: 12px"
           class="col-auto animate__animated animate__flipInX animate__faster"
         >
-          <div class="product-img">
-            <FileUploadComponent
-              :init-value="selectedFile"
-              @changed="fileUploaded"
-            />
-          </div>
+          <div
+            class="product-img"
+            @click="productStore.miniGalleryVisible = true"
+          ></div>
         </MDBCol>
         <MDBCol class="d-flex flex-column justify-content-center">
           <MDBRow
@@ -649,31 +647,7 @@ export default {
       this.photoName = file.name;
     },
     async startEditing() {
-      if (this.imageName) {
-        const file = (await new Promise(async (resolve, reject) => {
-          const blob = await fetch(this.imageSource).then(
-            async (res) => await res.blob(),
-          );
-          const reader = new FileReader();
-          reader.readAsDataURL(blob);
-          LoggerUtil.debug("start loading");
-          reader.onload = () => {
-            resolve({
-              src: this.imageSource,
-              file: new File([reader.result], this.imageName),
-            });
-          };
-          reader.onerror = reject;
-        }).catch((_) => {
-          LoggerUtil.debug("error while loading");
-          LoggerUtil.debug(_);
-          null;
-        })) as File | null;
-        this.selectedFile = file ? [file] : [];
-      } else {
-        this.selectedFile = [];
-      }
-      LoggerUtil.debug("continue editing initialization", this.selectedFile);
+      this.productStore.miniGallerySelected = this.selectedProduct.photoIds;
       this.fileChangedWhileEditing = false;
       this.editing = true;
       this.newCategory = String(this.categoryId);
@@ -716,8 +690,7 @@ export default {
       const categoryId = parseInt(String(this.newCategory));
       const expirationDate = parseInt(this.newExpirationDate) * 24 * 60 * 1000;
       const data = new ProductUpdateDto(
-        this.photoBase64,
-        this.photoName,
+        this.productStore.miniGallerySelected,
         this.getNullIfNoChange(this.newSku, this.sku),
         this.getNullIfNoChange(brandId, this.brandId),
         this.getNullIfNoChange(this.newProductName, this.productName),
@@ -792,9 +765,10 @@ export default {
       return this.productStore.getSelectedProduct || {};
     },
     imageSource() {
-      LoggerUtil.debug(this.selectedProduct.photo);
-      if (this.selectedProduct.photo && this.selectedProduct.photo != "")
-        return FilesResolverUtil.getStreamUrl(this.selectedProduct.photo || "");
+      if (this.selectedProduct.photo && this.selectedProduct.photo.length != 0)
+        return FilesResolverUtil.getStreamUrl(
+          this.selectedProduct.photo[0] || "",
+        );
       else return FilesResolverUtil.getStreamUrl("fileNotFound.jpeg");
     },
     imageName() {

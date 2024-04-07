@@ -1,7 +1,6 @@
 export default class ProductInputDto {
   constructor(
-    public photoBase64: string,
-    public photoName: string,
+    public photoList: number[],
     public vendorCode: string,
     public barcode: string,
     public brand: number | null,
@@ -15,6 +14,6 @@ export default class ProductInputDto {
     public color: string,
     public amountInBox: number,
     public expirationDate: number,
-    public link: string
+    public link: string,
   ) {}
 }

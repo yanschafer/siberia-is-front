@@ -1,139 +1,6 @@
-<script lang="ts">
-import { defineComponent } from "vue";
-import DataView from "primevue/dataview";
-import Image from "primevue/image";
-import DataViewLayoutOptions from "primevue/dataviewlayoutoptions";
-import Button from "primevue/button";
-import Tag from "primevue/tag";
-import Dialog from "primevue/dialog";
-import ScrollPanel from "primevue/scrollpanel";
-import SearchComponent from "@/components/Inputs/SearchComponent.vue";
-import SelectComponent from "@/components/Elements/Selectors/SelectComponent.vue";
-import Checkbox from "primevue/checkbox";
-import FileUploadModalComponent from "@/components/Inputs/FileUploadModalComponent.vue";
-import MediaModalComponent from "@/views/Media/MediaModalComponent.vue";
-import { useMediaStore } from "@/stores/media.store.ts";
-import LoggerUtil from "@/utils/logger/logger.util.ts";
-import { useMediaModalStore } from "@/stores/media-modal.store.ts";
-import FilesResolverUtil from "@/utils/files-resolver.util.ts";
-
-export default defineComponent({
-  name: "MediaMiniModalComponent",
-  components: {
-    SearchComponent,
-    Button,
-    Dialog,
-    ScrollPanel,
-    DataView,
-    Image,
-    DataViewLayoutOptions,
-    Tag,
-    SelectComponent,
-    Checkbox,
-    FileUploadModalComponent,
-    MediaModalComponent,
-    LoggerUtil,
-    FilesResolverUtil,
-  },
-  data() {
-    return {
-      visible: false,
-      checked: false,
-      uploadVisible: false,
-      sortOrder: null,
-      filters: null,
-      layout: "grid",
-      showUpload: false,
-    };
-  },
-  async setup() {
-    const mediaStore = useMediaStore();
-    const mediaModalStore = useMediaModalStore();
-
-    return {
-      mediaStore,
-      mediaModalStore,
-      loadRes: await mediaStore.loadGallery(),
-    };
-  },
-  async created() {
-    this.loadRes.toastIfError(this.$toast, this.$nextTick);
-  },
-  methods: {
-    getUrl(image) {
-      return FilesResolverUtil.getStreamUrl(image);
-    },
-    openModal(image) {
-      this.mediaModalStore.openImage(image);
-    },
-    async removeImage(image) {
-      const removeRes = await this.mediaStore.removeImage(image.id);
-
-      if (removeRes.success) {
-        this.$toast.add({
-          severity: "info",
-          summary: "Success",
-          detail: `File '${image.name}' removed`,
-          life: 3000,
-        });
-      } else removeRes.toastIfError(this.$toast, this.$nextTick);
-    },
-    async deleteSelected() {
-      const onDelete = this.items
-        .filter((el) => el.selected)
-        .map((el) => el.id);
-
-      const removeResult = await Promise.all(
-        onDelete.map(
-          async (el) => await this.mediaStore.removeImage(el, false),
-        ),
-      );
-
-      if (removeResult.every((el) => el.success)) {
-        if (this.checked) {
-          this.mediaStore.clearList();
-        } else {
-          this.mediaStore.removeFromList(onDelete);
-        }
-
-        this.$toast.add({
-          severity: "info",
-          summary: "Success",
-          detail: `Files removed`,
-          life: 3000,
-        });
-      }
-    },
-    toggleAll() {
-      this.mediaStore.toggleAll(this.checked);
-    },
-  },
-  computed: {
-    items() {
-      if (this.mediaStore.searchTerm != "")
-        return this.mediaStore.galleryItems.filter((el) => {
-          LoggerUtil.debug(el);
-          return Object.values(el).some((value) => {
-            LoggerUtil.debug(
-              String(value)
-                .toLowerCase()
-                .includes(this.mediaStore.searchTerm.toLowerCase()),
-            );
-            return String(value)
-              .toLowerCase()
-              .includes(this.mediaStore.searchTerm.toLowerCase());
-          });
-        });
-      else return this.mediaStore.galleryItems;
-    },
-  },
-});
-</script>
-
 <template>
-  <Button label="Show" @click="visible = true" />
   <Dialog
-    v-model:visible="visible"
+    v-model:visible="productStore.miniGalleryVisible"
     modal
     header="Media gallery"
     :style="{ width: '80vw' }"
@@ -156,9 +23,7 @@ export default defineComponent({
                   @change="toggleAll"
                   :binary="true"
                 />
-                <Button
-                  @click="deleteSelected"
-                  class="btn-success btn utility-btn"
+                <Button @click="setSelected" class="btn-success btn utility-btn"
                   >SELECT</Button
                 >
                 <SearchComponent
@@ -166,17 +31,6 @@ export default defineComponent({
                   v-model="mediaStore.searchTerm"
                 />
               </div>
-              <!--div class="d-flex flex-row gap-3">
-                TODO DATE SELECTOR
-                <SelectComponent
-                  model-value=""
-                  items=""
-                  :placeholder="'File type...'"
-                />
-                TODO FILE TYPE SELECTOR
-                <SelectComponent model-value="" items="" :placeholder="'Date'" />
-                <Button class="btn-outline-black btn utility-btn">FILTER</Button>
-              </div-->
               <div class="d-flex flex-column justify-center"></div>
               <DataViewLayoutOptions v-model="layout" />
             </div>
@@ -306,6 +160,125 @@ export default defineComponent({
     </ScrollPanel>
   </Dialog>
 </template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+import DataView from "primevue/dataview";
+import Image from "primevue/image";
+import DataViewLayoutOptions from "primevue/dataviewlayoutoptions";
+import Button from "primevue/button";
+import Tag from "primevue/tag";
+import Dialog from "primevue/dialog";
+import ScrollPanel from "primevue/scrollpanel";
+import SearchComponent from "@/components/Inputs/SearchComponent.vue";
+import SelectComponent from "@/components/Elements/Selectors/SelectComponent.vue";
+import Checkbox from "primevue/checkbox";
+import FileUploadModalComponent from "@/components/Inputs/FileUploadModalComponent.vue";
+import MediaModalComponent from "@/views/Media/MediaModalComponent.vue";
+import { useMediaStore } from "@/stores/media.store.ts";
+import LoggerUtil from "@/utils/logger/logger.util.ts";
+import FilesResolverUtil from "@/utils/files-resolver.util.ts";
+import { useProductsStore } from "@/stores/products.store";
+
+export default defineComponent({
+  name: "MediaMiniModalComponent",
+  components: {
+    SearchComponent,
+    Button,
+    Dialog,
+    ScrollPanel,
+    DataView,
+    Image,
+    DataViewLayoutOptions,
+    Tag,
+    SelectComponent,
+    Checkbox,
+    FileUploadModalComponent,
+    MediaModalComponent,
+    LoggerUtil,
+    FilesResolverUtil,
+  },
+  data() {
+    return {
+      checked: false,
+      uploadVisible: false,
+      sortOrder: null,
+      filters: null,
+      layout: "grid",
+      showUpload: false,
+    };
+  },
+  async setup() {
+    const mediaStore = useMediaStore();
+    const productStore = useProductsStore();
+
+    return {
+      productStore,
+      mediaStore,
+      loadRes: await mediaStore.loadGallery(),
+    };
+  },
+  async created() {
+    this.mediaStore.galleryItems = this.mediaStore.galleryItems.map((el) => {
+      if (this.productStore.miniGallerySelected.includes(el.id))
+        return {
+          ...el,
+          selected: true,
+        };
+      else return el;
+    });
+    this.loadRes.toastIfError(this.$toast, this.$nextTick);
+  },
+  methods: {
+    getUrl(image) {
+      return FilesResolverUtil.getStreamUrl(image);
+    },
+    openModal(image) {
+      image.selected = !image.selected;
+    },
+    async removeImage(image) {
+      const removeRes = await this.mediaStore.removeImage(image.id);
+
+      if (removeRes.success) {
+        this.$toast.add({
+          severity: "info",
+          summary: "Success",
+          detail: `File '${image.name}' removed`,
+          life: 3000,
+        });
+      } else removeRes.toastIfError(this.$toast, this.$nextTick);
+    },
+    async setSelected() {
+      this.productStore.miniGallerySelected = this.items
+        .filter((el) => el.selected)
+        .map((el) => el.id);
+      this.productStore.miniGalleryVisible = false;
+    },
+    toggleAll() {
+      this.mediaStore.toggleAll(this.checked);
+    },
+  },
+  computed: {
+    items() {
+      if (this.mediaStore.searchTerm != "")
+        return this.mediaStore.galleryItems.filter((el) => {
+          LoggerUtil.debug(el);
+          return Object.values(el).some((value) => {
+            LoggerUtil.debug(
+              String(value)
+                .toLowerCase()
+                .includes(this.mediaStore.searchTerm.toLowerCase()),
+            );
+            return String(value)
+              .toLowerCase()
+              .includes(this.mediaStore.searchTerm.toLowerCase());
+          });
+        });
+      else return this.mediaStore.galleryItems;
+    },
+  },
+});
+</script>
 
 <style scoped>
 .product-list-item,

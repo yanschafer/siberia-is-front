@@ -5,7 +5,8 @@ import CollectionDto from "@/api/modules/collection/dto/collection.dto";
 export default class ProductDto {
   constructor(
     public id: number,
-    public photo: string,
+    public photo: string[],
+    public photoIds: number[],
     public vendorCode: string,
     public barcode: string,
     public brand: BrandDto | null,
