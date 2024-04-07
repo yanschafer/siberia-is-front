@@ -1,17 +1,53 @@
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "TabsNavComponent",
-});
-</script>
-
 <template>
   <div class="tabs-row d-flex flex-row">
-    <div class="tab-item active">Single products</div>
-    <div class="tab-item">Groupped products</div>
+    <template v-for="tab in getTabs">
+      <div
+        class="tab-item"
+        :class="{ active: isActive(tab.id) }"
+        @click="tabClicked(tab)"
+      >
+        {{ tab.label }}
+      </div>
+    </template>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+import { useNavTabsStore } from "@/stores/nav-tabs.store";
+import NavTabDto from "@/router/dto/nav-tab.dto";
+import { useRouter } from "vue-router";
+
+export default {
+  name: "TabsNavComponent",
+  setup() {
+    const navTabsStore = useNavTabsStore();
+    const router = useRouter();
+
+    return {
+      navTabsStore,
+      router,
+    };
+  },
+  methods: {
+    isActive(id: number) {
+      return this.navTabsStore.getActive.id === id;
+    },
+    tabClicked(tab: NavTabDto) {
+      if (tab.callback) {
+        tab.callback();
+      } else if (tab.route) {
+        this.router.push({ ...tab.route.toVueRoute() });
+      }
+    },
+  },
+  computed: {
+    getTabs() {
+      return this.navTabsStore.tabsList;
+    },
+  },
+};
+</script>
 
 <style scoped>
 .tabs-row {

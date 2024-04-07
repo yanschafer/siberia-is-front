@@ -1,4 +1,4 @@
-import RouteParametrized from "@/router/route-parametrized.type";
+import RouteParametrized from "@/router/dto/route-parametrized";
 
 export default class BreadcrumbDto {
   constructor(
