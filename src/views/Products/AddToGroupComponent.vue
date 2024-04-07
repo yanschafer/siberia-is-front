@@ -1,3 +1,39 @@
+<template>
+  <div class="row mb-2">
+    <div class="col-auto">
+      <h5 class="m-0">Group name</h5>
+    </div>
+    <div class="col-auto">
+      <InputText
+        v-model="addToGroupModalStore.name"
+        :placeholder="'New group name'"
+      />
+    </div>
+    <div class="col">
+      <Button @click="save" class="btn btn-black btn-outline utility-btn">{{
+        addToGroupModalStore.buttonLabel
+      }}</Button>
+    </div>
+  </div>
+  <MDBContainer class="d-flex container-content">
+    <MDBCol class="col-auto">
+      <FiltersSidebarComponent @start-search="handleFiltersSearch" />
+    </MDBCol>
+    <MDBCol class="">
+      Click on rows to select
+      <TableComponent
+        :info-message="noDataMessage"
+        :showEditColumn="false"
+        :selection-mode="'multiple'"
+        :selected-output-store="addToGroupModalStore"
+        :rows="getFilteredProducts"
+        :columns="productsStore.productColumns"
+        :searchTerm="addToGroupModalStore.searchTerm"
+      />
+    </MDBCol>
+  </MDBContainer>
+</template>
+
 <script lang="ts">
 import { defineComponent } from "vue";
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
@@ -6,6 +42,11 @@ import { MDBCol, MDBContainer } from "mdb-vue-ui-kit";
 import FiltersSidebarComponent from "@/components/Elements/Filter sidebar/FiltersSidebarComponent.vue";
 import ProductSearchFilterDto from "@/api/modules/product/dto/product-search-filter.dto";
 import InputText from "primevue/inputtext";
+import Button from "primevue/button";
+import { useAddToGroupModalStore } from "@/stores/add-to-group-modal.store";
+import { useProductGroupStore } from "@/stores/product-group.store";
+import LoggerUtil from "@/utils/logger/logger.util";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default defineComponent({
   name: "AddToGroupComponent",
@@ -15,22 +56,77 @@ export default defineComponent({
     MDBContainer,
     TableComponent,
     InputText,
+    Button,
   },
   setup() {
     const productsStore = useProductsStore();
+    const productGroupStore = useProductGroupStore();
+    const addToGroupModalStore = useAddToGroupModalStore();
+
     return {
       productsStore,
+      productGroupStore,
+      addToGroupModalStore,
     };
   },
+  created() {
+    this.productGroupStore.$onAction(async (action) => {
+      if (action.name == "update_success") {
+        this.$toast.add({
+          severity: "info",
+          summary: "Success",
+          detail: `Group '${this.addToGroupModalStore.name}' updated`,
+          life: 3000,
+        });
+        this.addToGroupModalStore.addToGroupOpen = false;
+      }
+      if (action.name == "update_failed") {
+        this.$toast.add({
+          severity: "error",
+          summary: "Failed",
+          detail: `Group '${this.addToGroupModalStore.name}' updating failed`,
+          life: 3000,
+        });
+        this.addToGroupModalStore.addToGroupOpen = false;
+      }
+    });
+    this.addToGroupModalStore.$onAction(async (action) => {
+      if (action.name == "create") {
+        const created = await this.productGroupStore.createGroup(
+          this.addToGroupModalStore.getOutput,
+        );
+
+        if (created.success) {
+          this.$toast.add({
+            severity: "info",
+            summary: "Success",
+            detail: `Group '${created.getData().name}' created`,
+            life: 3000,
+          });
+          this.addToGroupModalStore.addToGroupOpen = false;
+        } else created.toastIfError(this.$toast, this.$nextTick);
+      }
+    });
+  },
+  data: () => ({
+    noDataMessage: {
+      icon: "IconSearchOff",
+      title: PrintUtil.localize("nothingWasFound", "role"),
+      text: PrintUtil.localize("pleaseClarifyYourSearchQuery", "role"),
+    },
+  }),
   methods: {
     handleSearch(searchTerm) {
-      this.productsStore.searchTerm = searchTerm;
+      this.addToGroupModalStore.searchTerm = searchTerm;
     },
     async handleFiltersSearch(filters) {
       const loadRes = await this.productsStore.loadProductList(
         new ProductSearchFilterDto(filters),
       );
       loadRes.toastIfError(this.$toast, this.$nextTick);
+    },
+    async save() {
+      this.addToGroupModalStore.callback();
     },
   },
   computed: {
@@ -48,34 +144,5 @@ export default defineComponent({
   },
 });
 </script>
-
-<template>
-  <div class="row mb-2">
-    <div class="col-auto">
-      <h5 class="m-0">Group name</h5>
-    </div>
-    <div class="col-auto">
-      <InputText :placeholder="'New group name'" />
-    </div>
-    <div class="col">
-      <Button class="btn btn-black btn-outline utility-btn">+ Create</Button>
-    </div>
-  </div>
-  <MDBContainer class="d-flex container-content">
-    <MDBCol class="col-auto">
-      <FiltersSidebarComponent @start-search="handleFiltersSearch" />
-    </MDBCol>
-    <MDBCol class="">
-      <TableComponent
-        :info-message="noDataMessage"
-        :showEditColumn="false"
-        :showSelectionColumn="true"
-        :rows="getFilteredProducts"
-        :columns="productsStore.productColumns"
-        :searchTerm="productsStore.searchTerm"
-      />
-    </MDBCol>
-  </MDBContainer>
-</template>
 
 <style scoped></style>

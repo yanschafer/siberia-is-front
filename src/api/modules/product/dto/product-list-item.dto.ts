@@ -3,8 +3,8 @@ export default class ProductListItemDto {
     public id: number,
     public name: string,
     public vendorCode: string,
+    public eanCode: string,
     public quantity: number,
-    public price: number
-  ) {
-  }
+    public price: number,
+  ) {}
 }

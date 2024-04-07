@@ -8,6 +8,7 @@ import BreadcrumbDto from "@/router/breadcrumb.dto";
 import { useMediaModalStore } from "@/stores/media-modal.store";
 import HeaderBtnDto from "@/router/header-btn.dto";
 import RouteParametrized from "@/router/route-parametrized.type";
+import { useAddToGroupModalStore } from "@/stores/add-to-group-modal.store";
 
 /*
 user-managing = "1"
@@ -89,7 +90,10 @@ const routes = [
           ],
           buttons: [
             new HeaderBtnDto("+ ADD", new RouteParametrized("New product")),
-            new HeaderBtnDto("+ ADD GROUP", new RouteParametrized("New group")),
+            new HeaderBtnDto("+ ADD GROUP", null, () => {
+              const groupModalStore = useAddToGroupModalStore();
+              groupModalStore.openCreateModal();
+            }),
             new HeaderBtnDto("UPLOAD", null, () => {
               const mediaStore = useMediaModalStore();
               mediaStore.openUploadProducts();
@@ -139,23 +143,23 @@ const routes = [
           name: PrintUtil.localize("NewProduct", "router"),
         },
       },
-      {
-        path: "/group/new",
-        name: "New group",
-        component: () => import("@/views/Products/CreateProduct.vue"),
-        props: true,
-        meta: {
-          breadcrumbs: [
-            new BreadcrumbDto(
-              "Siberia panel",
-              new RouteParametrized("dashboard"),
-            ),
-            new BreadcrumbDto("Groups", new RouteParametrized("products")),
-            new BreadcrumbDto("New group", new RouteParametrized("New group")),
-          ],
-          name: "New group",
-        },
-      },
+      // {
+      //   path: "/group/new",
+      //   name: "New group",
+      //   component: () => import("@/views/Products/CreateProduct.vue"),
+      //   props: true,
+      //   meta: {
+      //     breadcrumbs: [
+      //       new BreadcrumbDto(
+      //         "Siberia panel",
+      //         new RouteParametrized("dashboard"),
+      //       ),
+      //       new BreadcrumbDto("Groups", new RouteParametrized("products")),
+      //       new BreadcrumbDto("New group", new RouteParametrized("New group")),
+      //     ],
+      //     name: "New group",
+      //   },
+      // },
       {
         path: "/group/:id/apply",
         name: "Group apply",
