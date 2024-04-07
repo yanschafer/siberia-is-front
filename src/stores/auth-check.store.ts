@@ -14,6 +14,7 @@ const availableSidebarItems = [
     disabled: false,
     active: true,
     route: "dashboard",
+    match: ["dashboard"],
     rule: true,
   },
   {
@@ -25,6 +26,7 @@ const availableSidebarItems = [
     disabled: false,
     active: true,
     route: "products",
+    match: ["products", "groups", "Group details", "Group apply"],
     rule: [appConf.rules.productsManaging, appConf.rules.viewProductsList],
   },
   {
@@ -36,6 +38,7 @@ const availableSidebarItems = [
     disabled: false,
     active: true,
     route: "assortment",
+    match: ["assortment"],
     rule: [
       appConf.rules.brandManaging,
       appConf.rules.collectionManaging,
@@ -51,6 +54,7 @@ const availableSidebarItems = [
     disabled: false,
     active: true,
     route: "media",
+    match: ["media"],
     rule: [
       appConf.rules.brandManaging,
       appConf.rules.collectionManaging,
@@ -66,6 +70,7 @@ const availableSidebarItems = [
     disabled: false,
     active: false,
     route: "storehouses",
+    match: ["storehouses"],
     rule: [appConf.rules.stockManaging, appConf.rules.viewStockData],
   },
   {
@@ -77,6 +82,7 @@ const availableSidebarItems = [
     disabled: false,
     active: false,
     route: "users",
+    match: ["users"],
     rule: [appConf.rules.userManaging],
   },
   {
@@ -88,6 +94,7 @@ const availableSidebarItems = [
     disabled: false,
     active: false,
     route: "roles",
+    match: ["roles"],
     rule: [appConf.rules.rbacManaging],
   },
 ];

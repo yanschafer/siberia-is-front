@@ -80,16 +80,16 @@
       >
         <router-link
           v-if="
-            breadcrumb.path !== 'Siberia Panel' &&
-            breadcrumb.path !== 'dashboard' &&
-            breadcrumb.path !== '/dashboard' &&
-            breadcrumb.path !== '/' &&
+            breadcrumb.name !== 'Siberia Panel' &&
+            breadcrumb.name !== 'dashboard' &&
+            breadcrumb.name !== '/dashboard' &&
+            breadcrumb.name !== '/' &&
             notLast(index)
           "
-          :to="{ name: breadcrumb.path, params: breadcrumb.params }"
-          >{{ breadcrumb.name }}</router-link
+          :to="{ name: breadcrumb.name, params: breadcrumb.params }"
+          >{{ breadcrumb.label }}</router-link
         >
-        <span v-else>{{ breadcrumb.name }}</span>
+        <span v-else>{{ breadcrumb.label }}</span>
       </MDBBreadcrumbItem>
     </MDBBreadcrumb>
   </header>
@@ -130,8 +130,8 @@ import FileUploadModalComponent from "@/components/Inputs/FileUploadModalCompone
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import ProductsUploadModalComponent from "@/components/Inputs/ProductsUploadModalComponent.vue";
 import LoggerUtil from "@/utils/logger/logger.util";
-import RouteParametrized from "@/router/route-parametrized.type";
-import HeaderBtnDto from "@/router/header-btn.dto";
+import RouteParametrized from "@/router/dto/route-parametrized";
+import HeaderBtnDto from "@/router/dto/header-btn.dto";
 
 export default {
   name: "HeaderComponent",
@@ -190,7 +190,7 @@ export default {
     },
     breadcrumbs: {
       type: Array as PropType<
-        Array<{ name: string; path: string; params: any }>
+        Array<{ name: string; label: string; params: any }>
       >,
       default: () => [],
     },
@@ -205,6 +205,9 @@ export default {
       default: () => [],
     },
   },
+  created() {
+    LoggerUtil.debug(this.breadcrumbs);
+  },
   methods: {
     localize(key, module = "header") {
       return PrintUtil.localize(key, module);
@@ -213,8 +216,7 @@ export default {
       if (button.callback) {
         button.callback();
       } else if (button.route) {
-        const route = button.route.toVueRoute();
-        this.router.push({ name: route.path, params: route.params });
+        this.router.push({ ...button.route.toVueRoute() });
       }
     },
     handleClickHistory() {

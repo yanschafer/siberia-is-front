@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { MDBContainer, MDBRow, MDBBtn, MDBCol } from "mdb-vue-ui-kit";
 import {
   IconDashboard,
@@ -58,7 +58,6 @@ import {
   IconPhoto,
 } from "@tabler/icons-vue";
 import TokenUtil from "@/utils/token.util";
-import Router from "@/router";
 import LangSelectComponent from "@/components/Elements/Profile/LangSelectComponent.vue";
 import NotificationSocketModel from "@/api/modules/notification/models/notification-socket.model";
 
@@ -86,24 +85,24 @@ export default {
       default: () => [],
     },
   },
-  data: () => ({
-    router: Router,
-  }),
   setup() {
     const route = useRoute();
+    const router = useRouter();
 
-    const isRouteActive = (item) => {
-      return isRouteActiveRecursive(route, item);
+    return {
+      route,
+      router,
     };
-
-    const isRouteActiveRecursive = (currentRoute, item) => {
-      if (currentRoute.name === item.route) {
+  },
+  methods: {
+    isRouteActiveRecursive(currentRoute, item) {
+      if (item.match.includes(currentRoute.name)) {
         return true;
       }
 
       if (
         currentRoute.matched &&
-        currentRoute.matched.some((record) => record.name === item.route)
+        currentRoute.matched.some((record) => item.match.includes(record.name))
       ) {
         return true;
       }
@@ -111,16 +110,13 @@ export default {
       return (
         currentRoute.matched &&
         currentRoute.matched.some((record) =>
-          isRouteActiveRecursive(record, item),
+          this.isRouteActiveRecursive(record, item),
         )
       );
-    };
-
-    return {
-      isRouteActive,
-    };
-  },
-  methods: {
+    },
+    isRouteActive(item) {
+      return this.isRouteActiveRecursive(this.route, item);
+    },
     logout() {
       TokenUtil.logout();
       NotificationSocketModel.close();

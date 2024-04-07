@@ -24,7 +24,7 @@ export default class RouteParametrized {
     }
 
     return {
-      path: this.name,
+      name: this.name,
       params,
     };
   }

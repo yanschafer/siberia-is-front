@@ -4,10 +4,10 @@ import { appConf } from "@/api/conf/app.conf";
 import LoggerUtil from "@/utils/logger/logger.util";
 import PrintUtil from "@/utils/localization/print.util";
 import app from "@/App.vue";
-import BreadcrumbDto from "@/router/breadcrumb.dto";
+import BreadcrumbDto from "@/router/dto/breadcrumb.dto";
 import { useMediaModalStore } from "@/stores/media-modal.store";
-import HeaderBtnDto from "@/router/header-btn.dto";
-import RouteParametrized from "@/router/route-parametrized.type";
+import HeaderBtnDto from "@/router/dto/header-btn.dto";
+import RouteParametrized from "@/router/dto/route-parametrized";
 import { useAddToGroupModalStore } from "@/stores/add-to-group-modal.store";
 
 /*
@@ -90,10 +90,6 @@ const routes = [
           ],
           buttons: [
             new HeaderBtnDto("+ ADD", new RouteParametrized("New product")),
-            new HeaderBtnDto("+ ADD GROUP", null, () => {
-              const groupModalStore = useAddToGroupModalStore();
-              groupModalStore.openCreateModal();
-            }),
             new HeaderBtnDto("UPLOAD", null, () => {
               const mediaStore = useMediaModalStore();
               mediaStore.openUploadProducts();
@@ -111,27 +107,6 @@ const routes = [
               name: PrintUtil.localize("Product", "router"),
             },
           },
-          {
-            path: "/group/:id",
-            name: "Group details",
-            component: () =>
-              import("@/views/Products/SingleProductGroupView.vue"),
-            props: true,
-            meta: {
-              breadcrumbs: [
-                new BreadcrumbDto(
-                  "Siberia panel",
-                  new RouteParametrized("dashboard"),
-                ),
-                new BreadcrumbDto("Groups", new RouteParametrized("products")),
-                new BreadcrumbDto(
-                  "Group",
-                  new RouteParametrized("Group details"),
-                ),
-              ],
-              name: "Group details",
-            },
-          },
         ],
       },
       {
@@ -140,26 +115,62 @@ const routes = [
         component: () => import("@/views/Products/CreateProduct.vue"),
         props: true,
         meta: {
+          breadcrumbs: [
+            new BreadcrumbDto(
+              "Siberia panel",
+              new RouteParametrized("dashboard"),
+            ),
+            new BreadcrumbDto("Products", new RouteParametrized("products")),
+            new BreadcrumbDto("New product", new RouteParametrized("products")),
+          ],
           name: PrintUtil.localize("NewProduct", "router"),
         },
       },
-      // {
-      //   path: "/group/new",
-      //   name: "New group",
-      //   component: () => import("@/views/Products/CreateProduct.vue"),
-      //   props: true,
-      //   meta: {
-      //     breadcrumbs: [
-      //       new BreadcrumbDto(
-      //         "Siberia panel",
-      //         new RouteParametrized("dashboard"),
-      //       ),
-      //       new BreadcrumbDto("Groups", new RouteParametrized("products")),
-      //       new BreadcrumbDto("New group", new RouteParametrized("New group")),
-      //     ],
-      //     name: "New group",
-      //   },
-      // },
+      {
+        name: "groups",
+        path: "/group",
+        component: () => import("@/views/Products/GroupsView.vue"),
+        props: true,
+        meta: {
+          breadcrumbs: [
+            new BreadcrumbDto(
+              "Siberia panel",
+              new RouteParametrized("dashboard"),
+            ),
+            new BreadcrumbDto(
+              "Grouped products",
+              new RouteParametrized("groups"),
+            ),
+          ],
+          buttons: [
+            new HeaderBtnDto("+ ADD", null, () => {
+              const groupModalStore = useAddToGroupModalStore();
+              groupModalStore.openCreateModal();
+            }),
+          ],
+          name: "Groups",
+        },
+      },
+      {
+        path: "/group/:id",
+        name: "Group details",
+        component: () => import("@/views/Products/SingleProductGroupView.vue"),
+        props: true,
+        meta: {
+          breadcrumbs: [
+            new BreadcrumbDto(
+              "Siberia panel",
+              new RouteParametrized("dashboard"),
+            ),
+            new BreadcrumbDto(
+              "Grouped products",
+              new RouteParametrized("groups"),
+            ),
+            new BreadcrumbDto("Group", new RouteParametrized("Group details")),
+          ],
+          name: "Group details",
+        },
+      },
       {
         path: "/group/:id/apply",
         name: "Group apply",
@@ -171,7 +182,10 @@ const routes = [
               "Siberia panel",
               new RouteParametrized("dashboard"),
             ),
-            new BreadcrumbDto("Groups", new RouteParametrized("products")),
+            new BreadcrumbDto(
+              "Grouped products",
+              new RouteParametrized("groups"),
+            ),
             new BreadcrumbDto(
               "Group",
               new RouteParametrized("Group details", {

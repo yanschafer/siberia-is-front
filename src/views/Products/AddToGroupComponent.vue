@@ -58,7 +58,7 @@ export default defineComponent({
     InputText,
     Button,
   },
-  setup() {
+  async setup() {
     const productsStore = useProductsStore();
     const productGroupStore = useProductGroupStore();
     const addToGroupModalStore = useAddToGroupModalStore();
@@ -67,9 +67,11 @@ export default defineComponent({
       productsStore,
       productGroupStore,
       addToGroupModalStore,
+      loadProductListRes: await productsStore.loadProductList(),
     };
   },
   created() {
+    this.loadProductListRes.toastIfError(this.$toast, this.$nextTick);
     this.productGroupStore.$onAction(async (action) => {
       if (action.name == "update_success") {
         this.$toast.add({

@@ -1,4 +1,12 @@
 <template>
+  <Dialog
+    v-model:visible="addToGroupModalStore.addToGroupOpen"
+    modal
+    :style="{ width: '90vw' }"
+    :header="addToGroupModalStore.title"
+  >
+    <AddToGroupComponent />
+  </Dialog>
   <MDBContainer class="single-user-info d-flex flex-column gap-3">
     <MDBRow class="d-flex">
       <MDBRow class="w-auto">
