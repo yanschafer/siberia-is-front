@@ -4,7 +4,7 @@
     <MDBContainer
       class="animate__animated animate__fadeIn d-flex flex-column justify-content-center align-content-center align-items-center form-container"
     >
-      <img class="logo" src="@/assets/Logo.svg" alt="Company logo" />
+      <img class="logo" src="@/assets/logo.svg" alt="Company logo" />
       <form class="d-flex flex-column w-85" @submit.prevent="login">
         <!-- Email input -->
         <MDBInput

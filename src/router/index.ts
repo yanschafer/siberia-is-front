@@ -6,6 +6,8 @@ import PrintUtil from "@/utils/localization/print.util";
 import app from "@/App.vue";
 import BreadcrumbDto from "@/router/breadcrumb.dto";
 import { useMediaModalStore } from "@/stores/media-modal.store";
+import HeaderBtnDto from "@/router/header-btn.dto";
+import RouteParametrized from "@/router/route-parametrized.type";
 
 /*
 user-managing = "1"
@@ -46,7 +48,6 @@ const routes = [
         name: "dashboard",
         component: () => import("@/views/DashboardView.vue"),
         meta: {
-          showAddBtn: false,
           name: PrintUtil.localize("dashboard", "router"),
         },
       },
@@ -55,7 +56,6 @@ const routes = [
         name: "assortment",
         component: () => import("@/views/Assortment/AssortmentView.vue"),
         meta: {
-          showAddBtn: false,
           name: PrintUtil.localize("assortments", "router"),
           ruleId: [
             appConf.rules.brandManaging,
@@ -69,11 +69,12 @@ const routes = [
         name: "media",
         component: () => import("@/views/Media/MediaView.vue"),
         meta: {
-          showAddBtn: true,
-          addBtnCallback: () => {
-            const mediaStore = useMediaModalStore();
-            mediaStore.openUploadModal();
-          },
+          buttons: [
+            new HeaderBtnDto("+ ADD", null, () => {
+              const mediaStore = useMediaModalStore();
+              mediaStore.openUploadModal();
+            }),
+          ],
           name: "Media",
         },
       },
@@ -86,15 +87,14 @@ const routes = [
             appConf.rules.productsManaging,
             appConf.rules.viewProductsList,
           ],
-          showAddBtn: true,
-          addBtnRoute: "New product",
-          showSecondAddBtn: true,
-          secondAddBtnRoute: "New group",
-          showUploadBtn: true,
-          uploadBtnCallback: () => {
-            const mediaStore = useMediaModalStore();
-            mediaStore.openUploadProducts();
-          },
+          buttons: [
+            new HeaderBtnDto("+ ADD", new RouteParametrized("New product")),
+            new HeaderBtnDto("+ ADD GROUP", new RouteParametrized("New group")),
+            new HeaderBtnDto("UPLOAD", null, () => {
+              const mediaStore = useMediaModalStore();
+              mediaStore.openUploadProducts();
+            }),
+          ],
           name: PrintUtil.localize("products", "router"),
         },
         children: [
@@ -104,7 +104,6 @@ const routes = [
             component: () => import("@/views/Products/SingleProductView.vue"),
             props: true,
             meta: {
-              showAddBtn: false,
               name: PrintUtil.localize("Product", "router"),
             },
           },
@@ -116,11 +115,16 @@ const routes = [
             props: true,
             meta: {
               breadcrumbs: [
-                new BreadcrumbDto("Siberia panel", "dashboard"),
-                new BreadcrumbDto("Groups", "products"),
-                new BreadcrumbDto("Group", "Group details"),
+                new BreadcrumbDto(
+                  "Siberia panel",
+                  new RouteParametrized("dashboard"),
+                ),
+                new BreadcrumbDto("Groups", new RouteParametrized("products")),
+                new BreadcrumbDto(
+                  "Group",
+                  new RouteParametrized("Group details"),
+                ),
               ],
-              showAddBtn: false,
               name: "Group details",
             },
           },
@@ -142,9 +146,12 @@ const routes = [
         props: true,
         meta: {
           breadcrumbs: [
-            new BreadcrumbDto("Siberia panel", "dashboard"),
-            new BreadcrumbDto("Groups", "products"),
-            new BreadcrumbDto("New group", "New group"),
+            new BreadcrumbDto(
+              "Siberia panel",
+              new RouteParametrized("dashboard"),
+            ),
+            new BreadcrumbDto("Groups", new RouteParametrized("products")),
+            new BreadcrumbDto("New group", new RouteParametrized("New group")),
           ],
           name: "New group",
         },
@@ -156,15 +163,18 @@ const routes = [
         props: true,
         meta: {
           breadcrumbs: [
-            new BreadcrumbDto("Siberia panel", "dashboard"),
-            new BreadcrumbDto("Groups", "products"),
-            new BreadcrumbDto("Group", null, {
-              name: "Group details",
-              props: {
+            new BreadcrumbDto(
+              "Siberia panel",
+              new RouteParametrized("dashboard"),
+            ),
+            new BreadcrumbDto("Groups", new RouteParametrized("products")),
+            new BreadcrumbDto(
+              "Group",
+              new RouteParametrized("Group details", {
                 id: "nested",
-              },
-            }),
-            new BreadcrumbDto("Apply", "products"),
+              }),
+            ),
+            new BreadcrumbDto("Apply", new RouteParametrized("Group apply")),
           ],
           name: "Apply changes",
         },
@@ -176,8 +186,9 @@ const routes = [
         meta: {
           name: PrintUtil.localize("storehouses", "router"),
           ruleId: [appConf.rules.stockManaging, appConf.rules.viewStockData],
-          showAddBtn: true,
-          addBtnRoute: "New storehouse",
+          buttons: [
+            new HeaderBtnDto("+ ADD", new RouteParametrized("New storehouse")),
+          ],
         },
         children: [
           {
@@ -188,7 +199,6 @@ const routes = [
             props: true,
             meta: {
               name: PrintUtil.localize("Storehouse", "router"),
-              showAddBtn: false,
             },
           },
         ],
@@ -210,8 +220,9 @@ const routes = [
         meta: {
           name: PrintUtil.localize("roles", "router"),
           ruleId: [appConf.rules.rbacManaging],
-          showAddBtn: true,
-          addBtnRoute: "New role",
+          buttons: [
+            new HeaderBtnDto("+ ADD", new RouteParametrized("New role")),
+          ],
         },
         children: [
           {
@@ -221,7 +232,6 @@ const routes = [
             props: true,
             meta: {
               name: PrintUtil.localize("Role", "router"),
-              showAddBtn: false,
             },
           },
         ],
@@ -242,8 +252,9 @@ const routes = [
         meta: {
           name: PrintUtil.localize("users", "router"),
           ruleId: [appConf.rules.userManaging],
-          showAddBtn: true,
-          addBtnRoute: "New user",
+          buttons: [
+            new HeaderBtnDto("+ ADD", new RouteParametrized("New user")),
+          ],
         },
         children: [
           {
@@ -253,7 +264,6 @@ const routes = [
             props: true,
             meta: {
               name: PrintUtil.localize("User", "router"),
-              showAddBtn: false,
             },
           },
         ],
@@ -274,7 +284,6 @@ const routes = [
         meta: {
           name: PrintUtil.localize("History", "router"),
           ruleId: [appConf.rules.checkLogs],
-          showAddBtn: false,
         },
         children: [
           {
@@ -284,7 +293,6 @@ const routes = [
             props: true,
             meta: {
               name: PrintUtil.localize("SingleHistory", "router"),
-              showAddBtn: false,
             },
           },
         ],
@@ -295,7 +303,6 @@ const routes = [
         component: () => import("@/views/Operations/OperationsView.vue"),
         meta: {
           name: PrintUtil.localize("Operations", "router"),
-          showAddBtn: false,
         },
         children: [
           {

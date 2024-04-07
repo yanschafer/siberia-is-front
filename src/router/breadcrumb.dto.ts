@@ -1,12 +1,8 @@
-type RouteParametrized = {
-  name: string;
-  props: any;
-};
+import RouteParametrized from "@/router/route-parametrized.type";
 
 export default class BreadcrumbDto {
   constructor(
     public label: string,
-    public route: string | null = null,
-    public routeParametrized: RouteParametrized | null = null,
+    public route: RouteParametrized,
   ) {}
 }

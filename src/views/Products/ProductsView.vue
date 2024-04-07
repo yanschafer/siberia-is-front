@@ -69,6 +69,7 @@
 
 <script lang="ts">
 import Dialog from "primevue/dialog";
+import Button from "primevue/button";
 import FiltersSidebarComponent from "@/components/Elements/Filter sidebar/FiltersSidebarComponent.vue";
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import SearchComponent from "@/components/Inputs/SearchComponent.vue";
@@ -97,6 +98,7 @@ import { useAddToGroupModalStore } from "@/stores/add-to-group-modal.store";
 export default {
   name: "ProductsView",
   components: {
+    Button,
     Dialog,
     AddToGroupComponent,
     FileUploadModalComponent,
