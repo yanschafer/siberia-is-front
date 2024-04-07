@@ -8,11 +8,14 @@
     editMode="row"
     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink JumpToPageInput"
     :value="paginatedRows"
+    dataKey="id"
     :paginator="true"
     :rows="rowsPerPage"
-    selectionMode="single"
+    :selectionMode="selectionMode"
+    @row-unselect="handleRowUnselect"
     @row-select="handleRowClick"
     @row-edit-save="handleRowSave"
+    :select-all="false"
     :pt="{
       table: { style: 'min-width: 50rem' },
       column: {
@@ -23,13 +26,6 @@
       },
     }"
   >
-    <Column
-      v-if="showSelectionColumn"
-      selectionMode="multiple"
-      headerStyle="width: 3rem"
-    >
-      <template #header></template>
-    </Column>
     <Column
       class="animate__animated animate__fadeIn"
       v-for="column in columns"
@@ -107,6 +103,7 @@ import { MDBBtn, MDBContainer } from "mdb-vue-ui-kit";
 import { IconSearchOff, IconInfoCircle } from "@tabler/icons-vue";
 import InfoMessageComponent from "@/components/Elements/Dialogs/InfoMessageComponent.vue";
 import PrintUtil from "@/utils/localization/print.util";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export default defineComponent({
   components: {
@@ -125,6 +122,10 @@ export default defineComponent({
   props: {
     rows: Array,
     columns: Array,
+    selectionMode: {
+      type: String,
+      default: "single",
+    },
     searchTerm: String,
     showEditColumn: Boolean,
     showSelectionColumn: {
@@ -150,8 +151,21 @@ export default defineComponent({
         text: PrintUtil.localize("nothingFoundClarifyQuery"),
       },
     },
+    selectedOutputStore: {
+      type: Object,
+      default: {},
+    },
   },
   emits: ["rowClick", "rowEditSave", "rowDelete"],
+  created() {
+    if (this.selectedOutputStore.selectedRows) {
+      LoggerUtil.debug(
+        "Have selected rows: ",
+        this.selectedOutputStore.selectedRows,
+      );
+      this.selectedRows = this.selectedOutputStore.selectedRows;
+    }
+  },
   data() {
     return {
       currentPage: 1,
@@ -162,6 +176,7 @@ export default defineComponent({
       noSearchResultIcon: "IconSearchOff",
       noSearchResultTitle: this.localize("nothingFound"),
       noSearchResultText: this.localize("nothingFoundClarifyQuery"),
+      selectAll: false,
     };
   },
   computed: {
@@ -179,6 +194,11 @@ export default defineComponent({
     isEditable(columnField) {
       return this.editableColumns && this.editableColumns.includes(columnField);
     },
+    handleRowUnselect(event) {
+      if (this.selectedOutputStore.selectedRows) {
+        this.selectedOutputStore.selectedRows = this.selectedRows;
+      }
+    },
     handleRowClick(event) {
       if (this.deleteClick) {
         this.$emit("rowDelete", event.data);
@@ -188,6 +208,9 @@ export default defineComponent({
       if (!event.originalEvent.target.classList.contains("utility-col")) {
         const selectedRow = event.data;
         this.$emit("rowClick", selectedRow);
+        if (this.selectedOutputStore.selectedRows) {
+          this.selectedOutputStore.selectedRows = this.selectedRows;
+        }
       }
     },
     emitDelete(event) {
@@ -196,9 +219,6 @@ export default defineComponent({
     },
     handleRowSave({ newData }) {
       this.$emit("rowEditSave", newData);
-    },
-    changePage(page: number) {
-      this.currentPage = page;
     },
     filterDataBySearchTerm() {
       if (this.searchTerm) {

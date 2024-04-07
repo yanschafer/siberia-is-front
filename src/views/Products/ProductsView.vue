@@ -3,7 +3,7 @@
     v-model:visible="addToGroupStore.addToGroupOpen"
     modal
     :style="{ width: '90vw' }"
-    header="Add product to group"
+    :header="addToGroupStore.title"
   >
     <AddToGroupComponent />
   </Dialog>
@@ -45,9 +45,6 @@
             <MDBCol class="col-auto">
               <MDBContainer class="table-container">
                 <SearchComponent @search="handleSearch" />
-                <Button @click="openAddToGroupModal">Add to Group</Button>
-                <!-- TODO Вывести правильную колонку для групп, добавить метод для удаления (row-delete) -->
-                <!-- TODO Переход на(хуй хаха) SingleProductGroupView.vue при клике на(хуй хаха) ряд -->
                 <TableComponent
                   :info-message="noDataMessage"
                   :enable-delete="true"
@@ -56,7 +53,7 @@
                   :columns="productGroupStore.getColumns"
                   :searchTerm="productsStore.searchTerm"
                   @rowClick="handleGroupClick"
-                  @row-delete=""
+                  @row-delete="handleGroupDelete"
                 />
               </MDBContainer>
             </MDBCol>
@@ -70,6 +67,7 @@
 
 <script lang="ts">
 import Dialog from "primevue/dialog";
+import Button from "primevue/button";
 import FiltersSidebarComponent from "@/components/Elements/Filter sidebar/FiltersSidebarComponent.vue";
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import SearchComponent from "@/components/Inputs/SearchComponent.vue";
@@ -99,6 +97,7 @@ import TabsNavComponent from "@/components/Navigation/TabsNavComponent.vue";
 export default {
   name: "ProductsView",
   components: {
+    Button,
     TabsNavComponent,
     Dialog,
     AddToGroupComponent,
@@ -263,9 +262,6 @@ export default {
     },
   },
   methods: {
-    openAddToGroupModal() {
-      this.addToGroupStore.openModal();
-    },
     localize(key, module = "products") {
       return PrintUtil.localize(key, module);
     },
@@ -289,6 +285,18 @@ export default {
         name: "Group details",
         params: { id: row.id.toString() },
       });
+    },
+    async handleGroupDelete(row) {
+      const removed = await this.productGroupStore.removeGroup(row.id);
+
+      if (removed.success) {
+        this.$toast.add({
+          severity: "info",
+          summary: "Success",
+          detail: "Group successfully removed",
+          life: 3000,
+        });
+      } else removed.toastIfError(this.$toast, this.$nextTick);
     },
     async handleRowEdit(row) {
       if (row.price == "") {

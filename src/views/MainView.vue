@@ -4,15 +4,9 @@
     <SidebarComponent :sidebarItems="sidebar" />
     <div class="header-area">
       <HeaderComponent
-        :add-btn-route="addBtnRoute"
-        :show-add-button="showAddBtn"
-        :show-second-add-button="showSecondAddBtn"
-        :second-add-button-route="secondAddBtnRoute"
-        :show-upload-button="showUploadBtn"
-        :upload-btn-callback="uploadBtnCallback"
-        :add-btn-callback="addBtnCallback"
         :title="pageTitle"
         :breadcrumbs="navBreadcrumbs"
+        :buttons="navButtons"
       />
     </div>
     <MDBContainer class="container-bg">
@@ -31,14 +25,10 @@ import { useRoute, useRouter } from "vue-router";
 import SidebarComponent from "@/components/Navigation/SidebarComponent.vue";
 import HeaderComponent from "@/components/Navigation/HeaderComponent.vue";
 import DialogComponent from "@/components/Elements/Dialogs/DialogComponent.vue";
-import TokenUtil from "@/utils/token.util";
-import { appConf } from "@/api/conf/app.conf";
 import { MDBContainer } from "mdb-vue-ui-kit";
-import PrintUtil from "@/utils/localization/print.util";
-import loggerUtil from "@/utils/logger/logger.util";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
 import BreadcrumbDto from "@/router/breadcrumb.dto";
-import LoggerUtil from "@/utils/logger/logger.util";
+
 export default {
   name: "DashboardView",
   components: {
@@ -51,13 +41,6 @@ export default {
     return {
       router: useRouter(),
       pageTitle: "",
-      showAddBtn: false,
-      showUploadBtn: false,
-      uploadBtnCallback: null,
-      addBtnRoute: "",
-      addBtnCallback: null,
-      showSecondAddBtn: false,
-      secondAddBtnRoute: "",
     };
   },
   setup() {
@@ -83,18 +66,6 @@ export default {
       } else {
         this.pageTitle = "Dashboard";
       }
-
-      this.showAddBtn = this.route.meta.showAddBtn;
-      this.addBtnRoute = this.route.meta.addBtnRoute;
-      if (this.route.meta.addBtnCallback) {
-        this.addBtnCallback = this.route.meta.addBtnCallback;
-      }
-      if (this.route.meta.uploadBtnCallback) {
-        this.uploadBtnCallback = this.route.meta.uploadBtnCallback;
-      }
-      this.showSecondAddBtn = this.route.meta.showSecondAddBtn;
-      this.secondAddBtnRoute = this.route.meta.secondAddBtnRoute;
-      this.showUploadBtn = this.route.meta.showUploadBtn;
     },
     logout() {
       this.router.push("/");
@@ -104,38 +75,16 @@ export default {
     sidebar() {
       return this.authCheckStore.getSidebarItems;
     },
+    navButtons() {
+      return this.route.meta.buttons || [];
+    },
     navBreadcrumbs() {
-      console.log(this.route.meta);
       if (this.route.meta.breadcrumbs) {
         return this.route.meta.breadcrumbs.map((el: BreadcrumbDto) => {
-          if (el.route) {
-            return {
-              name: el.label,
-              path: el.route,
-            };
-          } else if (el.routeParametrized) {
-            let params = {};
-            Object.keys(el.routeParametrized.props).forEach((prop) => {
-              const val = el.routeParametrized?.props[prop];
-              if (val == "nested") {
-                params = {
-                  ...params,
-                  [prop]: this.route.params[prop],
-                };
-              } else {
-                params = {
-                  ...params,
-                  [prop]: val,
-                };
-              }
-            });
-
-            return {
-              name: el.label,
-              path: el.routeParametrized.name,
-              params,
-            };
-          }
+          return {
+            name: el.label,
+            ...el.route.toVueRoute(),
+          };
         });
       } else {
         return this.$route.matched.map((route) => ({

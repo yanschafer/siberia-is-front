@@ -3,6 +3,9 @@
     <MDBRow class="d-flex">
       <MDBRow class="w-auto">
         <h1 class="username-heading">{{ getGroupName }}</h1>
+        <MDBBtn class="btn btn-outline-black utility-btn" @click="startEdit"
+          >EDIT GROUP</MDBBtn
+        >
         <MDBBtn class="btn btn-outline-black utility-btn" @click="applyChanges"
           >APPLY CHANGES</MDBBtn
         >
@@ -34,12 +37,17 @@ import { useRoute, useRouter } from "vue-router";
 import { useProductsStore } from "@/stores/products.store";
 import PrintUtil from "@/utils/localization/print.util";
 import { appConf } from "@/api/conf/app.conf";
+import { useAddToGroupModalStore } from "@/stores/add-to-group-modal.store";
+import AddToGroupComponent from "@/views/Products/AddToGroupComponent.vue";
+import Dialog from "primevue/dialog";
 
 export default {
   name: "SingleProductGroupView",
   components: {
     SearchComponent,
     TableComponent,
+    AddToGroupComponent,
+    Dialog,
     MDBRow,
     MDBContainer,
     MDBCol,
@@ -55,11 +63,13 @@ export default {
   }),
   async setup() {
     const productGroupStore = useProductGroupStore();
+    const addToGroupModalStore = useAddToGroupModalStore();
     const route = useRoute();
     const router = useRouter();
 
     return {
       productGroupStore,
+      addToGroupModalStore,
       router,
       groupId: parseInt(route.params.id.toString()),
       loadSelectedRes: await productGroupStore.loadSelectedGroup(
@@ -70,6 +80,13 @@ export default {
   methods: {
     localize(name, module) {
       return PrintUtil.localize(name, module);
+    },
+    startEdit() {
+      const selectedGroup = this.productGroupStore.selectedGroup;
+      this.addToGroupModalStore.openEditModal(
+        selectedGroup,
+        this.productGroupStore.updateGroup,
+      );
     },
     handleSearch(searchTerm) {
       this.productGroupStore.searchTerm = searchTerm;

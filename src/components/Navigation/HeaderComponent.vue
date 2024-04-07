@@ -8,28 +8,16 @@
         <h1 :key="title" class="animate__animated animate__fadeInUp heading">
           {{ title }}
         </h1>
-        <MDBBtn
-          @click="navigate"
-          v-if="showAddButton && addButtonAvailable"
-          class="animate__animated animate__fadeInUp utility-btn"
-          outline="black"
-          >{{ addButtonLabel }}</MDBBtn
-        >
-        <MDBBtn
-          @click="navigate"
-          v-if="showSecondAddButton"
-          class="animate__animated animate__fadeInUp utility-btn"
-          outline="black"
-          >{{ secondAddButtonLabel }}</MDBBtn
-        >
-        <!-- TODO Разбить по компонентам модалку  -->
-        <MDBBtn
-          @click="upload"
-          v-if="showUploadButton"
-          class="animate__animated animate__fadeInUp utility-btn"
-          outline="black"
-          >UPLOAD</MDBBtn
-        >
+        <template v-if="buttons.length">
+          <MDBBtn
+            @click="buttonClicked(button)"
+            v-for="(button, index) in buttons"
+            class="animate__animated animate__fadeInUp utility-btn"
+            outline="black"
+          >
+            {{ button.label }}
+          </MDBBtn>
+        </template>
         <ProductsUploadModalComponent />
       </MDBContainer>
       <MDBContainer
@@ -141,6 +129,9 @@ import FileUploadComponent from "@/components/Inputs/FileUploadComponent.vue";
 import FileUploadModalComponent from "@/components/Inputs/FileUploadModalComponent.vue";
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import ProductsUploadModalComponent from "@/components/Inputs/ProductsUploadModalComponent.vue";
+import LoggerUtil from "@/utils/logger/logger.util";
+import RouteParametrized from "@/router/route-parametrized.type";
+import HeaderBtnDto from "@/router/header-btn.dto";
 
 export default {
   name: "HeaderComponent",
@@ -189,42 +180,6 @@ export default {
   },
   props: {
     title: String,
-    showAddButton: {
-      type: Boolean,
-      default: false,
-    },
-    showUploadButton: {
-      type: Boolean,
-      default: false,
-    },
-    uploadBtnCallback: {
-      type: Function,
-      default: null,
-    },
-    showSecondAddButton: {
-      type: Boolean,
-      default: false,
-    },
-    addBtnRoute: {
-      type: String,
-      default: "",
-    },
-    secondAddBtnRoute: {
-      type: String,
-      default: "",
-    },
-    addButtonLabel: {
-      type: String,
-      default: PrintUtil.localize("AddBtnLabel", "header"),
-    },
-    addBtnCallback: {
-      type: Function,
-      default: null,
-    },
-    secondAddButtonLabel: {
-      type: String,
-      default: PrintUtil.localize("SecondAddBtnLabel", "header"),
-    },
     showNotificationIcon: {
       type: Boolean,
       default: true,
@@ -239,21 +194,27 @@ export default {
       >,
       default: () => [],
     },
+    buttons: {
+      type: Array as PropType<
+        Array<{
+          label: string;
+          route?: RouteParametrized;
+          callback?: Function;
+        }>
+      >,
+      default: () => [],
+    },
   },
   methods: {
     localize(key, module = "header") {
       return PrintUtil.localize(key, module);
     },
-    navigate() {
-      if (this.addBtnCallback != null) {
-        this.addBtnCallback();
-        return;
-      }
-      this.router.push({ name: this.addBtnRoute || "" });
-    },
-    upload() {
-      if (this.uploadBtnCallback != null) {
-        this.uploadBtnCallback();
+    buttonClicked(button: HeaderBtnDto) {
+      if (button.callback) {
+        button.callback();
+      } else if (button.route) {
+        const route = button.route.toVueRoute();
+        this.router.push({ name: route.path, params: route.params });
       }
     },
     handleClickHistory() {
@@ -269,17 +230,6 @@ export default {
   computed: {
     hasAccessToHistory() {
       return this.authCheckStore.getHasAccessToHistory;
-    },
-    addButtonAvailable() {
-      const authCheckStore = useAuthCheckStore();
-      let addBtnAvailable = true;
-      if (this.$route.name == "products") {
-        addBtnAvailable = authCheckStore.getHasAccessToProductsManaging;
-      }
-      if (this.$route.name == "storehouses") {
-        addBtnAvailable = authCheckStore.getHasAccessToStockManaging;
-      }
-      return addBtnAvailable;
     },
   },
 };
