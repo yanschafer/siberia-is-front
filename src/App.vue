@@ -314,8 +314,7 @@ input::-webkit-inner-spin-button {
   color: black;
 }
 .p-toast,
-.p-toast-top-right,
-.p-ripple-disabled {
+.p-toast-top-right {
   top: 85px !important;
 }
 .p-treeselect-label {
