@@ -8,6 +8,8 @@ export const useMediaModalStore = defineStore({
     uploadOpen: false,
     imageOpen: false,
     selectedImage: null,
+    miniGalleryVisible: false,
+    miniGallerySelected: [],
   }),
   getters: {
     isUploadModalOpened: (state) => state.uploadOpen,

@@ -27,7 +27,7 @@
   </MDBContainer>
 </template>
 
-<script>
+<script lang="ts">
 import PrintUtil from "@/utils/localization/print.util";
 import { MDBContainer, MDBCol } from "mdb-vue-ui-kit";
 import SearchComponent from "@/components/Inputs/SearchComponent.vue";

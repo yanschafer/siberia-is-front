@@ -8,130 +8,47 @@
     style="height: 80vh; width: 88vw"
     class="main-area animate__animated animate__fadeIn"
   >
-    <Panel class="animate__animated animate__fadeIn">
-      <MDBRow class="d-flex flex-row gap-5 header-row">
-        <MDBCol v-if="!editing" class="col-auto">
-          <img
-            id="product-image"
-            class="product-img"
-            :src="imageSource"
-            :alt="productName"
-          />
-        </MDBCol>
-        <MDBCol
-          v-else
-          style="padding-left: 12px"
-          class="col-auto animate__animated animate__flipInX animate__faster"
-        >
-          <div
-            class="product-img"
-            @click="productStore.miniGalleryVisible = true"
-          ></div>
-        </MDBCol>
-        <MDBCol class="d-flex flex-column justify-content-center">
-          <MDBRow
-            style="padding-left: 12px; margin-bottom: 1rem"
-            v-if="!editing && editBtnAvailable"
-            class="d-flex d-flex justify-content-end"
-          >
-            <MDBBtn @click="startEditing" class="utility-btn" outline="black">{{
-              localize("editCapslock", "default")
-            }}</MDBBtn>
-          </MDBRow>
-          <MDBCol
-            style="margin-bottom: 1rem"
-            class="animate__animated animate__flipInX animate__faster gap-3 d-flex justify-content-end"
-            v-if="editing"
-          >
-            <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
-              localize("deleteCapslock", "default")
-            }}</MDBBtn>
-            <MediaMiniModalComponent />
-            <MDBBtn
-              @click="cancelEditing"
-              class="utility-btn"
-              outline="black"
-              >{{ localize("cancelCapslock", "default") }}</MDBBtn
-            >
-            <MDBBtn @click="saveChanges" class="utility-btn" outline="black">{{
-              localize("saveCapslock", "default")
-            }}</MDBBtn>
+    <template v-if="!editing">
+      <Panel class="animate__animated animate__fadeIn">
+        <MDBRow class="d-flex flex-row gap-5 header-row">
+          <MDBCol class="col-auto">
+            <img
+              id="product-image"
+              class="product-img"
+              :src="imageSource"
+              :alt="productName"
+            />
           </MDBCol>
-          <MDBRow>
-            <MDBCol class="product-name-col" v-if="!editing">
-              <h1 class="product-heading">{{ productName }}</h1>
-            </MDBCol>
-            <MDBCol
-              class="d-flex gap-1 align-items-center mb-3 animate__animated animate__flipInX animate__faster"
-              v-else
-            >
-              <h5 class="field-heading mb-0">
-                {{ localize("productNameCapslock") }}
-              </h5>
-              <InputText
-                id="product-name-input"
-                class="input-wrapper animate__animated animate__fadeIn username-input"
-                :class="{ 'p-invalid': !validate.name }"
-                type="text"
-                v-model="newProductName"
-              />
-            </MDBCol>
-          </MDBRow>
+          <MDBCol class="product-name-col">
+            <h1 class="product-heading">{{ productName }}</h1>
+          </MDBCol>
+
           <MDBRow>
             <MDBCol class="d-flex flex-column gap-3 col-auto">
               <h5 class="field-heading d-flex gap-1 align-items-center">
                 {{ localize("skuCapslock") }}
-                <span v-if="!editing" class="field-value copy-on">{{
-                  sku
-                }}</span>
-                <InputText
-                  v-else
-                  class="animate__animated animate__flipInX animate__faster input-wrapper animate__animated animate__fadeIn username-input"
-                  :class="{ 'p-invalid': !validate.vendorCode }"
-                  type="text"
-                  v-model="newSku"
-                />
+                <span class="field-value copy-on">{{ sku }}</span>
               </h5>
-              <!--              <img class="sku-img" :src="barcodeImage" alt="Barcode">-->
-              <h5 v-if="!editing" class="field-heading">
+              <h5 class="field-heading d-flex gap-1 align-items-center">
+                EAN
+                <span class="field-value copy-on">{{ ean }}</span>
+              </h5>
+              <h5 class="field-heading d-flex gap-1 align-items-center">
+                BARCODE
+                <span class="field-value copy-on">{{ barcode }}</span>
+              </h5>
+              <h5 class="field-heading">
                 {{ localize("brandCapslock") }}
                 <span class="field-value copy-on">{{ brand }}</span>
               </h5>
-              <template v-else>
-                <h5 class="field-heading">
-                  {{ localize("brandCapslock") }}
-                  <SelectComponent
-                    :placeholder="placeholderBrand"
-                    class="animate__animated animate__flipInX animate__faster"
-                    :class="{ 'p-invalid': !validate.brand }"
-                    :items="brandList"
-                    v-model="newBrand"
-                  />
-                  <DialogComponentTrigger
-                    :button-text="createButtonText"
-                    :init-object="initBrandDialog"
-                  />
-                </h5>
-              </template>
               <h5 class="field-heading d-flex gap-1 align-items-center">
                 {{ localize("linkCapslock") }}
-                <a
-                  v-if="!editing"
-                  target="_blank"
-                  :href="link"
-                  class="field-value copy-on"
-                  >{{ localize("openInNewWindowCapslock") }}</a
-                >
-                <InputText
-                  v-else
-                  class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-                  :class="{ 'p-invalid': !validate.link }"
-                  type="text"
-                  v-model="newLink"
-                />
+                <a target="_blank" :href="link" class="field-value copy-on">{{
+                  localize("openInNewWindowCapslock")
+                }}</a>
               </h5>
             </MDBCol>
-            <MDBCol v-if="!editing" class="d-flex flex-column gap-3">
+            <MDBCol class="d-flex flex-column gap-3">
               <h5 class="field-heading d-flex gap-1 align-items-center">
                 {{ localize("quantityCapslock") }}
                 <span class="field-value">{{ quantity }}</span>
@@ -148,185 +65,118 @@
               <!--              <h5 class="field-heading">STATUS <span class="field-value">{{ status }}</span></h5>-->
             </MDBCol>
           </MDBRow>
-        </MDBCol>
-      </MDBRow>
-    </Panel>
-    <MDBContainer class="description-section" fluid>
-      <h5 v-if="!editing" class="field-heading">{{ category }}</h5>
-      <template v-else>
-        <MDBRow>
-          <MDBCol class="col-auto">
-            <TreeDropdownComponent
-              v-if="updateDropdown"
-              :placeholder="placeholderCategory"
-              class="animate__animated animate__flipInX animate__faster"
-              :class="{ 'p-invalid': !validate.category }"
-              :nodes="categoryList"
-              v-model="newCategory"
-            />
+          <MDBCol
+            v-if="!editing && editBtnAvailable"
+            class="d-flex flex-column justify-content-center"
+          >
+            <MDBRow
+              style="padding-left: 12px; margin-bottom: 1rem"
+              class="d-flex d-flex justify-content-end"
+            >
+              <MDBBtn
+                @click="startEditing"
+                class="utility-btn"
+                outline="black"
+                >{{ localize("editCapslock", "default") }}</MDBBtn
+              >
+              <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
+                localize("deleteCapslock", "default")
+              }}</MDBBtn>
+            </MDBRow>
           </MDBCol>
-          <DialogComponentTrigger
-            :button-text="createButtonText"
-            :init-object="initCategoryDialog"
-          />
         </MDBRow>
-      </template>
-
-      <h1
-        class="product-heading d-flex gap-1 align-items-center mb-3 mt-3 gap-2"
-      >
-        {{ localize("productDescription") }}
-        <span v-if="!editing" class="field-heading collection-name">{{
-          collectionName
-        }}</span>
-        <template v-else>
-          <SelectComponent
-            :placeholder="placeholderCollection"
-            class="animate__animated animate__flipInX animate__faster"
-            :class="{ 'p-invalid': !validate.collection }"
-            :items="collectionList"
-            v-model="newCollection"
-          />
-          <DialogComponentTrigger
-            :button-text="createButtonText"
-            :init-object="initCollectionDialog"
-          />
-        </template>
-
-        <span class="field-heading separator">|</span>
-        <span v-if="!editing" class="field-heading color-name">{{
-          color
-        }}</span>
-        <h5
-          v-else
-          class="animate__animated animate__flipInX animate__faster field-heading d-flex gap-1 align-items-center mb-0"
+      </Panel>
+      <MDBContainer class="description-section" fluid>
+        <h5 class="field-heading">{{ category }}</h5>
+        <h1
+          class="product-heading d-flex gap-1 align-items-center mb-3 mt-3 gap-2"
         >
-          <span class="bottom-numbers">{{
-            localize("newColorNameCapslock")
+          {{ localize("productDescription") }}
+          <span class="field-heading collection-name">{{
+            collectionName
           }}</span>
-          <InputText
-            class="input-wrapper animate__animated animate__fadeIn username-input"
-            :class="{ 'p-invalid': !validate.color }"
-            type="text"
-            v-model="newColor"
-          />
-        </h5>
-      </h1>
-      <p v-if="!editing" class="description">{{ productDescription }}</p>
-      <textarea
-        v-else
-        class="animate__animated animate__flipInX animate__faster text-area"
-        :class="{ 'p-invalid': !validate.description }"
-        id="description"
-        type="textarea"
-        v-model="newDescription"
-      />
-    </MDBContainer>
-    <MDBContainer class="footer-section" fluid>
-      <MDBRow>
-        <MDBCol>
-          <!--          <h5 class="field-heading">VOLUME <span class="field-value">{{ volume }}</span></h5>-->
-          <!--          <h5 class="field-heading">SIZE <span class="field-value">{{ size }}</span></h5>-->
-          <h5
-            class="bottom-numbers d-flex flex-column justify-content-start gap-2"
-          >
-            {{ localize("quantityPerPackageCapslock") }}
-            <span v-if="!editing" class="field-value">{{
-              quantityPerPackage
-            }}</span>
-            <InputText
-              v-else
-              class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-              :class="{ 'p-invalid': !validate.amountInBox }"
-              type="text"
-              v-model="newAmountInBox"
-            />
-          </h5>
-        </MDBCol>
-        <MDBCol>
-          <h5
-            class="bottom-numbers d-flex flex-column justify-content-start gap-2"
-          >
-            {{ localize("distributionPriceCapslock") }}
-            <span v-if="!editing" class="field-value">{{
-              distributionPercent
-            }}</span>
-            <InputText
-              v-else
-              class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-              :class="{ 'p-invalid': !validate.distributorPercent }"
-              type="text"
-              v-model="newDistributionPercent"
-            />
-          </h5>
-          <h5 class="field-heading">
-            DISTRIBUTION PRICE
-            <span class="field-value">{{ distributionPrice }}</span>
-          </h5>
-          <!--          <h5 class="field-heading">-->
-          <!--            MARKUP <span class="field-value">{{ 0.0 }}</span>-->
-          <!--          </h5>-->
-        </MDBCol>
-        <MDBCol>
-          <h5
-            class="bottom-numbers d-flex flex-column justify-content-start gap-2"
-          >
-            {{ localize("professionalPriceCapslock") }}
-            <span v-if="!editing" class="field-value">{{
-              professionalPercent
-            }}</span>
-            <InputText
-              v-else
-              class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-              :class="{ 'p-invalid': !validate.professionalPercent }"
-              type="text"
-              v-model="newProfessionalPercent"
-            />
-          </h5>
-          <h5 class="field-heading">
-            PROFESSIONAL PRICE
-            <span class="field-value">{{ professionalPrice }}</span>
-          </h5>
-          <!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ professionalMarkup }}</span></h5>-->
-        </MDBCol>
-        <MDBCol>
-          <h5
-            class="bottom-numbers d-flex flex-column justify-content-start gap-2"
-          >
-            {{ localize("defaultPriceCapslock") }}
-            <span v-if="!editing" class="field-value">{{ defaultPrice }}</span>
-            <InputText
-              v-else
-              class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-              :class="{ 'p-invalid': !validate.commonPrice }"
-              type="text"
-              v-model="newDefaultPrice"
-            />
-          </h5>
-          <!--          <h5 class="field-heading">WITHOUT VAT <span class="field-value">{{ defaultPriceWithoutVat }}</span></h5>-->
-          <!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ defaultMarkup }}</span></h5>-->
-        </MDBCol>
-        <MDBCol>
-          <h5
-            class="bottom-numbers d-flex flex-column justify-content-start gap-2"
-          >
-            {{ localize("expirationDateCapslock") }}
-            <span v-if="!editing" class="field-value">{{
-              expirationDate
-            }}</span>
-            <InputText
-              v-else
-              class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-              :class="{ 'p-invalid': !validate.expirationDate }"
-              type="text"
-              v-model="newExpirationDate"
-            />
-          </h5>
-          <!--          <h5 class="field-heading">WITHOUT VAT <span class="field-value">{{ defaultPriceWithoutVat }}</span></h5>-->
-          <!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ defaultMarkup }}</span></h5>-->
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
+
+          <span class="field-heading separator">|</span>
+          <span class="field-heading color-name">{{ color }}</span>
+        </h1>
+        <p class="description">{{ productDescription }}</p>
+      </MDBContainer>
+      <MDBContainer class="footer-section" fluid>
+        <MDBRow>
+          <MDBCol>
+            <!--          <h5 class="field-heading">VOLUME <span class="field-value">{{ volume }}</span></h5>-->
+            <!--          <h5 class="field-heading">SIZE <span class="field-value">{{ size }}</span></h5>-->
+            <h5
+              class="bottom-numbers d-flex flex-column justify-content-start gap-2"
+            >
+              {{ localize("quantityPerPackageCapslock") }}
+              <span class="field-value">{{ quantityPerPackage }}</span>
+            </h5>
+          </MDBCol>
+          <MDBCol>
+            <h5
+              class="bottom-numbers d-flex flex-column justify-content-start gap-2"
+            >
+              {{ localize("distributionPriceCapslock") }}
+              <span class="field-value">{{ distributionPercent }}</span>
+            </h5>
+            <h5 class="field-heading">
+              DISTRIBUTION PRICE
+              <span class="field-value">{{ distributionPrice }}</span>
+            </h5>
+            <!--          <h5 class="field-heading">-->
+            <!--            MARKUP <span class="field-value">{{ 0.0 }}</span>-->
+            <!--          </h5>-->
+          </MDBCol>
+          <MDBCol>
+            <h5
+              class="bottom-numbers d-flex flex-column justify-content-start gap-2"
+            >
+              {{ localize("professionalPriceCapslock") }}
+              <span class="field-value">{{ professionalPercent }}</span>
+            </h5>
+            <h5 class="field-heading">
+              PROFESSIONAL PRICE
+              <span class="field-value">{{ professionalPrice }}</span>
+            </h5>
+            <!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ professionalMarkup }}</span></h5>-->
+          </MDBCol>
+          <MDBCol>
+            <h5
+              class="bottom-numbers d-flex flex-column justify-content-start gap-2"
+            >
+              {{ localize("defaultPriceCapslock") }}
+              <span class="field-value">{{ defaultPrice }}</span>
+            </h5>
+          </MDBCol>
+          <MDBCol>
+            <h5
+              class="bottom-numbers d-flex flex-column justify-content-start gap-2"
+            >
+              OFFERTA PRICE
+              <span class="field-value">{{ offertaPrice }}</span>
+            </h5>
+          </MDBCol>
+          <MDBCol>
+            <h5
+              class="bottom-numbers d-flex flex-column justify-content-start gap-2"
+            >
+              {{ localize("expirationDateCapslock") }}
+              <span class="field-value">{{ expirationDate }}</span>
+            </h5>
+          </MDBCol>
+        </MDBRow>
+      </MDBContainer>
+    </template>
+    <template v-else>
+      <Panel class="animate__animated animate__fadeIn">
+        <MDBRow class="d-flex flex-row gap-5 header-row">
+          <MDBCol class="d-flex flex-column justify-content-center">
+            <ProductsForm @save="handleSuccessUpdate" @cancel="handleCancel" />
+          </MDBCol>
+        </MDBRow>
+      </Panel>
+    </template>
   </ScrollPanel>
 </template>
 <script lang="ts">
@@ -337,17 +187,9 @@ import CascadeSelect from "primevue/cascadeselect";
 import FilesResolverUtil from "@/utils/files-resolver.util";
 import { useProductsStore } from "@/stores/products.store";
 import { useRoute, useRouter } from "vue-router";
-import { useBrandStore } from "@/stores/brand.store";
-import { useCategoriesStore } from "@/stores/categories.store";
 import SelectComponent from "@/components/Elements/Selectors/SelectComponent.vue";
 import TreeDropdownComponent from "@/components/Elements/Selectors/TreeDropdownComponent.vue";
 import ProductUpdateDto from "@/api/modules/product/dto/product-update.dto";
-import { useCollectionStore } from "@/stores/collection.store";
-import encoderUtil from "@/utils/encoder.util";
-import loggerUtil from "@/utils/logger/logger.util";
-import CategoryModel from "@/api/modules/category/models/category.model";
-import BrandModel from "@/api/modules/brand/models/brand.model";
-import CollectionModel from "@/api/modules/collection/models/collection.model";
 import DialogComponentTrigger from "@/components/Elements/Dialogs/DialogComponentTrigger.vue";
 import ModalComponent from "@/components/Elements/Dialogs/ModalComponent.vue";
 import { useModalStore } from "@/stores/modal.store";
@@ -357,13 +199,16 @@ import ValidatorUtil from "@/utils/validator/validator.util";
 import ValidateRule from "@/utils/validator/validate-rule";
 import Panel from "primevue/panel";
 import ScrollPanel from "primevue/scrollpanel";
-import LoggerUtil from "@/utils/logger/logger.util";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
 import ProductDto from "@/api/modules/product/dto/product.dto";
 import MediaMiniModalComponent from "@/views/Media/MediaMiniModalComponent.vue";
+import ProductsForm from "@/views/Products/ProductsForm.vue";
+import { useProductFormStore } from "@/stores/components/product-form.store";
+
 export default {
   name: "SingleProductView",
   components: {
+    ProductsForm,
     MediaMiniModalComponent,
     DialogComponentTrigger,
     FileUpload,
@@ -389,124 +234,24 @@ export default {
   },
   data() {
     return {
-      updateDropdown: true,
       createButtonText: this.localize("createCapslock", "default"),
-      placeholderBrand: this.localize("selectABrand"),
-      placeholderCategory: this.localize("selectACategory"),
-      placeholderCollection: this.localize("selectACollection"),
       editing: false,
-      photoBase64: null,
-      photoName: null,
-
-      newImageSource: null,
-      newProductName: null,
-      newSku: null,
-      newLink: null,
-      newQuantity: null,
-      newColor: null,
-      newDescription: null,
-      newAmountInBox: null,
-      newDistributionPrice: null,
-      newProfessionalPrice: null,
-      newDistributionPercent: null,
-      newProfessionalPercent: null,
-      newDefaultPrice: null,
-      newStatus: null,
-      newBrand: null,
-      newCategory: null,
-      newCollection: null,
-      newLastTimeOrdered: null,
-      newLastPriceOrdered: null,
-      newCostPrice: null,
-      newExpirationDate: null,
-      initCategoryDialog: {
-        header: this.localize("createACategory"),
-        showSelect: true,
-        selectItems: this.categoryList,
-        selectName: this.localize("selectParentCategory"),
-        inputName: this.localize("categoryName"),
-        methodOnSave: async (category) => {
-          const loadRes = await this.categoriesStore.loadCategoriesList();
-          loadRes.toastIfError(this.$toast, this.$nextTick);
-          this.initCategoryDialog.selectItems = this.categoryList;
-          this.$nextTick(() => {
-            this.newCategory = category.id;
-          });
-        },
-        methodOnClose: () => loggerUtil.debug("workds"),
-        model: new CategoryModel(),
-        toastSuccessText: this.localize("categoryIsCreated"),
-        toastErrorText: this.localize("categoryCreationFailed"),
-      },
-      initBrandDialog: {
-        header: this.localize("createABrand"),
-        inputName: this.localize("brandName"),
-        model: new BrandModel(),
-        methodOnSave: async (brand) => {
-          const loadRes = await this.brandStore.loadBrandsList();
-          loadRes.toastIfError(this.$toast, this.$nextTick);
-          this.newBrand = brand;
-        },
-        methodOnClose: () => loggerUtil.debug("workds"),
-        toastSuccessText: this.localize("brandIsCreated"),
-        toastErrorText: this.localize("brandCreationFailed"),
-      },
-      initCollectionDialog: {
-        header: this.localize("createACollection"),
-        inputName: this.localize("collectionName"),
-        methodOnSave: async (collection) => {
-          const loadRes = await this.collectionStore.loadCollectionList();
-          loadRes.toastIfError(this.$toast, this.$nextTick);
-          this.newCollection = collection;
-        },
-        methodOnClose: () => loggerUtil.debug("workds"),
-        model: new CollectionModel(),
-        toastSuccessText: this.localize("collectionIsCreated"),
-        toastErrorText: this.localize("collectionCreationFailed"),
-      },
-      validate: {
-        vendorCode: true,
-        brand: true,
-        name: true,
-        description: true,
-        distributorPrice: true,
-        distributorPercent: true,
-        professionalPrice: true,
-        professionalPercent: true,
-        commonPrice: true,
-        category: true,
-        collection: true,
-        color: true,
-        amountInBox: true,
-        expirationDate: true,
-        link: true,
-      },
-      validator: new ValidatorUtil(),
-      selectedFile: [],
-      fileChangedWhileEditing: false,
     };
   },
   async setup() {
+    const productFormStore = useProductFormStore();
     const authCheckStore = useAuthCheckStore();
     const productStore = useProductsStore();
-    const brandStore = useBrandStore();
-    const collectionStore = useCollectionStore();
-    const categoriesStore = useCategoriesStore();
     const modalStore = useModalStore();
     const route = useRoute();
     const router = useRouter();
 
     return {
       authCheckStore,
+      productFormStore,
       productStore,
-      brandStore,
-      categoriesStore,
-      collectionStore,
       modalStore,
       router,
-      loadBrandListRes: await brandStore.loadBrandsList(),
-      loadCollectionListRes: await collectionStore.loadCollectionList(),
-      loadCategoryListRes: await categoriesStore.loadCategoriesList(),
       loadSelectedRes: await productStore.loadSelectedProduct(
         parseInt(route.params.id.toString()),
       ),
@@ -514,76 +259,39 @@ export default {
   },
   created() {
     this.loadSelectedRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadBrandListRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadCollectionListRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadCategoryListRes.toastIfError(this.$toast, this.$nextTick);
 
-    const vendorCodeValidateRule = new ValidateRule().skipIfNull().required();
+    const stringValidateRule = new ValidateRule().skipIfNull().required();
+    const positiveNumberValidateRule = new ValidateRule()
+      .skipIfNull()
+      .required()
+      .setMin(0);
+
     const brandValidateRule = new ValidateRule().skipIfNull().required();
-    const nameValidateRule = new ValidateRule().skipIfNull().required();
-    const descriptionValidateRule = new ValidateRule().skipIfNull().required();
-    const distributorPercentValidateRule = new ValidateRule()
-      .skipIfNull()
-      .required()
-      .setMin(0);
-    const professionalPercentValidateRule = new ValidateRule()
-      .skipIfNull()
-      .required()
-      .setMin(0);
-    const commonPriceValidateRule = new ValidateRule()
-      .skipIfNull()
-      .required()
-      .setMin(0);
     const categoryValidateRule = new ValidateRule().skipIfNull().required();
     const collectionValidateRule = new ValidateRule().skipIfNull().required();
-    const colorValidateRule = new ValidateRule().skipIfNull().required();
-    const amountInBoxValidateRule = new ValidateRule()
-      .skipIfNull()
-      .required()
-      .setMin(0);
-    const expirationDateValidateRule = new ValidateRule()
-      .skipIfNull()
-      .required()
-      .setMin(0);
-    const linkValidateRule = new ValidateRule().skipIfNull().required();
 
-    this.validator = this.validator
-      .addRule("vendorCode", vendorCodeValidateRule)
+    const validator = new ValidatorUtil()
+      .addRule("vendorCode", stringValidateRule)
+      .addRule("eanCode", stringValidateRule)
+      .addRule("barcode", stringValidateRule)
       .addRule("brand", brandValidateRule)
-      .addRule("name", nameValidateRule)
-      .addRule("description", descriptionValidateRule)
-      .addRule("commonPrice", commonPriceValidateRule)
-      .addRule("distributorPercent", distributorPercentValidateRule)
-      .addRule("professionalPercent", professionalPercentValidateRule)
+      .addRule("name", stringValidateRule)
+      .addRule("description", stringValidateRule)
+      .addRule("commonPrice", positiveNumberValidateRule)
+      .addRule("distributorPercent", positiveNumberValidateRule)
+      .addRule("professionalPercent", positiveNumberValidateRule)
       .addRule("category", categoryValidateRule)
       .addRule("collection", collectionValidateRule)
-      .addRule("color", colorValidateRule)
-      .addRule("amountInBox", amountInBoxValidateRule)
-      .addRule("expirationDate", expirationDateValidateRule)
-      .addRule("link", linkValidateRule);
+      .addRule("color", stringValidateRule)
+      .addRule("amountInBox", positiveNumberValidateRule)
+      .addRule("expirationDate", positiveNumberValidateRule)
+      .addRule("link", stringValidateRule);
 
-    this.initCategoryDialog.selectItems = this.categoryList;
+    this.productFormStore.initUpdateProcess(this.selectedProduct, validator);
   },
   methods: {
     localize(key, module = "products") {
       return PrintUtil.localize(key, module);
-    },
-    clearValidationErrors() {
-      this.validate = {
-        vendorCode: true,
-        brand: true,
-        name: true,
-        description: true,
-        distributorPercent: true,
-        professionalPercent: true,
-        commonPrice: true,
-        category: true,
-        collection: true,
-        color: true,
-        amountInBox: true,
-        expirationDate: true,
-        link: true,
-      };
     },
     confirmDeletion() {
       this.modalStore.show({
@@ -613,66 +321,14 @@ export default {
         removed.toastIfError(this.$toast, this.$nextTick);
       }
     },
-    async handleCategoryUpdate() {
-      const loadRes = await this.categoriesStore.loadCategoriesList();
-      loadRes.toastIfError(this.$toast, this.$nextTick);
-    },
-    async handleBrandUpdate() {
-      const loadRes = await this.brandStore.loadBrandsList();
-      loadRes.toastIfError(this.$toast, this.$nextTick);
-    },
-    async handleCollectionUpdate() {
-      const loadRes = await this.collectionStore.loadCollectionList();
-      loadRes.toastIfError(this.$toast, this.$nextTick);
-    },
-    async fileUploaded(files: File[]) {
-      if (!files.length) {
-        if (this.editing) this.fileChangedWhileEditing = true;
-        this.photoName = "";
-        this.photoBase64 = "";
-        return;
-      }
-      const file = files[0];
-      const encoded = await encoderUtil.encode(file);
-      if (encoded == null) {
-        this.$toast.add({
-          severity: "error",
-          summary: this.localize("failedUpload"),
-          detail: this.localize("photoUploadingFailed"),
-          life: 3000,
-        });
-        return;
-      }
-      this.photoBase64 = encoded || "";
-      this.photoName = file.name;
-    },
     async startEditing() {
-      this.productStore.miniGallerySelected = this.selectedProduct.photoIds;
-      this.fileChangedWhileEditing = false;
       this.editing = true;
-      this.newCategory = String(this.categoryId);
-      this.newBrand = this.selectedProduct.brand;
-      this.newCollection = this.selectedProduct.collection;
-      this.newProductName = this.productName;
-      this.newSku = this.sku;
-      this.newColor = this.color;
-      this.newLink = this.link;
-      this.newQuantity = this.quantity;
-      this.newDescription = this.productDescription;
-      this.newAmountInBox = this.quantityPerPackage;
-      this.newDistributionPrice = this.distributionPrice;
-      this.newProfessionalPrice = this.professionalPrice;
-      this.newDistributionPercent = this.distributionPercent;
-      this.newProfessionalPercent = this.professionalPercent;
-      this.newDefaultPrice = this.defaultPrice;
-      this.newExpirationDate = this.expirationDate;
+      this.productFormStore.data.brand = this.selectedProduct.brand;
+      this.productFormStore.data.collection = this.selectedProduct.collection;
+      this.productFormStore.data.category = this.categoryId;
     },
-    cancelEditing() {
-      this.clearValidationErrors();
+    handleCancel() {
       this.editing = false;
-    },
-    getNullIfNoChange(newValue, originalValue) {
-      return newValue == originalValue ? null : newValue;
     },
     showNotFoundToast(type) {
       this.$toast.add({
@@ -682,45 +338,31 @@ export default {
         life: 3000,
       });
     },
-    async saveChanges() {
-      this.clearValidationErrors();
-      const brandId = this.newBrand ? this.newBrand.id : null;
-      const collectionId = this.newCollection ? this.newCollection.id : null;
-      // LoggerUtil.debug(this.newCategory, this.categoryId, this.category);
-      const categoryId = parseInt(String(this.newCategory));
-      const expirationDate = parseInt(this.newExpirationDate) * 24 * 60 * 1000;
-      const data = new ProductUpdateDto(
-        this.productStore.miniGallerySelected,
-        this.getNullIfNoChange(this.newSku, this.sku),
-        this.getNullIfNoChange(brandId, this.brandId),
-        this.getNullIfNoChange(this.newProductName, this.productName),
-        this.getNullIfNoChange(this.newDescription, this.productDescription),
-        this.getNullIfNoChange(
-          this.newDistributionPercent,
-          this.distributionPercent,
-        ),
-        this.getNullIfNoChange(
-          this.newProfessionalPercent,
-          this.professionalPercent,
-        ),
-        this.getNullIfNoChange(this.newDefaultPrice, this.defaultPrice),
-        this.getNullIfNoChange(categoryId, this.categoryId),
-        this.getNullIfNoChange(collectionId, this.collectionId),
-        this.getNullIfNoChange(this.newColor, this.color),
-        this.getNullIfNoChange(this.newAmountInBox, this.quantityPerPackage),
-        this.getNullIfNoChange(expirationDate, this.expirationDate),
-        this.getNullIfNoChange(this.newLink, this.link),
+    async handleSuccessUpdate() {
+      const data = this.productFormStore.data;
+      const productUpdateDto = new ProductUpdateDto(
+        data.photo,
+        data.vendorCode,
+        data.eanCode,
+        data.barcode,
+        data.brand,
+        data.name,
+        data.description,
+        data.distributorPercent,
+        data.professionalPercent,
+        data.commonPrice,
+        data.offertaPrice,
+        data.category,
+        data.collection,
+        data.color,
+        data.amountInBox,
+        data.expirationDate,
+        data.link,
       );
-      loggerUtil.debug(data);
-      const validateRes = this.validator.validate(data);
-      if (validateRes !== true) {
-        loggerUtil.debug(validateRes);
-        this.validate = validateRes;
-        this.validator.showErrorToast(this.$toast);
-        return;
-      }
-
-      const result = await this.productStore.updateProduct(this.id, data);
+      const result = await this.productStore.updateProduct(
+        this.id,
+        productUpdateDto,
+      );
 
       this.editing = !result.success;
       if (!result.success) {
@@ -752,15 +394,6 @@ export default {
     modalText() {
       return `${this.localize("areYouSureYouWantToDeleteProduct")} "${this.productName}?"`;
     },
-    categoryList() {
-      return this.categoriesStore.getCategoryList;
-    },
-    collectionList() {
-      return this.collectionStore.getCollectionList;
-    },
-    brandList() {
-      return this.brandStore.getBrandList;
-    },
     selectedProduct(): ProductDto {
       return this.productStore.getSelectedProduct || {};
     },
@@ -771,26 +404,22 @@ export default {
         );
       else return FilesResolverUtil.getStreamUrl("fileNotFound.jpeg");
     },
-    imageName() {
-      if (this.selectedProduct.photo && this.selectedProduct.photo != "")
-        return this.selectedProduct.photo;
-      else return null;
-    },
     productName() {
       return this.selectedProduct.name || "";
     },
     sku() {
       return this.selectedProduct.vendorCode || "";
     },
+    ean() {
+      return this.selectedProduct.eanCode || "";
+    },
+    barcode() {
+      return this.selectedProduct.barcode || "";
+    },
     brand() {
       if (this.selectedProduct.brand)
         return this.selectedProduct.brand.name || this.localize("noBrand");
       else return this.localize("noBrand");
-    },
-    brandId() {
-      if (this.selectedProduct.brand)
-        return this.selectedProduct.brand.id || null;
-      else return null;
     },
     link() {
       return this.selectedProduct.link || "";
@@ -800,9 +429,6 @@ export default {
     },
     expirationDate() {
       return (this.selectedProduct.expirationDate || 0) / 1000 / 24 / 60;
-    },
-    plainExpirationDate() {
-      return this.selectedProduct.expirationDate || 0;
     },
     lastTimeOrdered() {
       if (!this.selectedProduct.lastPurchaseDate)
@@ -819,9 +445,6 @@ export default {
       return (
         this.selectedProduct.lastPurchasePrice || this.localize("noInformation")
       );
-    },
-    costPrice() {
-      return this.selectedProduct.costPrice || "";
     },
     status() {
       return this.selectedProduct.status || "";
@@ -845,11 +468,6 @@ export default {
           this.selectedProduct.collection.name || this.localize("noCollection")
         );
       else return this.localize("noCollection");
-    },
-    collectionId() {
-      if (this.selectedProduct.collection)
-        return this.selectedProduct.collection.id || null;
-      else return null;
     },
     color() {
       return this.selectedProduct.color || "";
@@ -895,6 +513,9 @@ export default {
     },
     defaultPrice() {
       return this.selectedProduct.commonPrice || "";
+    },
+    offertaPrice() {
+      return this.selectedProduct.offertaPrice || "";
     },
     editBtnAvailable() {
       return this.authCheckStore.getHasAccessToProductsManaging;
