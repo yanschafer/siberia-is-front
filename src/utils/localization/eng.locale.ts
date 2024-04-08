@@ -171,6 +171,9 @@ export default {
       "Update stock data": "Update stock data",
       "View stock data": "View stock data",
       "View products list": "View products",
+      "Write-off managing": "Write-off managing",
+      "Create write-off": "Create write-off",
+      "Approve and cancel write-offs": "Approve and cancel write-offs",
     },
     products: {
       //CreateProduct.vue
@@ -436,6 +439,7 @@ export default {
       Arrival: "Arrival",
       Sale: "Sale",
       Request: "Request",
+      "Write-off": "Write off",
 
       operationType: "Operation type",
       operationStatus: "Operation status",

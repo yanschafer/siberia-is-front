@@ -8,7 +8,7 @@ import { useRouter } from "vue-router";
 import PrintUtil from "@/utils/localization/print.util";
 import ValidateRule from "@/utils/validator/validate-rule";
 import ValidatorUtil from "@/utils/validator/validator.util";
-import ProductsForm from "@/views/Products/helpers/ProductsForm.vue";
+import ProductsForm from "@/views/Products/ProductsForm.vue";
 import { useProductFormStore } from "@/stores/components/product-form.store";
 
 export default {

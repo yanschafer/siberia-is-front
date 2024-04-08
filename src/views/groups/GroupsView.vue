@@ -32,7 +32,7 @@ import PrintUtil from "@/utils/localization/print.util";
 import { MDBContainer, MDBCol } from "mdb-vue-ui-kit";
 import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
-import AddToGroupComponent from "@/views/Products/AddToGroupComponent.vue";
+import AddToGroupComponent from "@/views/groups/AddToGroupComponent.vue";
 import TabsNavComponent from "@/components/Navigation/TabsNavComponent.vue";
 import { useProductGroupStore } from "@/stores/product-group.store.ts";
 import { useProductsStore } from "@/stores/products.store.ts";

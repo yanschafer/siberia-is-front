@@ -202,7 +202,7 @@ import ScrollPanel from "primevue/scrollpanel";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
 import ProductDto from "@/api/modules/product/dto/product.dto";
 import MediaMiniModalComponent from "@/views/Media/MediaMiniModalComponent.vue";
-import ProductsForm from "@/views/Products/helpers/ProductsForm.vue";
+import ProductsForm from "@/views/Products/ProductsForm.vue";
 import { useProductFormStore } from "@/stores/components/product-form.store";
 
 export default {

@@ -43,7 +43,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { MDBBtn, MDBCol, MDBContainer, MDBRow } from "mdb-vue-ui-kit";
-import TabsComponent from "@/components/Navigation/TabsComponent.vue";
+import TabsComponent from "@/components/Inputs/TabsComponent.vue";
 import InputText from "primevue/inputtext";
 import Textarea from "primevue/inputtext";
 import { useUsersStore } from "@/stores/user.store";

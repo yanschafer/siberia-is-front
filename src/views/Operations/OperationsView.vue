@@ -50,6 +50,7 @@ export default {
         [TransactionType.INCOME]: "Arrival",
         [TransactionType.OUTCOME]: "Sale",
         [TransactionType.TRANSFER]: "Request",
+        [TransactionType.WriteOff]: "Write-off",
       },
     };
   },
@@ -120,6 +121,7 @@ export default {
             String(value).toLowerCase().includes(searchTerm.toLowerCase()),
           ),
         );
+
       const res = data.map((el) => ({
         id: el.id,
         operation: this.localize(this.typeMapper[el.type.id]),

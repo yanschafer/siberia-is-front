@@ -46,7 +46,7 @@ import { useProductsStore } from "@/stores/products.store";
 import PrintUtil from "@/utils/localization/print.util";
 import { appConf } from "@/api/conf/app.conf";
 import { useAddToGroupModalStore } from "@/stores/add-to-group-modal.store";
-import AddToGroupComponent from "@/views/Products/AddToGroupComponent.vue";
+import AddToGroupComponent from "@/views/groups/AddToGroupComponent.vue";
 import Dialog from "primevue/dialog";
 
 export default {

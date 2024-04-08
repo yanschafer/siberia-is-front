@@ -131,8 +131,11 @@
           <template v-else-if="newWriteOff">
             <StorehouseOperation
               :title="'New write-off registration'"
+              :need-validation="true"
+              :show-price="false"
+              :amount-validation="productListValidateObject"
               @cancel="newWriteOff = false"
-              @save="saveNewArrival"
+              @save="saveNewWriteOff"
             ></StorehouseOperation>
           </template>
         </template>
@@ -372,6 +375,20 @@ export default {
         const data = res.getData();
         this.showSuccessTransactionCreation(
           "Arrival",
+          data.status == TransactionStatus.PROCESSED,
+        );
+      } else {
+        res.toastIfError(this.$toast, this.$nextTick);
+      }
+    },
+    async saveNewWriteOff(writeOffData: ProductListItemDto[]) {
+      const res = await this.storehouseStore.newWriteOff(this.id, writeOffData);
+
+      if (res.success) {
+        this.newWriteOff = false;
+        const data = res.getData();
+        this.showSuccessTransactionCreation(
+          "WriteOff",
           data.status == TransactionStatus.PROCESSED,
         );
       } else {

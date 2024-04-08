@@ -106,7 +106,7 @@ import {
 } from "mdb-vue-ui-kit";
 import Panel from "primevue/panel";
 import InputText from "primevue/inputtext";
-import TabsComponent from "@/components/Navigation/TabsComponent.vue";
+import TabsComponent from "@/components/Inputs/TabsComponent.vue";
 import ModalComponent from "@/components/Elements/Dialogs/ModalComponent.vue";
 import { useRolesStore } from "@/stores/roles.store";
 import { useRoute, useRouter } from "vue-router";
