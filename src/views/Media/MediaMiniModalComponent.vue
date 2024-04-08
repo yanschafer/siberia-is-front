@@ -221,17 +221,26 @@ export default defineComponent({
     };
   },
   async created() {
-    this.mediaStore.galleryItems = this.mediaStore.galleryItems.map((el) => {
-      if (this.mediaModalStore.miniGallerySelected.includes(el.id))
-        return {
-          ...el,
-          selected: true,
-        };
-      else return el;
+    this.mediaModalStore.$onAction((action) => {
+      if (action.name == "showGallery") {
+        this.refreshSelected();
+        LoggerUtil.debug(this.mediaModalStore.miniGallerySelected, this.items);
+      }
     });
+    this.refreshSelected();
     this.loadRes.toastIfError(this.$toast, this.$nextTick);
   },
   methods: {
+    refreshSelected() {
+      this.mediaStore.galleryItems = this.mediaStore.galleryItems.map((el) => {
+        if (this.mediaModalStore.miniGallerySelected.includes(el.id))
+          return {
+            ...el,
+            selected: true,
+          };
+        else return el;
+      });
+    },
     getUrl(image) {
       return FilesResolverUtil.getStreamUrl(image);
     },

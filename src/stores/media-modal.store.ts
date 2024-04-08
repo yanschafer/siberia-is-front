@@ -22,6 +22,9 @@ export const useMediaModalStore = defineStore({
     openUploadProducts() {
       this.uploadProductsOpen = true;
     },
+    showGallery() {
+      this.miniGalleryVisible = true;
+    },
     openImage(image) {
       this.imageOpen = true;
       this.selectedImage = image;

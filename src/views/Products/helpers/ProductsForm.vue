@@ -338,7 +338,9 @@ export default {
       return PrintUtil.localize(key, module);
     },
     openMiniGallery() {
-      this.mediaModalStore.miniGalleryVisible = true;
+      this.mediaModalStore.miniGallerySelected =
+        this.productFormStore.data.photo;
+      this.mediaModalStore.showGallery(this.productFormStore.data.photo);
     },
     handleMiniGallerySelection() {
       this.productFormStore.data.photoList =
