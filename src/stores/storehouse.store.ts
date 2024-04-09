@@ -11,6 +11,7 @@ import OutcomeTransactionModel from "@/api/modules/transaction/models/outcome-tr
 import TransferTransactionModel from "@/api/modules/transaction/models/transfer-transaction.model";
 import StockInputDto from "@/api/modules/stock/dto/stock-input.dto";
 import PrintUtil from "@/utils/localization/print.util";
+import WriteOffTransactionModel from "@/api/modules/transaction/models/write-off-transaction.model";
 
 export const useStorehousesStore = defineStore({
   id: "storehouses",
@@ -144,6 +145,27 @@ export const useStorehousesStore = defineStore({
             productId: el.id,
             amount: parseInt(String(el.quantity)),
             price: parseFloat(String(el.price)),
+          })),
+        ),
+      );
+      if (res.success) {
+        this.operationSucceed();
+        const loadRes = await this.loadSelectedStoreHouse(storehouseId);
+        if (!loadRes.success) return loadRes;
+        else return res;
+      }
+      return res;
+    },
+    async newWriteOff(storehouseId: number, products: ProductListItemDto[]) {
+      const transactionModel = new WriteOffTransactionModel();
+      const res = await transactionModel.create(
+        new TransactionInputDto(
+          null,
+          storehouseId,
+          TransactionType.WriteOff,
+          products.map((el) => ({
+            productId: el.id,
+            amount: parseInt(String(el.quantity)),
           })),
         ),
       );

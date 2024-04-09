@@ -8,6 +8,8 @@ export const useMediaModalStore = defineStore({
     uploadOpen: false,
     imageOpen: false,
     selectedImage: null,
+    miniGalleryVisible: false,
+    miniGallerySelected: [],
   }),
   getters: {
     isUploadModalOpened: (state) => state.uploadOpen,
@@ -19,6 +21,9 @@ export const useMediaModalStore = defineStore({
     },
     openUploadProducts() {
       this.uploadProductsOpen = true;
+    },
+    showGallery() {
+      this.miniGalleryVisible = true;
     },
     openImage(image) {
       this.imageOpen = true;

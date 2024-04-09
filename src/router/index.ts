@@ -129,7 +129,7 @@ const routes = [
       {
         name: "groups",
         path: "/group",
-        component: () => import("@/views/Products/GroupsView.vue"),
+        component: () => import("@/views/groups/GroupsView.vue"),
         props: true,
         meta: {
           breadcrumbs: [
@@ -154,7 +154,7 @@ const routes = [
       {
         path: "/group/:id",
         name: "Group details",
-        component: () => import("@/views/Products/SingleProductGroupView.vue"),
+        component: () => import("@/views/groups/SingleProductGroupView.vue"),
         props: true,
         meta: {
           breadcrumbs: [
@@ -174,7 +174,7 @@ const routes = [
       {
         path: "/group/:id/apply",
         name: "Group apply",
-        component: () => import("@/views/Products/ApplyChangesView.vue"),
+        component: () => import("@/views/groups/ApplyChangesView.vue"),
         props: true,
         meta: {
           breadcrumbs: [

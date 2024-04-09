@@ -128,7 +128,7 @@ import {
 } from "mdb-vue-ui-kit";
 import Panel from "primevue/panel";
 import Tag from "primevue/tag";
-import TabsComponent from "@/components/Navigation/TabsComponent.vue";
+import TabsComponent from "@/components/Inputs/TabsComponent.vue";
 import UserFullDto from "@/api/modules/user/dto/user-full.dto";
 import { useRoute, useRouter } from "vue-router";
 import UpdateUserDto from "@/api/modules/user/dto/update-user.dto";

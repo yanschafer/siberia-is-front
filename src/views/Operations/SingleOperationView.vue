@@ -125,6 +125,7 @@ export default {
       [TransactionType.INCOME]: "Arrival",
       [TransactionType.OUTCOME]: "Sale",
       [TransactionType.TRANSFER]: "Request",
+      [TransactionType.WriteOff]: "Write-off",
     },
     productColumns: [
       {
@@ -222,11 +223,18 @@ export default {
         return;
       }
 
+      LoggerUtil.debug(
+        this.selectedStatus,
+        !this.selectedStatusNeedStock,
+        this.selectedStorehouse,
+        this.selectedOperation,
+      );
+
       if (this.selectedStatus) {
         let changed: ApiResponseDto<TransactionSimpleDto> | null = null;
-        if (!this.selectedStatusNeedStock)
+        if (!this.selectedStatusNeedStock) {
           changed = await this.changeToStatus(this.selectedStatus.id);
-        else if (this.selectedStorehouse)
+        } else if (this.selectedStorehouse)
           changed = await this.changeToStatusWithStock(
             this.selectedStatus.id,
             this.selectedStorehouse.id,

@@ -112,7 +112,7 @@ export default {
     async save() {
       this.dialogStore.value = {
         name: this.inputValue == "" ? null : this.inputValue,
-        parent: this.selectedDropdownItem,
+        parent: parseInt(this.selectedDropdownItem),
         checkbox: this.checkboxValue,
       };
 

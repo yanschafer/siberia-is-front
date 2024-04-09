@@ -8,6 +8,7 @@ import ApiResponseDto from "@/api/dto/api-response.dto";
 import TransactionSimpleDto from "@/api/modules/transaction/dto/transaction-simple.dto";
 import TransactionSearchFilterDto from "@/api/modules/transaction/dto/transaction-search-filter.dto";
 import PrintUtil from "@/utils/localization/print.util";
+import WriteOffTransactionModel from "@/api/modules/transaction/models/write-off-transaction.model";
 
 const localize = (key, module = "operations") =>
   PrintUtil.localize(key, module);
@@ -94,6 +95,15 @@ export const useOperationStore = defineStore({
             );
           } else {
             result = await transactionModel.changeStatus(operationId, statusId);
+          }
+          break;
+        case TransactionType.WriteOff:
+          transactionModel = new WriteOffTransactionModel();
+          if (statusId == TransactionStatus.PROCESSED) {
+            result = await transactionModel.approve(operationId);
+          }
+          if (statusId == TransactionStatus.CREATION_CANCELLED) {
+            result = await transactionModel.cancel(operationId);
           }
           break;
       }

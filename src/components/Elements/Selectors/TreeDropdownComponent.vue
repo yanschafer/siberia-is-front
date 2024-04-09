@@ -47,9 +47,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    modelValue: {
-      type: Object,
-    },
+    modelValue: {},
   },
   data() {
     return {

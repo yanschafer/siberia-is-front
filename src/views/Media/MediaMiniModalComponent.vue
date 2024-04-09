@@ -1,6 +1,6 @@
 <template>
   <Dialog
-    v-model:visible="productStore.miniGalleryVisible"
+    v-model:visible="mediaModalStore.miniGalleryVisible"
     modal
     header="Media gallery"
     :style="{ width: '80vw' }"
@@ -179,6 +179,7 @@ import { useMediaStore } from "@/stores/media.store.ts";
 import LoggerUtil from "@/utils/logger/logger.util.ts";
 import FilesResolverUtil from "@/utils/files-resolver.util.ts";
 import { useProductsStore } from "@/stores/products.store";
+import { useMediaModalStore } from "@/stores/media-modal.store";
 
 export default defineComponent({
   name: "MediaMiniModalComponent",
@@ -208,28 +209,38 @@ export default defineComponent({
       showUpload: false,
     };
   },
+  emits: ["selected"],
   async setup() {
     const mediaStore = useMediaStore();
-    const productStore = useProductsStore();
+    const mediaModalStore = useMediaModalStore();
 
     return {
-      productStore,
       mediaStore,
+      mediaModalStore,
       loadRes: await mediaStore.loadGallery(),
     };
   },
   async created() {
-    this.mediaStore.galleryItems = this.mediaStore.galleryItems.map((el) => {
-      if (this.productStore.miniGallerySelected.includes(el.id))
-        return {
-          ...el,
-          selected: true,
-        };
-      else return el;
+    this.mediaModalStore.$onAction((action) => {
+      if (action.name == "showGallery") {
+        this.refreshSelected();
+        LoggerUtil.debug(this.mediaModalStore.miniGallerySelected, this.items);
+      }
     });
+    this.refreshSelected();
     this.loadRes.toastIfError(this.$toast, this.$nextTick);
   },
   methods: {
+    refreshSelected() {
+      this.mediaStore.galleryItems = this.mediaStore.galleryItems.map((el) => {
+        if (this.mediaModalStore.miniGallerySelected.includes(el.id))
+          return {
+            ...el,
+            selected: true,
+          };
+        else return el;
+      });
+    },
     getUrl(image) {
       return FilesResolverUtil.getStreamUrl(image);
     },
@@ -249,10 +260,11 @@ export default defineComponent({
       } else removeRes.toastIfError(this.$toast, this.$nextTick);
     },
     async setSelected() {
-      this.productStore.miniGallerySelected = this.items
+      this.mediaModalStore.miniGallerySelected = this.items
         .filter((el) => el.selected)
         .map((el) => el.id);
-      this.productStore.miniGalleryVisible = false;
+      this.mediaModalStore.miniGalleryVisible = false;
+      this.$emit("selected");
     },
     toggleAll() {
       this.mediaStore.toggleAll(this.checked);

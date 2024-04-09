@@ -149,15 +149,12 @@
 <script lang="ts">
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput } from "mdb-vue-ui-kit";
 import FileUploadComponent from "@/components/Inputs/FileUploadComponent.vue";
-import { useProductsStore } from "@/stores/products.store";
 import { useCollectionStore } from "@/stores/collection.store";
 import { useRoute, useRouter } from "vue-router";
 import { useBrandStore } from "@/stores/brand.store";
 import { useCategoriesStore } from "@/stores/categories.store";
 import SelectComponent from "@/components/Elements/Selectors/SelectComponent.vue";
 import TreeDropdownComponent from "@/components/Elements/Selectors/TreeDropdownComponent.vue";
-import EncoderUtil from "@/utils/encoder.util";
-import ProductInputDto from "@/api/modules/product/dto/product-input.dto";
 import DialogComponentTrigger from "@/components/Elements/Dialogs/DialogComponentTrigger.vue";
 import loggerUtil from "@/utils/logger/logger.util";
 import BrandModel from "@/api/modules/brand/models/brand.model";
@@ -167,8 +164,6 @@ import PrintUtil from "@/utils/localization/print.util";
 import ValidateRule from "@/utils/validator/validate-rule";
 import InputText from "primevue/inputtext";
 import Panel from "primevue/panel";
-import LoggerUtil from "@/utils/logger/logger.util";
-import FilesResolverUtil from "@/utils/files-resolver.util";
 import ValidatorUtil from "@/utils/validator/validator.util";
 import MassiveUpdateDto from "@/api/modules/product/dto/groups/massive-update.dto";
 import { useProductGroupStore } from "@/stores/product-group.store";

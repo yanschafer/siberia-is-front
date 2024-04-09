@@ -279,7 +279,8 @@ export default {
         },
         { id: category.id, input: category.label, selected: category.parent },
         (state) => ({
-          ...state.value,
+          name: state.value.name,
+          parent: state.value.parent ? parseInt(state.value.parent) : 0,
         }),
       );
     },
