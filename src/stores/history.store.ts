@@ -2,6 +2,9 @@ import { defineStore } from "pinia";
 import HistoryModel from "@/api/modules/history/models/history.model";
 import HistorySearchFilterDto from "@/api/modules/history/dto/history-search-filter.dto";
 import PrintUtil from "@/utils/localization/print.util";
+import RollbackModel from "@/api/modules/history/models/rollback.model";
+import ApiResponseDto from "@/api/dto/api-response.dto";
+import HistoryOutputDto from "@/api/modules/history/dto/history-output.dto";
 
 export const useHistoryStore = defineStore({
   id: "history",
@@ -33,6 +36,7 @@ export const useHistoryStore = defineStore({
     ],
     eventTypes: [],
     eventObjectTypes: [],
+    searchFilterDto: new HistorySearchFilterDto(),
   }),
   getters: {
     getSearchTerm: (state) => state.searchTerm,
@@ -54,6 +58,7 @@ export const useHistoryStore = defineStore({
     async loadHistoryList(
       searchFilterDto: HistorySearchFilterDto = new HistorySearchFilterDto(),
     ) {
+      this.searchFilterDto = searchFilterDto;
       const historyModel = new HistoryModel();
       const getHistory = await historyModel.getAll(searchFilterDto);
       if (getHistory.success) {
@@ -62,10 +67,16 @@ export const useHistoryStore = defineStore({
       return getHistory;
     },
     async loadItem(itemId: number) {
-      this.selectedItem = this.historyRows.filter((el) => el.id == itemId);
-      if (this.selectedItem.length > 0)
-        this.selectedItem = this.selectedItem[0];
-      else this.selectedItem = {};
+      const historyModel = new HistoryModel();
+      const loaded = await historyModel.getOne(itemId);
+      if (loaded.success) {
+        this.selectedItem = HistoryOutputDto.createFromDto({
+          ...loaded.getData(),
+        });
+        console.log(this.selectedItem);
+      }
+
+      return loaded;
     },
     async loadEventTypes() {
       const historyModel = new HistoryModel();
@@ -78,6 +89,12 @@ export const useHistoryStore = defineStore({
       const selected = await historyModel.getAllObjectTypes();
       if (selected.success) this.eventObjectTypes = selected.getData();
       return selected;
+    },
+    async discard(): ApiResponseDto<any> {
+      const rollbackModel = new RollbackModel();
+      const discarded = await rollbackModel.rollback(this.selectedItem);
+      if (discarded.success) await this.loadHistoryList(this.searchFilterDto);
+      return discarded;
     },
   },
 });

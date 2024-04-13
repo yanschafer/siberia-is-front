@@ -120,10 +120,11 @@ export default class ApiModelUtil {
     if (error.code === "ERR_NETWORK") return ApiResponseDto.networkError();
 
     const result = ApiResponseDto.buildFromError(error);
+    const statusCode = result.getError().httpStatusCode;
     if (
       authorized &&
       request &&
-      result.getError().httpStatusCode == 401 &&
+      (statusCode == 401 || statusCode == 403) &&
       this.onRefresh == null
     ) {
       LoggerUtil.debugPrefixed("API_MODEL", "Start refreshing");

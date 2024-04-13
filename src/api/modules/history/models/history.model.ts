@@ -5,6 +5,7 @@ import HistorySearchFilterDto from "@/api/modules/history/dto/history-search-fil
 import ApiModelUtil from "@/utils/api-model.util";
 import HistoryEventTypeDto from "@/api/modules/history/dto/history-event-type.dto";
 import HistoryEventObjectTypeDto from "@/api/modules/history/dto/history-event-object-type.dto";
+import HistoryOutputDto from "@/api/modules/history/dto/history-output.dto";
 
 export default class HistoryModel extends ApiModelUtil {
   constructor() {
@@ -17,6 +18,12 @@ export default class HistoryModel extends ApiModelUtil {
     return this.authorizedRequest(
       new ApiRequestDto("", "POST", searchFilterDto),
     );
+  }
+
+  public async getOne(
+    eventId: number,
+  ): Promise<ApiResponseDto<HistoryOutputDto>> {
+    return this.authorizedRequest(new ApiRequestDto(`/${eventId}`, "GET"));
   }
 
   public async getAllTypes(): Promise<ApiResponseDto<HistoryEventTypeDto[]>> {
