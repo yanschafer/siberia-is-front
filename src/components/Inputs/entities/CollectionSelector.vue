@@ -1,15 +1,17 @@
 <template>
-  <SelectComponent
-    :placeholder="placeholder"
-    class="animate__animated animate__flipInX animate__faster"
-    :class="{ 'p-invalid': !collectionSelectorStore.validateRes }"
-    :items="collectionList"
-    v-model="collectionSelectorStore.value"
-  />
-  <DialogComponentTrigger
-    :button-text="createButtonText"
-    :init-object="initCollectionDialog"
-  />
+  <div class="d-flex flex-row gap-4 mb-2">
+    <SelectComponent
+      :placeholder="placeholder"
+      class="animate__animated animate__flipInX animate__faster"
+      :class="{ 'p-invalid': !collectionSelectorStore.validateRes }"
+      :items="collectionList"
+      v-model="collectionSelectorStore.value"
+    />
+    <DialogComponentTrigger
+      :button-text="createButtonText"
+      :init-object="initCollectionDialog"
+    />
+  </div>
 </template>
 
 <script lang="ts">

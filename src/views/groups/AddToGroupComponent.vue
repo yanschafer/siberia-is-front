@@ -20,8 +20,13 @@
       <FiltersSidebarComponent @start-search="handleFiltersSearch" />
     </MDBCol>
     <MDBCol class="">
-      Click on rows to select
+      <p class="text-info">
+        <IconInfoCircle color="#b6b6b6" :size="24" stroke-width="1" />
+        Click on rows to select
+      </p>
+
       <TableComponent
+        class="table-data"
         :info-message="noDataMessage"
         :showEditColumn="false"
         :selection-mode="'multiple'"
@@ -35,6 +40,7 @@
 </template>
 
 <script lang="ts">
+import { IconInfoCircle } from "@tabler/icons-vue";
 import { defineComponent } from "vue";
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import { useProductsStore } from "@/stores/products.store";
@@ -57,6 +63,7 @@ export default defineComponent({
     TableComponent,
     InputText,
     Button,
+    IconInfoCircle,
   },
   async setup() {
     const productsStore = useProductsStore();
@@ -147,4 +154,16 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.container-content {
+  margin: 0;
+  width: max-content;
+  display: flex;
+}
+.table-data {
+  width: 70vw;
+}
+.text-info {
+  color: #b6b6b6 !important;
+}
+</style>

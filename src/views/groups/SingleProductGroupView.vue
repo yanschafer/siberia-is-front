@@ -20,7 +20,7 @@
       </MDBRow>
     </MDBRow>
   </MDBContainer>
-  <MDBContainer class="mt-4">
+  <MDBContainer class="mt-4 table-block">
     <MDBRow class="w-auto">
       <h1 class="username-heading mb-2">Products list</h1>
     </MDBRow>
@@ -168,5 +168,8 @@ export default {
 }
 :deep(.nav-link) {
   font-weight: 600 !important;
+}
+.table-block {
+  width: 80vw;
 }
 </style>

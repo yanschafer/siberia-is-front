@@ -1,15 +1,17 @@
 <template>
-  <TreeDropdownComponent
-    :placeholder="placeholder"
-    class="animate__animated animate__flipInX animate__faster"
-    :class="{ 'p-invalid': !categorySelectorStore.validateRes }"
-    :nodes="categoryList"
-    v-model="categorySelectorStore.value"
-  />
-  <DialogComponentTrigger
-    :button-text="createButtonText"
-    :init-object="initCategoryDialog"
-  />
+  <div class="d-flex flex-row gap-4 mb-2">
+    <TreeDropdownComponent
+      :placeholder="placeholder"
+      class="animate__animated animate__flipInX animate__faster"
+      :class="{ 'p-invalid': !categorySelectorStore.validateRes }"
+      :nodes="categoryList"
+      v-model="categorySelectorStore.value"
+    />
+    <DialogComponentTrigger
+      :button-text="createButtonText"
+      :init-object="initCategoryDialog"
+    />
+  </div>
 </template>
 
 <script lang="ts">

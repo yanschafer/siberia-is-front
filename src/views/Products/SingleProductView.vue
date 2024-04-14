@@ -21,57 +21,57 @@
           </MDBCol>
           <MDBCol class="product-name-col">
             <h1 class="product-heading">{{ productName }}</h1>
+            <MDBRow class="d-flex flex-row flex-nowrap">
+              <MDBCol class="d-flex flex-column gap-3 col-auto">
+                <h5 class="field-heading d-flex gap-1 align-items-center">
+                  {{ localize("skuCapslock") }}
+                  <span class="field-value copy-on">{{ sku }}</span>
+                </h5>
+                <h5 class="field-heading d-flex gap-1 align-items-center">
+                  EAN
+                  <span class="field-value copy-on">{{ ean }}</span>
+                </h5>
+                <h5 class="field-heading d-flex gap-1 align-items-center">
+                  BARCODE
+                  <span class="field-value copy-on">{{ barcode }}</span>
+                </h5>
+                <h5 class="field-heading">
+                  {{ localize("brandCapslock") }}
+                  <span class="field-value copy-on">{{ brand }}</span>
+                </h5>
+                <h5 class="field-heading d-flex gap-1 align-items-center">
+                  {{ localize("linkCapslock") }}
+                  <a target="_blank" :href="link" class="field-value copy-on">{{
+                    localize("openInNewWindowCapslock")
+                  }}</a>
+                </h5>
+              </MDBCol>
+              <MDBCol class="d-flex flex-column gap-3">
+                <h5 class="field-heading d-flex gap-1 align-items-center">
+                  {{ localize("quantityCapslock") }}
+                  <span class="field-value">{{ quantity }}</span>
+                </h5>
+                <h5 class="field-heading d-flex gap-1 align-items-center">
+                  {{ localize("lastTimeOrderedCapslock") }}
+                  <span class="field-value">{{ lastTimeOrdered }}</span>
+                </h5>
+                <h5 class="field-heading d-flex gap-1 align-items-center">
+                  {{ localize("lastPriceOrderedCapslock") }}
+                  <span class="field-value">{{ lastPriceOrdered }}</span>
+                </h5>
+                <!--              <h5 class="field-heading">COST PRICE <span class="field-value">{{ costPrice }}</span></h5>-->
+                <!--              <h5 class="field-heading">STATUS <span class="field-value">{{ status }}</span></h5>-->
+              </MDBCol>
+            </MDBRow>
           </MDBCol>
 
-          <MDBRow>
-            <MDBCol class="d-flex flex-column gap-3 col-auto">
-              <h5 class="field-heading d-flex gap-1 align-items-center">
-                {{ localize("skuCapslock") }}
-                <span class="field-value copy-on">{{ sku }}</span>
-              </h5>
-              <h5 class="field-heading d-flex gap-1 align-items-center">
-                EAN
-                <span class="field-value copy-on">{{ ean }}</span>
-              </h5>
-              <h5 class="field-heading d-flex gap-1 align-items-center">
-                BARCODE
-                <span class="field-value copy-on">{{ barcode }}</span>
-              </h5>
-              <h5 class="field-heading">
-                {{ localize("brandCapslock") }}
-                <span class="field-value copy-on">{{ brand }}</span>
-              </h5>
-              <h5 class="field-heading d-flex gap-1 align-items-center">
-                {{ localize("linkCapslock") }}
-                <a target="_blank" :href="link" class="field-value copy-on">{{
-                  localize("openInNewWindowCapslock")
-                }}</a>
-              </h5>
-            </MDBCol>
-            <MDBCol class="d-flex flex-column gap-3">
-              <h5 class="field-heading d-flex gap-1 align-items-center">
-                {{ localize("quantityCapslock") }}
-                <span class="field-value">{{ quantity }}</span>
-              </h5>
-              <h5 class="field-heading d-flex gap-1 align-items-center">
-                {{ localize("lastTimeOrderedCapslock") }}
-                <span class="field-value">{{ lastTimeOrdered }}</span>
-              </h5>
-              <h5 class="field-heading d-flex gap-1 align-items-center">
-                {{ localize("lastPriceOrderedCapslock") }}
-                <span class="field-value">{{ lastPriceOrdered }}</span>
-              </h5>
-              <!--              <h5 class="field-heading">COST PRICE <span class="field-value">{{ costPrice }}</span></h5>-->
-              <!--              <h5 class="field-heading">STATUS <span class="field-value">{{ status }}</span></h5>-->
-            </MDBCol>
-          </MDBRow>
           <MDBCol
             v-if="!editing && editBtnAvailable"
-            class="d-flex flex-column justify-content-center"
+            class="d-flex flex-column justify-content-start gap-2"
           >
             <MDBRow
               style="padding-left: 12px; margin-bottom: 1rem"
-              class="d-flex d-flex justify-content-end"
+              class="d-flex d-flex justify-content-start gap-2"
             >
               <MDBBtn
                 @click="startEditing"

@@ -36,8 +36,8 @@
               }}</MDBBtn>
             </MDBCol>
           </MDBRow>
-          <MDBRow>
-            <MDBCol class="d-flex flex-column gap-3 w-100">
+          <MDBRow class="flex-nowrap">
+            <MDBCol class="d-flex flex-column gap-3 col-auto">
               <h5 class="field-heading d-flex gap-1 align-items-center">
                 {{ localize("skuCapslock") }}
                 <InputText
@@ -68,7 +68,9 @@
                   v-model="productFormStore.data.barcode"
                 />
               </h5>
-              <h5 class="field-heading d-flex gap-1 align-items-center">
+            </MDBCol>
+            <MDBCol class="d-flex flex-column gap-3 col-auto">
+              <h5 class="field-heading d-flex gap-2 align-items-center">
                 {{ localize("brandCapslock") }}
                 <BrandSelector
                   :init-value="productFormStore.data.brand"
@@ -85,9 +87,7 @@
                   v-model="productFormStore.data.link"
                 />
               </h5>
-              <h5
-                class="field-heading d-flex flex-column gap-1 align-items-start"
-              >
+              <h5 class="field-heading d-flex gap-1 align-items-center">
                 <span class="field-heading separator">{{
                   localize("expirationDateCapslock")
                 }}</span>
@@ -105,12 +105,12 @@
         </MDBCol>
       </MDBRow>
     </Panel>
-    <MDBContainer class="description-section" fluid>
+    <MDBContainer class="description-section gap-2" fluid>
       <CategorySelector
         :init-value="productFormStore.data.category"
         :placeholder="placeholders.category"
       />
-      <h1 class="product-heading d-flex gap-1 align-items-center">
+      <h1 class="product-heading d-flex gap-2 align-items-center mr-2">
         {{ localize("productDescription") }}
         <CollectionSelector
           :init-value="productFormStore.data.collection"
@@ -180,7 +180,7 @@
               v-model="productFormStore.data.professionalPercent"
             />
           </h5>
-          <h5 class="field-heading">
+          <h5 class="field-heading mt-4">
             PROFESSIONAL PRICE
             <span class="field-value">{{ professionalPrice }}</span>
           </h5>
