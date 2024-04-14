@@ -9,8 +9,8 @@
       class="animate__animated animate__fadeIn storehouse-info d-flex flex-column gap-3"
     >
       <MDBRow class="d-flex flex-row justify-content-around w-100">
-        <MDBCol>
-          <h1 v-if="!editing" class="storehouse-heading">
+        <MDBCol class="gap-2 col-auto justify-center align-items-center">
+          <h1 v-if="!editing" class="storehouse-heading mb-2">
             {{ storehouseName }}
           </h1>
           <InputText
@@ -34,11 +34,14 @@
           <MDBBtn
             v-if="!editing && editBtnAvailable"
             @click="startEditing"
-            class="utility-btn"
+            class="utility-btn btn-edit"
             outline="black"
             >{{ localize("editStorehouse") }}</MDBBtn
           >
-          <MDBCol v-if="editing" class="d-flex justify-content-start gap-2">
+          <MDBCol
+            v-if="editing"
+            class="d-flex justify-content-start gap-2 mt-3"
+          >
             <MDBBtn
               @click="cancelEditing"
               class="utility-btn"
@@ -576,5 +579,11 @@ export default {
 }
 .qr {
   width: 20%;
+}
+.btn-edit {
+  margin-left: 2rem;
+}
+.username-input {
+  margin-right: 2rem;
 }
 </style>

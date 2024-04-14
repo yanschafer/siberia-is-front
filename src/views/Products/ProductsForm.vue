@@ -164,7 +164,7 @@
               v-model="productFormStore.data.distributorPercent"
             />
           </h5>
-          <h5 class="field-heading">
+          <h5 class="field-heading mt-4">
             DISTRIBUTION PRICE
             <span class="field-value">{{ distributionPrice }}</span>
           </h5>

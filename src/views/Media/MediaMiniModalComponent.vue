@@ -6,11 +6,11 @@
     :style="{ width: '80vw' }"
   >
     <ScrollPanel
-      style="height: 80vh; width: 75vw"
+      style="width: 75vw"
       class="main-area animate__animated animate__fadeIn"
     >
       <div class="card">
-        <DataView :paginator="true" :rows="6" :value="items" :layout="layout">
+        <DataView :paginator="true" :rows="12" :value="items" :layout="layout">
           <template #header>
             <div
               class="d-flex justify-content-between align-items-center position-sticky header"
@@ -23,7 +23,7 @@
                   @change="toggleAll"
                   :binary="true"
                 />
-                <Button @click="setSelected" class="btn-success btn utility-btn"
+                <Button @click="setSelected" class="btn utility-btn"
                   >SELECT</Button
                 >
                 <SearchComponent
@@ -305,8 +305,6 @@ export default defineComponent({
   margin-right: 20px;
 }
 .media-image {
-  //width: 300px;
-  //border-radius: 8px;
   max-width: 100%; /* Максимальная ширина изображения */
   max-height: 100%; /* Максимальная высота изображения */
   object-fit: cover; /* Обеспечивает покрытие всей области контейнера, сохраняя пропорции */
@@ -327,8 +325,8 @@ export default defineComponent({
   position: relative;
   border-radius: 8px;
   overflow: hidden;
-  width: 200px; /* Ширина контейнера */
-  height: 200px; /* Высота контейнера, равная ширине для создания квадрата */
+  width: 13vw; /* Ширина контейнера */
+  height: 13vw; /* Высота контейнера, равная ширине для создания квадрата */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -424,5 +422,20 @@ export default defineComponent({
     0 0 0 2px #ffffff,
     0 0 0 4px #000000,
     0 1px 2px 0 black !important;
+}
+.utility-btn {
+  height: 2rem;
+  width: 100%;
+  min-width: 4rem;
+  max-width: max-content;
+  font-weight: 800;
+  margin: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 7px;
+  background-color: black;
+  color: white;
 }
 </style>
