@@ -2,6 +2,7 @@ import BrandModel from "@/api/modules/brand/models/brand.model";
 import CollectionModel from "@/api/modules/collection/models/collection.model";
 import CategoryModel from "@/api/modules/category/models/category.model";
 import GalleryModel from "@/api/modules/gallery/models/gallery.model";
+import { EventObjectTypes } from "@/api/conf/app.conf";
 
 export default class HistoryOutputDto {
   rollbackDto;
@@ -55,11 +56,9 @@ export default class HistoryOutputDto {
   }
 
   init() {
-    console.log(this);
     const { rollbackInstance, afterInstance } = JSON.parse(
       this.rollbackInstance,
     );
-    console.log(rollbackInstance, afterInstance);
     this.rollbackDto = rollbackInstance;
     this.afterInstance = afterInstance;
   }
@@ -104,24 +103,32 @@ export default class HistoryOutputDto {
   }
 
   //For update requests
-  public async getBeforeAfterObject(): Promise<
-    Record<string, { before: any; after: any }>[]
-  > {
+  public async getBeforeAfterObject(
+    translator = (data) => data,
+  ): Promise<Record<string, { before: any; after: any }>[]> {
     const beforeAfterObject = {};
     const specialKeys = Object.keys(this.keyToLoader);
+    const beforeObject = translator(this.rollbackDto);
     await Promise.all(
-      Object.keys(this.rollbackDto).map(async (field) => {
-        const before = specialKeys.includes(field)
-          ? await this.loadSubModel(field, this.rollbackDto[field])
-          : this.rollbackDto[field];
+      Object.keys(beforeObject).map(async (field) => {
+        let key = field;
+        if (
+          this.eventObjectTypeId == EventObjectTypes.CATEGORY &&
+          field == "parent"
+        ) {
+          key = "category";
+        }
+        const before = specialKeys.includes(key)
+          ? await this.loadSubModel(key, beforeObject[field])
+          : beforeObject[field];
 
-        const after = specialKeys.includes(field)
-          ? await this.loadSubModel(field, this.afterInstance[field])
+        const after = specialKeys.includes(key)
+          ? await this.loadSubModel(key, this.afterInstance[field])
           : this.afterInstance[field];
 
         beforeAfterObject[field] = {
           before,
-          after,
+          after: after ?? "",
         };
       }),
     );
@@ -130,16 +137,54 @@ export default class HistoryOutputDto {
   }
 
   //For remove requests
-  public async getBeforeObject(): Promise<
-    Record<string, { before: any; after: string }>[]
-  > {
+  public async getBeforeObject(
+    translator = (data) => data,
+  ): Promise<Record<string, { before: any; after: string }>[]> {
     const beforeAfterObject = {};
-    Object.keys(this.rollbackDto).map((field) => {
-      beforeAfterObject[field] = {
-        before: this.rollbackDto[field],
-        after: "-",
-      };
-    });
+    const specialKeys = Object.keys(this.keyToLoader);
+    const beforeObject = translator(this.rollbackDto);
+    await Promise.all(
+      Object.keys(beforeObject).map(async (field) => {
+        let key = field;
+        if (
+          this.eventObjectTypeId == EventObjectTypes.CATEGORY &&
+          field == "parent"
+        ) {
+          key = "category";
+        }
+
+        const before = specialKeys.includes(key)
+          ? await this.loadSubModel(key, beforeObject[field])
+          : beforeObject[field];
+
+        beforeAfterObject[field] = {
+          before,
+          after: "-",
+        };
+      }),
+    );
+
+    return beforeAfterObject;
+  }
+
+  //For remove requests
+  public async getAfterObject(
+    translator = (data) => data,
+  ): Promise<Record<string, { before: any; after: string }>[]> {
+    const beforeAfterObject = {};
+    const specialKeys = Object.keys(this.keyToLoader);
+    const afterObject = translator(this.rollbackDto);
+    await Promise.all(
+      Object.keys(afterObject).map(async (field) => {
+        const after = specialKeys.includes(field)
+          ? await this.loadSubModel(field, afterObject[field])
+          : afterObject[field];
+        beforeAfterObject[field] = {
+          before: "-",
+          after,
+        };
+      }),
+    );
 
     return beforeAfterObject;
   }

@@ -73,7 +73,6 @@ export const useHistoryStore = defineStore({
         this.selectedItem = HistoryOutputDto.createFromDto({
           ...loaded.getData(),
         });
-        console.log(this.selectedItem);
       }
 
       return loaded;

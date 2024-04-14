@@ -22,7 +22,7 @@
     <div class="flex row row-operation">
       <template v-for="(item, key) in beforeAfter">
         <div class="d-flex flex-row">
-          <h5 class="operation-name">{{ key }}</h5>
+          <h5 class="operation-name">{{ firstLetterToUpperCase(key) }}</h5>
         </div>
         <div class="col-4">
           <h5 class="text">{{ item.before }}</h5>
@@ -61,12 +61,16 @@ export default defineComponent({
     };
   },
 
+  methods: {
+    firstLetterToUpperCase(str: string) {
+      const first = str.substring(0, 1);
+
+      return first.toUpperCase() + str.substring(1, str.length);
+    },
+  },
   computed: {
     isSelected() {
       return this.historyEventStore.isSelected;
-    },
-    objectName() {
-      return this.historyEventStore.eventObjectName;
     },
     beforeAfter() {
       return this.historyEventStore.beforeAfterObject;

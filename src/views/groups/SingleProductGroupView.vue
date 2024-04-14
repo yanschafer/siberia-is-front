@@ -103,7 +103,6 @@ export default {
       window.open(`${window.location.origin}/product/${row.id}`, "_blank");
     },
     async handleRowDelete(row) {
-      console.log(row);
       const res = await this.productGroupStore.removeProductFromGroup(
         this.groupId,
         row.id,

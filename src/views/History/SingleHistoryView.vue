@@ -4,11 +4,7 @@
       <MDBRow class="w-auto">
         <h1
           class="username-heading"
-          :style="
-            historyEventStore.link != null
-              ? 'text-decoration: underline; cursor: pointer'
-              : ''
-          "
+          :style="showLink ? 'text-decoration: underline; cursor: pointer' : ''"
           @click="navigate"
         >
           {{ targetName }} -> {{ type }}
@@ -32,16 +28,15 @@
   </MDBContainer>
   <MDBContainer class="pt-4">
     {{ description }}
-    <BeforeAfterComponent
-      v-if="historyEventStore.showBeforeAfter && selectedHistory.canBeReset"
-    />
+    <BeforeAfterComponent v-if="showBeforeAfter" />
     <TableComponent
-      v-if="historyEventStore.showTable"
+      v-if="showTable"
       :infoMessage="noDataMessage"
       :rows="filteredRows"
-      :columns="historyEventStore.table.columns"
-      :searchTerm="historyEventStore.table.searchTerm"
+      :columns="table.columns"
+      :searchTerm="table.searchTerm"
     />
+    <TabsComponent v-if="showRules" :roles="roles" />
   </MDBContainer>
 </template>
 
@@ -55,6 +50,7 @@ import BeforeAfterComponent from "@/views/History/BeforeAfterComponent.vue";
 import { useHistoryEventStore } from "@/stores/components/history-event.store";
 import Button from "primevue/button";
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "SingleHistoryView",
@@ -90,8 +86,6 @@ export default {
     const loaded = await historyStore.loadItem(
       parseInt(route.params.id.toString()),
     );
-    if (loaded.success && historyStore.selectedItem.canBeReset)
-      await historyEventStore.init(historyStore.selectedItem);
     return {
       historyStore,
       historyEventStore,
@@ -99,8 +93,13 @@ export default {
       loadItemRes: loaded,
     };
   },
-  created() {
+  async created() {
     this.loadItemRes.toastIfError(this.$toast, this.$nextTick);
+    if (this.loadItemRes.success)
+      await this.historyEventStore.init(this.historyStore.selectedItem);
+    setTimeout(() => {
+      LoggerUtil.debug(this.showRules, this.showTable, this.showBeforeAfter);
+    }, 1000);
   },
   computed: {
     selectedHistory() {
@@ -138,6 +137,27 @@ export default {
         );
       }
     },
+    showLink() {
+      return !!this.historyEventStore.link;
+    },
+    link() {
+      return this.historyEventStore.link;
+    },
+    showTable() {
+      return this.historyEventStore.showTable;
+    },
+    showBeforeAfter() {
+      return this.historyEventStore.showBeforeAfter;
+    },
+    showRules() {
+      return this.historyEventStore.showRules;
+    },
+    table() {
+      return this.historyEventStore.table;
+    },
+    roles() {
+      return this.historyEventStore.rulesComponent.roles;
+    },
   },
   methods: {
     localize(key, module = "history") {
@@ -156,7 +176,7 @@ export default {
       } else discarded.toastIfError(this.$toast, this.$nextTick);
     },
     navigate() {
-      this.router.push(this.historyEventStore.link);
+      if (this.showLink) this.router.push(this.link);
     },
   },
 };
