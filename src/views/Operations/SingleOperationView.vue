@@ -1,7 +1,7 @@
 <template>
   <MDBContainer class="single-user-info d-flex flex-column gap-3">
-    <MDBRow class="d-flex flex-row justify-content-around w-100">
-      <MDBCol>
+    <MDBRow class="d-flex flex-row justify-content-around main-row">
+      <MDBCol class="col-auto">
         <MDBRow class="d-flex">
           <MDBRow class="w-auto">
             <h1 class="username-heading">
@@ -15,8 +15,8 @@
             </h1>
           </MDBRow>
         </MDBRow>
-        <MDBRow class="d-flex flex-nowrap">
-          <MDBCol class="col-auto">
+        <MDBRow class="d-flex flex-nowrap mt-2">
+          <MDBCol class="col-auto col-status">
             <span class="user-roles-heading"
               >{{ localize("statusCapslock") }}:
             </span>
@@ -24,7 +24,10 @@
           </MDBCol>
           <template v-if="haveAvailableStatuses">
             <MDBCol class="col-auto">
-              <MDBBtn class="utility-btn" @click="toggleStatusChange">
+              <MDBBtn
+                class="btn-outline-black outlined utility-btn"
+                @click="toggleStatusChange"
+              >
                 {{ changeStatusTitle }}
               </MDBBtn>
             </MDBCol>
@@ -53,19 +56,19 @@
                   :items="storehousesList"
                 />
               </MDBCol>
-              <MDBBtn class="utility-btn" @click="saveStatus">
+              <MDBBtn
+                class="btn-outline-black outlined utility-btn"
+                @click="saveStatus"
+              >
                 {{ localize("save") }}
               </MDBBtn>
             </template>
           </template>
         </MDBRow>
       </MDBCol>
-      <MDBCol
-        v-if="transactionQrUrl && transactionQrUrl != ''"
-        class="d-flex flex-row justify-content-end"
-      >
+      <div v-if="transactionQrUrl && transactionQrUrl != ''" class="w-auto">
         <img class="qr" :src="transactionQrUrl" />
-      </MDBCol>
+      </div>
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="mt-4">
@@ -370,6 +373,15 @@ export default {
   font-weight: 600 !important;
 }
 .qr {
-  width: 20%;
+  width: 10rem;
+  height: 10rem;
+}
+.col-status {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+.main-row {
+  width: 85vw;
 }
 </style>

@@ -6,7 +6,10 @@
         <MDBCol
           class="col-auto animate__animated animate__flipInX animate__faster"
         >
-          <div class="product-img" @click="openMiniGallery"></div>
+          <div class="product-img placeholder-img" @click="openMiniGallery">
+            <IconUpload color="#bbc3c7" :size="48" stroke-width="2" />
+            <p class="upload-text">Choose files from gallery</p>
+          </div>
         </MDBCol>
         <MDBCol class="d-flex flex-column justify-content-center">
           <MDBRow>
@@ -215,6 +218,7 @@
 </template>
 
 <script lang="ts">
+import { IconUpload } from "@tabler/icons-vue";
 import MediaMiniModalComponent from "@/views/Media/MediaMiniModalComponent.vue";
 import DialogComponentTrigger from "@/components/Elements/Dialogs/DialogComponentTrigger.vue";
 import FileUpload from "primevue/fileupload";
@@ -257,6 +261,7 @@ export default {
     MDBBtn,
     InputText,
     Panel,
+    IconUpload,
   },
   async setup() {
     const brandSelectorStore = useBrandSelectorStore();
@@ -547,5 +552,21 @@ export default {
 }
 :deep(.p-panel) {
   border-top: 1px solid #e5e7eb;
+}
+.placeholder-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  opacity: 0.8;
+  transition: all 0.3s ease-in-out;
+}
+.placeholder-img:hover {
+  cursor: pointer;
+  opacity: 1;
+}
+.upload-text {
+  font-weight: 600;
+  color: #bbc3c7;
 }
 </style>

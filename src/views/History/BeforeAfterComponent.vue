@@ -1,7 +1,7 @@
 <template>
   <ScrollPanel
     v-if="isSelected"
-    style="height: 50vh; width: 88vw"
+    style="width: 88vw"
     class="main-area animate__animated animate__fadeIn"
   >
     <!-- TODO Вынести в отдельные компоненты -->
