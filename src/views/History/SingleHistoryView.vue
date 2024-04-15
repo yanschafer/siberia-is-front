@@ -2,7 +2,13 @@
   <MDBContainer class="single-user-info d-flex flex-column gap-3">
     <MDBRow class="d-flex">
       <MDBRow class="w-auto">
-        <h1 class="username-heading">{{ targetName }} -> {{ type }}</h1>
+        <h1
+          class="username-heading"
+          :style="showLink ? 'text-decoration: underline; cursor: pointer' : ''"
+          @click="navigate"
+        >
+          {{ targetName }} -> {{ type }}
+        </h1>
       </MDBRow>
     </MDBRow>
     <MDBRow class="d-flex flex-nowrap w-100">
@@ -13,11 +19,24 @@
       <span class="user-roles-heading">{{ localize("dateCapslock") }}</span>
       <span class="username">{{ date }}</span>
     </MDBRow>
-    <Button class="btn btn-danger utility-btn">Discard changes</Button>
+    <Button
+      v-if="selectedHistory.canBeReset"
+      class="btn btn-danger utility-btn"
+      @click="discard"
+      >Discard changes</Button
+    >
   </MDBContainer>
   <MDBContainer class="pt-4">
     {{ description }}
-    <BeforeAfterComponent />
+    <BeforeAfterComponent v-if="showBeforeAfter" />
+    <TableComponent
+      v-if="showTable"
+      :infoMessage="noDataMessage"
+      :rows="filteredRows"
+      :columns="table.columns"
+      :searchTerm="table.searchTerm"
+    />
+    <TabsComponent v-if="showRules" :roles="roles" />
   </MDBContainer>
 </template>
 
@@ -25,16 +44,22 @@
 import { MDBBadge, MDBBtn, MDBCol, MDBContainer, MDBRow } from "mdb-vue-ui-kit";
 import TabsComponent from "@/components/Inputs/TabsComponent.vue";
 import { useHistoryStore } from "@/stores/history.store";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import PrintUtil from "@/utils/localization/print.util";
 import BeforeAfterComponent from "@/views/History/BeforeAfterComponent.vue";
+import { useHistoryEventStore } from "@/stores/components/history-event.store";
+import Button from "primevue/button";
+import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "SingleHistoryView",
   components: {
+    TableComponent,
     BeforeAfterComponent,
-    MDBCol,
     TabsComponent,
+    Button,
+    MDBCol,
     MDBRow,
     MDBContainer,
     MDBBadge,
@@ -46,15 +71,35 @@ export default {
       required: true,
     },
   },
+  data: () => ({
+    noDataMessage: {
+      icon: "IconSearchOff",
+      title: PrintUtil.localize("nothingWasFound", "product"),
+      text: PrintUtil.localize("pleaseClarifyYourSearchQuery", "role"),
+    },
+  }),
   async setup() {
     const historyStore = useHistoryStore();
+    const historyEventStore = useHistoryEventStore();
     const route = useRoute();
+    const router = useRouter();
+    const loaded = await historyStore.loadItem(
+      parseInt(route.params.id.toString()),
+    );
     return {
       historyStore,
-      loadItemRes: await historyStore.loadItem(
-        parseInt(route.params.id.toString()),
-      ),
+      historyEventStore,
+      router,
+      loadItemRes: loaded,
     };
+  },
+  async created() {
+    this.loadItemRes.toastIfError(this.$toast, this.$nextTick);
+    if (this.loadItemRes.success)
+      await this.historyEventStore.init(this.historyStore.selectedItem);
+    setTimeout(() => {
+      LoggerUtil.debug(this.showRules, this.showTable, this.showBeforeAfter);
+    }, 1000);
   },
   computed: {
     selectedHistory() {
@@ -78,10 +123,60 @@ export default {
     description() {
       return this.selectedHistory.eventDescription;
     },
+    filteredRows() {
+      if (!this.historyEventStore.showTable) return [];
+
+      const searchTerm = this.historyEventStore.table.searchTerm;
+      if (searchTerm.trim() === "") {
+        return this.historyEventStore.tableRows;
+      } else {
+        return this.historyEventStore.tableRows.filter((row) =>
+          Object.values(row).some((value) =>
+            String(value).toLowerCase().includes(searchTerm.toLowerCase()),
+          ),
+        );
+      }
+    },
+    showLink() {
+      return !!this.historyEventStore.link;
+    },
+    link() {
+      return this.historyEventStore.link;
+    },
+    showTable() {
+      return this.historyEventStore.showTable;
+    },
+    showBeforeAfter() {
+      return this.historyEventStore.showBeforeAfter;
+    },
+    showRules() {
+      return this.historyEventStore.showRules;
+    },
+    table() {
+      return this.historyEventStore.table;
+    },
+    roles() {
+      return this.historyEventStore.rulesComponent.roles;
+    },
   },
   methods: {
     localize(key, module = "history") {
       return PrintUtil.localize(key, module);
+    },
+    async discard() {
+      const discarded = await this.historyStore.discard();
+      if (discarded.success) {
+        this.$toast.add({
+          severity: "info",
+          summary: "Success",
+          detail: `Event successfully discarded`,
+          life: 3000,
+        });
+        this.router.push({ name: "History" });
+      } else discarded.toastIfError(this.$toast, this.$nextTick);
+    },
+    navigate() {
+      if (this.showLink) this.router.push(this.link);
     },
   },
 };

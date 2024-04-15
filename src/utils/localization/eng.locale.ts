@@ -434,6 +434,10 @@ export default {
       "Collection event": "Collection Event",
       "Category event": "Category Event",
       "Transaction event": "Operation event",
+      "Product group event": "Product group update",
+      "Product massive update event": "Group applied",
+      "Product bulk create": "Products upload",
+      "User rights update": "User rights update",
     },
     operations: {
       Arrival: "Arrival",
