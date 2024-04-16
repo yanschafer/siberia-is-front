@@ -11,7 +11,7 @@ export const useFiltersStore = defineStore({
   },
   actions: {
     setFilters(filters) {
-      LoggerUtil.debug("FILTERS WAS UPDATED");
+      LoggerUtil.debug("FILTERS WAS UPDATED", filters);
       this.filters = filters;
     },
     clearFilter() {},
