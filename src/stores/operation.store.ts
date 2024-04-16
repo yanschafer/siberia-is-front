@@ -9,6 +9,7 @@ import TransactionSimpleDto from "@/api/modules/transaction/dto/transaction-simp
 import TransactionSearchFilterDto from "@/api/modules/transaction/dto/transaction-search-filter.dto";
 import PrintUtil from "@/utils/localization/print.util";
 import WriteOffTransactionModel from "@/api/modules/transaction/models/write-off-transaction.model";
+import TransactionDto from "@/api/modules/transaction/dto/transaction.dto";
 
 const localize = (key, module = "operations") =>
   PrintUtil.localize(key, module);
@@ -59,6 +60,18 @@ export const useOperationStore = defineStore({
         this.selectedOperation = selected.getData();
       }
       return selected;
+    },
+    catchTransactionSocketUpdate(
+      transactionId: number,
+      transactionDto: TransactionDto,
+    ) {
+      if (!this.selectedOperation || transactionId != this.selectedOperation.id)
+        return;
+
+      if (this.selectedOperation.id == transactionId)
+        this.selectedOperation = {
+          ...transactionDto,
+        };
     },
     async changeStatus(
       operationId: number,

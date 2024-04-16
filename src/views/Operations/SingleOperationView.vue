@@ -105,6 +105,7 @@ import ApiResponseDto from "@/api/dto/api-response.dto";
 import PrintUtil from "@/utils/localization/print.util";
 import TokenUtil from "@/utils/token.util";
 import AuthModel from "@/api/modules/auth/models/auth.model";
+import { useTransactionSocketHandler } from "@/stores/transaction-socket-handler.store";
 
 export default {
   name: "SingleOperationView",
@@ -157,12 +158,14 @@ export default {
   async setup() {
     const operationStore = useOperationStore();
     const storehousesStore = useStorehousesStore();
+    const transactionSocketHandler = useTransactionSocketHandler();
     const route = useRoute();
 
     return {
       transactionId: parseInt(route.params.id.toString()),
       operationStore,
       storehousesStore,
+      transactionSocketHandler,
       loadStocksRes: await storehousesStore.loadStorehouseList(),
       loadOperationRes: await operationStore.loadSelectedOperation(
         parseInt(route.params.id.toString()),
@@ -183,6 +186,16 @@ export default {
         field: "price",
         header: this.localize("priceCapslock"),
       });
+
+    this.transactionSocketHandler.$onAction((action) => {
+      if (action.name == "updateTransaction") {
+        this.operationStore.catchTransactionSocketUpdate(
+          action.args[0],
+          action.args[1],
+        );
+      }
+      LoggerUtil.debug("NEW ACTION", action);
+    });
   },
   methods: {
     localize(key, module = "operations") {

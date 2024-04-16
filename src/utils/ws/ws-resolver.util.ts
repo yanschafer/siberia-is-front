@@ -5,24 +5,25 @@ import ApiModelUtil from "@/utils/api-model.util";
 import TokenUtil from "@/utils/token.util";
 import WebSocketRequestHeadersDto from "@/utils/ws/dto/web-socket-request-headers.dto";
 import loggerUtil from "@/utils/logger/logger.util";
+import LoggerUtil from "@/utils/logger/logger.util";
+
+export const WsHandlers: Record<string, Function[]> = {
+  "*": [
+    (event: WebSocketEventDto<any>) => {
+      loggerUtil.debugPrefixed(
+        "WebSocket",
+        `New event from socket (type=${event.type}):`,
+        event.data,
+      );
+    },
+  ],
+};
 
 export default class WsResolverUtil {
   private socket: WebSocket | null;
   private isActive: boolean;
   private whileInactive: WebSocketRequestDto[] = [];
   private reconnectAttempts = 0;
-
-  handlers: Record<string, Function[]> = {
-    "*": [
-      (event: WebSocketEventDto<any>) => {
-        loggerUtil.debugPrefixed(
-          "WebSocket",
-          `New event from socket (type=${event.type}):`,
-          event.data,
-        );
-      },
-    ],
-  };
 
   public close() {
     if (this.socket) this.socket?.close(3488);
@@ -43,8 +44,10 @@ export default class WsResolverUtil {
 
         this.socket.onmessage = (event: MessageEvent) => {
           const eventObj = JSON.parse(event.data);
-          const eventHandlers = this.handlers[eventObj.type];
-          let handlers = this.handlers["*"];
+          LoggerUtil.debug(eventObj, event.data);
+          const eventHandlers = WsHandlers[eventObj.type];
+          let handlers = WsHandlers["*"];
+          LoggerUtil.debug(handlers, WsHandlers);
           if (eventHandlers) handlers = handlers.concat(eventHandlers);
           handlers.forEach((handler) => {
             handler(eventObj);
@@ -119,7 +122,10 @@ export default class WsResolverUtil {
   }
 
   protected subscribe(type: string, callback: Function) {
-    if (this.handlers[type]) this.handlers[type].push(callback);
-    else this.handlers[type] = [callback];
+    LoggerUtil.debug(type, callback);
+    if (WsHandlers[type]) WsHandlers[type].push(callback);
+    else WsHandlers[type] = [callback];
+
+    LoggerUtil.debug("CURRENT HANDLERS", WsHandlers);
   }
 }
