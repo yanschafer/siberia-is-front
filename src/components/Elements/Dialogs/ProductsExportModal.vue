@@ -43,9 +43,14 @@ export default defineComponent({
     header="Export to file"
     :style="{ width: '80vw', height: '90vh' }"
   >
-    <div class="row">
-      <p>Columns for export</p>
-      <MultiSelectComponent />
+    <div class="row justify-content-between">
+      <div class="col-auto">
+        <p>Columns for export</p>
+        <!--      <MultiSelectComponent />-->
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-outline-black utility-btn">Exoprt</button>
+      </div>
     </div>
     <MDBContainer class="d-flex container-content">
       <MDBCol class="col-auto">
