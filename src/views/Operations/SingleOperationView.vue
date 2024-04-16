@@ -1,6 +1,6 @@
 <template>
   <MDBContainer class="single-user-info d-flex flex-column gap-3">
-    <MDBRow class="d-flex flex-row justify-content-around main-row">
+    <MDBRow class="d-flex flex-row justify-content-between main-row">
       <MDBCol class="col-auto">
         <MDBRow class="d-flex">
           <MDBRow class="w-auto">
