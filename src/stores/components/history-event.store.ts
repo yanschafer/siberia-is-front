@@ -158,6 +158,7 @@ export const useHistoryEventStore = defineStore({
           }
           break;
         default:
+          this.hideBeforeAfter = false;
           this.beforeAfterObject =
             await this.selectedEvent[beforeAfterResolver]();
       }
