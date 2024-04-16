@@ -70,34 +70,46 @@
       >
         <h1 class="storehouse-heading">{{ localize("productsInStock") }}</h1>
         <template v-if="!newArrival && !newSale && !newRequest && !newWriteOff">
-          <MDBBtn
-            v-if="arrivalAvailable"
-            @click="addNewArrival"
-            class="utility-btn"
-            outline="black"
-            >{{ localize("newArrivalCapslock") }}</MDBBtn
-          >
-          <MDBBtn
-            v-if="saleAvailable"
-            @click="addNewSale"
-            class="utility-btn"
-            outline="black"
-            >{{ localize("newSaleCapslock") }}</MDBBtn
-          >
-          <MDBBtn
-            v-if="requestAvailable"
-            @click="addNewRequest"
-            class="utility-btn"
-            outline="black"
-            >{{ localize("newRequestCapslock") }}</MDBBtn
-          >
-          <MDBBtn
-            v-if="requestAvailable"
-            @click="addWriteOff"
-            class="utility-btn"
-            outline="black"
-            >- WRITE-OFF</MDBBtn
-          >
+          <div class="row buttons-row gap-2">
+            <MDBBtn
+              v-if="arrivalAvailable"
+              @click="addNewArrival"
+              class="utility-btn"
+              outline="black"
+              >{{ localize("newArrivalCapslock") }}</MDBBtn
+            >
+
+            <MDBBtn
+              v-if="saleAvailable"
+              @click="addNewSale"
+              class="utility-btn"
+              outline="black"
+              >{{ localize("newSaleCapslock") }}</MDBBtn
+            >
+            <MDBBtn
+              v-if="requestAvailable"
+              @click="addNewRequest"
+              class="utility-btn"
+              outline="black"
+              >{{ localize("newRequestCapslock") }}</MDBBtn
+            >
+            <MDBBtn
+              v-if="requestAvailable"
+              @click="addWriteOff"
+              class="utility-btn"
+              outline="black"
+              >- WRITE-OFF</MDBBtn
+            >
+            <MDBBtn
+              v-if="arrivalAvailable"
+              @click="addNewArrival"
+              class="utility-btn upload-btn"
+              outline="black"
+              ><IconUpload color="black" :size="15" stroke-width="2" />
+              UPLOAD</MDBBtn
+            >
+          </div>
+
           <SearchComponent class="search" @search="handleSearch" />
           <TableComponent
             :info-message="noDataMessage"
@@ -148,7 +160,7 @@
 </template>
 
 <script lang="ts">
-import { IconMapPinFilled, IconRoute } from "@tabler/icons-vue";
+import { IconMapPinFilled, IconRoute, IconUpload } from "@tabler/icons-vue";
 import { MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow } from "mdb-vue-ui-kit";
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import SearchComponent from "@/components/Inputs/SearchComponent.vue";
@@ -184,6 +196,7 @@ export default {
     TableComponent,
     IconRoute,
     IconMapPinFilled,
+    IconUpload,
     MDBBtn,
     MDBContainer,
     MDBRow,
@@ -545,6 +558,7 @@ export default {
   margin-bottom: 0;
   color: #121212;
   font-size: 32px;
+  padding-left: 0;
   width: fit-content;
 }
 .storehouse-adress {
@@ -556,7 +570,7 @@ export default {
 }
 .search {
   width: 100%;
-  max-width: 20vw;
+  max-width: 95vw;
   display: flex;
   justify-content: center;
   align-content: center;
@@ -585,5 +599,12 @@ export default {
 }
 .username-input {
   margin-right: 2rem;
+}
+.upload-btn {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  gap: 5px;
 }
 </style>

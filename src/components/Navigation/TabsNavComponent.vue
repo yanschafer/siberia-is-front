@@ -1,14 +1,19 @@
 <template>
-  <div class="tabs-row d-flex flex-row">
-    <template v-for="tab in getTabs">
-      <div
-        class="tab-item"
-        :class="{ active: isActive(tab.id) }"
-        @click="tabClicked(tab)"
-      >
-        {{ tab.label }}
-      </div>
-    </template>
+  <div class="tabs-row d-flex flex-row justify-content-between">
+    <div class="tabs-names d-flex flex-row">
+      <template v-for="tab in getTabs">
+        <div
+          class="tab-item"
+          :class="{ active: isActive(tab.id) }"
+          @click="tabClicked(tab)"
+        >
+          {{ tab.label }}
+        </div>
+      </template>
+    </div>
+    <div class="utility-button">
+      <ProductsExportModal />
+    </div>
   </div>
 </template>
 
@@ -17,9 +22,11 @@ import { defineComponent } from "vue";
 import { useNavTabsStore } from "@/stores/nav-tabs.store";
 import NavTabDto from "@/router/dto/nav-tab.dto";
 import { useRouter } from "vue-router";
+import ProductsExportModal from "@/components/Elements/Dialogs/ProductsExportModal.vue";
 
 export default {
   name: "TabsNavComponent",
+  components: { ProductsExportModal },
   setup() {
     const navTabsStore = useNavTabsStore();
     const router = useRouter();
@@ -74,5 +81,9 @@ export default {
   color: black;
   background-color: #f6f6f6;
   transition: all 0.3s ease-in-out;
+}
+.utility-button {
+  display: flex;
+  align-items: center;
 }
 </style>
