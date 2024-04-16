@@ -325,18 +325,24 @@ export default {
         parseFloat(this.productFormStore.data.distributorPercent) || 0;
       const base = parseFloat(this.productFormStore.data.commonPrice) || 0;
 
-      return (percent / 100) * base;
+      const price = (percent / 100) * base;
+
+      return Math.round(price * 100) / 100;
     },
     professionalPrice() {
       const percent =
         parseFloat(this.productFormStore.data.professionalPercent) || 0;
       const base = parseFloat(this.productFormStore.data.commonPrice) || 0;
 
-      return (percent / 100) * base;
+      const price = (percent / 100) * base;
+
+      return Math.round(price * 100) / 100;
     },
   },
   created() {
     LoggerUtil.debug(this.productFormStore.data);
+    this.productFormStore.data.expirationDatePure =
+      this.productFormStore.data.expirationDate / 24 / 60 / 1000;
   },
   methods: {
     localize(key, module = "products") {
