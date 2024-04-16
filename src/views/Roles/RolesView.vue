@@ -1,8 +1,8 @@
 <template>
   <template v-if="!isIdProvided">
-    <SearchComponent @search="handleSearch" />
+    <SearchComponent class="search" @search="handleSearch" />
     <TableComponent
-        :info-message="noDataMessage"
+      :info-message="noDataMessage"
       :rows="filteredRoles"
       :columns="rolesStore.rolesColumns"
       :searchTerm="rolesStore.searchTerm"
@@ -32,7 +32,7 @@ export default {
         title: this.localize("nothingWasFound", "role"),
         text: this.localize("pleaseClarifyYourSearchQuery", "role"),
       },
-    }
+    };
   },
   async setup() {
     const rolesStore = useRolesStore();
@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     localize(key, module) {
-          return PrintUtil.localize(key, module);
+      return PrintUtil.localize(key, module);
     },
     handleSearch(searchTerm) {
       this.rolesStore.searchTerm = searchTerm;
@@ -82,4 +82,8 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.search {
+  width: 87vw;
+}
+</style>

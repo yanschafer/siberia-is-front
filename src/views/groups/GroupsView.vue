@@ -10,8 +10,8 @@
   <TabsNavComponent />
   <MDBContainer class="d-flex container-content">
     <MDBCol class="col-auto">
-      <MDBContainer class="table-container">
-        <SearchComponent @search="handleSearch" />
+      <MDBContainer class="table-container mt-3">
+        <SearchComponent class="search" @search="handleSearch" />
         <TableComponent
           :info-message="noDataMessage"
           :enable-delete="true"
@@ -126,4 +126,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.search {
+  width: 90vw;
+}
+</style>

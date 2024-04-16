@@ -105,7 +105,7 @@
                 :key="index"
                 class="col-12 col-sm-6 col-md-4 col-xl-3 p-2"
               >
-                <div class="p-4 border border-light rounded d-flex flex-column">
+                <div class="p-4 border rounded d-flex flex-column image-col">
                   <div @click="openModal(image)" class="image-container">
                     <img
                       class="img-fluid media-image"
@@ -147,7 +147,7 @@
                         class="d-flex flex-column justify-center align-items-start col-6"
                       >
                         <h5 class="m-0 heading-list">{{ image.name }}</h5>
-                        <p class="text-muted m-0">{{ image.url }}</p>
+                        <!--                        <p class="text-muted m-0">{{ image.url }}</p>-->
                       </div>
                     </div>
                   </div>
@@ -437,5 +437,15 @@ export default defineComponent({
   border-radius: 7px;
   background-color: black;
   color: white;
+}
+.image-col {
+  width: 15rem;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  border: 1px solid #bbbbbb;
+  height: 24rem;
 }
 </style>

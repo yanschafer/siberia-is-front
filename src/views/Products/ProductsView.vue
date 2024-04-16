@@ -5,13 +5,13 @@
   >
     <template v-if="!isIdProvided">
       <TabsNavComponent />
-      <MDBContainer class="d-flex container-content">
+      <MDBContainer class="d-flex container-content mt-3">
         <MDBCol class="col-auto">
           <FiltersSidebarComponent @start-search="handleFiltersSearch" />
         </MDBCol>
         <MDBCol class="col-auto">
-          <MDBContainer class="table-container">
-            <SearchComponent @search="handleSearch" />
+          <MDBContainer class="table-container mt-2">
+            <SearchComponent class="search" @search="handleSearch" />
             <TableComponent
               :info-message="noDataMessage"
               :editableColumns="editableColumns"
@@ -295,5 +295,8 @@ export default {
 .main-area {
   overflow-x: hidden !important;
   overflow-y: hidden !important;
+}
+.search {
+  width: 90vw;
 }
 </style>

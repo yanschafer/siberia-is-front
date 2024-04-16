@@ -86,10 +86,10 @@
                     <h5 class="m-0 heading-list">FILE NAME</h5>
                     <p class="text-muted m-0">{{ image.name }}</p>
                   </div>
-                  <!--div class="d-flex flex-column col-2 justify-center">
+                  <div class="d-flex flex-column col-2 justify-center">
                     <h5 class="heading-list m-0">USED FOR</h5>
                     <p class="text-muted m-0">Product #1</p>
-                  </div-->
+                  </div>
                   <div class="d-flex flex-column col-2 justify-center">
                     <Button
                       @click="removeImage(image)"
@@ -108,9 +108,9 @@
             <div
               v-for="(image, index) in slotProps.items"
               :key="index"
-              class="col-12 col-sm-6 col-md-4 col-xl-3 p-2"
+              class="col-auto"
             >
-              <div class="p-4 border border-light rounded d-flex flex-column">
+              <div class="p-2 border rounded col-auto image-col mt-2">
                 <div @click="openModal(image)" class="image-container">
                   <img
                     class="img-fluid media-image"
@@ -149,7 +149,7 @@
                       class="d-flex flex-column justify-center align-items-start col-6"
                     >
                       <h5 class="m-0 heading-list">{{ image.name }}</h5>
-                      <p class="text-muted m-0">{{ image.url }}</p>
+                      <!--                      <p class="text-muted m-0">{{ image.url }}</p>-->
                     </div>
                   </div>
                 </div>
@@ -289,7 +289,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .product-list-item,
 .product-grid-item {
   display: flex;
@@ -324,8 +324,8 @@ export default {
   position: relative;
   border-radius: 8px;
   overflow: hidden;
-  width: 300px; /* Ширина контейнера */
-  height: 300px; /* Высота контейнера, равная ширине для создания квадрата */
+  width: 10vw; /* Ширина контейнера */
+  height: 20vh; /* Высота контейнера, равная ширине для создания квадрата */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -385,11 +385,12 @@ export default {
   z-index: 999999999 !important;
 }
 .heading-list {
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: 800;
+  width: 100%;
 }
 .search {
-  width: 40vw !important;
+  width: 50vw;
   margin-bottom: 0 !important;
 }
 .p-inputtext {
@@ -415,5 +416,15 @@ export default {
     0 0 0 2px #ffffff,
     0 0 0 4px #000000,
     0 1px 2px 0 black !important;
+}
+.image-col {
+  width: 15rem;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  border: 1px solid #bbbbbb;
+  height: 16rem;
 }
 </style>

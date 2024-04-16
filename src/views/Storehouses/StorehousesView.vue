@@ -1,9 +1,10 @@
 <template>
-  <div class="container-fluid" style="padding: 0; width: 86vw">
+  <div class="container-fluid mt-3" style="padding: 0; width: 86vw">
     <template v-if="!isIdProvided">
       <SearchComponent
         v-model="storehousesStore.searchTerm"
         @search="handleSearch"
+        class="search"
       />
       <TableComponent
         :rows="filteredStorehouses"
@@ -94,4 +95,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.search {
+  width: 90vw;
+}
+</style>

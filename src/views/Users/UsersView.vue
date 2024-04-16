@@ -6,7 +6,7 @@
           <FiltersSidebarComponent @start-search="handleFiltersSearch" />
         </MDBCol>
         <MDBCol class="col-auto">
-          <SearchComponent @search="handleSearch" />
+          <SearchComponent class="search" @search="handleSearch" />
           <TableComponent
             :infoMessage="noDataMessage"
             :rows="filteredUsers"
@@ -125,4 +125,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.search {
+  width: 84vw;
+}
+</style>
