@@ -40,6 +40,12 @@
             :title="filter.title"
             @change="handleFilterChange(filter, $event)"
           />
+          <CheckboxFilter
+            v-if="isCheckbox(filter)"
+            :title="filter.title"
+            :default-value="filter.value"
+            @change="handleFilterChange(filter, $event)"
+          />
         </template>
         <MDBRow>
           <MDBCol>
@@ -60,28 +66,25 @@
 
 <script lang="ts">
 import { IconAdjustmentsHorizontal } from "@tabler/icons-vue";
-import InputText from "primevue/inputtext";
-import InputNumber from "primevue/inputnumber";
 import SelectComponent from "@/components/Elements/Selectors/SelectComponent.vue";
 import { MDBBtn, MDBCol, MDBRow } from "mdb-vue-ui-kit";
 import TextFilter from "@/components/Elements/Filter sidebar/Filter items/TextFilter.vue";
 import SelectorFilter from "@/components/Elements/Filter sidebar/Filter items/SelectorFilter.vue";
 import MinMaxFilter from "@/components/Elements/Filter sidebar/Filter items/MinMaxFilter.vue";
-import loggerUtil from "@/utils/logger/logger.util";
 import { FilterType } from "@/api/conf/app.conf";
-import filesResolverUtil from "@/utils/files-resolver.util";
-import ProductSearchFilterDto from "@/api/modules/product/dto/product-search-filter.dto";
 import FieldSearchWrapperDto from "@/utils/crud/dto/field-search-wrapper.dto";
 import MinMaxDateFilter from "@/components/Elements/Filter sidebar/Filter items/MinMaxDateFilter.vue";
 import TreeSelectorFilter from "@/components/Elements/Filter sidebar/Filter items/TreeSelectorFilter.vue";
-import ScrollPanel from "primevue/scrollpanel";
 import PrintUtil from "@/utils/localization/print.util";
-import { useCategoriesStore } from "@/stores/categories.store";
 import { useFiltersStore } from "@/stores/filters.store";
+import CheckboxFilter from "@/components/Elements/Filter sidebar/Filter items/CheckboxFilter.vue";
+import ScrollPanel from "primevue/scrollpanel";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "FiltersSidebarComponent",
   components: {
+    CheckboxFilter,
     TreeSelectorFilter,
     MinMaxDateFilter,
     MinMaxFilter,
@@ -89,18 +92,10 @@ export default {
     TextFilter,
     SelectComponent,
     IconAdjustmentsHorizontal,
-    InputText,
-    InputNumber,
-    ScrollPanel,
     MDBRow,
     MDBCol,
     MDBBtn,
-  },
-  props: {
-    // filtersInput: {
-    //   type: Object,
-    //   default: {},
-    // },
+    ScrollPanel,
   },
   emits: ["startSearch"],
   data() {
@@ -139,10 +134,12 @@ export default {
       this.collapsed = !this.collapsed;
     },
     handleFilterChange(filterItem, value) {
+      LoggerUtil.debug(value);
       this.filters?.forEach((el, index) => {
         if (el.key == filterItem.key) this.filters[index].value = value;
       });
       this.filtersObject[filterItem.key].value = value;
+      LoggerUtil.debug(this.filtersObject);
     },
     search() {
       const searchFilterDto = {};
@@ -155,6 +152,8 @@ export default {
             else return filtered;
           })();
         if (filter.type == FilterType.TEXT && filter.value)
+          searchFilterDto[key] = filter.value;
+        if (filter.type == FilterType.CHECKBOX)
           searchFilterDto[key] = filter.value;
         if (
           filter.type == FilterType.NUMBER &&
@@ -186,6 +185,9 @@ export default {
     },
     isDate(filter) {
       return filter.type == FilterType.DATE;
+    },
+    isCheckbox(filter) {
+      return filter.type == FilterType.CHECKBOX;
     },
   },
 };

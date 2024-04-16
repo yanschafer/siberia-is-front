@@ -77,6 +77,11 @@ export default {
     this.loadStocksRes.toastIfError(this.$toast, this.$nextTick);
     this.loadStatusesRes.toastIfError(this.$toast, this.$nextTick);
     this.filtersStore.setFilters({
+      showClosed: {
+        title: "Show closed operations",
+        type: FilterType.CHECKBOX,
+        value: false,
+      },
       status: {
         title: "Operation status",
         type: FilterType.SELECT,
@@ -150,6 +155,7 @@ export default {
       });
     },
     async handleFiltersSearch(filter) {
+      LoggerUtil.debug(filter);
       await this.operationStore.loadOperationList(filter);
     },
   },

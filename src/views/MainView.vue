@@ -89,7 +89,7 @@ export default {
       } else {
         return this.$route.matched.map((route) => ({
           label: route.meta.name,
-          name: route.meta.name || "dashboard",
+          name: route.name || "dashboard",
         }));
       }
     },
