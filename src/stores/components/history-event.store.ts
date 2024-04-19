@@ -144,6 +144,7 @@ export const useHistoryEventStore = defineStore({
 
       switch (this.selectedEvent.eventObjectTypeId) {
         case EventObjectTypes.MASSIVE_PRODUCT_UPDATE:
+          this.hideBeforeAfter = false;
           this.beforeAfterObject = await this.selectedEvent[
             beforeAfterResolver
           ]((data) => data.massiveUpdateDto);
@@ -172,6 +173,7 @@ export const useHistoryEventStore = defineStore({
           this.table.rows = this.selectedEvent.rollbackDto.productsList;
           this.table.columns = useProductsStore().productColumns;
           this.table.searchTerm = "";
+          this.hideTable = false;
           break;
         case EventObjectTypes.MASSIVE_PRODUCT_UPDATE:
           this.table.rows = this.selectedEvent.rollbackDto.productsData.map(
@@ -179,6 +181,7 @@ export const useHistoryEventStore = defineStore({
           );
           this.table.columns = useProductsStore().productColumns;
           this.table.searchTerm = "";
+          this.hideTable = false;
           break;
         case EventObjectTypes.USER_RIGHTS:
           if (this.selectedEvent.rollbackRoute == "user/rules") {
@@ -201,6 +204,7 @@ export const useHistoryEventStore = defineStore({
           }
           break;
       }
+      LoggerUtil.debug("Init table", this.table);
     },
 
     async initRules() {

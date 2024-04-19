@@ -97,9 +97,6 @@ export default {
     this.loadItemRes.toastIfError(this.$toast, this.$nextTick);
     if (this.loadItemRes.success)
       await this.historyEventStore.init(this.historyStore.selectedItem);
-    setTimeout(() => {
-      LoggerUtil.debug(this.showRules, this.showTable, this.showBeforeAfter);
-    }, 1000);
   },
   computed: {
     selectedHistory() {

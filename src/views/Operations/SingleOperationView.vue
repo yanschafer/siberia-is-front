@@ -194,7 +194,6 @@ export default {
           action.args[1],
         );
       }
-      LoggerUtil.debug("NEW ACTION", action);
     });
   },
   methods: {
