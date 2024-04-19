@@ -10,6 +10,8 @@ import NotificationSocketModel from "@/api/modules/notification/models/notificat
 import { useAuthCheckStore } from "@/stores/auth-check.store";
 import router from "@/router/index";
 import PrintUtil from "@/utils/localization/print.util";
+import TransactionSocketModel from "@/api/modules/transaction/models/transaction-socket.model";
+import { useTransactionSocketHandler } from "@/stores/transaction-socket-handler.store";
 
 export default class ApiModelUtil {
   constructor(private baseEndpoint: string) {}
@@ -238,6 +240,14 @@ export default class ApiModelUtil {
         });
       }
       await ApiModelUtil.refreshInterface();
+    });
+    TransactionSocketModel.setTransactionUpdateCallback(async (eventData) => {
+      const transactionSocketStore = useTransactionSocketHandler();
+      const transactionData = JSON.parse(eventData.data);
+      transactionSocketStore.updateTransaction(
+        transactionData.id,
+        transactionData,
+      );
     });
     NotificationSocketModel.init();
   }
