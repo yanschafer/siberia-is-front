@@ -35,16 +35,18 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
+    const loaders = await Promise.all([storehousesStore.loadStorehouseList()]);
+
     return {
       storehousesStore,
       route,
       router,
-      loadStockListRes: await storehousesStore.loadStorehouseList(),
+      loaders,
       authCheckStore,
     };
   },
   created() {
-    this.loadStockListRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
     this.authCheckStore.$onAction(async ({ name }) => {
       if (name == "refresh") {
         const loadRes = await this.storehousesStore.loadStorehouseList();

@@ -101,10 +101,26 @@ export default {
     const router = useRouter();
 
     tabNavStore.setTabs([
-      new NavTabDto(1, "Single products", null, () => {}),
-      new NavTabDto(2, "Grouped products", new RouteParametrized("groups")),
+      new NavTabDto(
+        1,
+        PrintUtil.localize("singleProducts", "components"),
+        null,
+        () => {},
+      ),
+      new NavTabDto(
+        2,
+        PrintUtil.localize("groupedProducts", "components"),
+        new RouteParametrized("groups"),
+      ),
     ]);
     tabNavStore.setActive(0);
+
+    const loaders = await Promise.all([
+      productsStore.loadProductList(),
+      brandStore.loadBrandsList(),
+      collectionStore.loadCollectionList(),
+      categoryStore.loadCategoriesList(),
+    ]);
 
     return {
       tabNavStore,
@@ -116,10 +132,7 @@ export default {
       productGroupStore,
       route,
       router,
-      loadProductListRes: await productsStore.loadProductList(),
-      loadBrandListRes: await brandStore.loadBrandsList(),
-      loadCollectionListRes: await collectionStore.loadCollectionList(),
-      loadCategoryListRes: await categoryStore.loadCategoriesList(),
+      loaders,
     };
   },
   created() {
@@ -187,10 +200,7 @@ export default {
         type: FilterType.SELECT,
       },
     });
-    this.loadProductListRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadBrandListRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadCollectionListRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadCategoryListRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
   },
   computed: {
     getFilteredProducts() {

@@ -71,12 +71,16 @@ const routes = [
         component: () => import("@/views/Media/MediaView.vue"),
         meta: {
           buttons: [
-            new HeaderBtnDto("+ ADD", null, () => {
-              const mediaStore = useMediaModalStore();
-              mediaStore.openUploadModal();
-            }),
+            new HeaderBtnDto(
+              PrintUtil.localize("+ ADD", "router"),
+              null,
+              () => {
+                const mediaStore = useMediaModalStore();
+                mediaStore.openUploadModal();
+              },
+            ),
           ],
-          name: "Media",
+          name: PrintUtil.localize("Media", "router"),
         },
       },
       {
@@ -89,11 +93,18 @@ const routes = [
             appConf.rules.viewProductsList,
           ],
           buttons: [
-            new HeaderBtnDto("+ ADD", new RouteParametrized("New product")),
-            new HeaderBtnDto("UPLOAD", null, () => {
-              const mediaStore = useMediaModalStore();
-              mediaStore.openUploadProducts();
-            }),
+            new HeaderBtnDto(
+              PrintUtil.localize("+ ADD", "router"),
+              new RouteParametrized("New product"),
+            ),
+            new HeaderBtnDto(
+              PrintUtil.localize("UPLOAD", "router"),
+              null,
+              () => {
+                const mediaStore = useMediaModalStore();
+                mediaStore.openUploadProducts();
+              },
+            ),
           ],
           name: PrintUtil.localize("products", "router"),
         },
@@ -117,11 +128,17 @@ const routes = [
         meta: {
           breadcrumbs: [
             new BreadcrumbDto(
-              "Siberia panel",
+              PrintUtil.localize("panelName", "router"),
               new RouteParametrized("dashboard"),
             ),
-            new BreadcrumbDto("Products", new RouteParametrized("products")),
-            new BreadcrumbDto("New product", new RouteParametrized("products")),
+            new BreadcrumbDto(
+              PrintUtil.localize("products", "router"),
+              new RouteParametrized("products"),
+            ),
+            new BreadcrumbDto(
+              PrintUtil.localize("NewProduct", "router"),
+              new RouteParametrized("products"),
+            ),
           ],
           name: PrintUtil.localize("NewProduct", "router"),
         },
@@ -134,21 +151,25 @@ const routes = [
         meta: {
           breadcrumbs: [
             new BreadcrumbDto(
-              "Siberia panel",
+              PrintUtil.localize("panelName", "router"),
               new RouteParametrized("dashboard"),
             ),
             new BreadcrumbDto(
-              "Grouped products",
+              PrintUtil.localize("Groups", "router"),
               new RouteParametrized("groups"),
             ),
           ],
           buttons: [
-            new HeaderBtnDto("+ ADD", null, () => {
-              const groupModalStore = useAddToGroupModalStore();
-              groupModalStore.openCreateModal();
-            }),
+            new HeaderBtnDto(
+              PrintUtil.localize("+ ADD", "router"),
+              null,
+              () => {
+                const groupModalStore = useAddToGroupModalStore();
+                groupModalStore.openCreateModal();
+              },
+            ),
           ],
-          name: "Groups",
+          name: PrintUtil.localize("Groups", "router"),
         },
       },
       {
@@ -159,16 +180,19 @@ const routes = [
         meta: {
           breadcrumbs: [
             new BreadcrumbDto(
-              "Siberia panel",
+              PrintUtil.localize("panelName", "router"),
               new RouteParametrized("dashboard"),
             ),
             new BreadcrumbDto(
-              "Grouped products",
+              PrintUtil.localize("Groups", "router"),
               new RouteParametrized("groups"),
             ),
-            new BreadcrumbDto("Group", new RouteParametrized("Group details")),
+            new BreadcrumbDto(
+              PrintUtil.localize("Group details", "router"),
+              new RouteParametrized("Group details"),
+            ),
           ],
-          name: "Group details",
+          name: PrintUtil.localize("Group details", "router"),
         },
       },
       {
@@ -179,22 +203,25 @@ const routes = [
         meta: {
           breadcrumbs: [
             new BreadcrumbDto(
-              "Siberia panel",
+              PrintUtil.localize("panelName", "router"),
               new RouteParametrized("dashboard"),
             ),
             new BreadcrumbDto(
-              "Grouped products",
+              PrintUtil.localize("Groups", "router"),
               new RouteParametrized("groups"),
             ),
             new BreadcrumbDto(
-              "Group",
+              PrintUtil.localize("Group details", "router"),
               new RouteParametrized("Group details", {
                 id: "nested",
               }),
             ),
-            new BreadcrumbDto("Apply", new RouteParametrized("Group apply")),
+            new BreadcrumbDto(
+              PrintUtil.localize("Apply changes", "router"),
+              new RouteParametrized("Group apply"),
+            ),
           ],
-          name: "Apply changes",
+          name: PrintUtil.localize("Apply changes", "router"),
         },
       },
       {
@@ -205,7 +232,10 @@ const routes = [
           name: PrintUtil.localize("storehouses", "router"),
           ruleId: [appConf.rules.stockManaging, appConf.rules.viewStockData],
           buttons: [
-            new HeaderBtnDto("+ ADD", new RouteParametrized("New storehouse")),
+            new HeaderBtnDto(
+              PrintUtil.localize("+ ADD", "router"),
+              new RouteParametrized("New storehouse"),
+            ),
           ],
         },
         children: [

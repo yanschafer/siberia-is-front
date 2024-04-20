@@ -156,13 +156,15 @@ export default {
     const router = useRouter();
     const route = useRoute();
 
+    const loaders = await Promise.all([
+      rolesStore.loadSelectedRole(parseInt(route.params.id.toString())),
+      usersStore.loadUsersList(),
+    ]);
+
     return {
       usersStore,
       rolesStore,
-      roleLoadRes: await rolesStore.loadSelectedRole(
-        parseInt(route.params.id.toString()),
-      ),
-      usersLoadRes: await usersStore.loadUsersList(),
+      loaders,
       modalStore,
       authCheckStore,
       router,
@@ -192,8 +194,7 @@ export default {
       .addRule("name", nameValidateRule)
       .addRule("description", descriptionValidateRule);
 
-    this.roleLoadRes.toastIfError(this.$toast, this.$nextTick);
-    this.usersLoadRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
 
     this.authCheckStore.$onAction(async ({ name }) => {
       if (name == "refresh") {

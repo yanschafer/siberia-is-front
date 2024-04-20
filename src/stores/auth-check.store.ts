@@ -46,7 +46,7 @@ const availableSidebarItems = [
     ],
   },
   {
-    name: "Media",
+    name: PrintUtil.localize("Media", "sidebar"),
     icon: "IconPhoto",
     iconColor: "#B8B8B8",
     iconSize: 24,

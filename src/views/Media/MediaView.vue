@@ -4,7 +4,7 @@
   <Dialog
     v-model:visible="mediaModalStore.uploadOpen"
     modal
-    header="Upload media content"
+    :header="localize('uploadMedia')"
   >
     <FileUploadModalComponent />
   </Dialog>
@@ -22,8 +22,10 @@
               class="d-flex flex-row justify-center align-content-center align-self-center align-items-center gap-2"
             >
               <Checkbox v-model="checked" @change="toggleAll" :binary="true" />
-              <Button @click="deleteSelected" class="btn-danger btn utility-btn"
-                >DELETE SELECTED</Button
+              <Button
+                @click="deleteSelected"
+                class="btn-danger btn utility-btn"
+                >{{ localize("deleteSelected") }}</Button
               >
             </div>
             <!--div class="d-flex flex-row gap-3">
@@ -83,18 +85,18 @@
                 </div>
                 <div class="d-flex flex-row flex-grow-1 gap-4">
                   <div class="d-flex flex-column justify-center col-4">
-                    <h5 class="m-0 heading-list">FILE NAME</h5>
+                    <h5 class="m-0 heading-list">{{ localize("fileName") }}</h5>
                     <p class="text-muted m-0">{{ image.name }}</p>
                   </div>
                   <div class="d-flex flex-column col-2 justify-center">
-                    <h5 class="heading-list m-0">USED FOR</h5>
+                    <h5 class="heading-list m-0">{{ localize("usedFor") }}</h5>
                     <p class="text-muted m-0">Product #1</p>
                   </div>
                   <div class="d-flex flex-column col-2 justify-center">
                     <Button
                       @click="removeImage(image)"
                       class="btn btn-danger utility-btn"
-                      >DELETE</Button
+                      >{{ localize("delete") }}</Button
                     >
                   </div>
                 </div>
@@ -154,7 +156,7 @@
   </ScrollPanel>
 </template>
 
-<script>
+<script lang="ts">
 import DataView from "primevue/dataview";
 import Image from "primevue/image";
 import DataViewLayoutOptions from "primevue/dataviewlayoutoptions";
@@ -167,10 +169,11 @@ import SelectComponent from "@/components/Elements/Selectors/SelectComponent.vue
 import Checkbox from "primevue/checkbox";
 import FileUploadModalComponent from "@/components/Inputs/FileUploadModalComponent.vue";
 import MediaModalComponent from "@/views/Media/MediaModalComponent.vue";
-import { useMediaStore } from "@/stores/media.store.ts";
-import LoggerUtil from "@/utils/logger/logger.util.ts";
-import { useMediaModalStore } from "@/stores/media-modal.store.ts";
-import FilesResolverUtil from "@/utils/files-resolver.util.ts";
+import { useMediaStore } from "@/stores/media.store";
+import LoggerUtil from "@/utils/logger/logger.util";
+import { useMediaModalStore } from "@/stores/media-modal.store";
+import FilesResolverUtil from "@/utils/files-resolver.util";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   components: {
@@ -211,6 +214,9 @@ export default {
     };
   },
   methods: {
+    localize(key: string, module: string = "media") {
+      return PrintUtil.localize(key, module);
+    },
     getUrl(image) {
       return FilesResolverUtil.getStreamUrl(image);
     },

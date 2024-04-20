@@ -11,7 +11,7 @@
                 localize("cancelCapslock", "default")
               }}</MDBBtn>
               <MDBBtn @click="create" class="utility-btn" outline="black">
-                APPLY
+                {{ localize("apply", "groups") }}
               </MDBBtn>
             </MDBCol>
           </MDBRow>
@@ -107,7 +107,7 @@
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-            {{ localize("distributionPriceCapslock") }}
+            {{ localize("distributionPercentCapslock") }}
             <InputText
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input mt-2"
               :class="{ 'p-invalid': !validate.distributorPercent }"
@@ -119,7 +119,7 @@
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-            {{ localize("professionalPriceCapslock") }}
+            {{ localize("professionalPercentCapslock") }}
             <InputText
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input mt-2"
               :class="{ 'p-invalid': !validate.professionalPercent }"
@@ -148,7 +148,6 @@
 
 <script lang="ts">
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput } from "mdb-vue-ui-kit";
-import FileUploadComponent from "@/components/Inputs/FileUploadComponent.vue";
 import { useCollectionStore } from "@/stores/collection.store";
 import { useRoute, useRouter } from "vue-router";
 import { useBrandStore } from "@/stores/brand.store";
@@ -175,7 +174,6 @@ export default {
     TreeDropdownComponent,
     SelectComponent,
     MDBInput,
-    FileUploadComponent,
     MDBContainer,
     MDBRow,
     MDBCol,
@@ -191,8 +189,8 @@ export default {
       placeholderCollection: this.localize("selectACollection"),
       placeholderColor: this.localize("placeholderColor"),
       placeholderQuantityPerPackage: this.localize("placeholderNumber"),
-      placeholderDistributionPercent: "DISTRIBUTOR PERCENT",
-      placeholderProfessionalPercent: "PROFESSIONAL PERCENT",
+      placeholderDistributionPercent: this.localize("placeholderNumber"),
+      placeholderProfessionalPercent: this.localize("placeholderNumber"),
       placeholderDefaultPrice: this.localize("placeholderNumber"),
       placeholderExpirationDate: this.localize("placeholderExpirationDate"),
       brand: null,
@@ -271,6 +269,12 @@ export default {
     const router = useRouter();
     const route = useRoute();
 
+    const loaders = await Promise.all([
+      brandStore.loadBrandsList(),
+      collectionStore.loadCollectionList(),
+      categoriesStore.loadCategoriesList(),
+    ]);
+
     return {
       productGroupStore,
       brandStore,
@@ -278,15 +282,11 @@ export default {
       collectionStore,
       groupId: parseInt(route.params.id.toString()),
       router,
-      loadBrandListRes: await brandStore.loadBrandsList(),
-      loadCollectionListRes: await collectionStore.loadCollectionList(),
-      loadCategoryListRes: await categoriesStore.loadCategoriesList(),
+      loaders,
     };
   },
   created() {
-    this.loadBrandListRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadCollectionListRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadCategoryListRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
 
     const brandValidateRule = new ValidateRule().skipIfNull().required();
     const distributorPercentValidateRule = new ValidateRule()
@@ -342,18 +342,6 @@ export default {
         amountInBox: true,
         expirationDate: true,
       };
-    },
-    async handleCategoryUpdate() {
-      const loadRes = await this.categoriesStore.loadCategoriesList();
-      loadRes.toastIfError(this.$toast, this.$nextTick);
-    },
-    async handleBrandUpdate() {
-      const loadRes = await this.brandStore.loadBrandsList();
-      loadRes.toastIfError(this.$toast, this.$nextTick);
-    },
-    async handleCollectionUpdate() {
-      const loadRes = await this.collectionStore.loadCollectionList();
-      loadRes.toastIfError(this.$toast, this.$nextTick);
     },
     showNotFoundToast(type) {
       this.$toast.add({

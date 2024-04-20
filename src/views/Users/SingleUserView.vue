@@ -247,21 +247,22 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
+    const loaders = await Promise.all([
+      userStore.loadSelectedUser(parseInt(route.params.id.toString())),
+      rolesStore.loadRolesList(),
+    ]);
+
     return {
       userStore,
       rolesStore,
       modalStore,
       router,
-      userLoadRes: await userStore.loadSelectedUser(
-        parseInt(route.params.id.toString()),
-      ),
-      rolesLoadRes: await rolesStore.loadRolesList(),
+      loaders,
       authCheckStore,
     };
   },
   created() {
-    this.userLoadRes.toastIfError(this.$toast, this.$nextTick);
-    this.rolesLoadRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
 
     this.rolesList = this.selectedUser.roles.map((el) => ({
       id: el.id,

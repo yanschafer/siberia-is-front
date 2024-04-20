@@ -21,7 +21,7 @@
 import { defineComponent } from "vue";
 import { useNavTabsStore } from "@/stores/nav-tabs.store";
 import NavTabDto from "@/router/dto/nav-tab.dto";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import ProductsExportModal from "@/components/Elements/Dialogs/ProductsExportModal.vue";
 
 export default {
@@ -30,10 +30,12 @@ export default {
   setup() {
     const navTabsStore = useNavTabsStore();
     const router = useRouter();
+    const route = useRoute();
 
     return {
       navTabsStore,
       router,
+      route,
     };
   },
   methods: {
@@ -44,7 +46,7 @@ export default {
       if (tab.callback) {
         tab.callback();
       } else if (tab.route) {
-        this.router.push({ ...tab.route.toVueRoute() });
+        this.router.push({ ...tab.route.toVueRoute(this.route.params) });
       }
     },
   },

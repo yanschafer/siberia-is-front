@@ -33,7 +33,7 @@
                   <span class="field-value copy-on">{{ ean }}</span>
                 </h5>
                 <h5 class="field-heading d-flex gap-1 align-items-center">
-                  BARCODE
+                  {{ localize("barcode") }}
                   <span class="field-value copy-on">{{ barcode }}</span>
                 </h5>
                 <h5 class="field-heading">
@@ -183,7 +183,6 @@
 <script lang="ts">
 import FileUpload from "primevue/fileupload";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput } from "mdb-vue-ui-kit";
-import FileUploadComponent from "@/components/Inputs/FileUploadComponent.vue";
 import CascadeSelect from "primevue/cascadeselect";
 import FilesResolverUtil from "@/utils/files-resolver.util";
 import { useProductsStore } from "@/stores/products.store";
@@ -205,6 +204,9 @@ import ProductDto from "@/api/modules/product/dto/product.dto";
 import MediaMiniModalComponent from "@/views/Media/MediaMiniModalComponent.vue";
 import ProductsForm from "@/views/Products/ProductsForm.vue";
 import { useProductFormStore } from "@/stores/components/product-form.store";
+import { useBrandStore } from "@/stores/brand.store";
+import { useCategoriesStore } from "@/stores/categories.store";
+import { useCollectionStore } from "@/stores/collection.store";
 import SliderComponent from "@/views/Media/SliderComponent.vue";
 
 export default {
@@ -222,7 +224,6 @@ export default {
     Panel,
     CascadeSelect,
     MDBInput,
-    FileUploadComponent,
     MDBContainer,
     MDBRow,
     MDBCol,
@@ -245,9 +246,19 @@ export default {
     const productFormStore = useProductFormStore();
     const authCheckStore = useAuthCheckStore();
     const productStore = useProductsStore();
+    const brandStore = useBrandStore();
+    const categoryStore = useCategoriesStore();
+    const collectionStore = useCollectionStore();
     const modalStore = useModalStore();
     const route = useRoute();
     const router = useRouter();
+
+    const loaders = await Promise.all([
+      productStore.loadSelectedProduct(parseInt(route.params.id.toString())),
+      brandStore.loadBrandsList(),
+      collectionStore.loadCollectionList(),
+      categoryStore.loadCategoriesList(),
+    ]);
 
     return {
       authCheckStore,
@@ -255,13 +266,11 @@ export default {
       productStore,
       modalStore,
       router,
-      loadSelectedRes: await productStore.loadSelectedProduct(
-        parseInt(route.params.id.toString()),
-      ),
+      loaders,
     };
   },
   created() {
-    this.loadSelectedRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
 
     const stringValidateRule = new ValidateRule().skipIfNull().required();
     const positiveNumberValidateRule = new ValidateRule()

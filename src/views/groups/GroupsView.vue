@@ -62,10 +62,21 @@ export default {
     const router = useRouter();
 
     tabNavStore.setTabs([
-      new NavTabDto(1, "Single products", new RouteParametrized("products")),
-      new NavTabDto(2, "Grouped products", null, () => {}),
+      new NavTabDto(
+        1,
+        PrintUtil.localize("singleProducts", "components"),
+        new RouteParametrized("products"),
+      ),
+      new NavTabDto(
+        2,
+        PrintUtil.localize("groupedProducts", "components"),
+        null,
+        () => {},
+      ),
     ]);
     tabNavStore.setActive(1);
+
+    const loaders = await Promise.all([productGroupStore.loadGroupsList()]);
 
     return {
       productGroupStore,
@@ -73,11 +84,11 @@ export default {
       addToGroupStore,
       tabNavStore,
       router,
-      loadProductGroupsListRes: await productGroupStore.loadGroupsList(),
+      loaders,
     };
   },
   created() {
-    this.loadProductGroupsListRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
   },
   data: () => ({
     noDataMessage: {

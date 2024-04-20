@@ -1,18 +1,22 @@
+import LoggerUtil from "@/utils/logger/logger.util";
+
 export default class RouteParametrized {
   constructor(
     public name: string,
     public props: any | null = null,
   ) {}
-  public toVueRoute() {
+  public toVueRoute(nestedValues) {
     let params = {};
 
     if (this.props) {
       Object.keys(this.props).forEach((prop) => {
         const val = this.props[prop];
+        LoggerUtil.debug(this.props);
+        LoggerUtil.debug(val);
         if (val == "nested") {
           params = {
             ...params,
-            [prop]: this.props[prop],
+            [prop]: nestedValues[prop],
           };
         } else {
           params = {

@@ -1,12 +1,12 @@
 <template>
   <div class="row mb-2">
     <div class="col-auto">
-      <h5 class="m-0">Group name</h5>
+      <h5 class="m-0">{{ localize("groupNamePlaceholder") }}</h5>
     </div>
     <div class="col-auto">
       <InputText
         v-model="addToGroupModalStore.name"
-        :placeholder="'New group name'"
+        :placeholder="localize('groupNamePlaceholder')"
       />
     </div>
     <div class="col">
@@ -22,7 +22,7 @@
     <MDBCol class="">
       <p class="text-info">
         <IconInfoCircle color="#b6b6b6" :size="24" stroke-width="1" />
-        Click on rows to select
+        {{ localize("clickOnRowsToSelect") }}
       </p>
 
       <TableComponent
@@ -65,26 +65,35 @@ export default defineComponent({
     Button,
     IconInfoCircle,
   },
+  props: {
+    groupName: {
+      type: String,
+      default: PrintUtil.localize("groupName", "groups"),
+    },
+  },
   async setup() {
     const productsStore = useProductsStore();
     const productGroupStore = useProductGroupStore();
     const addToGroupModalStore = useAddToGroupModalStore();
 
+    const loaders = await Promise.all([productsStore.loadProductList()]);
+
     return {
       productsStore,
       productGroupStore,
       addToGroupModalStore,
-      loadProductListRes: await productsStore.loadProductList(),
+      loaders,
     };
   },
   created() {
-    this.loadProductListRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
+
     this.productGroupStore.$onAction(async (action) => {
       if (action.name == "update_success") {
         this.$toast.add({
           severity: "info",
-          summary: "Success",
-          detail: `Group '${this.addToGroupModalStore.name}' updated`,
+          summary: this.localize("success"),
+          detail: `${this.localize("group")} '${this.addToGroupModalStore.name}' ${this.localize("updateSuccess")}`,
           life: 3000,
         });
         this.addToGroupModalStore.addToGroupOpen = false;
@@ -92,8 +101,8 @@ export default defineComponent({
       if (action.name == "update_failed") {
         this.$toast.add({
           severity: "error",
-          summary: "Failed",
-          detail: `Group '${this.addToGroupModalStore.name}' updating failed`,
+          summary: this.localize("failed"),
+          detail: `${this.localize("group")} '${this.addToGroupModalStore.name}' ${this.localize("updateFailed")}`,
           life: 3000,
         });
         this.addToGroupModalStore.addToGroupOpen = false;
@@ -108,8 +117,8 @@ export default defineComponent({
         if (created.success) {
           this.$toast.add({
             severity: "info",
-            summary: "Success",
-            detail: `Group '${created.getData().name}' created`,
+            summary: this.localize("success"),
+            detail: `${this.localize("group")} '${created.getData().name}' ${this.localize("createSuccess")}`,
             life: 3000,
           });
           this.addToGroupModalStore.addToGroupOpen = false;
@@ -125,6 +134,9 @@ export default defineComponent({
     },
   }),
   methods: {
+    localize(key: string, module: string = "groups") {
+      return PrintUtil.localize(key, module);
+    },
     handleSearch(searchTerm) {
       this.addToGroupModalStore.searchTerm = searchTerm;
     },

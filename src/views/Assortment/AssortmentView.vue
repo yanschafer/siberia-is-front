@@ -157,22 +157,24 @@ export default {
     const dialogStore = useDialogStore();
     const authCheckStore = useAuthCheckStore();
 
+    const loaders = await Promise.all([
+      brandStore.loadBrandsList(),
+      collectionStore.loadCollectionList(),
+      categoryStore.loadCategoriesList(),
+    ]);
+
     return {
       brandStore,
       categoryStore,
       collectionStore,
       modalStore,
       dialogStore,
-      loadBrandRes: await brandStore.loadBrandsList(),
-      loadCollectionRes: await collectionStore.loadCollectionList(),
-      loadCategoryRes: await categoryStore.loadCategoriesList(),
+      loaders,
       authCheckStore,
     };
   },
-  created() {
-    this.loadBrandRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadCollectionRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadCategoryRes.toastIfError(this.$toast, this.$nextTick);
+  async created() {
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
 
     this.initCategoryDialog.selectItems = this.categoryList;
   },

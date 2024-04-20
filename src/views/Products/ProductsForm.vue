@@ -8,7 +8,9 @@
         >
           <div class="product-img placeholder-img" @click="openMiniGallery">
             <IconUpload color="#bbc3c7" :size="48" stroke-width="2" />
-            <p class="upload-text">Choose files from gallery</p>
+            <p class="upload-text">
+              {{ localize("chooseFilesFromGallery", "media") }}
+            </p>
           </div>
         </MDBCol>
         <MDBCol class="d-flex flex-column justify-content-center">
@@ -62,7 +64,7 @@
                 />
               </h5>
               <h5 class="field-heading d-flex gap-1 align-items-center">
-                barcode
+                {{ localize("barcode") }}
                 <InputText
                   class="animate__animated animate__flipInX animate__faster input-wrapper animate__animated animate__fadeIn username-input"
                   :class="{ 'p-invalid': !validate.barcode }"
@@ -158,7 +160,7 @@
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-            {{ localize("distributionPriceCapslock") }}
+            {{ localize("distributionPercentCapslock") }}
             <InputText
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
               :class="{ 'p-invalid': !validate.distributionPercent }"
@@ -168,13 +170,13 @@
             />
           </h5>
           <h5 class="field-heading mt-4">
-            DISTRIBUTION PRICE
+            {{ localize("professionalPriceCapslock") }}
             <span class="field-value">{{ distributionPrice }}</span>
           </h5>
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-            {{ localize("professionalPriceCapslock") }}
+            {{ localize("professionalPercentCapslock") }}
             <InputText
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
               :class="{ 'p-invalid': !validate.professionalPercent }"
@@ -184,7 +186,7 @@
             />
           </h5>
           <h5 class="field-heading mt-4">
-            PROFESSIONAL PRICE
+            {{ localize("professionalPriceCapslock") }}
             <span class="field-value">{{ professionalPrice }}</span>
           </h5>
         </MDBCol>
@@ -226,7 +228,6 @@ import TreeDropdownComponent from "@/components/Elements/Selectors/TreeDropdownC
 import SelectComponent from "@/components/Elements/Selectors/SelectComponent.vue";
 import CascadeSelect from "primevue/cascadeselect";
 import { MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow } from "mdb-vue-ui-kit";
-import FileUploadComponent from "@/components/Inputs/FileUploadComponent.vue";
 import InputText from "primevue/inputtext";
 import Panel from "primevue/panel";
 import PrintUtil from "@/utils/localization/print.util";
@@ -240,6 +241,9 @@ import BrandSelector from "@/components/Inputs/entities/BrandSelector.vue";
 import { useMediaModalStore } from "@/stores/media-modal.store";
 import loggerUtil from "@/utils/logger/logger.util";
 import LoggerUtil from "@/utils/logger/logger.util";
+import { useBrandStore } from "@/stores/brand.store";
+import { useCategoriesStore } from "@/stores/categories.store";
+import { useCollectionStore } from "@/stores/collection.store";
 
 export default {
   name: "ProductsForm",
@@ -254,7 +258,6 @@ export default {
     SelectComponent,
     CascadeSelect,
     MDBInput,
-    FileUploadComponent,
     MDBContainer,
     MDBRow,
     MDBCol,
