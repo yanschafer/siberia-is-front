@@ -137,18 +137,10 @@
                   </div>
 
                   <div class="pt-4">
-                    <div class="d-flex flex-row mt-1">
-                      <div
-                        class="d-flex flex-column justify-center align-items-center col-2"
-                      >
+                    <div class="d-flex flex-row mt-1 align-items-center gap-2">
                         <Checkbox v-model="image.selected" :binary="true" />
-                      </div>
-                      <div
-                        class="d-flex flex-column justify-center align-items-start col-6"
-                      >
                         <h5 class="m-0 heading-list">{{ image.name }}</h5>
                         <!--                        <p class="text-muted m-0">{{ image.url }}</p>-->
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -305,6 +297,8 @@ export default defineComponent({
   margin-right: 20px;
 }
 .media-image {
+  //width: 300px;
+  //border-radius: 8px;
   max-width: 100%; /* Максимальная ширина изображения */
   max-height: 100%; /* Максимальная высота изображения */
   object-fit: cover; /* Обеспечивает покрытие всей области контейнера, сохраняя пропорции */
@@ -325,15 +319,13 @@ export default defineComponent({
   position: relative;
   border-radius: 8px;
   overflow: hidden;
-  width: 13vw; /* Ширина контейнера */
-  height: 13vw; /* Высота контейнера, равная ширине для создания квадрата */
+  width: min(10vw, 16rem);
+  height: min(10vw, 16rem);
   display: flex;
   justify-content: center;
   align-items: center;
 }
-:deep(.card) {
-  box-shadow: none;
-}
+
 .media-image {
   display: block;
   width: 100%;
@@ -353,9 +345,9 @@ export default defineComponent({
   visibility: hidden;
   opacity: 0;
   transition:
-    all 0.3s ease-in-out,
-    visibility 0s ease-in-out,
-    opacity 0.5s ease-in-out;
+      all 0.3s ease-in-out,
+      visibility 0s ease-in-out,
+      opacity 0.5s ease-in-out;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -375,9 +367,9 @@ export default defineComponent({
 .feather-eye {
   stroke: white;
   transition:
-    all 0.3s ease-in-out,
-    visibility 0s ease-in-out,
-    opacity 0.5s ease-in-out;
+      all 0.3s ease-in-out,
+      visibility 0s ease-in-out,
+      opacity 0.5s ease-in-out;
 }
 .list-row {
   border-bottom: 1px solid #efefef;
@@ -388,18 +380,15 @@ export default defineComponent({
   z-index: 999999999 !important;
 }
 .heading-list {
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: 800;
-}
-.header {
-  position: sticky !important;
-  top: 0 !important;
+  width: 100%;
 }
 .search {
-  max-width: 80vw !important;
+  width: 50vw;
   margin-bottom: 0 !important;
 }
-:deep(.p-inputtext) {
+.p-inputtext {
   width: 100% !important;
 }
 .utility-btn {
@@ -419,33 +408,19 @@ export default defineComponent({
 }
 .p-button:focus {
   box-shadow:
-    0 0 0 2px #ffffff,
-    0 0 0 4px #000000,
-    0 1px 2px 0 black !important;
-}
-.utility-btn {
-  height: 2rem;
-  width: 100%;
-  min-width: 4rem;
-  max-width: max-content;
-  font-weight: 800;
-  margin: 0;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  border-radius: 7px;
-  background-color: black;
-  color: white;
+      0 0 0 2px #ffffff,
+      0 0 0 4px #000000,
+      0 1px 2px 0 black !important;
 }
 .image-col {
-  width: 15rem;
+  width: 15rem; /* фиксированная ширина колонки */
+  height: 16rem; /* фиксированная высота колонки */
   justify-content: center;
   display: flex;
   flex-direction: column;
   align-content: center;
   align-items: center;
   border: 1px solid #bbbbbb;
-  height: 24rem;
 }
+.checkbox-inline {}
 </style>

@@ -139,18 +139,10 @@
                 </div>
 
                 <div class="pt-4">
-                  <div class="d-flex flex-row mt-1">
-                    <div
-                      class="d-flex flex-column justify-center align-items-center col-2"
-                    >
-                      <Checkbox v-model="image.selected" :binary="true" />
-                    </div>
-                    <div
-                      class="d-flex flex-column justify-center align-items-start col-6"
-                    >
+                  <div class="d-flex flex-row mt-1 align-items-center gap-2">
+                      <Checkbox class="checkbox-inline" v-model="image.selected" :binary="true" />
                       <h5 class="m-0 heading-list">{{ image.name }}</h5>
                       <!--                      <p class="text-muted m-0">{{ image.url }}</p>-->
-                    </div>
                   </div>
                 </div>
               </div>
@@ -324,8 +316,8 @@ export default {
   position: relative;
   border-radius: 8px;
   overflow: hidden;
-  width: 10vw; /* Ширина контейнера */
-  height: 20vh; /* Высота контейнера, равная ширине для создания квадрата */
+  width: min(10vw, 16rem);
+  height: min(10vw, 16rem);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -418,13 +410,14 @@ export default {
     0 1px 2px 0 black !important;
 }
 .image-col {
-  width: 15rem;
+  width: 15rem; /* фиксированная ширина колонки */
+  height: 16rem; /* фиксированная высота колонки */
   justify-content: center;
   display: flex;
   flex-direction: column;
   align-content: center;
   align-items: center;
   border: 1px solid #bbbbbb;
-  height: 16rem;
 }
+.checkbox-inline {}
 </style>

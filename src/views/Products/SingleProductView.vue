@@ -12,12 +12,13 @@
       <Panel class="animate__animated animate__fadeIn">
         <MDBRow class="d-flex flex-row gap-5 header-row">
           <MDBCol class="col-auto">
-            <img
-              id="product-image"
-              class="product-img"
-              :src="imageSource"
-              :alt="productName"
-            />
+<!--            <img-->
+<!--              id="product-image"-->
+<!--              class="product-img"-->
+<!--              :src="imageSource"-->
+<!--              :alt="productName"-->
+<!--            />-->
+            <SliderComponent />
           </MDBCol>
           <MDBCol class="product-name-col">
             <h1 class="product-heading">{{ productName }}</h1>
@@ -204,10 +205,12 @@ import ProductDto from "@/api/modules/product/dto/product.dto";
 import MediaMiniModalComponent from "@/views/Media/MediaMiniModalComponent.vue";
 import ProductsForm from "@/views/Products/ProductsForm.vue";
 import { useProductFormStore } from "@/stores/components/product-form.store";
+import SliderComponent from "@/views/Media/SliderComponent.vue";
 
 export default {
   name: "SingleProductView",
   components: {
+    SliderComponent,
     ProductsForm,
     MediaMiniModalComponent,
     DialogComponentTrigger,

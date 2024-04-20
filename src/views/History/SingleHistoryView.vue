@@ -28,15 +28,21 @@
   </MDBContainer>
   <MDBContainer class="pt-4">
     {{ description }}
-    <BeforeAfterComponent v-if="showBeforeAfter" />
-    <TableComponent
-      v-if="showTable"
-      :infoMessage="noDataMessage"
-      :rows="filteredRows"
-      :columns="table.columns"
-      :searchTerm="table.searchTerm"
-    />
-    <TabsComponent v-if="showRules" :roles="roles" />
+    <ScrollPanel
+        style="width: 88vw; height: 45vh;"
+        class=" animate__animated animate__fadeIn"
+    >
+      <BeforeAfterComponent v-if="showBeforeAfter" />
+      <TableComponent
+          v-if="showTable"
+          :infoMessage="noDataMessage"
+          :rows="filteredRows"
+          :columns="table.columns"
+          :searchTerm="table.searchTerm"
+      />
+      <TabsComponent v-if="showRules" :roles="roles" />
+    </ScrollPanel>
+
   </MDBContainer>
 </template>
 
@@ -51,6 +57,7 @@ import { useHistoryEventStore } from "@/stores/components/history-event.store";
 import Button from "primevue/button";
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import LoggerUtil from "@/utils/logger/logger.util";
+import ScrollPanel from "primevue/scrollpanel";
 
 export default {
   name: "SingleHistoryView",
@@ -64,6 +71,7 @@ export default {
     MDBContainer,
     MDBBadge,
     MDBBtn,
+    ScrollPanel
   },
   props: {
     id: {
