@@ -121,7 +121,7 @@ import {
 } from "@tabler/icons-vue";
 import { ref } from "vue";
 import NotificationsComponent from "@/components/Elements/Notification/NotificationsComponent.vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import PrintUtil from "@/utils/localization/print.util";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
 import ProfileComponent from "@/components/Elements/Profile/ProfileComponent.vue";
@@ -167,6 +167,7 @@ export default {
     const tooltip4 = ref(false);
     const dropdown24 = ref(false);
     const router = useRouter();
+    const route = useRoute();
 
     return {
       tooltip1,
@@ -175,6 +176,7 @@ export default {
       tooltip4,
       dropdown24,
       router,
+      route,
       authCheckStore: useAuthCheckStore(),
     };
   },
@@ -216,7 +218,7 @@ export default {
       if (button.callback) {
         button.callback();
       } else if (button.route) {
-        this.router.push({ ...button.route.toVueRoute() });
+        this.router.push({ ...button.route.toVueRoute(this.route.params) });
       }
     },
     handleClickHistory() {

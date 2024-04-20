@@ -5,24 +5,28 @@
     :style="{ width: '90vw' }"
     :header="addToGroupModalStore.title"
   >
-    <AddToGroupComponent />
+    <AddToGroupComponent :group-name="getGroupName" />
   </Dialog>
   <MDBContainer class="single-user-info d-flex flex-column gap-3">
     <MDBRow class="d-flex">
       <MDBRow class="w-auto">
         <h1 class="username-heading">{{ getGroupName }}</h1>
-        <MDBBtn class="btn btn-outline-black utility-btn" @click="startEdit"
-          >EDIT GROUP</MDBBtn
-        >
-        <MDBBtn class="btn btn-outline-black utility-btn" @click="applyChanges"
-          >APPLY CHANGES</MDBBtn
+        <MDBBtn class="btn btn-outline-black utility-btn" @click="startEdit">{{
+          localize("editGroup", "groups")
+        }}</MDBBtn>
+        <MDBBtn
+          class="btn btn-outline-black utility-btn"
+          @click="applyChanges"
+          >{{ localize("applyChanges", "groups") }}</MDBBtn
         >
       </MDBRow>
     </MDBRow>
   </MDBContainer>
   <MDBContainer class="mt-4 table-block">
     <MDBRow class="w-auto">
-      <h1 class="username-heading mb-2">Products list</h1>
+      <h1 class="username-heading mb-2">
+        {{ localize("productsList", "groups") }}
+      </h1>
     </MDBRow>
     <SearchComponent @search="handleSearch" />
     <TableComponent

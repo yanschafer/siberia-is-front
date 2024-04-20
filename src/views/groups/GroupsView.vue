@@ -62,8 +62,17 @@ export default {
     const router = useRouter();
 
     tabNavStore.setTabs([
-      new NavTabDto(1, "Single products", new RouteParametrized("products")),
-      new NavTabDto(2, "Grouped products", null, () => {}),
+      new NavTabDto(
+        1,
+        PrintUtil.localize("singleProducts", "components"),
+        new RouteParametrized("products"),
+      ),
+      new NavTabDto(
+        2,
+        PrintUtil.localize("groupedProducts", "components"),
+        null,
+        () => {},
+      ),
     ]);
     tabNavStore.setActive(1);
 

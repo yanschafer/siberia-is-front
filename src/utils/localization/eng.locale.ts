@@ -50,6 +50,15 @@ export default {
 
       Operations: "Operations",
       SingleOperation: "Single operation",
+
+      Groups: "Groups",
+      "Group details": "Group details",
+      "Apply changes": "Apply changes",
+
+      Media: "Media",
+
+      "+ ADD": "+ ADD",
+      UPLOAD: "UPLOAD",
     },
     sidebar: {
       //auth-check.store
@@ -182,8 +191,10 @@ export default {
       linkCapslock: "LINK",
       colorCapslock: "COLOR",
       quantityPerPackageCapslock: "QUANTITY PER PACKAGE",
-      distributionPriceCapslock: "DISTRIBUTION PERCENT",
+      distributionPriceCapslock: "DISTRIBUTION PRICE",
       professionalPriceCapslock: "PROFESSIONAL PRICE",
+      distributionPercentCapslock: "DISTRIBUTION PERCENT",
+      professionalPercentCapslock: "PROFESSIONAL PERCENT",
       defaultPriceCapslock: "DEFAULT PRICE",
       selectACategory: "Select a category",
       selectABrand: "Select a brand",
@@ -253,6 +264,35 @@ export default {
       collectionCreationFailed: "Collection creation failed",
       productIsRemoved: "Product is removed",
       productSuccessfullyUpdated: "Product successfully updated",
+      exportToFile: "Export to file",
+      columnsForExport: "Columns for export",
+      export: "Export",
+    },
+    groups: {
+      editGroup: "EDIT GROUP",
+      applyChanges: "APPLY CHANGES",
+      productsList: "Products list",
+      apply: "APPLY",
+      groupName: "Group name",
+      groupNamePlaceholder: "Group name",
+      clickOnRowsToSelect: "Click on rows to select",
+
+      editGroupDialog: "Edit group",
+      createGroupDialog: "Create group",
+
+      "+ Create": "+ Create",
+      Save: "Save",
+
+      //Toasts
+      success: "Success",
+      failed: "Failed",
+      group: "Group",
+      createSuccess: "created",
+      updateSuccess: "updated",
+      updateFailure: "updating failed",
+
+      massiveUpdate: "Massive update",
+      applyChangesSuccessMessage: "Products in group were successfully updated",
     },
     storehouses: {
       //CreateStorehouse.vue
@@ -348,6 +388,10 @@ export default {
       infoNotiText: "Initial Info Message",
       errorNotiHeading: "Error",
       errorNotiText: "Error message",
+
+      //NavTabsComponent
+      singleProducts: "Single products",
+      groupedProducts: "Grouped products",
     },
     utils: {
       //api-model.util.ts

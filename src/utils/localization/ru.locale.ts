@@ -82,6 +82,14 @@ export default {
 
       Operations: "Операции",
       SingleOperation: "Страница операции",
+
+      Groups: "Группы",
+      "Group details": "Группа",
+      "Apply changes": "Применить изменения",
+
+      Media: "Медиа",
+      "+ ADD": "+ ДОБАВИТЬ",
+      UPLOAD: "ЗАГРУЗИТЬ",
     },
     sidebar: {
       Dashboard: "Статистика",
@@ -210,18 +218,20 @@ export default {
       linkCapslock: "ССЫЛКА",
       colorCapslock: "ЦВЕТ",
       quantityPerPackageCapslock: "КОЛ-ВО В УПАКОВКЕ",
-      distributionPriceCapslock: "РОЗНИЧНЫЙ ПРОЦЕНТ",
-      professionalPriceCapslock: "ПРОФЕССИОНАЛЬНАЯ ЦЕНА",
+      distributionPriceCapslock: "ЦЕНА РОЗНИЦЫ",
+      professionalPriceCapslock: "ЦЕНА ПРОФЕССИОНАЛОВ",
+      distributionPercentCapslock: "ПРОЦЕНТ РОЗНИЦЫ",
+      professionalPercentCapslock: "ПРОЦЕНТ ДЛЯ ПРОФЕССИОНАЛОВ",
       defaultPriceCapslock: "ЦЕНА ПО УМОЛЧАНИЮ",
       selectACategory: "Выберите категорию",
       selectABrand: "Выберите бренд",
       selectACollection: "Выберите коллекцию",
-      createACategory: "Выберите категорию",
+      createACategory: "Создание категории",
       selectParentCategory: "Выберите родительскую категорию",
       categoryName: "Название категории",
-      createABrand: "Выберите бренд",
+      createABrand: "Создание бренда",
       brandName: "Название бренда",
-      createACollection: "Создать коллекцию",
+      createACollection: "Создание коллекции",
       collectionName: "Название коллекции",
       placeholderDescription: "Новое описание товара...",
       placeholderProductName: "Новое название товара...",
@@ -246,7 +256,9 @@ export default {
       color: "Цвет",
       purchasePrice: "Закупочная цена",
       distributorPrice: "Розничная цена",
-      professionalPrice: "Профессиональная цена",
+      professionalPrice: "Цена для профессионалов",
+      distributorPercent: "Процент розницы",
+      professionalPercent: "Процент для профессионалов",
       commonPrice: "Цена по умолчанию",
       amountInBox: "Кол-во в упаковке",
       brand: "Бренд",
@@ -280,6 +292,36 @@ export default {
       collectionCreationFailed: "Ошибка при создании коллекции",
       productIsRemoved: "Товар удален",
       productSuccessfullyUpdated: "Товар успешно обновлен",
+      exportToFile: "Экспорт в файл",
+      columnsForExport: "Колонки для экспорта",
+      export: "Экспорт",
+    },
+    groups: {
+      editGroup: "РЕДАКТИРОВАТЬ ГРУППУ",
+      applyChanges: "ПРИМЕНИТЬ ИЗМЕНЕНИЯ",
+      productsList: "Список товаров",
+      apply: "ПРИМЕНИТЬ",
+
+      groupName: "Название группы",
+      groupNamePlaceholder: "Название группы",
+      clickOnRowsToSelect: "Нажмите на строки, чтобы выбрать",
+
+      editGroupDialog: "Редактировать группу",
+      createGroupDialog: "Создать группу",
+
+      "+ Create": "+ Создать",
+      Save: "Сохранить",
+
+      //Toasts
+      success: "Успех",
+      failed: "Неудача",
+      group: "Группа",
+      createSuccess: "создана",
+      updateSuccess: "обновлена",
+      updateFailure: "обновление не удалось",
+
+      massiveUpdate: "Массовое обновление",
+      applyChangesSuccessMessage: "Товары в группе успешно обновлены",
     },
     storehouses: {
       //CreateStorehouse.vue
@@ -375,6 +417,10 @@ export default {
       infoNotiText: "Текст информационного сообщения",
       errorNotiHeading: "Ошибка",
       errorNotiText: "Текст сообщения об ошибке",
+
+      //NavTabsComponent
+      singleProducts: "Товары",
+      groupedProducts: "Группы товаров",
     },
     utils: {
       //api-model.util.ts

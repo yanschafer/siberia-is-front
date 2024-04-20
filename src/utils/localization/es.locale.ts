@@ -51,6 +51,14 @@ export default {
 
       Operations: "Operaciones",
       SingleOperation: "Operación Individual",
+
+      Groups: "Grupos",
+      "Group details": "Grupo",
+      "Apply changes": "Aplicar cambios",
+
+      Media: "Medios",
+      "+ ADD": "+ AGREGAR",
+      UPLOAD: "CARGAR",
     },
     sidebar: {
       //auth-check.store
@@ -182,8 +190,10 @@ export default {
       linkCapslock: "ENLACE",
       colorCapslock: "COLOR",
       quantityPerPackageCapslock: "CANTIDAD POR PAQUETE",
-      distributionPriceCapslock: "PORCENTAJE DE DISTRIBUCIÓN",
-      professionalPriceCapslock: "PORCENTAJE DEL PRECIO PROFESIONAL",
+      distributionPriceCapslock: "PRECIO DE DISTRIBUCIÓN",
+      professionalPriceCapslock: "PRECIO PROFESIONAL",
+      distributionPercentCapslock: "PORCENTAJE DE DISTRIBUCIÓN",
+      professionalPercentCapslock: "PORCENTAJE PROFESIONAL",
       defaultPriceCapslock: "PRECIO POR DEFECTO",
       selectACategory: "Seleccionar una categoría",
       selectABrand: "Seleccionar una marca",
@@ -219,6 +229,8 @@ export default {
       purchasePrice: "Precio de compra",
       distributorPrice: "Precio del distribuidor",
       professionalPrice: "Precio profesional",
+      distributorPercent: "Porcentaje del distribuidor",
+      professionalPercent: "Porcentaje profesional",
       commonPrice: "Precio común",
       amountInBox: "Cantidad en la caja",
       brand: "Marca",
@@ -253,6 +265,36 @@ export default {
       collectionCreationFailed: "Error al crear la colección",
       productIsRemoved: "Producto eliminado",
       productSuccessfullyUpdated: "Producto actualizado exitosamente",
+      exportToFile: "Exportar a archivo",
+      columnsForExport: "Columnas para exportar",
+      export: "Exportar",
+    },
+    groups: {
+      editGroup: "EDITAR GRUPO",
+      applyChanges: "APLICAR CAMBIOS",
+      productsList: "Lista de productos",
+      apply: "APLICAR",
+      groupName: "Nombre del grupo",
+      groupNamePlaceholder: "Nombre del grupo",
+      clickOnRowsToSelect: "Haz clic en las filas para seleccionar",
+
+      editGroupDialog: "Editar grupo",
+      createGroupDialog: "Crear grupo",
+
+      "+ Create": "+ Crear",
+      Save: "Guardar",
+
+      //Toasts
+      success: "Éxito",
+      failed: "Fallo",
+      group: "Grupo",
+      createSuccess: "creado",
+      updateSuccess: "actualizado",
+      updateFailure: "actualización fallida",
+
+      massiveUpdate: "Actualización masiva",
+      applyChangesSuccessMessage:
+        "Los productos del grupo se actualizaron correctamente",
     },
     storehouses: {
       //CreateStorehouse.vue
@@ -349,6 +391,10 @@ export default {
       infoNotiText: "Mensaje Inicial de Información",
       errorNotiHeading: "Error",
       errorNotiText: "Mensaje de Error",
+
+      //NavTabsComponent
+      singleProducts: "Productos individuales",
+      groupedProducts: "Productos agrupados",
     },
 
     utils: {

@@ -158,7 +158,7 @@
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-            {{ localize("distributionPriceCapslock") }}
+            {{ localize("distributionPercentCapslock") }}
             <InputText
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
               :class="{ 'p-invalid': !validate.distributionPercent }"
@@ -168,13 +168,13 @@
             />
           </h5>
           <h5 class="field-heading mt-4">
-            DISTRIBUTION PRICE
+            {{ localize("professionalPriceCapslock") }}
             <span class="field-value">{{ distributionPrice }}</span>
           </h5>
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-            {{ localize("professionalPriceCapslock") }}
+            {{ localize("professionalPercentCapslock") }}
             <InputText
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
               :class="{ 'p-invalid': !validate.professionalPercent }"
@@ -184,7 +184,7 @@
             />
           </h5>
           <h5 class="field-heading mt-4">
-            PROFESSIONAL PRICE
+            {{ localize("professionalPriceCapslock") }}
             <span class="field-value">{{ professionalPrice }}</span>
           </h5>
         </MDBCol>
