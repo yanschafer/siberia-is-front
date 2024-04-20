@@ -9,7 +9,7 @@
   </Dialog>
   <MDBContainer class="single-user-info d-flex flex-column gap-3">
     <MDBRow class="d-flex">
-      <MDBRow class="w-auto">
+      <MDBRow class="w-auto gap-2">
         <h1 class="username-heading">{{ getGroupName }}</h1>
         <MDBBtn class="btn btn-outline-black utility-btn" @click="startEdit">{{
           localize("editGroup", "groups")
@@ -28,7 +28,7 @@
         {{ localize("productsList", "groups") }}
       </h1>
     </MDBRow>
-    <SearchComponent @search="handleSearch" />
+    <SearchComponent class="search" @search="handleSearch" />
     <TableComponent
       :info-message="noDataMessage"
       :rows="getProductList"
@@ -179,5 +179,8 @@ export default {
 }
 .table-block {
   width: 80vw;
+}
+.search {
+  width: 78.5vw;
 }
 </style>
