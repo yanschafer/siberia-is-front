@@ -228,7 +228,6 @@ import TreeDropdownComponent from "@/components/Elements/Selectors/TreeDropdownC
 import SelectComponent from "@/components/Elements/Selectors/SelectComponent.vue";
 import CascadeSelect from "primevue/cascadeselect";
 import { MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow } from "mdb-vue-ui-kit";
-import FileUploadComponent from "@/components/Inputs/FileUploadComponent.vue";
 import InputText from "primevue/inputtext";
 import Panel from "primevue/panel";
 import PrintUtil from "@/utils/localization/print.util";
@@ -259,7 +258,6 @@ export default {
     SelectComponent,
     CascadeSelect,
     MDBInput,
-    FileUploadComponent,
     MDBContainer,
     MDBRow,
     MDBCol,

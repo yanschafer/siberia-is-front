@@ -125,7 +125,6 @@ import { useRoute, useRouter } from "vue-router";
 import PrintUtil from "@/utils/localization/print.util";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
 import ProfileComponent from "@/components/Elements/Profile/ProfileComponent.vue";
-import FileUploadComponent from "@/components/Inputs/FileUploadComponent.vue";
 import FileUploadModalComponent from "@/components/Inputs/FileUploadModalComponent.vue";
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import ProductsUploadModalComponent from "@/components/Inputs/ProductsUploadModalComponent.vue";
@@ -139,7 +138,6 @@ export default {
     ProductsUploadModalComponent,
     TableComponent,
     FileUploadModalComponent,
-    FileUploadComponent,
     ProfileComponent,
     NotificationsComponent,
     MDBContainer,

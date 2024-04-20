@@ -13,6 +13,7 @@ import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
 import PrintUtil from "@/utils/localization/print.util";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 const app = createApp(App);
 
@@ -21,14 +22,7 @@ app.directive("tooltip", Tooltip);
 app.use(VueApexCharts);
 app.use(createPinia());
 app.use(router);
-app.use(PrimeVue, {
-  locale: {
-    cancel: PrintUtil.localize("cancel", "media"),
-    choose: PrintUtil.localize("choose", "media"),
-    upload: PrintUtil.localize("upload", "media"),
-    //...
-  },
-});
+app.use(PrimeVue, {});
 app.use(ToastService);
 
 app.mount("#app");

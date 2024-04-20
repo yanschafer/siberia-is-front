@@ -148,7 +148,6 @@
 
 <script lang="ts">
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput } from "mdb-vue-ui-kit";
-import FileUploadComponent from "@/components/Inputs/FileUploadComponent.vue";
 import { useCollectionStore } from "@/stores/collection.store";
 import { useRoute, useRouter } from "vue-router";
 import { useBrandStore } from "@/stores/brand.store";
@@ -175,7 +174,6 @@ export default {
     TreeDropdownComponent,
     SelectComponent,
     MDBInput,
-    FileUploadComponent,
     MDBContainer,
     MDBRow,
     MDBCol,

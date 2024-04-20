@@ -21,6 +21,7 @@ import { useMediaStore } from "@/stores/media.store";
 import { useMediaModalStore } from "@/stores/media-modal.store";
 import { useProductsStore } from "@/stores/products.store";
 import PrintUtil from "@/utils/localization/print.util";
+import { usePrimeVue } from "primevue/config";
 
 export default defineComponent({
   name: "FileUploadModalComponent",
@@ -34,6 +35,12 @@ export default defineComponent({
   data: () => ({
     accept: "image/*",
   }),
+  setup() {
+    const primeVue = usePrimeVue();
+    primeVue.config.locale.cancel = PrintUtil.localize("cancel", "media");
+    primeVue.config.locale.choose = PrintUtil.localize("choose", "media");
+    primeVue.config.locale.upload = PrintUtil.localize("upload", "media");
+  },
   created() {
     if (this.products) this.accept = "text/csv";
   },

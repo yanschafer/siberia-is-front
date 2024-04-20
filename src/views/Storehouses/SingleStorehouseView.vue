@@ -98,7 +98,7 @@
               @click="addWriteOff"
               class="utility-btn"
               outline="black"
-              >- WRITE-OFF</MDBBtn
+              >{{ localize("newWriteOffCapslock") }}</MDBBtn
             >
             <MDBBtn
               v-if="arrivalAvailable"
@@ -106,7 +106,7 @@
               class="utility-btn upload-btn"
               outline="black"
               ><IconUpload color="black" :size="15" stroke-width="2" />
-              UPLOAD</MDBBtn
+              {{ localize("UPLOAD", "router") }}</MDBBtn
             >
           </div>
 
@@ -145,7 +145,7 @@
           </template>
           <template v-else-if="newWriteOff">
             <StorehouseOperation
-              :title="'New write-off registration'"
+              :title="localize('newWriteOffRegistration')"
               :need-validation="true"
               :show-price="false"
               :amount-validation="productListValidateObject"
