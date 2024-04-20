@@ -389,12 +389,17 @@ export default {
         60 *
         1000;
 
-      this.productFormStore.data.brand =
-        parseInt(this.brandSelectorStore.value.id) || null;
-      this.productFormStore.data.collection =
-        parseInt(this.collectionSelectorStore.value.id) || null;
-      this.productFormStore.data.category =
-        parseInt(this.categorySelectorStore.value) || null;
+      if (this.brandSelectorStore.value)
+        this.productFormStore.data.brand =
+          parseInt(this.brandSelectorStore.value.id) || null;
+
+      if (this.collectionSelectorStore.value)
+        this.productFormStore.data.collection =
+          parseInt(this.collectionSelectorStore.value.id) || null;
+
+      if (this.categorySelectorStore.value)
+        this.productFormStore.data.category =
+          parseInt(this.categorySelectorStore.value) || null;
 
       const validateRes = this.productFormStore.validate();
       if (validateRes !== true) {

@@ -134,10 +134,17 @@ export default {
   },
   computed: {
     productList() {
-      if (!this.needValidation) return this.productStore.getProductList;
-      return this.productStore.getProductList.filter(
-        (el) => this.amountValidation[el.id],
-      );
+      let list;
+      if (!this.needValidation) list = this.productStore.getProductList;
+      else
+        list = this.productStore.getProductList.filter(
+          (el) => this.amountValidation[el.id],
+        );
+
+      return list.map((el) => ({
+        ...el,
+        badgeName: el.vendorCode,
+      }));
     },
   },
   methods: {

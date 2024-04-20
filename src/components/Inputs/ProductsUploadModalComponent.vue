@@ -2,7 +2,7 @@
   <Dialog
     v-model:visible="mediaModalStore.uploadProductsOpen"
     modal
-    header="Upload products from a file"
+    :header="localize('uploadFromFile')"
   >
     <FileUploadModalComponent :products="true" />
     <TableComponent
@@ -19,14 +19,14 @@
   </Dialog>
 </template>
 
-<script>
+<script lang="ts">
 import { MDBBtn } from "mdb-vue-ui-kit";
 import { useMediaModalStore } from "@/stores/media-modal.store.ts";
 import FileUploadModalComponent from "@/components/Inputs/FileUploadModalComponent.vue";
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import Dialog from "primevue/dialog";
 import { useProductsStore } from "@/stores/products.store.ts";
-import LoggerUtil from "@/utils/logger/logger.util.ts";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "ProductsUploadModalComponent",
@@ -46,6 +46,9 @@ export default {
     };
   },
   methods: {
+    localize(key: string, module: string = "products") {
+      return PrintUtil.localize(key, module);
+    },
     removeFromUpload(row) {
       this.productsStore.removeFromUpload(row.index);
     },

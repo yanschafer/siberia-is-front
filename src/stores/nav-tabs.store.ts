@@ -6,14 +6,16 @@ export const useNavTabsStore = defineStore({
   state: () => ({
     tabsList: [],
     active: {},
+    showUtility: false,
   }),
   getters: {
     getTabs: (state) => state.tabsList,
     getActive: (state) => state.active,
   },
   actions: {
-    setTabs(tabs: NavTabDto[]) {
+    setTabs(tabs: NavTabDto[], showUtility: boolean = false) {
       this.tabsList = tabs;
+      this.showUtility = showUtility;
     },
     setActive(index: number) {
       this.active = this.tabsList[index];

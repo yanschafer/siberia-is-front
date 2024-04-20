@@ -12,7 +12,9 @@
     <template #option="slotProps">
       <div class="selector-option align-items-center justify-content-between">
         <div>{{ slotProps.option.name }}</div>
-        <Badge v-if="showBadge" value="SKU" class="ml-2"></Badge>
+        <Badge v-if="showBadge" value="SKU" class="ml-2">{{
+          slotProps.option.badgeName
+        }}</Badge>
       </div>
     </template>
   </Dropdown>
@@ -21,6 +23,7 @@
 <script lang="ts">
 import Dropdown from "primevue/dropdown";
 import Badge from "primevue/badge";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "SelectComponent",
@@ -66,6 +69,9 @@ export default {
       selectedItem,
       handleChange,
     };
+  },
+  created() {
+    LoggerUtil.debug(this.items);
   },
   mounted() {
     this.$watch("modelValue", () => {

@@ -100,19 +100,22 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
-    tabNavStore.setTabs([
-      new NavTabDto(
-        1,
-        PrintUtil.localize("singleProducts", "components"),
-        null,
-        () => {},
-      ),
-      new NavTabDto(
-        2,
-        PrintUtil.localize("groupedProducts", "components"),
-        new RouteParametrized("groups"),
-      ),
-    ]);
+    tabNavStore.setTabs(
+      [
+        new NavTabDto(
+          1,
+          PrintUtil.localize("singleProducts", "components"),
+          null,
+          () => {},
+        ),
+        new NavTabDto(
+          2,
+          PrintUtil.localize("groupedProducts", "components"),
+          new RouteParametrized("groups"),
+        ),
+      ],
+      true,
+    );
     tabNavStore.setActive(0);
 
     const loaders = await Promise.all([
@@ -214,6 +217,7 @@ export default {
         ),
       );
     },
+
     routeIdParam() {
       return parseInt(this.route.params.id.toString());
     },
