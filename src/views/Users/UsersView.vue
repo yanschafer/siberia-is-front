@@ -60,17 +60,17 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
-    const loadRes = await usersStore.loadUsersList();
+    const loaders = await Promise.all([usersStore.loadUsersList()]);
     return {
       filtersStore,
       usersStore,
       router,
       route,
-      loadRes,
+      loaders,
     };
   },
   mounted() {
-    this.loadRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
     this.filtersStore.setFilters({
       name: {
         title: this.localize("name"),

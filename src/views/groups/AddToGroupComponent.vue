@@ -70,15 +70,18 @@ export default defineComponent({
     const productGroupStore = useProductGroupStore();
     const addToGroupModalStore = useAddToGroupModalStore();
 
+    const loaders = await Promise.all([productsStore.loadProductList()]);
+
     return {
       productsStore,
       productGroupStore,
       addToGroupModalStore,
-      loadProductListRes: await productsStore.loadProductList(),
+      loaders,
     };
   },
   created() {
-    this.loadProductListRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
+
     this.productGroupStore.$onAction(async (action) => {
       if (action.name == "update_success") {
         this.$toast.add({

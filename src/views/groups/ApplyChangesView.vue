@@ -271,6 +271,12 @@ export default {
     const router = useRouter();
     const route = useRoute();
 
+    const loaders = await Promise.all([
+      brandStore.loadBrandsList(),
+      collectionStore.loadCollectionList(),
+      categoriesStore.loadCategoriesList(),
+    ]);
+
     return {
       productGroupStore,
       brandStore,
@@ -278,15 +284,11 @@ export default {
       collectionStore,
       groupId: parseInt(route.params.id.toString()),
       router,
-      loadBrandListRes: await brandStore.loadBrandsList(),
-      loadCollectionListRes: await collectionStore.loadCollectionList(),
-      loadCategoryListRes: await categoriesStore.loadCategoriesList(),
+      loaders,
     };
   },
   created() {
-    this.loadBrandListRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadCollectionListRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadCategoryListRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
 
     const brandValidateRule = new ValidateRule().skipIfNull().required();
     const distributorPercentValidateRule = new ValidateRule()

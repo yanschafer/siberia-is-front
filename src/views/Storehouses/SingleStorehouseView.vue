@@ -261,6 +261,13 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
+    const loaders = await Promise.all([
+      productStore.loadProductList(),
+      storehouseStore.loadSelectedStoreHouse(
+        parseInt(route.params.id.toString()),
+      ),
+    ]);
+
     return {
       storehouseStore,
       productStore,
@@ -268,17 +275,17 @@ export default {
       route,
       router,
       storehouseId: parseInt(route.params.id.toString()),
-      loadProductListRes: await productStore.loadProductList(),
-      loadSelectedStorehouse: await storehouseStore.loadSelectedStoreHouse(
-        parseInt(route.params.id.toString()),
-      ),
+      loaders,
       authCheckStore,
     };
   },
   async created() {
-    this.loadProductListRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadSelectedStorehouse.toastIfError(this.$toast, this.$nextTick);
-    if (this.loadSelectedStorehouse.success) this.updateMangeButtons();
+    const succeedLoad = this.loaders.filter((el) => {
+      el.toastIfError(this.$toast, this.$nextTick);
+      return el.success;
+    });
+
+    if (succeedLoad) this.updateMangeButtons();
 
     const authModel = new AuthModel();
     this.storehouseQrUrl = await authModel.getStorehouseQr(this.storehouseId);

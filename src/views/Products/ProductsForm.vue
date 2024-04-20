@@ -240,6 +240,9 @@ import BrandSelector from "@/components/Inputs/entities/BrandSelector.vue";
 import { useMediaModalStore } from "@/stores/media-modal.store";
 import loggerUtil from "@/utils/logger/logger.util";
 import LoggerUtil from "@/utils/logger/logger.util";
+import { useBrandStore } from "@/stores/brand.store";
+import { useCategoriesStore } from "@/stores/categories.store";
+import { useCollectionStore } from "@/stores/collection.store";
 
 export default {
   name: "ProductsForm",

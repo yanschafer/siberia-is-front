@@ -83,19 +83,23 @@ export default {
     const historyEventStore = useHistoryEventStore();
     const route = useRoute();
     const router = useRouter();
-    const loaded = await historyStore.loadItem(
-      parseInt(route.params.id.toString()),
-    );
+    const loaders = await Promise.all([
+      historyStore.loadItem(parseInt(route.params.id.toString())),
+    ]);
     return {
       historyStore,
       historyEventStore,
       router,
-      loadItemRes: loaded,
+      loaders,
     };
   },
   async created() {
-    this.loadItemRes.toastIfError(this.$toast, this.$nextTick);
-    if (this.loadItemRes.success)
+    const succeedLoad =
+      this.loaders.filter((el) => {
+        el.toastIfError(this.$toast, this.$nextTick);
+        return el.success;
+      }).length > 0;
+    if (succeedLoad)
       await this.historyEventStore.init(this.historyStore.selectedItem);
   },
   computed: {

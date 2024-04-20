@@ -204,6 +204,9 @@ import ProductDto from "@/api/modules/product/dto/product.dto";
 import MediaMiniModalComponent from "@/views/Media/MediaMiniModalComponent.vue";
 import ProductsForm from "@/views/Products/ProductsForm.vue";
 import { useProductFormStore } from "@/stores/components/product-form.store";
+import { useBrandStore } from "@/stores/brand.store";
+import { useCategoriesStore } from "@/stores/categories.store";
+import { useCollectionStore } from "@/stores/collection.store";
 
 export default {
   name: "SingleProductView",
@@ -242,9 +245,19 @@ export default {
     const productFormStore = useProductFormStore();
     const authCheckStore = useAuthCheckStore();
     const productStore = useProductsStore();
+    const brandStore = useBrandStore();
+    const categoryStore = useCategoriesStore();
+    const collectionStore = useCollectionStore();
     const modalStore = useModalStore();
     const route = useRoute();
     const router = useRouter();
+
+    const loaders = await Promise.all([
+      productStore.loadSelectedProduct(parseInt(route.params.id.toString())),
+      brandStore.loadBrandsList(),
+      collectionStore.loadCollectionList(),
+      categoryStore.loadCategoriesList(),
+    ]);
 
     return {
       authCheckStore,
@@ -252,13 +265,11 @@ export default {
       productStore,
       modalStore,
       router,
-      loadSelectedRes: await productStore.loadSelectedProduct(
-        parseInt(route.params.id.toString()),
-      ),
+      loaders,
     };
   },
   created() {
-    this.loadSelectedRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
 
     const stringValidateRule = new ValidateRule().skipIfNull().required();
     const positiveNumberValidateRule = new ValidateRule()

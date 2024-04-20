@@ -106,6 +106,13 @@ export default {
     ]);
     tabNavStore.setActive(0);
 
+    const loaders = await Promise.all([
+      productsStore.loadProductList(),
+      brandStore.loadBrandsList(),
+      collectionStore.loadCollectionList(),
+      categoryStore.loadCategoriesList(),
+    ]);
+
     return {
       tabNavStore,
       filtersStore,
@@ -116,10 +123,7 @@ export default {
       productGroupStore,
       route,
       router,
-      loadProductListRes: await productsStore.loadProductList(),
-      loadBrandListRes: await brandStore.loadBrandsList(),
-      loadCollectionListRes: await collectionStore.loadCollectionList(),
-      loadCategoryListRes: await categoryStore.loadCategoriesList(),
+      loaders,
     };
   },
   created() {
@@ -187,10 +191,7 @@ export default {
         type: FilterType.SELECT,
       },
     });
-    this.loadProductListRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadBrandListRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadCollectionListRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadCategoryListRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
   },
   computed: {
     getFilteredProducts() {

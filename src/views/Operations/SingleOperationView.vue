@@ -66,7 +66,7 @@
           </template>
         </MDBRow>
       </MDBCol>
-      <div v-if="transactionQrUrl && transactionQrUrl != ''" class="w-auto">
+      <div v-if="showTransactionQr" class="w-auto">
         <img class="qr" :src="transactionQrUrl" />
       </div>
     </MDBRow>
@@ -161,20 +161,23 @@ export default {
     const transactionSocketHandler = useTransactionSocketHandler();
     const route = useRoute();
 
+    const loaders = await Promise.all([
+      storehousesStore.loadStorehouseList(),
+      operationStore.loadSelectedOperation(
+        parseInt(route.params.id.toString()),
+      ),
+    ]);
+
     return {
       transactionId: parseInt(route.params.id.toString()),
       operationStore,
       storehousesStore,
       transactionSocketHandler,
-      loadStocksRes: await storehousesStore.loadStorehouseList(),
-      loadOperationRes: await operationStore.loadSelectedOperation(
-        parseInt(route.params.id.toString()),
-      ),
+      loaders,
     };
   },
   async created() {
-    this.loadOperationRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadStocksRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
 
     const authModel = new AuthModel();
     this.transactionQrUrl = await authModel.getTransactionQr(
@@ -353,6 +356,11 @@ export default {
         vendorCode: el.product.vendorCode,
         price: el.price,
       }));
+    },
+    showTransactionQr() {
+      let urlExist = this.transactionQrUrl && this.transactionQrUrl != "";
+
+      return urlExist;
     },
   },
 };

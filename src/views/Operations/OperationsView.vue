@@ -61,21 +61,23 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
+    const loaders = await Promise.all([
+      operationStore.loadOperationList(),
+      stockStore.loadStorehouseList(),
+      operationStore.loadStatusesList(),
+    ]);
+
     return {
       filtersStore,
       operationStore,
       stockStore,
       route,
       router,
-      loadOperationsRes: await operationStore.loadOperationList(),
-      loadStocksRes: await stockStore.loadStorehouseList(),
-      loadStatusesRes: await operationStore.loadStatusesList(),
+      loaders,
     };
   },
   created() {
-    this.loadOperationsRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadStocksRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadStatusesRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
     this.filtersStore.setFilters({
       showClosed: {
         title: "Show closed operations",

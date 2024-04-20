@@ -67,17 +67,19 @@ export default {
     ]);
     tabNavStore.setActive(1);
 
+    const loaders = await Promise.all([productGroupStore.loadGroupsList()]);
+
     return {
       productGroupStore,
       productsStore,
       addToGroupStore,
       tabNavStore,
       router,
-      loadProductGroupsListRes: await productGroupStore.loadGroupsList(),
+      loaders,
     };
   },
   created() {
-    this.loadProductGroupsListRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
   },
   data: () => ({
     noDataMessage: {

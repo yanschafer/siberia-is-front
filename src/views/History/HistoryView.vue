@@ -54,14 +54,18 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
+    const loaders = await Promise.all([
+      historyStore.loadHistoryList(),
+      historyStore.loadEventObjectTypes(),
+      historyStore.loadEventTypes(),
+    ]);
+
     return {
       filtersStore,
       historyStore,
       route,
       router,
-      loadListRes: await historyStore.loadHistoryList(),
-      loadEventObjectsRes: await historyStore.loadEventObjectTypes(),
-      loadEventTypesRes: await historyStore.loadEventTypes(),
+      loaders,
     };
   },
   created() {
@@ -87,9 +91,7 @@ export default {
         items: this.historyStore.getEventObjectTypes,
       },
     });
-    this.loadListRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadEventTypesRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadEventObjectsRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
   },
   computed: {
     filtersInput() {

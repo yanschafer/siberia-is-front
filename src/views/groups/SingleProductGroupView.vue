@@ -75,15 +75,20 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
+    const loaders = await Promise.all([
+      productGroupStore.loadSelectedGroup(parseInt(route.params.id.toString())),
+    ]);
+
     return {
       productGroupStore,
       addToGroupModalStore,
       router,
       groupId: parseInt(route.params.id.toString()),
-      loadSelectedRes: await productGroupStore.loadSelectedGroup(
-        parseInt(route.params.id.toString()),
-      ),
+      loaders,
     };
+  },
+  created() {
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
   },
   methods: {
     localize(name, module) {
