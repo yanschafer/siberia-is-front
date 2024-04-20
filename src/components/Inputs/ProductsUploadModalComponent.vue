@@ -12,8 +12,10 @@
       :enable-delete="true"
       @row-delete="removeFromUpload"
     />
-    <MDBBtn v-if="uploadedProducts.length" @click="upload">LOAD</MDBBtn>
-    <MDBBtn v-if="uploadedProducts.length" @click="clear">CLEAR</MDBBtn>
+    <div class="d-flex flex-row gap-2">
+      <MDBBtn class="btn utility-btn btn-outline-black" v-if="uploadedProducts.length" @click="upload">LOAD</MDBBtn>
+      <MDBBtn class="btn utility-btn btn-outline-danger" v-if="uploadedProducts.length" @click="clear">CLEAR</MDBBtn>
+    </div>
   </Dialog>
 </template>
 
