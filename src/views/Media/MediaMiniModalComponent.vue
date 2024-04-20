@@ -2,7 +2,7 @@
   <Dialog
     v-model:visible="mediaModalStore.miniGalleryVisible"
     modal
-    header="Media gallery"
+    :header="localize('mediaGallery')"
     :style="{ width: '80vw' }"
   >
     <ScrollPanel
@@ -23,9 +23,9 @@
                   @change="toggleAll"
                   :binary="true"
                 />
-                <Button @click="setSelected" class="btn utility-btn"
-                  >SELECT</Button
-                >
+                <Button @click="setSelected" class="btn utility-btn">{{
+                  localize("select")
+                }}</Button>
                 <SearchComponent
                   class="search"
                   v-model="mediaStore.searchTerm"
@@ -78,7 +78,9 @@
                   </div>
                   <div class="d-flex flex-row flex-grow-1 gap-4">
                     <div class="d-flex flex-column justify-center col-4">
-                      <h5 class="m-0 heading-list">FILE NAME</h5>
+                      <h5 class="m-0 heading-list">
+                        {{ localize("fileName") }}
+                      </h5>
                       <p class="text-muted m-0">{{ image.name }}</p>
                     </div>
                     <!--div class="d-flex flex-column col-2 justify-center">
@@ -89,7 +91,7 @@
                       <Button
                         @click="removeImage(image)"
                         class="btn btn-success utility-btn"
-                        >SELECT</Button
+                        >{{ localize("select") }}</Button
                       >
                     </div>
                   </div>
@@ -172,6 +174,7 @@ import LoggerUtil from "@/utils/logger/logger.util.ts";
 import FilesResolverUtil from "@/utils/files-resolver.util.ts";
 import { useProductsStore } from "@/stores/products.store";
 import { useMediaModalStore } from "@/stores/media-modal.store";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default defineComponent({
   name: "MediaMiniModalComponent",
@@ -223,6 +226,9 @@ export default defineComponent({
     this.loadRes.toastIfError(this.$toast, this.$nextTick);
   },
   methods: {
+    localize(key: string, module: string = "media") {
+      return PrintUtil.localize(key, module);
+    },
     refreshSelected() {
       this.mediaStore.galleryItems = this.mediaStore.galleryItems.map((el) => {
         if (this.mediaModalStore.miniGallerySelected.includes(el.id))

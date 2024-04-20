@@ -28,6 +28,7 @@ import DialogComponent from "@/components/Elements/Dialogs/DialogComponent.vue";
 import { MDBContainer } from "mdb-vue-ui-kit";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
 import BreadcrumbDto from "@/router/dto/breadcrumb.dto";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "DashboardView",
@@ -66,6 +67,8 @@ export default {
       } else {
         this.pageTitle = "Dashboard";
       }
+
+      LoggerUtil.debug("PAGE TITLE HERE", this.pageTitle);
     },
     logout() {
       this.router.push("/");
@@ -83,7 +86,7 @@ export default {
         return this.route.meta.breadcrumbs.map((el: BreadcrumbDto) => {
           return {
             label: el.label,
-            ...el.route.toVueRoute(),
+            ...el.route.toVueRoute(this.route.params),
           };
         });
       } else {

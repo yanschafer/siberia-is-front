@@ -16,7 +16,9 @@ export const useProductGroupStore = defineStore({
     searchTerm: "",
     groupList: [],
     selectedGroup: new ProductGroupDto(1, "", []),
-    productGroupColumns: [{ field: "name", header: "NAME" }],
+    productGroupColumns: [
+      { field: "name", header: PrintUtil.localize("nameCapslock", "default") },
+    ],
     productTableColumns: [
       { field: "name", header: PrintUtil.localize("nameCapslock", "default") },
       {

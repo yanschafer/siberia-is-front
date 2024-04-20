@@ -8,7 +8,7 @@
     :maxFileSize="100000000"
   >
     <template #empty>
-      <p>Drag and drop files to here to upload.</p>
+      <p>{{ localize("dragAndDrop") }}</p>
     </template>
   </FileUpload>
 </template>
@@ -20,6 +20,8 @@ import LoggerUtil from "@/utils/logger/logger.util";
 import { useMediaStore } from "@/stores/media.store";
 import { useMediaModalStore } from "@/stores/media-modal.store";
 import { useProductsStore } from "@/stores/products.store";
+import PrintUtil from "@/utils/localization/print.util";
+import { usePrimeVue } from "primevue/config";
 
 export default defineComponent({
   name: "FileUploadModalComponent",
@@ -33,10 +35,19 @@ export default defineComponent({
   data: () => ({
     accept: "image/*",
   }),
+  setup() {
+    const primeVue = usePrimeVue();
+    primeVue.config.locale.cancel = PrintUtil.localize("cancel", "media");
+    primeVue.config.locale.choose = PrintUtil.localize("choose", "media");
+    primeVue.config.locale.upload = PrintUtil.localize("upload", "media");
+  },
   created() {
     if (this.products) this.accept = "text/csv";
   },
   methods: {
+    localize(key: string, module: string = "media") {
+      return PrintUtil.localize(key, module);
+    },
     uploader(event) {
       if (this.products) this.productUploader(event);
       else this.photoUploader(event);

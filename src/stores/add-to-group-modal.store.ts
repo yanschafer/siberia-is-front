@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import ProductGroupDto from "@/api/modules/product/dto/groups/product-group.dto";
 import LoggerUtil from "@/utils/logger/logger.util";
+import PrintUtil from "@/utils/localization/print.util";
 
 export const useAddToGroupModalStore = defineStore({
   id: "add-to-group-modal-store",
@@ -34,8 +35,8 @@ export const useAddToGroupModalStore = defineStore({
       this.name = "";
       this.selectedRows = [];
       this.addToGroupOpen = true;
-      this.buttonLabel = "+ Create";
-      this.title = "Create group";
+      this.buttonLabel = PrintUtil.localize("+ Create", "groups");
+      this.title = PrintUtil.localize("createGroupDialog", "groups");
       this.callback = () => this.create();
     },
     openEditModal(selectedGroup: ProductGroupDto, callback: Function) {
@@ -44,8 +45,8 @@ export const useAddToGroupModalStore = defineStore({
       this.selectedRows = selectedGroup.products;
       LoggerUtil.debug(this.getOutput);
       this.addToGroupOpen = true;
-      this.buttonLabel = "Save";
-      this.title = "Edit group";
+      this.buttonLabel = PrintUtil.localize("Save", "groups");
+      this.title = PrintUtil.localize("editGroupDialog", "groups");
       this.callback = () => callback(this.getOutput);
     },
   },

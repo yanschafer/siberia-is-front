@@ -98,7 +98,7 @@
               @click="addWriteOff"
               class="utility-btn"
               outline="black"
-              >- WRITE-OFF</MDBBtn
+              >{{ localize("newWriteOffCapslock") }}</MDBBtn
             >
             <MDBBtn
               v-if="arrivalAvailable"
@@ -106,7 +106,7 @@
               class="utility-btn upload-btn"
               outline="black"
               ><IconUpload color="black" :size="15" stroke-width="2" />
-              UPLOAD</MDBBtn
+              {{ localize("UPLOAD", "router") }}</MDBBtn
             >
           </div>
 
@@ -145,7 +145,7 @@
           </template>
           <template v-else-if="newWriteOff">
             <StorehouseOperation
-              :title="'New write-off registration'"
+              :title="localize('newWriteOffRegistration')"
               :need-validation="true"
               :show-price="false"
               :amount-validation="productListValidateObject"
@@ -261,6 +261,13 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
+    const loaders = await Promise.all([
+      productStore.loadProductList(),
+      storehouseStore.loadSelectedStoreHouse(
+        parseInt(route.params.id.toString()),
+      ),
+    ]);
+
     return {
       storehouseStore,
       productStore,
@@ -268,17 +275,17 @@ export default {
       route,
       router,
       storehouseId: parseInt(route.params.id.toString()),
-      loadProductListRes: await productStore.loadProductList(),
-      loadSelectedStorehouse: await storehouseStore.loadSelectedStoreHouse(
-        parseInt(route.params.id.toString()),
-      ),
+      loaders,
       authCheckStore,
     };
   },
   async created() {
-    this.loadProductListRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadSelectedStorehouse.toastIfError(this.$toast, this.$nextTick);
-    if (this.loadSelectedStorehouse.success) this.updateMangeButtons();
+    const succeedLoad = this.loaders.filter((el) => {
+      el.toastIfError(this.$toast, this.$nextTick);
+      return el.success;
+    });
+
+    if (succeedLoad) this.updateMangeButtons();
 
     const authModel = new AuthModel();
     this.storehouseQrUrl = await authModel.getStorehouseQr(this.storehouseId);

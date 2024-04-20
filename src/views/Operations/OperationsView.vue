@@ -61,51 +61,66 @@ export default {
     const route = useRoute();
     const router = useRouter();
 
+    const loaders = await Promise.all([
+      operationStore.loadOperationList(),
+      stockStore.loadStorehouseList(),
+      operationStore.loadStatusesList(),
+    ]);
+
     return {
       filtersStore,
       operationStore,
       stockStore,
       route,
       router,
-      loadOperationsRes: await operationStore.loadOperationList(),
-      loadStocksRes: await stockStore.loadStorehouseList(),
-      loadStatusesRes: await operationStore.loadStatusesList(),
+      loaders,
     };
   },
   created() {
-    this.loadOperationsRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadStocksRes.toastIfError(this.$toast, this.$nextTick);
-    this.loadStatusesRes.toastIfError(this.$toast, this.$nextTick);
+    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
     this.filtersStore.setFilters({
       showClosed: {
-        title: "Show closed operations",
+        title: PrintUtil.localize("showClosedOperations", "operations"),
         type: FilterType.CHECKBOX,
         value: false,
       },
       status: {
-        title: "Operation status",
+        title: PrintUtil.localize("operationStatus", "operations"),
         type: FilterType.SELECT,
         items: this.operationStore.getStatusList,
         value: null,
       },
       type: {
-        title: "Operation type",
+        title: PrintUtil.localize("operationType", "operations"),
         type: FilterType.SELECT,
         items: [
-          { id: TransactionType.INCOME, name: "Arrival" },
-          { id: TransactionType.OUTCOME, name: "Sale" },
-          { id: TransactionType.TRANSFER, name: "Request" },
+          {
+            id: TransactionType.INCOME,
+            name: PrintUtil.localize("Arrival", "operations"),
+          },
+          {
+            id: TransactionType.OUTCOME,
+            name: PrintUtil.localize("Sale", "operations"),
+          },
+          {
+            id: TransactionType.TRANSFER,
+            name: PrintUtil.localize("Request", "operations"),
+          },
+          {
+            id: TransactionType.WriteOff,
+            name: PrintUtil.localize("Write-off", "operations"),
+          },
         ],
         value: null,
       },
       to: {
-        title: "Storehouse TO",
+        title: PrintUtil.localize("storehouseTo", "operations"),
         type: FilterType.SELECT,
         items: this.stockStore.getStorehouseList,
         value: null,
       },
       from: {
-        title: "Storehouse FROM",
+        title: PrintUtil.localize("storehouseFrom", "operations"),
         type: FilterType.SELECT,
         items: this.stockStore.getStorehouseList,
         value: null,

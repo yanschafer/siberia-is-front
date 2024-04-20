@@ -7,6 +7,7 @@ import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import { MDBCol, MDBContainer } from "mdb-vue-ui-kit";
 import FiltersSidebarComponent from "@/components/Elements/Filter sidebar/FiltersSidebarComponent.vue";
 import MultiSelectComponent from "@/components/Elements/Selectors/MultiSelectComponent.vue";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default defineComponent({
   name: "ProductsExportModal",
@@ -26,6 +27,11 @@ export default defineComponent({
       visible: false,
     };
   },
+  methods: {
+    localize(key: string, module: string = "products") {
+      return PrintUtil.localize(key, module);
+    },
+  },
 });
 </script>
 
@@ -33,23 +39,25 @@ export default defineComponent({
   <span
     class="export-btn d-flex justify-content-center align-items-center gap-2"
     @click="visible = true"
-    ><IconFileArrowRight color="#9b9b9b" :size="16" stroke-width="2" /> Export
-    to file
+    ><IconFileArrowRight color="#9b9b9b" :size="16" stroke-width="2" />
+    {{ localize("exportToFile") }}
   </span>
 
   <Dialog
     v-model:visible="visible"
     modal
-    header="Export to file"
+    :header="localize('exportToFile')"
     :style="{ width: '80vw', height: '90vh' }"
   >
     <div class="row justify-content-between">
       <div class="col-auto">
-        <p>Columns for export</p>
+        <p>{{ localize("columnsForExport") }}</p>
         <!--      <MultiSelectComponent />-->
       </div>
       <div class="col-auto">
-        <button class="btn btn-outline-black utility-btn">Exoprt</button>
+        <button class="btn btn-outline-black utility-btn">
+          {{ localize("export") }}
+        </button>
       </div>
     </div>
     <MDBContainer class="d-flex container-content">

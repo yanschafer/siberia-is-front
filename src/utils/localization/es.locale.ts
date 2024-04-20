@@ -51,6 +51,14 @@ export default {
 
       Operations: "Operaciones",
       SingleOperation: "Operación Individual",
+
+      Groups: "Grupos",
+      "Group details": "Grupo",
+      "Apply changes": "Aplicar cambios",
+
+      Media: "Medios",
+      "+ ADD": "+ AGREGAR",
+      UPLOAD: "CARGAR",
     },
     sidebar: {
       //auth-check.store
@@ -59,7 +67,8 @@ export default {
       Assortments: "Asortimentos",
       Storehouses: "Almacenes",
       Users: "Usuarios",
-      Roles: "Roles",
+      Roles: "Funciones",
+      Media: "Medios",
     },
     //HeaderComponent
     header: {
@@ -182,8 +191,10 @@ export default {
       linkCapslock: "ENLACE",
       colorCapslock: "COLOR",
       quantityPerPackageCapslock: "CANTIDAD POR PAQUETE",
-      distributionPriceCapslock: "PORCENTAJE DE DISTRIBUCIÓN",
-      professionalPriceCapslock: "PORCENTAJE DEL PRECIO PROFESIONAL",
+      distributionPriceCapslock: "PRECIO DE DISTRIBUCIÓN",
+      professionalPriceCapslock: "PRECIO PROFESIONAL",
+      distributionPercentCapslock: "PORCENTAJE DE DISTRIBUCIÓN",
+      professionalPercentCapslock: "PORCENTAJE PROFESIONAL",
       defaultPriceCapslock: "PRECIO POR DEFECTO",
       selectACategory: "Seleccionar una categoría",
       selectABrand: "Seleccionar una marca",
@@ -193,6 +204,7 @@ export default {
       categoryName: "Nombre de la categoría",
       createABrand: "Crear una marca",
       brandName: "Nombre de la marca",
+      barcode: "CÓDIGO DE BARRAS",
       createACollection: "Crear una colección",
       collectionName: "Nombre de la colección",
       placeholderDescription: "Agregar nueva descripción...",
@@ -219,6 +231,8 @@ export default {
       purchasePrice: "Precio de compra",
       distributorPrice: "Precio del distribuidor",
       professionalPrice: "Precio profesional",
+      distributorPercent: "Porcentaje del distribuidor",
+      professionalPercent: "Porcentaje profesional",
       commonPrice: "Precio común",
       amountInBox: "Cantidad en la caja",
       brand: "Marca",
@@ -253,6 +267,36 @@ export default {
       collectionCreationFailed: "Error al crear la colección",
       productIsRemoved: "Producto eliminado",
       productSuccessfullyUpdated: "Producto actualizado exitosamente",
+      exportToFile: "Exportar a archivo",
+      columnsForExport: "Columnas para exportar",
+      export: "Exportar",
+    },
+    groups: {
+      editGroup: "EDITAR GRUPO",
+      applyChanges: "APLICAR CAMBIOS",
+      productsList: "Lista de productos",
+      apply: "APLICAR",
+      groupName: "Nombre del grupo",
+      groupNamePlaceholder: "Nombre del grupo",
+      clickOnRowsToSelect: "Haz clic en las filas para seleccionar",
+
+      editGroupDialog: "Editar grupo",
+      createGroupDialog: "Crear grupo",
+
+      "+ Create": "+ Crear",
+      Save: "Guardar",
+
+      //Toasts
+      success: "Éxito",
+      failed: "Fallo",
+      group: "Grupo",
+      createSuccess: "creado",
+      updateSuccess: "actualizado",
+      updateFailure: "actualización fallida",
+
+      massiveUpdate: "Actualización masiva",
+      applyChangesSuccessMessage:
+        "Los productos del grupo se actualizaron correctamente",
     },
     storehouses: {
       //CreateStorehouse.vue
@@ -266,11 +310,13 @@ export default {
       editStorehouse: "Editar almacén",
       deleteStorehouseCapslock: "ELIMINAR ALMACÉN",
       newArrivalCapslock: "+ NUEVA LLEGADA",
-      newSaleCapslock: "+ NUEVA VENTA",
+      newSaleCapslock: "- NUEVA VENTA",
       newRequestCapslock: "+ NUEVA SOLICITUD",
+      newWriteOffCapslock: "- NUEVA ANULAR",
       newArrivalRegistration: "Registro de Nueva Llegada",
       newSaleRegistration: "Registro de Nueva Venta",
       newRequestRegistration: "Registro de Nueva Solicitud",
+      newWriteOffRegistration: "Registro de Nueva Anular",
       confirmDeletion: "Confirmar eliminación",
       deleteWarn:
         "Esta acción no se puede deshacer, se perderán los datos de este almacén",
@@ -312,6 +358,49 @@ export default {
       //MinMaxDateFilter.vue
       min: "min",
       max: "máx",
+
+      dayNames: [
+        "Domingo",
+        "Lunes",
+        "Martes",
+        "Miércoles",
+        "Jueves",
+        "Viernes",
+        "Sábado",
+      ],
+      dayNamesShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+      dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
+      monthNames: [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre",
+      ],
+      monthNamesShort: [
+        "Ene",
+        "Feb",
+        "Mar",
+        "Abr",
+        "May",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dic",
+      ],
+      chooseYear: "Elija año",
+      chooseMonth: "Elija mes",
+      chooseDate: "Elija fecha",
     },
     components: {
       //SearchComponent.vue
@@ -349,6 +438,10 @@ export default {
       infoNotiText: "Mensaje Inicial de Información",
       errorNotiHeading: "Error",
       errorNotiText: "Mensaje de Error",
+
+      //NavTabsComponent
+      singleProducts: "Productos individuales",
+      groupedProducts: "Productos agrupados",
     },
 
     utils: {
@@ -418,32 +511,34 @@ export default {
       DateRange: "Rango de fechas",
       EventType: "Tipo de evento",
       EventObjectType: "Tipo de objeto de evento",
-
-      //history.store + SingleHistoryView.vue
       targetCapslock: "OBJETIVO",
       targetNameCapslock: "NOMBRE DEL OBJETIVO",
       typeCapslock: "TIPO",
       authorCapslock: "AUTOR",
       dateCapslock: "FECHA",
-
       Create: "Crear",
       Update: "Actualizar",
       Remove: "Eliminar",
-
-      "Stock event": "Evento de Stock",
-      "User event": "Evento de Usuario",
-      "Role event": "Evento de Rol",
-      "Product event": "Evento de Producto",
-      "Brand event": "Evento de Marca",
-      "Collection event": "Evento de Colección",
-      "Category event": "Evento de Categoría",
-      "Transaction event": "Evento de Operación",
+      "Stock event": "Evento de inventario",
+      "User event": "Evento de usuario",
+      "Role event": "Evento de rol",
+      "Product event": "Evento de producto",
+      "Brand event": "Evento de marca",
+      "Collection event": "Evento de colección",
+      "Category event": "Evento de categoría",
+      "Transaction event": "Evento de operación",
+      "Product group event": "Actualización de grupo de productos",
+      "Product massive update event": "Grupo aplicado",
+      "Product bulk create": "Carga de productos",
+      "User rights update": "Actualización de derechos de usuario",
     },
     operations: {
       Arrival: "Llegada",
       Sale: "Venta",
       Request: "Solicitud",
+      "Write-off": "Anular",
 
+      showClosedOperations: "Mostrar operaciones cerradas",
       operationType: "Tipo de operación",
       operationStatus: "Estado de la operación",
       storehouseTo: "Almacén DESTINO",
@@ -502,6 +597,28 @@ export default {
       totalValueCapslock: "VALOR TOTAL",
       leastBestsellingItems: "Productos Menos Vendidos",
       soldFrom: "800K vendidos de 1M",
+    },
+    media: {
+      uploadMedia: "Subir contenido multimedia",
+      deleteSelected: "ELIMINAR SELECCIONADO",
+      fileName: "NOMBRE DE ARCHIVO",
+      userFor: "PARA USUARIO",
+      delete: "ELIMINAR",
+      imageDetails: "Detalles de la imagen",
+      mediaNamePlaceholder: "Nombre del medio...",
+      description: "DESCRIPCIÓN",
+      descriptionPlaceholder: "Descripción...",
+      edit: "EDITAR",
+      cancelCapslock: "CANCELAR",
+      save: "GUARDAR",
+      mediaGallery: "Galería de medios",
+      select: "SELECCIONAR",
+      dragAndDrop: "Para cargar, arrastre y suelte los archivos aquí",
+      choose: "Elegir",
+      upload: "Subir",
+      cancel: "Cancelar",
+
+      chooseFilesFromGallery: "Elegir archivos de la galería",
     },
   },
 };

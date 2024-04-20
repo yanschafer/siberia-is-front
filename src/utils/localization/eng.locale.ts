@@ -50,6 +50,15 @@ export default {
 
       Operations: "Operations",
       SingleOperation: "Single operation",
+
+      Groups: "Groups",
+      "Group details": "Group details",
+      "Apply changes": "Apply changes",
+
+      Media: "Media",
+
+      "+ ADD": "+ ADD",
+      UPLOAD: "UPLOAD",
     },
     sidebar: {
       //auth-check.store
@@ -59,6 +68,7 @@ export default {
       Storehouses: "Storehouses",
       Users: "Users",
       Roles: "Roles",
+      Media: "Media",
     },
     //HeaderComponent
     header: {
@@ -182,8 +192,10 @@ export default {
       linkCapslock: "LINK",
       colorCapslock: "COLOR",
       quantityPerPackageCapslock: "QUANTITY PER PACKAGE",
-      distributionPriceCapslock: "DISTRIBUTION PERCENT",
+      distributionPriceCapslock: "DISTRIBUTION PRICE",
       professionalPriceCapslock: "PROFESSIONAL PRICE",
+      distributionPercentCapslock: "DISTRIBUTION PERCENT",
+      professionalPercentCapslock: "PROFESSIONAL PERCENT",
       defaultPriceCapslock: "DEFAULT PRICE",
       selectACategory: "Select a category",
       selectABrand: "Select a brand",
@@ -193,6 +205,7 @@ export default {
       categoryName: "Category name",
       createABrand: "Create a brand",
       brandName: "Brand name",
+      barcode: "BARCODE",
       createACollection: "Create a collection",
       collectionName: "Collection name",
       placeholderDescription: "Add new description...",
@@ -253,6 +266,35 @@ export default {
       collectionCreationFailed: "Collection creation failed",
       productIsRemoved: "Product is removed",
       productSuccessfullyUpdated: "Product successfully updated",
+      exportToFile: "Export to file",
+      columnsForExport: "Columns for export",
+      export: "Export",
+    },
+    groups: {
+      editGroup: "EDIT GROUP",
+      applyChanges: "APPLY CHANGES",
+      productsList: "Products list",
+      apply: "APPLY",
+      groupName: "Group name",
+      groupNamePlaceholder: "Group name",
+      clickOnRowsToSelect: "Click on rows to select",
+
+      editGroupDialog: "Edit group",
+      createGroupDialog: "Create group",
+
+      "+ Create": "+ Create",
+      Save: "Save",
+
+      //Toasts
+      success: "Success",
+      failed: "Failed",
+      group: "Group",
+      createSuccess: "created",
+      updateSuccess: "updated",
+      updateFailure: "updating failed",
+
+      massiveUpdate: "Massive update",
+      applyChangesSuccessMessage: "Products in group were successfully updated",
     },
     storehouses: {
       //CreateStorehouse.vue
@@ -266,11 +308,13 @@ export default {
       editStorehouse: "Edit storehouse",
       deleteStorehouseCapslock: "DELETE STOREHOUSE",
       newArrivalCapslock: "+ NEW ARRIVAL",
-      newSaleCapslock: "+ NEW SALE",
+      newSaleCapslock: "- NEW SALE",
       newRequestCapslock: "+ NEW REQUEST",
+      newWriteOffCapslock: "- NEW WRITE OFF",
       newArrivalRegistration: "New Arrival Registration",
       newSaleRegistration: "New Sale Registration",
       newRequestRegistration: "New Request Registration",
+      newWriteOffRegistration: "New Write-off Registration",
       confirmDeletion: "Confirm deletion",
       deleteWarn:
         "This action cannot be undone, this storehouse data will be lost",
@@ -311,6 +355,49 @@ export default {
       //MinMaxDateFilter.vue
       min: "min",
       max: "max",
+
+      dayNames: [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ],
+      dayNamesShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      dayNamesMin: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+      monthNames: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ],
+      monthNamesShort: [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ],
+      chooseYear: "Choose Year",
+      chooseMonth: "Choose Month",
+      chooseDate: "Choose Date",
     },
     components: {
       //SearchComponent.vue
@@ -348,6 +435,10 @@ export default {
       infoNotiText: "Initial Info Message",
       errorNotiHeading: "Error",
       errorNotiText: "Error message",
+
+      //NavTabsComponent
+      singleProducts: "Single products",
+      groupedProducts: "Grouped products",
     },
     utils: {
       //api-model.util.ts
@@ -503,6 +594,31 @@ export default {
       totalValueCapslock: "TOTAL VALUE",
       leastBestsellingItems: "Least Bestselling Items",
       soldFrom: "800K sold from 1M",
+    },
+    media: {
+      uploadMedia: "Upload media content",
+      deleteSelected: "DELETE SELECTED",
+      fileName: "FILE NAME",
+      userFor: "USER FOR",
+      delete: "DELETE",
+
+      imageDetails: "Image Details",
+      mediaNamePlaceholder: "Media name...",
+      description: "DESCRIPTION",
+      descriptionPlaceholder: "Description...",
+      edit: "EDIT",
+      cancelCapslock: "CANCEL",
+      save: "SAVE",
+
+      mediaGallery: "Media gallery",
+      select: "SELECT",
+
+      dragAndDrop: "Drag and drop files to here to upload.",
+      choose: "Choose",
+      upload: "Upload",
+      cancel: "Cancel",
+
+      chooseFilesFromGallery: "Choose files from gallery",
     },
   },
 };
