@@ -68,6 +68,7 @@ export default {
       Storehouses: "Storehouses",
       Users: "Users",
       Roles: "Roles",
+      Media: "Media",
     },
     //HeaderComponent
     header: {
@@ -204,6 +205,7 @@ export default {
       categoryName: "Category name",
       createABrand: "Create a brand",
       brandName: "Brand name",
+      barcode: "BARCODE",
       createACollection: "Create a collection",
       collectionName: "Collection name",
       placeholderDescription: "Add new description...",
@@ -547,6 +549,31 @@ export default {
       totalValueCapslock: "TOTAL VALUE",
       leastBestsellingItems: "Least Bestselling Items",
       soldFrom: "800K sold from 1M",
+    },
+    media: {
+      uploadMedia: "Upload media content",
+      deleteSelected: "DELETE SELECTED",
+      fileName: "FILE NAME",
+      userFor: "USER FOR",
+      delete: "DELETE",
+
+      imageDetails: "Image Details",
+      mediaNamePlaceholder: "Media name...",
+      description: "DESCRIPTION",
+      descriptionPlaceholder: "Description...",
+      edit: "EDIT",
+      cancelCapslock: "CANCEL",
+      save: "SAVE",
+
+      mediaGallery: "Media gallery",
+      select: "SELECT",
+
+      dragAndDrop: "Drag and drop files to here to upload.",
+      choose: "Choose",
+      upload: "Upload",
+      cancel: "Cancel",
+
+      chooseFilesFromGallery: "Choose files from gallery",
     },
   },
 };

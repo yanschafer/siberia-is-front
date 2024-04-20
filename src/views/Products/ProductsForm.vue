@@ -8,7 +8,9 @@
         >
           <div class="product-img placeholder-img" @click="openMiniGallery">
             <IconUpload color="#bbc3c7" :size="48" stroke-width="2" />
-            <p class="upload-text">Choose files from gallery</p>
+            <p class="upload-text">
+              {{ localize("chooseFilesFromGallery", "media") }}
+            </p>
           </div>
         </MDBCol>
         <MDBCol class="d-flex flex-column justify-content-center">
@@ -62,7 +64,7 @@
                 />
               </h5>
               <h5 class="field-heading d-flex gap-1 align-items-center">
-                barcode
+                {{ localize("barcode") }}
                 <InputText
                   class="animate__animated animate__flipInX animate__faster input-wrapper animate__animated animate__fadeIn username-input"
                   :class="{ 'p-invalid': !validate.barcode }"

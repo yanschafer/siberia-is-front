@@ -3,12 +3,16 @@
     v-model:visible="mediaModalStore.imageOpen"
     modal
     :style="{ width: '50vw' }"
-    header="Image Details"
+    :header="localize('imageDetails')"
   >
     <div class="d-flex flex-row">
       <div class="flex flex-column col-auto w-50 photo-col">
         <div class="container image-cont">
-          <img :src="getUrl(image.url)" alt="Image" class="media-image-full" />
+          <img
+            :src="getUrl(image.url)"
+            :alt="image.name"
+            class="media-image-full"
+          />
         </div>
       </div>
       <div class="d-flex flex-column justify-center items-center mt-3">
@@ -19,7 +23,7 @@
             <InputText
               v-model="image.name"
               v-if="editMode"
-              :placeholder="'Media name...'"
+              :placeholder="localize('mediaNamePlaceholder')"
             />
             <!--div class="d-flex flex-column justify-center">
             <h5 class="heading-list m-0">USED FOR</h5>
@@ -31,54 +35,59 @@
           </div-->
           </div>
         </div>
-        <h5 class="heading-list m-0">DESCRIPTION</h5>
+        <h5 class="heading-list m-0">{{ localize("description") }}</h5>
         <p v-if="!editMode" class="text-muted m-0">
           {{ image.description }}
         </p>
         <Textarea
           v-if="editMode"
           class="text-area"
-          :placeholder="'Description...'"
+          :placeholder="localize('descriptionPlaceholder')"
           v-model="image.description"
         ></Textarea>
         <div
           v-if="!editMode"
           class="d-flex flex-row justify-content-start gap-2 mt-3"
         >
-          <Button @click="startEdit" class="btn btn-outline-black utility-btn"
-            >EDIT</Button
+          <Button
+            @click="startEdit"
+            class="btn btn-outline-black utility-btn"
+            >{{ localize("edit") }}</Button
           >
-          <Button @click="removeImage" class="btn btn-danger utility-btn"
-            >DELETE</Button
-          >
+          <Button @click="removeImage" class="btn btn-danger utility-btn">{{
+            localize("delete")
+          }}</Button>
         </div>
         <div
           v-if="editMode"
           class="d-flex flex-row justify-content-start gap-2 mt-3"
         >
-          <Button @click="cancelEdit" class="btn btn-outline-black utility-btn"
-            >CANCEL</Button
+          <Button
+            @click="cancelEdit"
+            class="btn btn-outline-black utility-btn"
+            >{{ localize("cancelCapslock") }}</Button
           >
-          <Button @click="saveEdit" class="btn btn-success utility-btn"
-            >SAVE</Button
-          >
+          <Button @click="saveEdit" class="btn btn-success utility-btn">{{
+            localize("save")
+          }}</Button>
         </div>
       </div>
     </div>
   </Dialog>
 </template>
 
-<script>
+<script lang="ts">
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 import Textarea from "primevue/textarea";
-import { useMediaModalStore } from "@/stores/media-modal.store.ts";
-import FilesResolverUtil from "@/utils/files-resolver.util.ts";
-import { useMediaStore } from "@/stores/media.store.ts";
-import ValidatorUtil from "@/utils/validator/validator.util.ts";
+import { useMediaModalStore } from "@/stores/media-modal.store";
+import FilesResolverUtil from "@/utils/files-resolver.util";
+import { useMediaStore } from "@/stores/media.store";
+import ValidatorUtil from "@/utils/validator/validator.util";
 import ValidateRule from "@/utils/validator/validate-rule";
-import GalleryUpdateDto from "@/api/modules/gallery/dto/gallery-update.dto.ts";
+import GalleryUpdateDto from "@/api/modules/gallery/dto/gallery-update.dto";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default {
   name: "MediaModalComponent",
@@ -109,6 +118,9 @@ export default {
       .addRule("description", descriptionValidateRule);
   },
   methods: {
+    localize(key: string, module: string = "media") {
+      return PrintUtil.localize(key, module);
+    },
     startEdit() {
       this.editMode = true;
     },

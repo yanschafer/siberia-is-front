@@ -71,10 +71,14 @@ const routes = [
         component: () => import("@/views/Media/MediaView.vue"),
         meta: {
           buttons: [
-            new HeaderBtnDto("+ ADD", null, () => {
-              const mediaStore = useMediaModalStore();
-              mediaStore.openUploadModal();
-            }),
+            new HeaderBtnDto(
+              PrintUtil.localize("+ ADD", "router"),
+              null,
+              () => {
+                const mediaStore = useMediaModalStore();
+                mediaStore.openUploadModal();
+              },
+            ),
           ],
           name: PrintUtil.localize("Media", "router"),
         },

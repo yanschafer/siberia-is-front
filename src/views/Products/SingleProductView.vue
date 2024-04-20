@@ -32,7 +32,7 @@
                   <span class="field-value copy-on">{{ ean }}</span>
                 </h5>
                 <h5 class="field-heading d-flex gap-1 align-items-center">
-                  BARCODE
+                  {{ localize("barcode") }}
                   <span class="field-value copy-on">{{ barcode }}</span>
                 </h5>
                 <h5 class="field-heading">

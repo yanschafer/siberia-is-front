@@ -8,7 +8,7 @@
     :maxFileSize="100000000"
   >
     <template #empty>
-      <p>Drag and drop files to here to upload.</p>
+      <p>{{ localize("dragAndDrop") }}</p>
     </template>
   </FileUpload>
 </template>
@@ -20,6 +20,7 @@ import LoggerUtil from "@/utils/logger/logger.util";
 import { useMediaStore } from "@/stores/media.store";
 import { useMediaModalStore } from "@/stores/media-modal.store";
 import { useProductsStore } from "@/stores/products.store";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default defineComponent({
   name: "FileUploadModalComponent",
@@ -37,6 +38,9 @@ export default defineComponent({
     if (this.products) this.accept = "text/csv";
   },
   methods: {
+    localize(key: string, module: string = "media") {
+      return PrintUtil.localize(key, module);
+    },
     uploader(event) {
       if (this.products) this.productUploader(event);
       else this.photoUploader(event);
