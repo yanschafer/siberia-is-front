@@ -11,6 +11,7 @@
 <script lang="ts">
 import Checkbox from "primevue/checkbox";
 import LoggerUtil from "@/utils/logger/logger.util";
+import { useFiltersStore } from "@/stores/filters.store";
 
 export default {
   name: "CheckboxFilter",
@@ -30,9 +31,22 @@ export default {
   data: () => ({
     value: false,
   }),
+  setup() {
+    const filtersStore = useFiltersStore();
+
+    return {
+      filtersStore,
+    };
+  },
   created() {
     LoggerUtil.debug(this.defaultValue);
     this.value = this.defaultValue;
+    this.filtersStore.$onAction(({ name }) => {
+      if (name == "clearFilter") {
+        this.value = false;
+        this.handleOnChange();
+      }
+    });
   },
   emits: ["change"],
   methods: {

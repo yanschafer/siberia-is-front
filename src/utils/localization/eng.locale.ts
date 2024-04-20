@@ -186,6 +186,73 @@ export default {
       "Approve and cancel write-offs": "Approve and cancel write-offs",
     },
     products: {
+      availableColumns: [
+        {
+          id: 1,
+          name: "Name",
+          key: "name",
+        },
+        {
+          id: 2,
+          name: "Vendor Code",
+          key: "vendorCode",
+        },
+        {
+          id: 3,
+          name: "EAN Code",
+          key: "eanCode",
+        },
+        {
+          id: 4,
+          name: "Link",
+          key: "link",
+        },
+        {
+          id: 5,
+          name: "Brand",
+          key: "brand",
+        },
+        {
+          id: 6,
+          name: "Category",
+          key: "category",
+        },
+        {
+          id: 7,
+          name: "Collection",
+          key: "collection",
+        },
+        {
+          id: 8,
+          name: "Amount in box",
+          key: "amountInBox",
+        },
+        {
+          id: 9,
+          name: "Professional price",
+          key: "professionalPrice",
+        },
+        {
+          id: 10,
+          name: "Distribution price",
+          key: "distributorPrice",
+        },
+        {
+          id: 11,
+          name: "Offerta price",
+          key: "offertaPrice",
+        },
+        {
+          id: 12,
+          name: "Default price",
+          key: "commonPrice",
+        },
+        {
+          id: 13,
+          name: "Days to expire",
+          key: "expirationDate",
+        },
+      ],
       //CreateProduct.vue
       productNameCapslock: "PRODUCT NAME",
       skuCapslock: "SKU",
@@ -295,6 +362,7 @@ export default {
 
       massiveUpdate: "Massive update",
       applyChangesSuccessMessage: "Products in group were successfully updated",
+      uploadFromFile: "Upload products from a file",
     },
     storehouses: {
       //CreateStorehouse.vue

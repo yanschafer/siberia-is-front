@@ -7,6 +7,7 @@ import ProductDto from "@/api/modules/product/dto/product.dto";
 import ProductInputDto from "@/api/modules/product/dto/product-input.dto";
 import PrintUtil from "@/utils/localization/print.util";
 import ProductListItemDto from "@/api/modules/product/dto/product-list-item.dto";
+import ExportConfigDto from "@/api/modules/product/dto/export-config.dto";
 
 export const useProductsStore = defineStore({
   id: "products",
@@ -170,12 +171,28 @@ export const useProductsStore = defineStore({
 
     async createUploaded(): ApiResponseDto<ProductListItemDto[]> {
       const productModel = new ProductModel();
-      const created = await productModel.bulkInsert(this.onUploadRows);
+      const created = await productModel.bulkInsert(
+        this.onUploadRows.map((el) => ({
+          ...el,
+          expirationDate: el.expirationDate * 1000 * 60 * 24,
+        })),
+      );
       if (created.success) {
         await this.loadProductList();
       }
 
       return created;
+    },
+
+    async exportToFile(exportConfigDto: ExportConfigDto) {
+      const productModel = new ProductModel();
+
+      const res = await productModel.exportToFile(exportConfigDto);
+      const linkSource = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${res.data}`;
+      const downloadLink = document.createElement("a");
+      downloadLink.href = linkSource;
+      downloadLink.download = `export_${new Date().toLocaleString()}.xlsx`;
+      downloadLink.click();
     },
   },
 });

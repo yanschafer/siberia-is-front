@@ -11,14 +11,13 @@
         </div>
       </template>
     </div>
-    <div class="utility-button">
+    <div class="utility-button" v-if="showUtility">
       <ProductsExportModal />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
 import { useNavTabsStore } from "@/stores/nav-tabs.store";
 import NavTabDto from "@/router/dto/nav-tab.dto";
 import { useRoute, useRouter } from "vue-router";
@@ -53,6 +52,9 @@ export default {
   computed: {
     getTabs() {
       return this.navTabsStore.tabsList;
+    },
+    showUtility() {
+      return this.navTabsStore.showUtility;
     },
   },
 };

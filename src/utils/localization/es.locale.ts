@@ -185,6 +185,73 @@ export default {
       "View products list": "Ver productos",
     },
     products: {
+      availableColumns: [
+        {
+          id: 1,
+          name: "Nombre",
+          key: "name",
+        },
+        {
+          id: 2,
+          name: "Código de proveedor",
+          key: "vendorCode",
+        },
+        {
+          id: 3,
+          name: "Código EAN",
+          key: "eanCode",
+        },
+        {
+          id: 4,
+          name: "Enlace",
+          key: "link",
+        },
+        {
+          id: 5,
+          name: "Marca",
+          key: "brand",
+        },
+        {
+          id: 6,
+          name: "Categoría",
+          key: "category",
+        },
+        {
+          id: 7,
+          name: "Colección",
+          key: "collection",
+        },
+        {
+          id: 8,
+          name: "Cantidad en caja",
+          key: "amountInBox",
+        },
+        {
+          id: 9,
+          name: "Precio profesional",
+          key: "professionalPrice",
+        },
+        {
+          id: 10,
+          name: "Precio de distribución",
+          key: "distributorPrice",
+        },
+        {
+          id: 11,
+          name: "Precio de oferta",
+          key: "offertaPrice",
+        },
+        {
+          id: 12,
+          name: "Precio predeterminado",
+          key: "commonPrice",
+        },
+        {
+          id: 13,
+          name: "Días hasta caducar",
+          key: "expirationDate",
+        },
+      ],
       //CreateProduct.vue
       productNameCapslock: "NOMBRE DEL PRODUCTO",
       skuCapslock: "SKU",
@@ -270,6 +337,7 @@ export default {
       exportToFile: "Exportar a archivo",
       columnsForExport: "Columnas para exportar",
       export: "Exportar",
+      uploadFromFile: "Subir productos desde un archivo",
     },
     groups: {
       editGroup: "EDITAR GRUPO",

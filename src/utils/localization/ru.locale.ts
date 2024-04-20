@@ -213,6 +213,73 @@ export default {
       "View products list": "Просмотр товаров",
     },
     products: {
+      availableColumns: [
+        {
+          id: 1,
+          name: "Название",
+          key: "name",
+        },
+        {
+          id: 2,
+          name: "Код",
+          key: "vendorCode",
+        },
+        {
+          id: 3,
+          name: "Код EAN",
+          key: "eanCode",
+        },
+        {
+          id: 4,
+          name: "Ссылка",
+          key: "link",
+        },
+        {
+          id: 5,
+          name: "Бренд",
+          key: "brand",
+        },
+        {
+          id: 6,
+          name: "Категория",
+          key: "category",
+        },
+        {
+          id: 7,
+          name: "Коллекция",
+          key: "collection",
+        },
+        {
+          id: 8,
+          name: "Количество в коробке",
+          key: "amountInBox",
+        },
+        {
+          id: 9,
+          name: "Профессиональная цена",
+          key: "professionalPrice",
+        },
+        {
+          id: 10,
+          name: "Распределительная цена",
+          key: "distributorPrice",
+        },
+        {
+          id: 11,
+          name: "Цена акции",
+          key: "offertaPrice",
+        },
+        {
+          id: 12,
+          name: "Стандартная цена",
+          key: "commonPrice",
+        },
+        {
+          id: 13,
+          name: "Срок годности",
+          key: "expirationDate",
+        },
+      ],
       //CreateProduct.vue
       productNameCapslock: "НАЗВАНИЕ ТОВАРА",
       skuCapslock: "КОД",
@@ -239,7 +306,7 @@ export default {
       placeholderProductName: "Новое название товара...",
       placeholderVendorCode: "Новый код товара...",
       placeholderLink: "Новая ссылка на товар...",
-      placeholderExpirationDate: "Годен до...",
+      placeholderExpirationDate: "Годен дней...",
       placeholderColor: "Новый цвет...",
       placeholderNumber: "Число...",
       failedUpload: "Ошибка загрузки",
@@ -277,7 +344,7 @@ export default {
       lastTimeOrderedCapslock: "ДАТА ПОСЛЕДНЕЙ ЗАКУПКИ",
       lastPriceOrderedCapslock: "СТОИМОСТЬ ПРИ ПОСЛЕДНЕЙ ЗАКУПКЕ",
       newColorNameCapslock: "НОВЫЙ ЦВЕТ",
-      expirationDateCapslock: "ГОДЕН ДО",
+      expirationDateCapslock: "ГОДЕН ДНЕЙ",
       areYouSureYouWantToDeleteProduct: "Вы уверены что хотите удалить товар",
       noBrand: "Нет бренда",
       noInformation: "Нет информации",
@@ -297,6 +364,7 @@ export default {
       exportToFile: "Экспорт в файл",
       columnsForExport: "Колонки для экспорта",
       export: "Экспорт",
+      uploadFromFile: "Загрузка товаров из файла",
     },
     groups: {
       editGroup: "РЕДАКТИРОВАТЬ ГРУППУ",

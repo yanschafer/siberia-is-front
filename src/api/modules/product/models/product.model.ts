@@ -6,6 +6,7 @@ import ApiResponseDto from "@/api/dto/api-response.dto";
 import ProductListItemDto from "@/api/modules/product/dto/product-list-item.dto";
 import ApiRequestDto from "@/api/dto/api-request.dto";
 import ApiCrudModelUtil from "@/utils/crud/api-crud-model.util";
+import ExportConfigDto from "@/api/modules/product/dto/export-config.dto";
 
 export default class ProductModel extends ApiCrudModelUtil<
   ProductInputDto,
@@ -42,6 +43,12 @@ export default class ProductModel extends ApiCrudModelUtil<
   ): Promise<ApiResponseDto<ProductListItemDto[]>> {
     return this.authorizedRequest(
       new ApiRequestDto("/bulk", "POST", onUploadRows),
+    );
+  }
+
+  async exportToFile(exportConfigDto: ExportConfigDto) {
+    return this.plainAuthorizedRequest(
+      new ApiRequestDto("/xls", "POST", exportConfigDto),
     );
   }
 }
