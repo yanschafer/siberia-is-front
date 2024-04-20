@@ -12,13 +12,7 @@
       <Panel class="animate__animated animate__fadeIn">
         <MDBRow class="d-flex flex-row gap-5 header-row">
           <MDBCol class="col-auto">
-<!--            <img-->
-<!--              id="product-image"-->
-<!--              class="product-img"-->
-<!--              :src="imageSource"-->
-<!--              :alt="productName"-->
-<!--            />-->
-            <SliderComponent />
+            <SliderNoThumbnailComponent :images="imageSource" />
           </MDBCol>
           <MDBCol class="product-name-col">
             <h1 class="product-heading">{{ productName }}</h1>
@@ -208,10 +202,12 @@ import { useBrandStore } from "@/stores/brand.store";
 import { useCategoriesStore } from "@/stores/categories.store";
 import { useCollectionStore } from "@/stores/collection.store";
 import SliderComponent from "@/views/Media/SliderComponent.vue";
+import SliderNoThumbnailComponent from "@/views/Media/SliderNoThumbnailComponent.vue";
 
 export default {
   name: "SingleProductView",
   components: {
+    SliderNoThumbnailComponent,
     SliderComponent,
     ProductsForm,
     MediaMiniModalComponent,
@@ -411,10 +407,22 @@ export default {
     },
     imageSource() {
       if (this.selectedProduct.photo && this.selectedProduct.photo.length != 0)
-        return FilesResolverUtil.getStreamUrl(
-          this.selectedProduct.photo[0] || "",
-        );
-      else return FilesResolverUtil.getStreamUrl("fileNotFound.jpeg");
+        return this.selectedProduct.photo.map((el) => ({
+          itemImageSrc: FilesResolverUtil.getStreamUrl(el || ""),
+          thumbnailImageSrc: FilesResolverUtil.getStreamUrl(el || ""),
+          alt: el,
+          title: `Title ${el}`,
+        }));
+      else
+        return [
+          {
+            itemImageSrc: FilesResolverUtil.getStreamUrl("fileNotFound.jpeg"),
+            thumbnailImageSrc:
+              FilesResolverUtil.getStreamUrl("fileNotFound.jpeg"),
+            alt: "Not found",
+            title: `Title not found`,
+          },
+        ];
     },
     productName() {
       return this.selectedProduct.name || "";
