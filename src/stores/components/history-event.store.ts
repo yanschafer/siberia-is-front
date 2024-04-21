@@ -7,11 +7,15 @@ import {
   EventType,
   rulesChangingTypes,
   tableTypes,
+  treeTableTypes,
 } from "@/api/conf/app.conf";
 import { useProductsStore } from "@/stores/products.store";
 import LoggerUtil from "@/utils/logger/logger.util";
 import RoleModel from "@/api/modules/rbac/models/role.model";
 import { useRolesStore } from "@/stores/roles.store";
+import PrintUtil from "@/utils/localization/print.util";
+import { useCategoriesStore } from "@/stores/categories.store";
+import ProductModel from "@/api/modules/product/models/product.model";
 
 export const useHistoryEventStore = defineStore({
   id: "history-event-store",
@@ -28,9 +32,14 @@ export const useHistoryEventStore = defineStore({
     rulesComponent: {
       roles: [],
     },
+    treeTable: {
+      title: "",
+      value: [],
+    },
     hideTable: false,
     hideRules: false,
     hideBeforeAfter: false,
+    hideTreeTable: false,
   }),
   getters: {
     tableRows: (state) => {
@@ -98,6 +107,11 @@ export const useHistoryEventStore = defineStore({
       state.canBeReset &&
       rulesChangingTypes.includes(state.selectedEvent.eventObjectTypeId),
     showRules: (state) => state.loadRules && !state.hideRules,
+
+    loadTreeTable: (state) =>
+      state.canBeReset &&
+      treeTableTypes.includes(state.selectedEvent.eventObjectTypeId),
+    showTreeTable: (state) => state.loadTreeTable && !state.hideTreeTable,
   },
   actions: {
     async init(historyEvent: HistoryOutputDto) {
@@ -115,6 +129,8 @@ export const useHistoryEventStore = defineStore({
       if (this.loadTable) await this.initTable();
 
       if (this.loadRules) await this.initRules();
+
+      if (this.loadTreeTable) await this.initTreeTable();
     },
 
     async initBeforeAfter() {
@@ -182,6 +198,46 @@ export const useHistoryEventStore = defineStore({
               await this.selectedEvent[beforeAfterResolver]();
           }
           break;
+        case EventObjectTypes.PRODUCT:
+          this.hideBeforeAfter = false;
+          if (this.selectedEvent.eventTypeId == EventType.REMOVE) {
+            this.beforeAfterObject = await this.selectedEvent[
+              beforeAfterResolver
+            ]((data) => {
+              const obj = {};
+              Object.keys(data)
+                .filter((el) =>
+                  Object.keys(PrintUtil.getModule("beforeAfter")).includes(el),
+                )
+                .map((el) => {
+                  LoggerUtil.debug(`${el} = ${data[el]}`);
+                  obj[el] = data[el];
+                });
+
+              return obj;
+            });
+          } else {
+            this.beforeAfterObject =
+              await this.selectedEvent[beforeAfterResolver]();
+          }
+          break;
+        case EventObjectTypes.CATEGORY:
+          this.hideBeforeAfter = false;
+          this.beforeAfterObject = await this.selectedEvent[
+            beforeAfterResolver
+          ]((data) => ({
+            name: data.name,
+            parent: data.parent,
+          }));
+          break;
+        case EventObjectTypes.PRODUCT_GROUP:
+          this.hideBeforeAfter = false;
+          this.beforeAfterObject = await this.selectedEvent[
+            beforeAfterResolver
+          ]((data) => ({
+            name: data.name,
+          }));
+          break;
         default:
           this.hideBeforeAfter = false;
           this.beforeAfterObject =
@@ -203,7 +259,23 @@ export const useHistoryEventStore = defineStore({
           this.table.rows = this.selectedEvent.rollbackDto.productsData.map(
             (el) => el.second,
           );
-          this.table.columns = useProductsStore().productColumns;
+          this.table.columns = useProductsStore().productColumns.filter(
+            (el) => el.field != "price",
+          );
+          this.table.searchTerm = "";
+          this.hideTable = false;
+          break;
+        case EventObjectTypes.PRODUCT_GROUP:
+          const productModel = new ProductModel();
+          const loaded = await productModel.getList({
+            filters: {
+              ids: this.selectedEvent.afterInstance.products,
+            },
+          });
+          this.table.rows = loaded.success ? loaded.getData() : [];
+          this.table.columns = useProductsStore().productColumns.filter(
+            (el) => el.field != "price",
+          );
           this.table.searchTerm = "";
           this.hideTable = false;
           break;
@@ -239,9 +311,9 @@ export const useHistoryEventStore = defineStore({
             this.rulesComponent.roles = [
               {
                 id: 1,
-                name: "Personal rules",
+                name: PrintUtil.localize("personalRules", "user"),
                 relatedUsersCount: 1,
-                description: "Personal rules",
+                description: PrintUtil.localize("personalRules", "user"),
                 rules: this.selectedEvent.rollbackDto.rules.map((el) => {
                   if (el.stockId) {
                     return {
@@ -268,9 +340,9 @@ export const useHistoryEventStore = defineStore({
             this.rulesComponent.roles = [
               {
                 id: 0,
-                name: "Updated Rules",
+                name: PrintUtil.localize("updatedRules", "history"),
                 relatedUsersCount: 1,
-                description: "Updated rules",
+                description: PrintUtil.localize("updatedRules", "history"),
                 rules: this.selectedEvent.rollbackDto.rules.map((el) => {
                   if (el.stockId) {
                     return {
@@ -294,9 +366,9 @@ export const useHistoryEventStore = defineStore({
             this.hideRules = true;
           } else {
             this.hideRules = false;
-            let title = "Updated Rules";
+            let title = PrintUtil.localize("updatedRules", "history");
             if (this.selectedEvent.eventTypeId == EventType.REMOVE)
-              title = "Related rules";
+              title = PrintUtil.localize("relatedRules", "history");
             this.rulesComponent.roles = [
               {
                 id: 1,
@@ -317,6 +389,64 @@ export const useHistoryEventStore = defineStore({
               },
             ];
           }
+      }
+    },
+
+    transformChildren(parent, children) {
+      if (!children || children.length === 0) {
+        return [];
+      }
+
+      return children.map((child, index) => {
+        return {
+          id: child.key,
+          key: child.key,
+          name: child.label || "",
+          parent,
+          label: child.label || "",
+          data: {
+            parent,
+            label: child.label || "",
+            data: child.label || "",
+            icon: child.icon,
+            isEditable: "",
+          },
+          children: this.transformChildren(child.key, child.children),
+        };
+      });
+    },
+
+    async initTreeTable() {
+      switch (this.selectedEvent.eventObjectTypeId) {
+        case EventObjectTypes.CATEGORY:
+          if (!this.selectedEvent.rollbackDto.childrenRemoved)
+            this.hideTreeTable = true;
+          const categoriesStore = useCategoriesStore();
+          this.treeTable.title = PrintUtil.localize(
+            "categoryTableRemovedChildrenTitle",
+            "history",
+          );
+          this.treeTable.value = categoriesStore
+            .transformCategoriesData([this.selectedEvent.rollbackDto], 0)
+            .map((category, index) => {
+              return {
+                id: category.key,
+                key: category.key,
+                label: category.label || "",
+                data: {
+                  id: category.key,
+                  label: category.label || "",
+                  isEditable: "",
+                },
+                children: this.transformChildren(
+                  category.key,
+                  category.children,
+                ),
+              };
+            });
+          break;
+        default:
+          this.hideTreeTable = true;
       }
     },
   },

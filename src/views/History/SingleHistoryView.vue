@@ -41,6 +41,10 @@
         :searchTerm="table.searchTerm"
       />
       <TabsComponent v-if="showRules" :roles="roles" />
+      <h5 class="operation-name">
+        {{ treeTableTitle }}
+      </h5>
+      <TreeTableComponent v-if="showTreeTable" :nodes="treeTable" />
     </ScrollPanel>
   </MDBContainer>
 </template>
@@ -57,11 +61,16 @@ import Button from "primevue/button";
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import LoggerUtil from "@/utils/logger/logger.util";
 import ScrollPanel from "primevue/scrollpanel";
+import { EventObjectTypes, EventType } from "@/api/conf/app.conf";
+import { useAuthCheckStore } from "@/stores/auth-check.store";
+import TokenUtil from "@/utils/token.util";
+import TreeTableComponent from "@/components/Elements/Tables/TreeTableComponent.vue";
 
 export default {
   name: "SingleHistoryView",
   components: {
     TableComponent,
+    TreeTableComponent,
     BeforeAfterComponent,
     TabsComponent,
     Button,
@@ -88,6 +97,7 @@ export default {
   async setup() {
     const historyStore = useHistoryStore();
     const historyEventStore = useHistoryEventStore();
+    const authCheckStore = useAuthCheckStore();
     const route = useRoute();
     const router = useRouter();
     const loaders = await Promise.all([
@@ -96,6 +106,7 @@ export default {
     return {
       historyStore,
       historyEventStore,
+      authCheckStore,
       router,
       loaders,
     };
@@ -146,7 +157,29 @@ export default {
       }
     },
     showLink() {
-      return !!this.historyEventStore.link;
+      const linkExist = !!this.historyEventStore.link;
+      if (!linkExist) return false;
+
+      let hasAccess = true;
+
+      hasAccess = this.authCheckStore.availableEventTransitions.includes(
+        this.selectedHistory.eventObjectTypeId,
+      );
+
+      LoggerUtil.debug(
+        hasAccess,
+        linkExist,
+        this.selectedHistory.eventObjectTypeId,
+        this.authCheckStore.availableEventTransitions,
+      );
+
+      if (this.selectedHistory.eventObjectTypeId == EventObjectTypes.STOCK) {
+        hasAccess = TokenUtil.hasAnyAccessToStock(
+          this.selectedHistory.eventObjectId,
+        );
+      }
+
+      return linkExist && hasAccess;
     },
     link() {
       return this.historyEventStore.link;
@@ -160,11 +193,20 @@ export default {
     showRules() {
       return this.historyEventStore.showRules;
     },
+    showTreeTable() {
+      return this.historyEventStore.showTreeTable;
+    },
     table() {
       return this.historyEventStore.table;
     },
     roles() {
       return this.historyEventStore.rulesComponent.roles;
+    },
+    treeTableTitle() {
+      return this.historyEventStore.treeTable.title;
+    },
+    treeTable() {
+      return this.historyEventStore.treeTable.value;
     },
   },
   methods: {
@@ -215,5 +257,11 @@ export default {
 }
 :deep(.nav-link) {
   font-weight: 600 !important;
+}
+.operation-name {
+  font-weight: 400;
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+  color: #4f4f4f;
 }
 </style>

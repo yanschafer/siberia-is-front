@@ -3,6 +3,7 @@ import CollectionModel from "@/api/modules/collection/models/collection.model";
 import CategoryModel from "@/api/modules/category/models/category.model";
 import GalleryModel from "@/api/modules/gallery/models/gallery.model";
 import { EventObjectTypes } from "@/api/conf/app.conf";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export default class HistoryOutputDto {
   rollbackDto;
@@ -163,6 +164,8 @@ export default class HistoryOutputDto {
         };
       }),
     );
+
+    LoggerUtil.debug("BEFORE AFTER OBJECT", beforeAfterObject);
 
     return beforeAfterObject;
   }

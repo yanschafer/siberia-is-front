@@ -388,8 +388,8 @@ export default {
       if (creationResult.success) {
         this.$toast.add({
           severity: "success",
-          summary: "Massive update",
-          detail: "Products in group were successfully updated",
+          summary: PrintUtil.localize("massiveUpdate", "groups"),
+          detail: PrintUtil.localize("applyChangesSuccessMessage", "groups"),
           life: 3000,
         });
 

@@ -29,6 +29,7 @@ import loggerUtil from "@/utils/logger/logger.util";
 import { IconSearchOff } from "@tabler/icons-vue";
 import PrintUtil from "@/utils/localization/print.util";
 import { useFiltersStore } from "@/stores/filters.store";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "HistoryView",
@@ -92,6 +93,9 @@ export default {
       },
     });
     this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
+  },
+  mounted() {
+    LoggerUtil.debug("MOUNTED");
   },
   computed: {
     filtersInput() {

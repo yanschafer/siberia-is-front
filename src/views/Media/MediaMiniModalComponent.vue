@@ -140,9 +140,9 @@
 
                   <div class="pt-4">
                     <div class="d-flex flex-row mt-1 align-items-center gap-2">
-                        <Checkbox v-model="image.selected" :binary="true" />
-                        <h5 class="m-0 heading-list">{{ image.name }}</h5>
-                        <!--                        <p class="text-muted m-0">{{ image.url }}</p>-->
+                      <Checkbox v-model="image.selected" :binary="true" />
+                      <h5 class="m-0 heading-list">{{ image.name }}</h5>
+                      <!--                        <p class="text-muted m-0">{{ image.url }}</p>-->
                     </div>
                   </div>
                 </div>
@@ -219,7 +219,11 @@ export default defineComponent({
     this.mediaModalStore.$onAction((action) => {
       if (action.name == "showGallery") {
         this.refreshSelected();
-        LoggerUtil.debug(this.mediaModalStore.miniGallerySelected, this.items);
+        LoggerUtil.debug(
+          "REFRESH",
+          this.mediaModalStore.miniGallerySelected,
+          this.items,
+        );
       }
     });
     this.refreshSelected();
@@ -236,7 +240,7 @@ export default defineComponent({
             ...el,
             selected: true,
           };
-        else return el;
+        else return { ...el, selected: false };
       });
     },
     getUrl(image) {
@@ -351,9 +355,9 @@ export default defineComponent({
   visibility: hidden;
   opacity: 0;
   transition:
-      all 0.3s ease-in-out,
-      visibility 0s ease-in-out,
-      opacity 0.5s ease-in-out;
+    all 0.3s ease-in-out,
+    visibility 0s ease-in-out,
+    opacity 0.5s ease-in-out;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -373,9 +377,9 @@ export default defineComponent({
 .feather-eye {
   stroke: white;
   transition:
-      all 0.3s ease-in-out,
-      visibility 0s ease-in-out,
-      opacity 0.5s ease-in-out;
+    all 0.3s ease-in-out,
+    visibility 0s ease-in-out,
+    opacity 0.5s ease-in-out;
 }
 .list-row {
   border-bottom: 1px solid #efefef;
@@ -414,9 +418,9 @@ export default defineComponent({
 }
 .p-button:focus {
   box-shadow:
-      0 0 0 2px #ffffff,
-      0 0 0 4px #000000,
-      0 1px 2px 0 black !important;
+    0 0 0 2px #ffffff,
+    0 0 0 4px #000000,
+    0 1px 2px 0 black !important;
 }
 .image-col {
   width: 15rem; /* фиксированная ширина колонки */
@@ -428,5 +432,6 @@ export default defineComponent({
   align-items: center;
   border: 1px solid #bbbbbb;
 }
-.checkbox-inline {}
+.checkbox-inline {
+}
 </style>

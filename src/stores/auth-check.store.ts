@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import PrintUtil from "@/utils/localization/print.util";
-import { appConf } from "@/api/conf/app.conf";
+import { appConf, EventObjectTypes } from "@/api/conf/app.conf";
 import TokenUtil from "@/utils/token.util";
 import LoggerUtil from "@/utils/logger/logger.util";
 
@@ -16,6 +16,7 @@ const availableSidebarItems = [
     route: "dashboard",
     match: ["dashboard"],
     rule: true,
+    eventTransitionFrom: [],
   },
   {
     name: PrintUtil.localize("Products", "sidebar"),
@@ -28,6 +29,10 @@ const availableSidebarItems = [
     route: "products",
     match: ["products", "groups", "Group details", "Group apply"],
     rule: [appConf.rules.productsManaging, appConf.rules.viewProductsList],
+    eventTransitionFrom: [
+      EventObjectTypes.PRODUCT,
+      EventObjectTypes.PRODUCT_GROUP,
+    ],
   },
   {
     name: PrintUtil.localize("Assortments", "sidebar"),
@@ -43,6 +48,11 @@ const availableSidebarItems = [
       appConf.rules.brandManaging,
       appConf.rules.collectionManaging,
       appConf.rules.categoryManaging,
+    ],
+    eventTransitionFrom: [
+      EventObjectTypes.BRAND,
+      EventObjectTypes.COLLECTION,
+      EventObjectTypes.CATEGORY,
     ],
   },
   {
@@ -60,6 +70,7 @@ const availableSidebarItems = [
       appConf.rules.collectionManaging,
       appConf.rules.categoryManaging,
     ],
+    eventTransitionFrom: [],
   },
   {
     name: PrintUtil.localize("Storehouses", "sidebar"),
@@ -72,6 +83,7 @@ const availableSidebarItems = [
     route: "storehouses",
     match: ["storehouses"],
     rule: [appConf.rules.stockManaging, appConf.rules.viewStockData],
+    eventTransitionFrom: [EventObjectTypes.STOCK],
   },
   {
     name: PrintUtil.localize("Users", "sidebar"),
@@ -84,6 +96,7 @@ const availableSidebarItems = [
     route: "users",
     match: ["users"],
     rule: [appConf.rules.userManaging],
+    eventTransitionFrom: [EventObjectTypes.USER, EventObjectTypes.USER_RIGHTS],
   },
   {
     name: PrintUtil.localize("Roles", "sidebar"),
@@ -96,6 +109,7 @@ const availableSidebarItems = [
     route: "roles",
     match: ["roles"],
     rule: [appConf.rules.rbacManaging],
+    eventTransitionFrom: [EventObjectTypes.ROLE],
   },
 ];
 
@@ -130,6 +144,7 @@ export const useAuthCheckStore = defineStore({
     assortmentTabs: [...availableAssortmentTabs],
     canEditUsersInRole: true,
     showKickedOutToast: false,
+    availableEventTransitions: [],
   }),
   getters: {
     getSidebarItems() {
@@ -161,6 +176,10 @@ export const useAuthCheckStore = defineStore({
         if (el.rule === true) return true;
         const a = [];
         return el.rule.some((el) => TokenUtil.hasAccessTo(el));
+      });
+      this.availableEventTransitions = [];
+      this.sidebarItems.forEach((el) => {
+        this.availableEventTransitions.push(...el.eventTransitionFrom);
       });
       this.hasAccessToHistory = TokenUtil.hasAccessTo(appConf.rules.checkLogs);
       this.assortmentTabs = availableAssortmentTabs.filter((el) =>

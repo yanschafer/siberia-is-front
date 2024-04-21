@@ -277,6 +277,7 @@ export default {
       quantityPerPackageCapslock: "QUANTITY PER PACKAGE",
       distributionPriceCapslock: "DISTRIBUTION PRICE",
       professionalPriceCapslock: "PROFESSIONAL PRICE",
+      offertaPriceCapslock: "OFFERTA PRICE",
       distributionPercentCapslock: "DISTRIBUTION PERCENT",
       professionalPercentCapslock: "PROFESSIONAL PERCENT",
       defaultPriceCapslock: "DEFAULT PRICE",
@@ -615,6 +616,10 @@ export default {
       "User rights update": "User rights update",
 
       discardChanges: "DISCARD CHANGES",
+
+      updatedRules: "Updated rules",
+      relatedRules: "Related rules",
+      categoryTableRemovedChildrenTitle: "Removed children",
     },
     operations: {
       Arrival: "Arrival",
@@ -732,6 +737,7 @@ export default {
       password: "Password",
       hash: "Password",
       relatedUsersCount: "Users with role",
+      color: "Color",
     },
   },
 };
