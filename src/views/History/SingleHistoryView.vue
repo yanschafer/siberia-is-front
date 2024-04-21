@@ -26,10 +26,10 @@
       >{{ localize("discardChanges") }}</Button
     >
   </MDBContainer>
-  <MDBContainer class="pt-4">
+  <MDBContainer class="pt-4 container-info">
     {{ description }}
     <ScrollPanel
-      style="width: 88vw; height: 45vh"
+      style="width: 88vw"
       class="animate__animated animate__fadeIn"
     >
       <BeforeAfterComponent v-if="showBeforeAfter" />

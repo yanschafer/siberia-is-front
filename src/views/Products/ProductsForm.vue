@@ -581,6 +581,7 @@ export default {
 }
 .upload-text {
   font-weight: 600;
+  text-align: center;
   color: #bbc3c7;
 }
 </style>

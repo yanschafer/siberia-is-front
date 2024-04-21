@@ -7,6 +7,10 @@
   >
     <AddToGroupComponent />
   </Dialog>
+  <ScrollPanel
+      style="height: 80vh; width: 88vw"
+      class="main-area animate__animated animate__fadeIn"
+  >
   <TabsNavComponent />
   <MDBContainer class="d-flex container-content">
     <MDBCol class="col-auto">
@@ -25,6 +29,7 @@
       </MDBContainer>
     </MDBCol>
   </MDBContainer>
+  </ScrollPanel>
 </template>
 
 <script lang="ts">
@@ -42,6 +47,7 @@ import { useRouter } from "vue-router";
 import { useNavTabsStore } from "@/stores/nav-tabs.store.ts";
 import NavTabDto from "@/router/dto/nav-tab.dto.ts";
 import RouteParametrized from "@/router/dto/route-parametrized.ts";
+import ScrollPanel from "primevue/scrollpanel";
 
 export default {
   name: "GroupsView",
@@ -53,6 +59,7 @@ export default {
     Dialog,
     MDBCol,
     MDBContainer,
+    ScrollPanel
   },
   async setup() {
     const productGroupStore = useProductGroupStore();
@@ -138,7 +145,19 @@ export default {
 </script>
 
 <style scoped>
-.search {
+.container-content {
+  width: 100%;
+  margin: 0;
+}
+.table-container {
   width: 90vw;
+  overflow-x: hidden !important;
+}
+.main-area {
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+}
+.search {
+  width: 81vw;
 }
 </style>

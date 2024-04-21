@@ -2,10 +2,10 @@
   <Dialog
     v-model:visible="mediaModalStore.imageOpen"
     modal
-    :style="{ width: '50vw' }"
+    :style="{ width: 'max-content' }"
     :header="localize('imageDetails')"
   >
-    <div class="d-flex flex-row">
+    <div class="d-flex flex-row gap-5">
       <div class="flex flex-column col-auto w-50 photo-col">
         <div class="container image-cont">
           <img
@@ -186,14 +186,11 @@ export default {
   width: 100%;
 }
 .image-cont {
-  width: 90%;
   padding: 0;
   margin: 0;
   border: 10px solid black;
   position: relative;
   border-radius: 8px;
-  overflow: hidden;
-  max-height: 30rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -209,7 +206,6 @@ export default {
   justify-content: start !important;
 }
 .p-dialog {
-  width: 78vw !important;
 }
 .text-area {
   min-height: 5rem;

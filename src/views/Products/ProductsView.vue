@@ -311,6 +311,6 @@ export default {
   overflow-y: hidden !important;
 }
 .search {
-  width: 90vw;
+  width: 82vw;
 }
 </style>
