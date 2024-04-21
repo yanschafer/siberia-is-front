@@ -307,6 +307,7 @@ export default {
       quantityPerPackageCapslock: "КОЛ-ВО В УПАКОВКЕ",
       distributionPriceCapslock: "ЦЕНА РОЗНИЦЫ",
       professionalPriceCapslock: "ЦЕНА ПРОФЕССИОНАЛОВ",
+      offertaPriceCapslock: "СПЕЦИАЛЬНАЯ ЦЕНА",
       distributionPercentCapslock: "ПРОЦЕНТ РОЗНИЦЫ",
       professionalPercentCapslock: "ПРОЦЕНТ ПРОФЕССИОНАЛОВ",
       defaultPriceCapslock: "ЦЕНА ПО УМОЛЧАНИЮ",
@@ -644,6 +645,10 @@ export default {
       "User rights update": "Обновление прав пользователя",
 
       discardChanges: "ОТМЕНИТЬ ИЗМЕНЕНИЯ",
+      updatedRules: "Обновленные правила",
+      relatedRules: "Связанные правила",
+      categoryTableRemovedChildrenTitle:
+        "Удаленные элементы дочерних категорий",
     },
     operations: {
       Arrival: "Поступление",
@@ -759,6 +764,7 @@ export default {
       password: "Пароль",
       hash: "Пароль",
       relatedUsersCount: "Пользователей с ролью",
+      color: "Цвет",
     },
   },
 };

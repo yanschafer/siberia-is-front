@@ -1,7 +1,7 @@
 <template>
   <div v-if="isSelected" class="main-area animate__animated animate__fadeIn">
     <template v-for="(item, key) in beforeAfter">
-      <div class="flex row row-operation">
+      <div v-if="key !== 'id'" class="flex row row-operation">
         <div class="d-flex flex-row">
           <h5 class="operation-name">
             {{ localize(key) }}
@@ -65,7 +65,7 @@ export default defineComponent({
       return first.toUpperCase() + str.substring(1, str.length);
     },
     imagesSource(photo) {
-      if (photo && photo.length != 0)
+      if (photo && photo.length != 0 && photo != "-")
         return photo.map((el) => ({
           itemImageSrc: FilesResolverUtil.getStreamUrl(el || ""),
           thumbnailImageSrc: FilesResolverUtil.getStreamUrl(el || ""),

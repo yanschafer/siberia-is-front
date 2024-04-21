@@ -208,13 +208,13 @@ export default {
       }
     },
     deleteCollection(collectionRow) {
-      this.toastOnSuccess = this.localize("toastSuccessRemoveCollection");
+      this.toastOnSuccess = this.localize("collectionRemoveSuccessToast");
       this.onDelete = this.collectionStore;
       this.idOnDelete = collectionRow.id;
       this.showModal("collection", collectionRow.name);
     },
     deleteBrand(brandRow) {
-      this.toastOnSuccess = this.localize("toastSuccessRemoveBrand");
+      this.toastOnSuccess = this.localize("brandRemoveSuccessToast");
       this.onDelete = this.brandStore;
       this.idOnDelete = brandRow.id;
       this.showModal("brand", brandRow.name);
@@ -237,7 +237,7 @@ export default {
         this.$toast.add({
           severity: "success",
           summary: this.localize("Success"),
-          detail: this.localize("toastSuccessUpdateBrand"),
+          detail: this.localize("brandUpdatedSuccessToast"),
           life: 3000,
         });
         const loadListRes = await this.brandStore.loadBrandsList();
@@ -256,7 +256,7 @@ export default {
         this.$toast.add({
           severity: "success",
           summary: this.localize("Success"),
-          detail: this.localize("toastSuccessUpdateCollection"),
+          detail: this.localize("collectionUpdatedSuccessToast"),
           life: 3000,
         });
         const loadListRes = await this.collectionStore.loadCollectionList();

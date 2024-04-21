@@ -112,11 +112,11 @@
             <h5
               class="bottom-numbers d-flex flex-column justify-content-start gap-2"
             >
-              {{ localize("distributionPriceCapslock") }}
+              {{ localize("distributionPercentCapslock") }}
               <span class="field-value">{{ distributionPercent }}</span>
             </h5>
             <h5 class="field-heading">
-              DISTRIBUTION PRICE
+              {{ localize("distributionPriceCapslock") }}
               <span class="field-value">{{ distributionPrice }}</span>
             </h5>
             <!--          <h5 class="field-heading">-->
@@ -127,11 +127,11 @@
             <h5
               class="bottom-numbers d-flex flex-column justify-content-start gap-2"
             >
-              {{ localize("professionalPriceCapslock") }}
+              {{ localize("professionalPercentCapslock") }}
               <span class="field-value">{{ professionalPercent }}</span>
             </h5>
             <h5 class="field-heading">
-              PROFESSIONAL PRICE
+              {{ localize("professionalPriceCapslock") }}
               <span class="field-value">{{ professionalPrice }}</span>
             </h5>
             <!--          <h5 class="field-heading">MARKUP <span class="field-value">{{ professionalMarkup }}</span></h5>-->
@@ -140,16 +140,16 @@
             <h5
               class="bottom-numbers d-flex flex-column justify-content-start gap-2"
             >
-              {{ localize("defaultPriceCapslock") }}
-              <span class="field-value">{{ defaultPrice }}</span>
+              {{ localize("offertaPriceCapslock") }}
+              <span class="field-value">{{ offertaPrice }}</span>
             </h5>
           </MDBCol>
           <MDBCol>
             <h5
               class="bottom-numbers d-flex flex-column justify-content-start gap-2"
             >
-              OFFERTA PRICE
-              <span class="field-value">{{ offertaPrice }}</span>
+              {{ localize("defaultPriceCapslock") }}
+              <span class="field-value">{{ defaultPrice }}</span>
             </h5>
           </MDBCol>
           <MDBCol>

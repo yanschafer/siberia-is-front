@@ -204,7 +204,7 @@
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-            OFFERTA PRICE
+            {{ localize("offertaPriceCapslock") }}
             <InputText
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
               :class="{ 'p-invalid': !validate.offertaPrice }"
@@ -353,8 +353,8 @@ export default {
     },
     openMiniGallery() {
       this.mediaModalStore.miniGallerySelected =
-        this.productFormStore.data.photo;
-      this.mediaModalStore.showGallery(this.productFormStore.data.photo);
+        this.productFormStore.data.photo || [];
+      this.mediaModalStore.showGallery(this.productFormStore.data.photo || []);
     },
     handleMiniGallerySelection() {
       this.productFormStore.data.photoList =

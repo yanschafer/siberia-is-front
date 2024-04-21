@@ -381,17 +381,29 @@ const routes = [
           name: PrintUtil.localize("History", "router"),
           ruleId: [appConf.rules.checkLogs],
         },
-        children: [
-          {
-            path: "/history/:id",
-            name: "Single history",
-            component: () => import("@/views/History/SingleHistoryView.vue"),
-            props: true,
-            meta: {
-              name: PrintUtil.localize("SingleHistory", "router"),
-            },
-          },
-        ],
+      },
+      {
+        path: "/history/:id",
+        name: "Single history",
+        component: () => import("@/views/History/SingleHistoryView.vue"),
+        props: true,
+        meta: {
+          breadcrumbs: [
+            new BreadcrumbDto(
+              PrintUtil.localize("panelName", "router"),
+              new RouteParametrized("dashboard"),
+            ),
+            new BreadcrumbDto(
+              PrintUtil.localize("History", "router"),
+              new RouteParametrized("History"),
+            ),
+            new BreadcrumbDto(
+              PrintUtil.localize("SingleHistory", "router"),
+              new RouteParametrized("Single history"),
+            ),
+          ],
+          name: PrintUtil.localize("SingleHistory", "router"),
+        },
       },
       {
         path: "/operations",
@@ -400,18 +412,29 @@ const routes = [
         meta: {
           name: PrintUtil.localize("Operations", "router"),
         },
-        children: [
-          {
-            path: "/operations/:id",
-            name: "Single operation",
-            component: () =>
-              import("@/views/Operations/SingleOperationView.vue"),
-            props: true,
-            meta: {
-              name: PrintUtil.localize("SingleOperation", "router"),
-            },
-          },
-        ],
+      },
+      {
+        path: "/operations/:id",
+        name: "Single operation",
+        component: () => import("@/views/Operations/SingleOperationView.vue"),
+        props: true,
+        meta: {
+          breadcrumbs: [
+            new BreadcrumbDto(
+              PrintUtil.localize("panelName", "router"),
+              new RouteParametrized("dashboard"),
+            ),
+            new BreadcrumbDto(
+              PrintUtil.localize("Operations", "router"),
+              new RouteParametrized("Operations"),
+            ),
+            new BreadcrumbDto(
+              PrintUtil.localize("SingleOperation", "router"),
+              new RouteParametrized("Single operation"),
+            ),
+          ],
+          name: PrintUtil.localize("SingleOperation", "router"),
+        },
       },
     ],
   },

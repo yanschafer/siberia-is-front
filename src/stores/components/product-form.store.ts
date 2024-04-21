@@ -5,7 +5,7 @@ import ValidatorUtil from "@/utils/validator/validator.util";
 import ProductInputDto from "@/api/modules/product/dto/product-input.dto";
 
 const emptyProduct = new ProductInputDto(
-  [],
+  null,
   "",
   "",
   "",
@@ -48,7 +48,7 @@ export const useProductFormStore = defineStore({
         brand: productDto.brand,
         collection: productDto.collection,
         category: productDto.category,
-        photoList: [],
+        photoList: null,
         photo: productDto.photoIds,
       };
       this.saveBtnTitle = "SAVE";

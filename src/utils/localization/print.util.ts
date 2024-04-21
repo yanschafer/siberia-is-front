@@ -42,6 +42,10 @@ class PrintUtil {
     if (localeModule) return localeModule[key];
     else return `LOCALIZATION FOR ${module}.${key} NOT FOUND`;
   }
+
+  public getModule(module: string): any {
+    return this.locales[this.selectedLang].modules[module];
+  }
 }
 
 export default new PrintUtil();
