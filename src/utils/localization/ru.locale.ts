@@ -142,6 +142,7 @@ export default {
       //UsersView.vue
       name: "Номер",
       login: "Логин",
+      loginCapslock: "ЛОГИН",
       nothingWasFound: "Ничего не найдено",
 
       profileHeader: "Профиль",
@@ -211,6 +212,9 @@ export default {
       "Update stock data": "Изменение данных складов",
       "View stock data": "Просмотр складов",
       "View products list": "Просмотр товаров",
+      "Write-off managing": "Управление списаниями",
+      "Create write-off": "Создание списания",
+      "Approve and cancel write-offs": "Подтверждение или отмена списания",
     },
     products: {
       availableColumns: [
@@ -221,12 +225,12 @@ export default {
         },
         {
           id: 2,
-          name: "Код",
+          name: "SKU",
           key: "vendorCode",
         },
         {
           id: 3,
-          name: "Код EAN",
+          name: "EAN",
           key: "eanCode",
         },
         {
@@ -280,9 +284,24 @@ export default {
           key: "expirationDate",
         },
       ],
+      uploadTableColumns: [
+        { field: "vendorCode", header: "SKU" },
+        { field: "eanCode", header: "EАН" },
+        { field: "barcode", header: "БАРКОД" },
+        { field: "brand", header: "БРЕНД" },
+        { field: "name", header: "НАЗВАНИЕ" },
+        { field: "distributorPercent", header: "РОЗНИЧНЫЙ ПРОЦЕНТ" },
+        { field: "professionalPercent", header: "ПРОФЕССИОНАЛЬНЫЙ ПРОЦЕНТ" },
+        { field: "commonPrice", header: "ЦЕНА" },
+        { field: "category", header: "КАТЕГОРИЯ" },
+        { field: "color", header: "ЦВЕТ" },
+        { field: "amountInBox", header: "КОЛИЧЕСТВО В КОРОБКЕ" },
+        { field: "expirationDate", header: "СРОК ГОДНОСТИ" },
+        { field: "link", header: "ССЫЛКА" },
+      ],
       //CreateProduct.vue
       productNameCapslock: "НАЗВАНИЕ ТОВАРА",
-      skuCapslock: "КОД",
+      skuCapslock: "SKU",
       linkCapslock: "ССЫЛКА",
       colorCapslock: "ЦВЕТ",
       quantityPerPackageCapslock: "КОЛ-ВО В УПАКОВКЕ",
@@ -319,7 +338,7 @@ export default {
       priceCapslock: "ЦЕНА",
 
       //ProductsView.vue
-      vendorCode: "Код производителя",
+      vendorCode: "SKU",
       name: "Название",
       description: "Описание",
       color: "Цвет",
@@ -611,7 +630,7 @@ export default {
       Create: "Создать",
       Update: "Обновить",
       Remove: "Удалить",
-      "Stock event": "Событие запаса",
+      "Stock event": "Событие склада",
       "User event": "Событие пользователя",
       "Role event": "Событие роли",
       "Product event": "Событие продукта",
@@ -623,6 +642,8 @@ export default {
       "Product massive update event": "Группа применена",
       "Product bulk create": "Загрузка продуктов",
       "User rights update": "Обновление прав пользователя",
+
+      discardChanges: "ОТМЕНИТЬ ИЗМЕНЕНИЯ",
     },
     operations: {
       Arrival: "Поступление",
@@ -711,6 +732,33 @@ export default {
       cancel: "Отменить",
 
       chooseFilesFromGallery: "Выбрать файлы из галереи",
+    },
+    beforeAfter: {
+      name: "Имя",
+      parent: "Родитель",
+      description: "Описание",
+      photo: "Фото",
+      vendorCode: "SKU",
+      eanCode: "EAN",
+      barcode: "Штрих-код",
+      brand: "Бренд",
+      commonPrice: "Цена",
+      category: "Категория",
+      collection: "Коллекция",
+      amountInBox: "Количество в коробке",
+      expirationDate: "Срок годности",
+      link: "Ссылка",
+      distributorPercent: "Процент розницы",
+      professionalPercent: "Процент профессионала",
+      distributorPrice: "Цена в розницу",
+      professionalPrice: "Цена профессионала",
+      offertaPrice: "Цена по акции",
+      products: "Продукты",
+      address: "Адрес",
+      login: "Логин",
+      password: "Пароль",
+      hash: "Пароль",
+      relatedUsersCount: "Пользователей с ролью",
     },
   },
 };

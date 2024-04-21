@@ -257,6 +257,20 @@ const routes = [
         component: () => import("@/views/Storehouses/CreateStorehouse.vue"),
         props: true,
         meta: {
+          breadcrumbs: [
+            new BreadcrumbDto(
+              PrintUtil.localize("panelName", "router"),
+              new RouteParametrized("dashboard"),
+            ),
+            new BreadcrumbDto(
+              PrintUtil.localize("stiorehouses", "router"),
+              new RouteParametrized("storehouses"),
+            ),
+            new BreadcrumbDto(
+              PrintUtil.localize("NewStorehouse", "router"),
+              new RouteParametrized("New storehouse"),
+            ),
+          ],
           name: PrintUtil.localize("NewStorehouse", "router"),
         },
       },
@@ -269,7 +283,10 @@ const routes = [
           name: PrintUtil.localize("roles", "router"),
           ruleId: [appConf.rules.rbacManaging],
           buttons: [
-            new HeaderBtnDto("+ ADD", new RouteParametrized("New role")),
+            new HeaderBtnDto(
+              PrintUtil.localize("+ ADD", "router"),
+              new RouteParametrized("New role"),
+            ),
           ],
         },
         children: [
@@ -290,6 +307,20 @@ const routes = [
         component: () => import("@/views/Roles/CreateRole.vue"),
         props: true,
         meta: {
+          breadcrumbs: [
+            new BreadcrumbDto(
+              PrintUtil.localize("panelName", "router"),
+              new RouteParametrized("dashboard"),
+            ),
+            new BreadcrumbDto(
+              PrintUtil.localize("roles", "router"),
+              new RouteParametrized("roles"),
+            ),
+            new BreadcrumbDto(
+              PrintUtil.localize("NewRole", "router"),
+              new RouteParametrized("New role"),
+            ),
+          ],
           name: PrintUtil.localize("NewRole", "router"),
         },
       },
@@ -301,7 +332,10 @@ const routes = [
           name: PrintUtil.localize("users", "router"),
           ruleId: [appConf.rules.userManaging],
           buttons: [
-            new HeaderBtnDto("+ ADD", new RouteParametrized("New user")),
+            new HeaderBtnDto(
+              PrintUtil.localize("+ ADD", "router"),
+              new RouteParametrized("New user"),
+            ),
           ],
         },
         children: [
@@ -322,6 +356,20 @@ const routes = [
         component: () => import("@/views/Users/CreateUser.vue"),
         props: true,
         meta: {
+          breadcrumbs: [
+            new BreadcrumbDto(
+              PrintUtil.localize("panelName", "router"),
+              new RouteParametrized("dashboard"),
+            ),
+            new BreadcrumbDto(
+              PrintUtil.localize("users", "router"),
+              new RouteParametrized("users"),
+            ),
+            new BreadcrumbDto(
+              PrintUtil.localize("NewUser", "router"),
+              new RouteParametrized("New user"),
+            ),
+          ],
           name: PrintUtil.localize("NewUser", "router"),
         },
       },

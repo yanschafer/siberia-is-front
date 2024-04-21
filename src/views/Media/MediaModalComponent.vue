@@ -19,7 +19,7 @@
         <div class="d-flex flex-row justify-content-start pl-3">
           <div class="d-flex flex-col flex-grow-1 text-col">
             <h5 class="m-0 heading-list">{{ image.name }}</h5>
-            <p class="text-muted m-0">{{ image.url }}</p>
+            <!--            <p class="text-muted m-0">{{ image.url }}</p>-->
             <InputText
               v-model="image.name"
               v-if="editMode"
@@ -37,7 +37,7 @@
         </div>
         <h5 class="heading-list m-0">{{ localize("description") }}</h5>
         <p v-if="!editMode" class="text-muted m-0">
-          {{ image.description }}
+          {{ image.description || "-" }}
         </p>
         <Textarea
           v-if="editMode"

@@ -27,6 +27,11 @@ export default class WsResolverUtil {
 
   public close() {
     if (this.socket) this.socket?.close(3488);
+    Object.keys(WsHandlers).forEach((type) => {
+      WsHandlers[type] = [];
+    });
+    LoggerUtil.debug(WsHandlers);
+    LoggerUtil.debug(this.socket);
     this.socket = null;
   }
 

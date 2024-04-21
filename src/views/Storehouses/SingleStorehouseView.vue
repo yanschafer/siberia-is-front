@@ -94,7 +94,7 @@
               >{{ localize("newRequestCapslock") }}</MDBBtn
             >
             <MDBBtn
-              v-if="requestAvailable"
+              v-if="writeOffAvailable"
               @click="addWriteOff"
               class="utility-btn"
               outline="black"
@@ -231,6 +231,10 @@ export default {
           header: this.localize("skuCapslock", "products"),
         },
         {
+          field: "eanCode",
+          header: "EAN",
+        },
+        {
           field: "quantity",
           header: this.localize("quantityCapslock", "products"),
         },
@@ -250,6 +254,7 @@ export default {
       arrivalAvailable: true,
       saleAvailable: true,
       requestAvailable: true,
+      writeOffAvailable: true,
       storehouseQrUrl: "",
     };
   },
@@ -360,6 +365,10 @@ export default {
         appConf.rules.requestCreation,
         this.id,
       );
+      this.writeOffAvailable = TokenUtil.hasAccessToStock(
+        appConf.rules.writeOffCreation,
+        this.id,
+      );
     },
     showSuccessToast() {
       this.$toast.add({
@@ -411,7 +420,7 @@ export default {
         this.newWriteOff = false;
         const data = res.getData();
         this.showSuccessTransactionCreation(
-          "WriteOff",
+          "Write-off",
           data.status == TransactionStatus.PROCESSED,
         );
       } else {

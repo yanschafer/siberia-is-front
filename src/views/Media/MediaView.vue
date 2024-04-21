@@ -89,8 +89,8 @@
                     <p class="text-muted m-0">{{ image.name }}</p>
                   </div>
                   <div class="d-flex flex-column col-2 justify-center">
-                    <h5 class="heading-list m-0">{{ localize("usedFor") }}</h5>
-                    <p class="text-muted m-0">Product #1</p>
+                    <!--                    <h5 class="heading-list m-0">{{ localize("usedFor") }}</h5>-->
+                    <!--                    <p class="text-muted m-0">Product #1</p>-->
                   </div>
                   <div class="d-flex flex-column col-2 justify-center">
                     <Button
@@ -142,9 +142,13 @@
 
                 <div class="pt-4">
                   <div class="d-flex flex-row mt-1 align-items-center gap-2">
-                      <Checkbox class="checkbox-inline" v-model="image.selected" :binary="true" />
-                      <h5 class="m-0 heading-list">{{ image.name }}</h5>
-                      <!--                      <p class="text-muted m-0">{{ image.url }}</p>-->
+                    <Checkbox
+                      class="checkbox-inline"
+                      v-model="image.selected"
+                      :binary="true"
+                    />
+                    <h5 class="m-0 heading-list">{{ image.name }}</h5>
+                    <!--                      <p class="text-muted m-0">{{ image.url }}</p>-->
                   </div>
                 </div>
               </div>
@@ -425,5 +429,6 @@ export default {
   align-items: center;
   border: 1px solid #bbbbbb;
 }
-.checkbox-inline {}
+.checkbox-inline {
+}
 </style>

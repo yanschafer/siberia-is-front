@@ -2,9 +2,9 @@
   <div class="container-fluid" style="padding: 0">
     <template v-if="!isIdProvided">
       <MDBContainer class="d-flex container-content">
-        <MDBCol class="col-auto">
-          <FiltersSidebarComponent @start-search="handleFiltersSearch" />
-        </MDBCol>
+        <!--        <MDBCol class="col-auto">-->
+        <!--          <FiltersSidebarComponent @start-search="handleFiltersSearch" />-->
+        <!--        </MDBCol>-->
         <MDBCol class="col-auto">
           <SearchComponent class="search" @search="handleSearch" />
           <TableComponent

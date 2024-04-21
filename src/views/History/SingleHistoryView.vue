@@ -23,26 +23,25 @@
       v-if="selectedHistory.canBeReset"
       class="btn btn-danger utility-btn"
       @click="discard"
-      >Discard changes</Button
+      >{{ localize("discardChanges") }}</Button
     >
   </MDBContainer>
   <MDBContainer class="pt-4">
     {{ description }}
     <ScrollPanel
-        style="width: 88vw; height: 45vh;"
-        class=" animate__animated animate__fadeIn"
+      style="width: 88vw; height: 45vh"
+      class="animate__animated animate__fadeIn"
     >
       <BeforeAfterComponent v-if="showBeforeAfter" />
       <TableComponent
-          v-if="showTable"
-          :infoMessage="noDataMessage"
-          :rows="filteredRows"
-          :columns="table.columns"
-          :searchTerm="table.searchTerm"
+        v-if="showTable"
+        :infoMessage="noDataMessage"
+        :rows="filteredRows"
+        :columns="table.columns"
+        :searchTerm="table.searchTerm"
       />
       <TabsComponent v-if="showRules" :roles="roles" />
     </ScrollPanel>
-
   </MDBContainer>
 </template>
 
@@ -71,7 +70,7 @@ export default {
     MDBContainer,
     MDBBadge,
     MDBBtn,
-    ScrollPanel
+    ScrollPanel,
   },
   props: {
     id: {
