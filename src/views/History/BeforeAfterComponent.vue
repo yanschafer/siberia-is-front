@@ -1,29 +1,17 @@
 <template>
   <div v-if="isSelected" class="main-area animate__animated animate__fadeIn">
-    <!-- TODO Вынести в отдельные компоненты -->
-    <!-- Тип операция/таблица -->
-    <!--    <div class="flex row row-operation">-->
-    <!--      <div class="d-flex flex-row">-->
-    <!--        <h5 class="operation-name">Operation name 1</h5>-->
-    <!--      </div>-->
-    <!--      <div class="col-4">-->
-    <!--        <h5 class="text">Operation details</h5>-->
-    <!--      </div>-->
-    <!--      <div class="col-4">-->
-    <!--        <h5>Product details</h5>-->
-    <!--        <TableComponent />-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <!-- Тип было/стало -->
     <template v-for="(item, key) in beforeAfter">
       <div class="flex row row-operation">
         <div class="d-flex flex-row">
-          <h5 class="operation-name">{{ firstLetterToUpperCase(key) }}</h5>
+          <h5 class="operation-name">
+            {{ localize(key) }}
+          </h5>
         </div>
         <div class="col-4">
           <template v-if="key === 'photo'">
             <SliderNoThumbnailComponent :images="imagesSource(item.before)" />
           </template>
+          <h5 v-else-if="key === 'hash'" class="text">*******</h5>
           <h5 v-else class="text">{{ item.before }}</h5>
         </div>
         <div
@@ -39,6 +27,7 @@
           <template v-if="key === 'photo'">
             <SliderNoThumbnailComponent :images="imagesSource(item.after)" />
           </template>
+          <h5 v-else-if="key === 'hash'" class="text">*******</h5>
           <h5 v-else class="text">{{ item.after }}</h5>
         </div>
       </div>
@@ -53,6 +42,7 @@ import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import { useHistoryEventStore } from "@/stores/components/history-event.store";
 import SliderNoThumbnailComponent from "@/views/Media/SliderNoThumbnailComponent.vue";
 import FilesResolverUtil from "@/utils/files-resolver.util";
+import PrintUtil from "@/utils/localization/print.util";
 
 export default defineComponent({
   name: "BeforeAfterComponent",
@@ -66,6 +56,9 @@ export default defineComponent({
   },
 
   methods: {
+    localize(key: string, module: string = "beforeAfter") {
+      return PrintUtil.localize(key, module);
+    },
     firstLetterToUpperCase(str: string) {
       const first = str.substring(0, 1);
 

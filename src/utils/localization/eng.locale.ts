@@ -111,6 +111,7 @@ export default {
       //UsersView.vue
       name: "Name",
       login: "Login",
+      loginCapslock: "LOGIN",
       nothingWasFound: "Nothing was found",
 
       //ProfileComponent
@@ -252,6 +253,21 @@ export default {
           name: "Days to expire",
           key: "expirationDate",
         },
+      ],
+      uploadTableColumns: [
+        { field: "vendorCode", header: "SKU" },
+        { field: "eanCode", header: "EAN" },
+        { field: "barcode", header: "BARCODE" },
+        { field: "brand", header: "BRAND" },
+        { field: "name", header: "NAME" },
+        { field: "distributorPercent", header: "DISTRIBUTOR PERCENT" },
+        { field: "professionalPercent", header: "PROFESSIONAL PERCENT" },
+        { field: "commonPrice", header: "PRICE" },
+        { field: "category", header: "CATEGORY" },
+        { field: "color", header: "COLOR" },
+        { field: "amountInBox", header: "AMOUNT IN BOX" },
+        { field: "expirationDate", header: "EXPIRATION DATE" },
+        { field: "link", header: "LINK" },
       ],
       //CreateProduct.vue
       productNameCapslock: "PRODUCT NAME",
@@ -597,6 +613,8 @@ export default {
       "Product massive update event": "Group applied",
       "Product bulk create": "Products upload",
       "User rights update": "User rights update",
+
+      discardChanges: "DISCARD CHANGES",
     },
     operations: {
       Arrival: "Arrival",
@@ -687,6 +705,33 @@ export default {
       cancel: "Cancel",
 
       chooseFilesFromGallery: "Choose files from gallery",
+    },
+    beforeAfter: {
+      name: "Name",
+      parent: "Parent",
+      description: "Description",
+      photo: "Photo",
+      vendorCode: "SKU",
+      eanCode: "EAN",
+      barcode: "Barcode",
+      brand: "Brand",
+      commonPrice: "Price",
+      category: "Category",
+      collection: "Collection",
+      amountInBox: "Amount in box",
+      expirationDate: "Expiration date",
+      link: "Link",
+      distributorPercent: "Distributor percent",
+      professionalPercent: "Professional percent",
+      distributorPrice: "Distributor percent",
+      professionalPrice: "Professional percent",
+      offertaPrice: "Offerta price",
+      products: "Products",
+      address: "Address",
+      login: "Login",
+      password: "Password",
+      hash: "Password",
+      relatedUsersCount: "Users with role",
     },
   },
 };

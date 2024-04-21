@@ -106,6 +106,7 @@ export default {
       addedColumns: [
         { field: "name", header: this.localize("nameCapslock", "default") },
         { field: "sku", header: this.localize("skuCapslock", "products") },
+        { field: "ean", header: "EAN" },
         {
           field: "quantity",
           header: this.localize("quantityCapslock", "products"),
@@ -217,6 +218,7 @@ export default {
         id: this.selectedProduct.id,
         name: this.selectedProduct.name,
         sku: this.selectedProduct.vendorCode,
+        ean: this.selectedProduct.eanCode,
         quantity: this.quantity,
         price: this.price,
       });

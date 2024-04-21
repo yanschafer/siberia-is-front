@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import HistoryOutputDto from "@/api/modules/history/dto/history-output.dto";
-import RollbackModel from "@/api/modules/history/models/rollback.model";
 import {
+  appConf,
   beforeAfterTypes,
   EventObjectTypes,
   EventType,
@@ -154,6 +154,30 @@ export const useHistoryEventStore = defineStore({
             this.hideBeforeAfter = true;
           } else {
             this.hideBeforeAfter = false;
+            if (this.selectedEvent.eventTypeId == EventType.REMOVE) {
+              this.beforeAfterObject = await this.selectedEvent[
+                beforeAfterResolver
+              ]((data) => ({
+                name: data.name,
+                description: data.description,
+                relatedUsersCount: data.relatedUsers.length,
+              }));
+            } else {
+              this.beforeAfterObject =
+                await this.selectedEvent[beforeAfterResolver]();
+            }
+          }
+          break;
+        case EventObjectTypes.USER:
+          this.hideBeforeAfter = false;
+          if (this.selectedEvent.eventTypeId == EventType.REMOVE) {
+            this.beforeAfterObject = await this.selectedEvent[
+              beforeAfterResolver
+            ]((data) => ({
+              name: data.name,
+              login: data.login,
+            }));
+          } else {
             this.beforeAfterObject =
               await this.selectedEvent[beforeAfterResolver]();
           }
@@ -209,6 +233,32 @@ export const useHistoryEventStore = defineStore({
 
     async initRules() {
       switch (this.selectedEvent.eventObjectTypeId) {
+        case EventObjectTypes.USER:
+          if (this.selectedEvent.eventTypeId == EventType.REMOVE) {
+            this.hideRules = false;
+            this.rulesComponent.roles = [
+              {
+                id: 1,
+                name: "Personal rules",
+                relatedUsersCount: 1,
+                description: "Personal rules",
+                rules: this.selectedEvent.rollbackDto.rules.map((el) => {
+                  if (el.stockId) {
+                    return {
+                      needStock: true,
+                      ...el,
+                    };
+                  } else {
+                    return el;
+                  }
+                }),
+                canChange: false,
+              },
+            ];
+          } else {
+            this.hideRules = true;
+          }
+          break;
         case EventObjectTypes.USER_RIGHTS:
           if (this.selectedEvent.rollbackRoute == "user/roles") {
             this.hideRules = true;
@@ -237,16 +287,22 @@ export const useHistoryEventStore = defineStore({
           }
           break;
         case EventObjectTypes.ROLE:
-          if (this.selectedEvent.rollbackRoute != "rbac/roles/rules") {
+          if (
+            this.selectedEvent.rollbackRoute != "rbac/roles/rules" &&
+            this.selectedEvent.eventTypeId != EventType.REMOVE
+          ) {
             this.hideRules = true;
           } else {
             this.hideRules = false;
+            let title = "Updated Rules";
+            if (this.selectedEvent.eventTypeId == EventType.REMOVE)
+              title = "Related rules";
             this.rulesComponent.roles = [
               {
                 id: 1,
-                name: "Updated Rules",
+                name: title,
                 relatedUsersCount: 1,
-                description: "Updated rules",
+                description: title,
                 rules: this.selectedEvent.rollbackDto.rules.map((el) => {
                   if (el.stockId) {
                     return {

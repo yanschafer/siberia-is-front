@@ -112,7 +112,8 @@ export default {
 
       //UsersView.vue
       name: "Nombre",
-      login: "Inicio de sesión",
+      login: "Login",
+      loginCapslock: "LOGIN",
       nothingWasFound: "No se encontró nada",
 
       //ProfileComponent
@@ -183,6 +184,9 @@ export default {
       "Update stock data": "Modificar datos de almacén",
       "View stock data": "Ver almacenes",
       "View products list": "Ver productos",
+      "Write-off managing": "Gestión de bajas",
+      "Create write-off": "Crear baja",
+      "Approve and cancel write-offs": "Aprobar y cancelar bajas",
     },
     products: {
       availableColumns: [
@@ -252,6 +256,23 @@ export default {
           key: "expirationDate",
         },
       ],
+
+      uploadTableColumns: [
+        { field: "vendorCode", header: "SKU" },
+        { field: "eanCode", header: "EAN" },
+        { field: "barcode", header: "CÓDIGO DE BARRAS" },
+        { field: "brand", header: "MARCA" },
+        { field: "name", header: "NOMBRE" },
+        { field: "distributorPercent", header: "PORCENTAJE DEL DISTRIBUIDOR" },
+        { field: "professionalPercent", header: "PORCENTAJE PROFESIONAL" },
+        { field: "commonPrice", header: "PRECIO" },
+        { field: "category", header: "CATEGORÍA" },
+        { field: "color", header: "COLOR" },
+        { field: "amountInBox", header: "CANTIDAD EN CAJA" },
+        { field: "expirationDate", header: "FECHA DE CADUCIDAD" },
+        { field: "link", header: "ENLACE" },
+      ],
+
       //CreateProduct.vue
       productNameCapslock: "NOMBRE DEL PRODUCTO",
       skuCapslock: "SKU",
@@ -587,7 +608,7 @@ export default {
       Create: "Crear",
       Update: "Actualizar",
       Remove: "Eliminar",
-      "Stock event": "Evento de inventario",
+      "Stock event": "Evento de almacén",
       "User event": "Evento de usuario",
       "Role event": "Evento de rol",
       "Product event": "Evento de producto",
@@ -599,6 +620,8 @@ export default {
       "Product massive update event": "Grupo aplicado",
       "Product bulk create": "Carga de productos",
       "User rights update": "Actualización de derechos de usuario",
+
+      discardChanges: "CANCELAR CAMBIOS",
     },
     operations: {
       Arrival: "Llegada",
@@ -687,6 +710,33 @@ export default {
       cancel: "Cancelar",
 
       chooseFilesFromGallery: "Elegir archivos de la galería",
+    },
+    beforeAfter: {
+      name: "Nombre",
+      parent: "Padre",
+      description: "Descripción",
+      photo: "Foto",
+      vendorCode: "SKU",
+      eanCode: "EAN",
+      barcode: "Código de barras",
+      brand: "Marca",
+      commonPrice: "Precio",
+      category: "Categoría",
+      collection: "Colección",
+      amountInBox: "Cantidad en caja",
+      expirationDate: "Fecha de caducidad",
+      link: "Enlace",
+      distributorPercent: "Porcentaje de distribuidor",
+      professionalPercent: "Porcentaje de profesional",
+      distributorPrice: "Precio de distribuidor",
+      professionalPrice: "Precio de profesional",
+      offertaPrice: "Precio de oferta",
+      products: "Productos",
+      address: "Dirección",
+      login: "Login",
+      password: "Contraseña",
+      hash: "Contraseña",
+      relatedUsersCount: "Usuarios por rol",
     },
   },
 };

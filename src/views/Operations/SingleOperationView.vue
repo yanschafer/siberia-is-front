@@ -90,7 +90,7 @@ import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdb-vue-ui-kit";
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 import { useOperationStore } from "@/stores/operation.store";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import {
   appConf,
   TransactionStatus,
@@ -106,6 +106,7 @@ import PrintUtil from "@/utils/localization/print.util";
 import TokenUtil from "@/utils/token.util";
 import AuthModel from "@/api/modules/auth/models/auth.model";
 import { useTransactionSocketHandler } from "@/stores/transaction-socket-handler.store";
+import { useAuthCheckStore } from "@/stores/auth-check.store";
 
 export default {
   name: "SingleOperationView",
@@ -159,7 +160,9 @@ export default {
     const operationStore = useOperationStore();
     const storehousesStore = useStorehousesStore();
     const transactionSocketHandler = useTransactionSocketHandler();
+    const authCheckStore = useAuthCheckStore();
     const route = useRoute();
+    const router = useRouter();
 
     const loaders = await Promise.all([
       storehousesStore.loadStorehouseList(),
@@ -172,8 +175,10 @@ export default {
       transactionId: parseInt(route.params.id.toString()),
       operationStore,
       storehousesStore,
+      authCheckStore,
       transactionSocketHandler,
       loaders,
+      router,
     };
   },
   async created() {
@@ -184,7 +189,10 @@ export default {
       this.transactionId,
     );
 
-    if (this.selectedOperation.type.id != TransactionType.TRANSFER)
+    if (
+      this.selectedOperation.type.id != TransactionType.TRANSFER &&
+      this.selectedOperation.type.id != TransactionType.WriteOff
+    )
       this.productColumns.push({
         field: "price",
         header: this.localize("priceCapslock"),
@@ -196,6 +204,15 @@ export default {
           action.args[0],
           action.args[1],
         );
+      }
+    });
+
+    this.authCheckStore.$onAction(async (action) => {
+      if (action.name == "refresh") {
+        const loaded = await this.operationStore.loadSelectedOperation(
+          this.selectedOperation.id,
+        );
+        if (!loaded.success) this.router.push({ name: "Operations" });
       }
     });
   },

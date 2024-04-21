@@ -22,66 +22,17 @@ export const useProductsStore = defineStore({
         field: "vendorCode",
         header: PrintUtil.localize("skuCapslock", "products"),
       },
+      {
+        field: "eanCode",
+        header: "EAN",
+      },
       //Price field = Default price (commonPrice on backend)
       {
         field: "price",
         header: PrintUtil.localize("priceCapslock", "products"),
       },
     ],
-    uploadPreviewColumns: [
-      {
-        field: "vendorCode",
-        header: "SKU",
-      },
-      {
-        field: "eanCode",
-        header: "EAN",
-      },
-      {
-        field: "barcode",
-        header: "BARCODE",
-      },
-      {
-        field: "brand",
-        header: "BRAND",
-      },
-      {
-        field: "name",
-        header: "NAME",
-      },
-      {
-        field: "distributorPercent",
-        header: "DISTRIBUTOR PERCENT",
-      },
-      {
-        field: "professionalPercent",
-        header: "PROFESSIONAL PERCENT",
-      },
-      {
-        field: "commonPrice",
-        header: "PRICE",
-      },
-      {
-        field: "category",
-        header: "CATEGORY",
-      },
-      {
-        field: "color",
-        header: "COLOR",
-      },
-      {
-        field: "amountInBox",
-        header: "AMOUNT IN BOX",
-      },
-      {
-        field: "expirationDate",
-        header: "EXPIRATION DATE",
-      },
-      {
-        field: "link",
-        header: "LINK",
-      },
-    ],
+    uploadPreviewColumns: PrintUtil.localize("uploadTableColumns", "products"),
     onUploadRows: [],
     selectedProduct: {},
   }),

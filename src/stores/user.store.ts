@@ -16,7 +16,7 @@ export const useUsersStore = defineStore({
     searchTerm: "",
     usersRows: [],
     usersColumns: [
-      { field: "name", header: PrintUtil.localize("nameCapslock") },
+      { field: "name", header: PrintUtil.localize("loginCapslock", "user") },
     ],
     selectedUser: {},
     userOnCreate: {},
