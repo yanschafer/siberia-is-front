@@ -19,7 +19,7 @@
           :placeholder="localize('columnsForExport')"
           :options="availableColumns"
           :option-label="'name'"
-          :start-items="selectedColumns"
+          :start-items="[]"
           @items-changed="columnsChanged"
         />
       </div>
@@ -34,14 +34,17 @@
     </div>
     <MDBContainer class="d-flex container-content">
       <MDBCol class="col-auto">
-        <FiltersSidebarComponent @start-search="handleFiltersSearch" />
+        <FiltersSidebarComponent
+          :use-fast-search="true"
+          @start-search="handleFiltersSearch"
+        />
       </MDBCol>
       <MDBCol class="">
         <TableComponent
           class="table-data"
           :info-message="noDataMessage"
           :rows="getFilteredProducts"
-          :columns="productsStore.productColumns"
+          :columns="tableColumns"
           :searchTerm="productsStore.searchTerm"
         />
       </MDBCol>
@@ -103,7 +106,7 @@ export default defineComponent({
     const collectionStore = useCollectionStore();
 
     const loaders = await Promise.all([
-      productsStore.loadProductList(),
+      productsStore.loadUnminifiedProductList(),
       brandStore.loadBrandsList(),
       collectionStore.loadCollectionList(),
       categoryStore.loadCategoriesList(),
@@ -206,6 +209,19 @@ export default defineComponent({
     collectionList() {
       return this.collectionStore.getCollectionList;
     },
+    tableColumns() {
+      if (Object.keys(this.selectedColumns).length == 0)
+        return this.productsStore.productColumns;
+      else
+        return Object.keys(
+          this.selectedColumns.filter((el) => !el.hideFromTable),
+        ).map((el) => {
+          return {
+            field: el,
+            header: this.selectedColumns[el],
+          };
+        });
+    },
   },
   methods: {
     localize(key: string, module: string = "products") {
@@ -216,6 +232,7 @@ export default defineComponent({
       items.forEach((el) => {
         this.selectedColumns[el.key] = el.name;
       });
+      LoggerUtil.debug("selectedcolumn", this.selectedColumns);
     },
     async exportProducts() {
       const exportConfig = new ExportConfigDto(
@@ -232,7 +249,7 @@ export default defineComponent({
     },
     async handleFiltersSearch(filters) {
       this.filters = filters;
-      const loadRes = await this.productsStore.loadProductList(
+      const loadRes = await this.productsStore.loadUnminifiedProductList(
         new ProductSearchFilterDto(filters),
       );
       loadRes.toastIfError(this.$toast, this.$nextTick);

@@ -106,9 +106,22 @@ export default {
       textFilterValue: null,
     };
   },
+  props: {
+    useFastSearch: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  setup() {
+    const filtersStore = useFiltersStore();
+
+    return {
+      filtersStore,
+    };
+  },
   computed: {
     filtersInput() {
-      return useFiltersStore().getFilters;
+      return this.filtersStore.getFilters;
     },
   },
   created() {
@@ -119,6 +132,10 @@ export default {
       };
     });
     this.filtersObject = { ...this.filtersInput };
+    if (this.filtersStore.needStartSearch) {
+      this.search();
+      this.filtersStore.needStartSearch = false;
+    }
   },
   methods: {
     localize(key, module = "filters") {
@@ -139,6 +156,7 @@ export default {
         if (el.key == filterItem.key) this.filters[index].value = value;
       });
       this.filtersObject[filterItem.key].value = value;
+      if (this.useFastSearch) this.search();
       LoggerUtil.debug(this.filtersObject);
     },
     search() {

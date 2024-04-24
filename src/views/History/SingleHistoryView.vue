@@ -29,7 +29,7 @@
   <MDBContainer class="pt-4 container-info">
     {{ description }}
     <ScrollPanel
-      style="width: 88vw"
+      style="width: 88vw; height: 50vh"
       class="animate__animated animate__fadeIn"
     >
       <BeforeAfterComponent v-if="showBeforeAfter" />
@@ -41,10 +41,12 @@
         :searchTerm="table.searchTerm"
       />
       <TabsComponent v-if="showRules" :roles="roles" />
-      <h5 class="operation-name">
-        {{ treeTableTitle }}
-      </h5>
-      <TreeTableComponent v-if="showTreeTable" :nodes="treeTable" />
+      <template v-if="showTreeTable">
+        <h5 class="operation-name">
+          {{ treeTableTitle }}
+        </h5>
+        <TreeTableComponent v-if="showTreeTable" :nodes="treeTable" />
+      </template>
     </ScrollPanel>
   </MDBContainer>
 </template>
