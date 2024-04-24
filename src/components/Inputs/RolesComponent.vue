@@ -70,6 +70,7 @@ import { useModalStore } from "@/stores/modal.store";
 import ModalComponent from "@/components/Elements/Dialogs/ModalComponent.vue";
 import TokenUtil from "@/utils/token.util";
 import { useUsersStore } from "@/stores/user.store";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "RolesComponent",
@@ -155,6 +156,7 @@ export default {
           this.storehouseList[el.id] = rulesToStock[el.id];
       });
     });
+    LoggerUtil.debug("STOREHOUSE LIST", this.storehouseList);
     this.lastStorehouseList = { ...this.storehouseList };
   },
   methods: {

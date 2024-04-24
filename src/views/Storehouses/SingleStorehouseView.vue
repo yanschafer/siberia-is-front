@@ -72,7 +72,7 @@
         <template v-if="!newArrival && !newSale && !newRequest && !newWriteOff">
           <div class="row buttons-row gap-2">
             <MDBBtn
-              v-if="arrivalAvailable"
+              v-if="isArrivalAvailable"
               @click="addNewArrival"
               class="utility-btn"
               outline="black"
@@ -80,21 +80,21 @@
             >
 
             <MDBBtn
-              v-if="saleAvailable"
+              v-if="isSaleAvailable"
               @click="addNewSale"
               class="utility-btn"
               outline="black"
               >{{ localize("newSaleCapslock") }}</MDBBtn
             >
             <MDBBtn
-              v-if="requestAvailable"
+              v-if="isTransferAvailable"
               @click="addNewRequest"
               class="utility-btn"
               outline="black"
               >{{ localize("newRequestCapslock") }}</MDBBtn
             >
             <MDBBtn
-              v-if="writeOffAvailable"
+              v-if="isWriteOffAvailable"
               @click="addWriteOff"
               class="utility-btn"
               outline="black"
@@ -107,6 +107,13 @@
               outline="black"
               ><IconUpload color="black" :size="15" stroke-width="2" />
               {{ localize("UPLOAD", "router") }}</MDBBtn
+            >
+            <MDBBtn
+              @click="goToOperationsByStock"
+              class="utility-btn upload-btn"
+              outline="black"
+              ><IconRoute color="black" :size="15" stroke-width="2" />
+              {{ localize("OperationsCapslock", "header") }}</MDBBtn
             >
           </div>
 
@@ -184,6 +191,7 @@ import loggerUtil from "@/utils/logger/logger.util";
 import InputText from "primevue/inputtext";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
 import AuthModel from "@/api/modules/auth/models/auth.model";
+import { useFiltersStore } from "@/stores/filters.store";
 
 export default {
   name: "SingleStorehouseView",
@@ -255,6 +263,7 @@ export default {
       saleAvailable: true,
       requestAvailable: true,
       writeOffAvailable: true,
+      controlOperationsFromDesktop: false,
       storehouseQrUrl: "",
     };
   },
@@ -340,6 +349,18 @@ export default {
     },
     editBtnAvailable() {
       return this.authCheckStore.getHasAccessToStockManaging;
+    },
+    isArrivalAvailable() {
+      return this.arrivalAvailable && this.controlOperationsFromDesktop;
+    },
+    isSaleAvailable() {
+      return this.saleAvailable && this.controlOperationsFromDesktop;
+    },
+    isTransferAvailable() {
+      return this.requestAvailable && this.controlOperationsFromDesktop;
+    },
+    isWriteOffAvailable() {
+      return this.writeOffAvailable && this.controlOperationsFromDesktop;
     },
   },
   methods: {
@@ -560,6 +581,29 @@ export default {
     cancelEditing() {
       this.clearValidationErrors();
       this.editing = false;
+    },
+    goToOperationsByStock() {
+      const selectedStockId = this.selectedStorehouse.id;
+      const filtersStore = useFiltersStore();
+      filtersStore.setDefaults({
+        to: [
+          {
+            id: selectedStockId,
+            name: this.selectedStorehouse.name,
+            address: this.selectedStorehouse.address,
+          },
+        ],
+        from: [
+          {
+            id: selectedStockId,
+            name: this.selectedStorehouse.name,
+            address: this.selectedStorehouse.address,
+          },
+        ],
+      });
+      this.router.push({
+        name: "Operations",
+      });
     },
   },
 };

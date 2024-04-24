@@ -25,6 +25,15 @@ export default class ProductModel extends ApiCrudModelUtil<
     );
   }
 
+  //For export preview (DON'T USE INSTEAD OF GET LIST!)
+  async getUnminifiedList(
+    searchFilterDto: ProductSearchFilterDto,
+  ): Promise<ApiResponseDto<ProductDto[]>> {
+    return this.authorizedRequest(
+      new ApiRequestDto("/all/unminified", "POST", searchFilterDto),
+    );
+  }
+
   override async getAll(
     searchFilterDto: ProductSearchFilterDto,
   ): Promise<ApiResponseDto<ProductDto[]>> {

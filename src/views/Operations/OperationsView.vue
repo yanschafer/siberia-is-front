@@ -39,6 +39,12 @@ export default {
     MDBContainer,
     MDBCol,
   },
+  props: {
+    setStockFilter: {
+      default: null,
+      type: Number,
+    },
+  },
   data() {
     return {
       noDataMessage: {

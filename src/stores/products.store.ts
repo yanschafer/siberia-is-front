@@ -52,7 +52,17 @@ export const useProductsStore = defineStore({
       }
       return getProducts;
     },
-
+    //For export preview table ONLY!! (DON'T USE INSTEAD OF GET LIST!)
+    async loadUnminifiedProductList(
+      searchFilterDto: ProductSearchFilterDto = new ProductSearchFilterDto(),
+    ) {
+      const productModel = new ProductModel();
+      const getProducts = await productModel.getUnminifiedList(searchFilterDto);
+      if (getProducts.success) {
+        this.productRows = getProducts.getData();
+      }
+      return getProducts;
+    },
     async loadSelectedProduct(productId: number) {
       const productModel = new ProductModel();
       const product = await productModel.getOne(productId);
