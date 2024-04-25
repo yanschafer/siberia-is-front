@@ -301,11 +301,13 @@ export default {
         { field: "professionalPercent", header: "ПРОФЕССИОНАЛЬНЫЙ ПРОЦЕНТ" },
         { field: "commonPrice", header: "ЦЕНА" },
         { field: "category", header: "КАТЕГОРИЯ" },
+        { field: "collection", header: "КОЛЛЕКЦИЯ" },
         { field: "color", header: "ЦВЕТ" },
         { field: "amountInBox", header: "КОЛИЧЕСТВО В КОРОБКЕ" },
         { field: "expirationDate", header: "СРОК ГОДНОСТИ" },
         { field: "link", header: "ССЫЛКА" },
       ],
+      productsUploaded: "Продукты загружены",
       //CreateProduct.vue
       productNameCapslock: "НАЗВАНИЕ ТОВАРА",
       skuCapslock: "SKU",
@@ -415,10 +417,13 @@ export default {
       group: "Группа",
       createSuccess: "создана",
       updateSuccess: "обновлена",
-      updateFailure: "обновление не удалось",
+      updateFailure: "Обновление не удалось",
+      removed: "удалена",
+      successfully: "успешно",
 
       massiveUpdate: "Массовое обновление",
       applyChangesSuccessMessage: "Товары в группе успешно обновлены",
+      areYouSure: "Вы уверены, что хотите удалить группу под названием",
     },
     storehouses: {
       //CreateStorehouse.vue
@@ -433,6 +438,7 @@ export default {
       deleteStorehouseCapslock: "УДАЛЕНИЕ СКЛАДА",
       newArrivalCapslock: "+ НОВОЕ ПОСТУПЛЕНИЕ",
       newSaleCapslock: "- НОВАЯ ПРОДАЖА",
+      uploadSale: "НОВУЮ ПРОДАЖУ",
       newRequestCapslock: "+ НОВЫЙ ЗАПРОС ТОВАРОВ",
       newWriteOffCapslock: "- НОВОЕ СПИСАНИЕ",
       newArrivalRegistration: "Регистрация поступления",
@@ -656,6 +662,7 @@ export default {
       relatedRules: "Связанные правила",
       categoryTableRemovedChildrenTitle:
         "Удаленные элементы дочерних категорий",
+      eventDiscarded: "Изменения успешно отменены",
     },
     operations: {
       Arrival: "Поступление",
@@ -727,6 +734,12 @@ export default {
       uploadMedia: "Загрузить медиаконтент",
       deleteSelected: "УДАЛИТЬ ОТМЕЧЕННОЕ",
       fileName: "ИМЯ ФАЙЛА",
+      file: "Файл",
+      files: "Файлы",
+      removedOne: "удален",
+      removedSelected: "удалены",
+      updated: "изменен",
+      uploaded: "загружен",
       userFor: "ДЛЯ ПОЛЬЗОВАТЕЛЯ",
       delete: "УДАЛИТЬ",
       imageDetails: "Детали изображения",

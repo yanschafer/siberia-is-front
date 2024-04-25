@@ -74,7 +74,7 @@ export default {
     header: {
       History: "History",
       Operations: "Operations",
-      operationsCapslock: "OPERATIONS",
+      OperationsCapslock: "OPERATIONS",
       Notifications: "Notifications",
       Profile: "Profile",
       AddBtnLabel: "+ Add",
@@ -271,11 +271,13 @@ export default {
         { field: "professionalPercent", header: "PROFESSIONAL PERCENT" },
         { field: "commonPrice", header: "PRICE" },
         { field: "category", header: "CATEGORY" },
+        { field: "collection", header: "COLLECTION" },
         { field: "color", header: "COLOR" },
         { field: "amountInBox", header: "AMOUNT IN BOX" },
         { field: "expirationDate", header: "EXPIRATION DATE" },
         { field: "link", header: "LINK" },
       ],
+      productsUploaded: "Products uploaded",
       //CreateProduct.vue
       productNameCapslock: "PRODUCT NAME",
       skuCapslock: "SKU",
@@ -382,11 +384,14 @@ export default {
       group: "Group",
       createSuccess: "created",
       updateSuccess: "updated",
-      updateFailure: "updating failed",
+      updateFailure: "Group updating failed",
+      removed: "removed",
+      successfully: "successfully",
 
       massiveUpdate: "Massive update",
       applyChangesSuccessMessage: "Products in group were successfully updated",
       uploadFromFile: "Upload products from a file",
+      areYouSure: "Are you sure you want to delete group named",
     },
     storehouses: {
       //CreateStorehouse.vue
@@ -401,6 +406,7 @@ export default {
       deleteStorehouseCapslock: "DELETE STOREHOUSE",
       newArrivalCapslock: "+ NEW ARRIVAL",
       newSaleCapslock: "- NEW SALE",
+      uploadSale: "NEW SALE",
       newRequestCapslock: "+ NEW REQUEST",
       newWriteOffCapslock: "- NEW WRITE OFF",
       newArrivalRegistration: "New Arrival Registration",
@@ -627,6 +633,7 @@ export default {
       updatedRules: "Updated rules",
       relatedRules: "Related rules",
       categoryTableRemovedChildrenTitle: "Removed children",
+      eventDiscarded: "Event successfully discarded",
     },
     operations: {
       Arrival: "Arrival",
@@ -698,6 +705,11 @@ export default {
       uploadMedia: "Upload media content",
       deleteSelected: "DELETE SELECTED",
       fileName: "FILE NAME",
+      file: "File",
+      removedOne: "removed",
+      removedSelected: "removed",
+      updated: "updated",
+      uploaded: "uploaded",
       userFor: "USER FOR",
       delete: "DELETE",
 

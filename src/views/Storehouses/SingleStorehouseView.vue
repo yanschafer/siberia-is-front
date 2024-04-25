@@ -60,7 +60,10 @@
           v-if="storehouseQrUrl && storehouseQrUrl != ''"
           class="d-flex flex-row justify-content-end"
         >
-          <img class="qr" :src="storehouseQrUrl" />
+          <img v-if="qrLoaded" class="qr" :src="storehouseQrUrl" />
+          <div v-else class="qr">
+            <ProgressSpinner />
+          </div>
         </MDBCol>
       </MDBRow>
     </MDBContainer>
@@ -106,7 +109,8 @@
               class="utility-btn upload-btn"
               outline="black"
               ><IconUpload color="black" :size="15" stroke-width="2" />
-              {{ localize("UPLOAD", "router") }}</MDBBtn
+              {{ localize("UPLOAD", "router") }}
+              {{ localize("uploadSale", "storehouses") }}</MDBBtn
             >
             <MDBBtn
               @click="goToOperationsByStock"
@@ -192,6 +196,7 @@ import InputText from "primevue/inputtext";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
 import AuthModel from "@/api/modules/auth/models/auth.model";
 import { useFiltersStore } from "@/stores/filters.store";
+import ProgressSpinner from "primevue/progressspinner";
 
 export default {
   name: "SingleStorehouseView",
@@ -211,6 +216,7 @@ export default {
     ModalComponent,
     Toast,
     InputText,
+    ProgressSpinner,
   },
   props: {
     id: {
@@ -263,8 +269,9 @@ export default {
       saleAvailable: true,
       requestAvailable: true,
       writeOffAvailable: true,
-      controlOperationsFromDesktop: false,
+      controlOperationsFromDesktop: true,
       storehouseQrUrl: "",
+      qrLoaded: false,
     };
   },
   async setup() {
@@ -306,6 +313,9 @@ export default {
 
     this.authCheckStore.$onAction(async ({ name }) => {
       if (name == "refresh") {
+        this.storehouseQrUrl = await authModel.getStorehouseQr(
+          this.storehouseId,
+        );
         const loadRes = await this.storehouseStore.loadSelectedStoreHouse(
           this.id,
         );
@@ -323,6 +333,12 @@ export default {
     this.validator = this.validator
       .addRule("name", nameValidateRule)
       .addRule("address", addressValidateRule);
+
+    const qrPreloader = document.createElement("img");
+    qrPreloader.src = this.storehouseQrUrl;
+    qrPreloader.onload = () => {
+      this.qrLoaded = true;
+    };
   },
   computed: {
     modalText() {

@@ -13,8 +13,18 @@
       @row-delete="removeFromUpload"
     />
     <div class="d-flex flex-row gap-2">
-      <MDBBtn class="btn utility-btn btn-outline-black" v-if="uploadedProducts.length" @click="upload">LOAD</MDBBtn>
-      <MDBBtn class="btn utility-btn btn-outline-danger" v-if="uploadedProducts.length" @click="clear">CLEAR</MDBBtn>
+      <MDBBtn
+        class="btn utility-btn btn-outline-black"
+        v-if="uploadedProducts.length"
+        @click="upload"
+        >LOAD</MDBBtn
+      >
+      <MDBBtn
+        class="btn utility-btn btn-outline-danger"
+        v-if="uploadedProducts.length"
+        @click="clear"
+        >CLEAR</MDBBtn
+      >
     </div>
   </Dialog>
 </template>
@@ -57,8 +67,8 @@ export default {
       if (created.success) {
         this.$toast.add({
           severity: "info",
-          summary: "Success",
-          detail: `Products Uploaded`,
+          summary: PrintUtil.localize("success", "operations"),
+          detail: PrintUtil.localize("productsUploaded", "products"),
           life: 3000,
         });
         this.mediaModalStore.uploadProductsOpen = false;

@@ -123,6 +123,9 @@ export default {
     filtersInput() {
       return this.filtersStore.getFilters;
     },
+    visible() {
+      return !this.collapsed;
+    },
   },
   created() {
     this.filters = Object.keys(this.filtersInput).map((key) => {
@@ -135,6 +138,10 @@ export default {
     if (this.filtersStore.needStartSearch) {
       this.search();
       this.filtersStore.needStartSearch = false;
+    }
+    if (this.filtersStore.visibleByDefault) {
+      this.collapsed = false;
+      this.filtersStore.visibleByDefault = false;
     }
   },
   methods: {

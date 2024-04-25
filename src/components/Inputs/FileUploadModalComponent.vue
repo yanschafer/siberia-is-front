@@ -60,8 +60,8 @@ export default defineComponent({
           if (uploaded.success) {
             this.$toast.add({
               severity: "info",
-              summary: "Success",
-              detail: `File '${file.name}' Uploaded`,
+              summary: PrintUtil.localize("success", "operations"),
+              detail: `${PrintUtil.localize("file", "media")} '${file.name}' ${PrintUtil.localize("uploaded", "media")}`,
               life: 3000,
             });
           } else uploaded.toastIfError(this.$toast, this.$nextTick);
@@ -92,8 +92,8 @@ export default defineComponent({
             LoggerUtil.debug(event);
             this.$toast.add({
               severity: "info",
-              summary: "Success",
-              detail: `File '${upload.getData()[0].name}' Uploaded`,
+              summary: PrintUtil.localize("success", "operations"),
+              detail: `${PrintUtil.localize("file", "media")} '${file.name}' ${PrintUtil.localize("uploaded", "media")}`,
               life: 3000,
             });
           } else upload.toastIfError(this.$toast, this.$nextTick);

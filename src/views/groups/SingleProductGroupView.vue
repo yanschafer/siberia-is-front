@@ -1,4 +1,9 @@
 <template>
+  <ModalComponent
+    v-if="modalStore.getIsVisible"
+    @approved="confirmDeleteGroup"
+    @close="closeModal"
+  />
   <Dialog
     v-model:visible="addToGroupModalStore.addToGroupOpen"
     modal
@@ -18,6 +23,11 @@
           class="btn btn-outline-black utility-btn"
           @click="applyChanges"
           >{{ localize("applyChanges", "groups") }}</MDBBtn
+        >
+        <MDBBtn
+          class="btn btn-outline-black utility-btn"
+          @click="deleteGroup"
+          >{{ localize("deleteCapslock", "default") }}</MDBBtn
         >
       </MDBRow>
     </MDBRow>
@@ -46,12 +56,12 @@ import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 import { useProductGroupStore } from "@/stores/product-group.store";
 import { useRoute, useRouter } from "vue-router";
-import { useProductsStore } from "@/stores/products.store";
 import PrintUtil from "@/utils/localization/print.util";
-import { appConf } from "@/api/conf/app.conf";
 import { useAddToGroupModalStore } from "@/stores/add-to-group-modal.store";
 import AddToGroupComponent from "@/views/groups/AddToGroupComponent.vue";
 import Dialog from "primevue/dialog";
+import { useModalStore } from "@/stores/modal.store";
+import ModalComponent from "@/components/Elements/Dialogs/ModalComponent.vue";
 
 export default {
   name: "SingleProductGroupView",
@@ -59,6 +69,7 @@ export default {
     SearchComponent,
     TableComponent,
     AddToGroupComponent,
+    ModalComponent,
     Dialog,
     MDBRow,
     MDBContainer,
@@ -76,6 +87,7 @@ export default {
   async setup() {
     const productGroupStore = useProductGroupStore();
     const addToGroupModalStore = useAddToGroupModalStore();
+    const modalStore = useModalStore();
     const route = useRoute();
     const router = useRouter();
 
@@ -86,6 +98,7 @@ export default {
     return {
       productGroupStore,
       addToGroupModalStore,
+      modalStore,
       router,
       groupId: parseInt(route.params.id.toString()),
       loaders,
@@ -119,16 +132,16 @@ export default {
 
       if (res?.success) {
         this.$toast.add({
-          severity: "success",
-          summary: "Group update",
-          detail: "Group was successfully updated",
+          severity: "info",
+          summary: PrintUtil.localize("success", "groups"),
+          detail: `${PrintUtil.localize("group", "groups")} ${PrintUtil.localize("successfully", "groups")} ${PrintUtil.localize("updated", "groups")}`,
           life: 3000,
         });
       } else {
         this.$toast.add({
           severity: "error",
-          summary: "Group update",
-          detail: "Group was not updated!",
+          summary: PrintUtil.localize("failed", "groups"),
+          detail: `${PrintUtil.localize("updateFailure", "groups")}`,
           life: 3000,
         });
       }
@@ -138,6 +151,27 @@ export default {
         name: "Group apply",
         params: { id: this.groupId },
       });
+    },
+    deleteGroup() {
+      this.modalStore.show({
+        title: this.localize("confirmDeletion", "default"),
+        text: `${this.localize("areYouSure", "groups")} ${this.getGroupName}`,
+        disclaimer: "",
+      });
+    },
+    closeModal() {
+      this.modalStore.hide();
+    },
+    async confirmDeleteGroup() {
+      const removed = await this.productGroupStore.removeGroup(this.groupId);
+      if (removed.success) {
+        this.$toast.add({
+          severity: "info",
+          summary: PrintUtil.localize("success", "groups"),
+          detail: `${PrintUtil.localize("group", "groups")} ${PrintUtil.localize("successfully", "groups")} ${PrintUtil.localize("removed", "groups")}`,
+          life: 3000,
+        });
+      }
     },
   },
   computed: {

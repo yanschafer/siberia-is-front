@@ -35,7 +35,7 @@ export const useDialogStore = defineStore({
     inputName: "",
     selectName: "",
     model: {},
-    methodOnSave: (value) => {},
+    methodOnSave: async (value) => {},
     methodOnClose: () => {},
     value: {},
     update: null,
@@ -129,9 +129,9 @@ export const useDialogStore = defineStore({
       } else res = await this.model.create(this.value);
 
       if (res.success) {
-        this.visible = false;
-        this.methodOnSave(res.getData());
+        await this.methodOnSave(res.getData());
         this.methodOnClose();
+        this.visible = false;
         toast.add({
           severity: "success",
           summary: printUtil.localize("success", "storehouses"),

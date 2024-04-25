@@ -274,12 +274,14 @@ export default {
         { field: "professionalPercent", header: "PORCENTAJE PROFESIONAL" },
         { field: "commonPrice", header: "PRECIO" },
         { field: "category", header: "CATEGORÍA" },
+        { field: "collection", header: "COLECCIÓN" },
         { field: "color", header: "COLOR" },
         { field: "amountInBox", header: "CANTIDAD EN CAJA" },
         { field: "expirationDate", header: "FECHA DE CADUCIDAD" },
         { field: "link", header: "ENLACE" },
       ],
 
+      productsUploaded: "Productos subidos",
       //CreateProduct.vue
       productNameCapslock: "NOMBRE DEL PRODUCTO",
       skuCapslock: "SKU",
@@ -389,11 +391,14 @@ export default {
       group: "Grupo",
       createSuccess: "creado",
       updateSuccess: "actualizado",
-      updateFailure: "actualización fallida",
+      updateFailure: "Actualización fallida",
+      removed: "eliminada",
+      successfully: "exitosamente",
 
       massiveUpdate: "Actualización masiva",
       applyChangesSuccessMessage:
         "Los productos del grupo se actualizaron correctamente",
+      areYouSure: "¿Estás seguro de que quieres eliminar el grupo llamado",
     },
     storehouses: {
       //CreateStorehouse.vue
@@ -408,6 +413,7 @@ export default {
       deleteStorehouseCapslock: "ELIMINAR ALMACÉN",
       newArrivalCapslock: "+ NUEVA LLEGADA",
       newSaleCapslock: "- NUEVA VENTA",
+      uploadSale: "NUEVA VENTA",
       newRequestCapslock: "+ NUEVA SOLICITUD",
       newWriteOffCapslock: "- NUEVA ANULAR",
       newArrivalRegistration: "Registro de Nueva Llegada",
@@ -633,6 +639,7 @@ export default {
       updatedRules: "Reglas actualizadas",
       relatedRules: "Reglas relacionadas",
       categoryTableRemovedChildrenTitle: "Elementos de hijos eliminados",
+      eventDiscarded: "Evento descartado exitosamente",
     },
     operations: {
       Arrival: "Llegada",
@@ -704,6 +711,12 @@ export default {
       uploadMedia: "Subir contenido multimedia",
       deleteSelected: "ELIMINAR SELECCIONADO",
       fileName: "NOMBRE DE ARCHIVO",
+      file: "Archivo",
+      files: "Archivos",
+      removedOne: "eliminado",
+      removedSelected: "eliminados",
+      updated: "modificado",
+      uploaded: "subido",
       userFor: "PARA USUARIO",
       delete: "ELIMINAR",
       imageDetails: "Detalles de la imagen",

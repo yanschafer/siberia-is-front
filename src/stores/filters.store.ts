@@ -7,6 +7,7 @@ export const useFiltersStore = defineStore({
     defaults: {},
     filters: {},
     needStartSearch: false,
+    visibleByDefault: false,
   }),
   getters: {
     getFilters: (state) => state.filters,
@@ -14,6 +15,7 @@ export const useFiltersStore = defineStore({
   actions: {
     setDefaults(defaults) {
       this.defaults = defaults;
+      this.visibleByDefault = true;
     },
     setFilters(filters) {
       const filtersKeys = Object.keys(filters);

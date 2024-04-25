@@ -233,8 +233,8 @@ export default {
       if (removeRes.success) {
         this.$toast.add({
           severity: "info",
-          summary: "Success",
-          detail: `File '${image.name}' removed`,
+          summary: PrintUtil.localize("success", "operations"),
+          detail: `${PrintUtil.localize("file", "media")} '${image.name}' ${PrintUtil.localize("removedOne", "media")}`,
           life: 3000,
         });
       } else removeRes.toastIfError(this.$toast, this.$nextTick);
@@ -259,8 +259,8 @@ export default {
 
         this.$toast.add({
           severity: "info",
-          summary: "Success",
-          detail: `Files removed`,
+          summary: PrintUtil.localize("success", "operations"),
+          detail: `${PrintUtil.localize("files", "media")} ${PrintUtil.localize("removedSelected", "media")}`,
           life: 3000,
         });
       }
