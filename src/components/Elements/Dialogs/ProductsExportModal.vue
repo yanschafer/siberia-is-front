@@ -1,7 +1,7 @@
 <template>
   <span
     class="export-btn d-flex justify-content-center align-items-center gap-2"
-    @click="visible = true"
+    @click="showExport()"
     ><IconFileArrowRight color="#9b9b9b" :size="16" stroke-width="2" />
     {{ localize("exportToFile") }}
   </span>
@@ -19,7 +19,7 @@
           :placeholder="localize('columnsForExport')"
           :options="availableColumns"
           :option-label="'name'"
-          :start-items="selectedColumns"
+          :start-items="[]"
           @items-changed="columnsChanged"
         />
       </div>
@@ -34,14 +34,17 @@
     </div>
     <MDBContainer class="d-flex container-content">
       <MDBCol class="col-auto">
-        <FiltersSidebarComponent @start-search="handleFiltersSearch" />
+        <FiltersSidebarComponent
+          :use-fast-search="true"
+          @start-search="handleFiltersSearch"
+        />
       </MDBCol>
       <MDBCol class="">
         <TableComponent
           class="table-data"
           :info-message="noDataMessage"
           :rows="getFilteredProducts"
-          :columns="productsStore.productColumns"
+          :columns="tableColumns"
           :searchTerm="productsStore.searchTerm"
         />
       </MDBCol>
@@ -93,6 +96,7 @@ export default defineComponent({
       availableColumns: PrintUtil.localize("availableColumns", "products"),
       selectedColumns: [],
       filters: {},
+      hideFromTable: ["description"],
     };
   },
   async setup() {
@@ -102,20 +106,12 @@ export default defineComponent({
     const categoryStore = useCategoriesStore();
     const collectionStore = useCollectionStore();
 
-    const loaders = await Promise.all([
-      productsStore.loadProductList(),
-      brandStore.loadBrandsList(),
-      collectionStore.loadCollectionList(),
-      categoryStore.loadCategoriesList(),
-    ]);
-
     return {
       productsStore,
       filtersStore,
       brandStore,
       categoryStore,
       collectionStore,
-      loaders,
     };
   },
   created() {
@@ -183,15 +179,15 @@ export default defineComponent({
         type: FilterType.SELECT,
       },
     });
-    this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
   },
   computed: {
     getFilteredProducts() {
       const searchTerm = this.productsStore.getSearchTerm;
 
-      if (searchTerm.trim() === "") return this.productsStore.getProductList;
+      if (searchTerm.trim() === "")
+        return this.productsStore.getProductUnminifiedList;
 
-      return this.productsStore.getProductList.filter((row) =>
+      return this.productsStore.getProductUnminifiedList.filter((row) =>
         Object.values(row).some((value) =>
           String(value).toLowerCase().includes(searchTerm.toLowerCase()),
         ),
@@ -206,16 +202,44 @@ export default defineComponent({
     collectionList() {
       return this.collectionStore.getCollectionList;
     },
+    tableColumns() {
+      if (Object.keys(this.selectedColumns).length == 0)
+        return this.productsStore.productColumns.map((el) => {
+          if (el.field == "price") {
+            return { ...el, field: "commonPrice" };
+          } else return el;
+        });
+      else
+        return Object.keys(this.selectedColumns)
+          .filter((el) => !this.hideFromTable.includes(el))
+          .map((el) => {
+            return {
+              field: el,
+              header: this.selectedColumns[el],
+            };
+          });
+    },
   },
   methods: {
     localize(key: string, module: string = "products") {
       return PrintUtil.localize(key, module);
+    },
+    async showExport() {
+      const loaders = await Promise.all([
+        this.productsStore.loadUnminifiedProductList(),
+        this.brandStore.loadBrandsList(),
+        this.collectionStore.loadCollectionList(),
+        this.categoryStore.loadCategoriesList(),
+      ]);
+      loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
+      this.visible = true;
     },
     columnsChanged(items) {
       this.selectedColumns = {};
       items.forEach((el) => {
         this.selectedColumns[el.key] = el.name;
       });
+      LoggerUtil.debug("selectedcolumn", this.selectedColumns);
     },
     async exportProducts() {
       const exportConfig = new ExportConfigDto(
@@ -232,7 +256,7 @@ export default defineComponent({
     },
     async handleFiltersSearch(filters) {
       this.filters = filters;
-      const loadRes = await this.productsStore.loadProductList(
+      const loadRes = await this.productsStore.loadUnminifiedProductList(
         new ProductSearchFilterDto(filters),
       );
       loadRes.toastIfError(this.$toast, this.$nextTick);

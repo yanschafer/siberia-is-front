@@ -16,6 +16,7 @@ import { useRolesStore } from "@/stores/roles.store";
 import PrintUtil from "@/utils/localization/print.util";
 import { useCategoriesStore } from "@/stores/categories.store";
 import ProductModel from "@/api/modules/product/models/product.model";
+import { useStorehousesStore } from "@/stores/storehouse.store";
 
 export const useHistoryEventStore = defineStore({
   id: "history-event-store",
@@ -25,6 +26,7 @@ export const useHistoryEventStore = defineStore({
     eventObjectName: "",
     beforeAfterObject: {},
     table: {
+      title: "",
       searchTerm: "",
       rows: [],
       columns: [],
@@ -238,6 +240,15 @@ export const useHistoryEventStore = defineStore({
             name: data.name,
           }));
           break;
+        case EventObjectTypes.STOCK:
+          this.hideBeforeAfter = false;
+          this.beforeAfterObject = await this.selectedEvent[
+            beforeAfterResolver
+          ]((data) => ({
+            name: data.name,
+            address: data.address,
+          }));
+          break;
         default:
           this.hideBeforeAfter = false;
           this.beforeAfterObject =
@@ -248,6 +259,7 @@ export const useHistoryEventStore = defineStore({
     },
 
     async initTable() {
+      this.table.title = "";
       switch (this.selectedEvent.eventObjectTypeId) {
         case EventObjectTypes.PRODUCT_BULK_CREATE:
           this.table.rows = this.selectedEvent.rollbackDto.productsList;
@@ -299,6 +311,25 @@ export const useHistoryEventStore = defineStore({
             this.hideTable = false;
           }
           break;
+        case EventObjectTypes.STOCK:
+          if (this.selectedEvent.eventTypeId == EventType.REMOVE) {
+            this.table.rows = this.selectedEvent.rollbackDto.products;
+            const productStore = useProductsStore();
+            const columns = productStore.productColumns.filter(
+              (el) => el.field != "price",
+            );
+            columns.push({
+              header: PrintUtil.localize("quantity", "storehouses"),
+              field: "quantity",
+            });
+            this.table.title = PrintUtil.localize(
+              "productsInStock",
+              "storehouses",
+            );
+            this.table.columns = columns;
+            this.table.searchTerm = "";
+            this.hideTable = false;
+          }
       }
       LoggerUtil.debug("Init table", this.table);
     },

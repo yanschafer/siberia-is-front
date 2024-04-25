@@ -255,8 +255,8 @@ export default defineComponent({
       if (removeRes.success) {
         this.$toast.add({
           severity: "info",
-          summary: "Success",
-          detail: `File '${image.name}' removed`,
+          summary: PrintUtil.localize("Success", "assortment"),
+          detail: `${PrintUtil.localize("file", "media")} '${image.name}' ${PrintUtil.localize("media", "removedOne")}`,
           life: 3000,
         });
       } else removeRes.toastIfError(this.$toast, this.$nextTick);

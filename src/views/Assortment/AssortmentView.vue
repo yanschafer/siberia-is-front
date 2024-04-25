@@ -16,6 +16,7 @@
             class="mb-2"
             :init-object="initBrandDialog"
           />
+          <SearchComponent v-model="searchBrands" />
           <TableComponent
             :enableDelete="true"
             :rows="brandList"
@@ -32,6 +33,7 @@
             :button-text="localize('createPlusCapslock')"
             :init-object="initCollectionDialog"
           />
+          <SearchComponent v-model="searchCollections" />
           <TableComponent
             :editableColumns="editableColumns"
             :showEditColumn="true"
@@ -48,6 +50,7 @@
             :button-text="localize('createPlusCapslock')"
             :init-object="initCategoryDialog"
           />
+          <SearchComponent v-model="searchCategories" />
           <TreeTableComponent
             :editableColumns="editableColumns"
             :showEditColumn="true"
@@ -82,10 +85,13 @@ import DialogComponentTrigger from "@/components/Elements/Dialogs/DialogComponen
 import ScrollPanel from "primevue/scrollpanel";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
 import PrintUtil from "@/utils/localization/print.util";
+import SearchComponent from "@/components/Inputs/SearchComponent.vue";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "AssortmentVue",
   components: {
+    SearchComponent,
     ModalComponent,
     TableComponent,
     TreeTableComponent,
@@ -107,6 +113,9 @@ export default {
       idOnDelete: 0,
       toastOnSuccess: "",
       toastOnError: "",
+      searchCategories: "",
+      searchCollections: "",
+      searchBrands: "",
       initCategoryDialog: {
         header: this.localize("modalHeaderCreateCategory"),
         showSelect: true,
@@ -368,19 +377,50 @@ export default {
         };
       });
     },
+    getFiltered(list, searchTerm: string) {
+      const search = searchTerm.trim();
+
+      LoggerUtil.debug(
+        list,
+        Object.values(list[0]),
+        String(Object.values(list[0])),
+        search.toLowerCase(),
+      );
+
+      const removeIdFromSearch = (row) => {
+        return {
+          ...row,
+          id: "",
+        };
+      };
+
+      if (search == "") return list;
+      else
+        return list.filter((row) =>
+          Object.values(removeIdFromSearch(row)).some((val) =>
+            String(val).toLowerCase().includes(search.toLowerCase()),
+          ),
+        );
+    },
   },
   computed: {
     tabs() {
       return this.authCheckStore.getAssortmentTabs;
     },
     categoryList() {
-      return this.categoryStore.getCategoryList;
+      return this.getFiltered(
+        this.categoryStore.getCategoryList,
+        this.searchCategories,
+      );
     },
     brandList() {
-      return this.brandStore.getBrandList;
+      return this.getFiltered(this.brandStore.getBrandList, this.searchBrands);
     },
     collectionList() {
-      return this.collectionStore.getCollectionList;
+      return this.getFiltered(
+        this.collectionStore.getCollectionList,
+        this.searchCollections,
+      );
     },
   },
 };

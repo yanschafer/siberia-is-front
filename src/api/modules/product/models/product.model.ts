@@ -7,6 +7,7 @@ import ProductListItemDto from "@/api/modules/product/dto/product-list-item.dto"
 import ApiRequestDto from "@/api/dto/api-request.dto";
 import ApiCrudModelUtil from "@/utils/crud/api-crud-model.util";
 import ExportConfigDto from "@/api/modules/product/dto/export-config.dto";
+import ProductParseResultDto from "@/api/modules/product/dto/product-parse-result.dto";
 
 export default class ProductModel extends ApiCrudModelUtil<
   ProductInputDto,
@@ -25,13 +26,22 @@ export default class ProductModel extends ApiCrudModelUtil<
     );
   }
 
+  //For export preview (DON'T USE INSTEAD OF GET LIST!)
+  async getUnminifiedList(
+    searchFilterDto: ProductSearchFilterDto,
+  ): Promise<ApiResponseDto<ProductDto[]>> {
+    return this.authorizedRequest(
+      new ApiRequestDto("/all/unminified", "POST", searchFilterDto),
+    );
+  }
+
   override async getAll(
     searchFilterDto: ProductSearchFilterDto,
   ): Promise<ApiResponseDto<ProductDto[]>> {
     throw new DOMException("Not implemented");
   }
 
-  async loadFile(file: File): Promise<ApiResponseDto<ProductInputDto[]>> {
+  async loadFile(file: File): Promise<ApiResponseDto<ProductParseResultDto>> {
     const csvData = await file.arrayBuffer();
     return this.authorizedRequest(
       new ApiRequestDto("/parse/csv", "POST", csvData),

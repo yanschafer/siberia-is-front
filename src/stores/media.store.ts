@@ -37,12 +37,8 @@ export const useMediaStore = defineStore({
       const createRes = await galleryModel.create([
         galleryInputDto,
       ] as GalleryInputDto);
-      if (createRes.success) {
-        this.galleryItems.unshift({
-          ...createRes.getData()[0],
-          selected: false,
-        });
-      }
+
+      this.loadGallery();
 
       return createRes;
     },

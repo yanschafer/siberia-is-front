@@ -18,7 +18,8 @@
       />
       <h3 class="modal-heading">{{ title }}</h3>
       <p class="modal-text mb-0">
-        {{ text }} <span class="disclaimer">{{ disclaimer }}</span>
+        {{ text }}
+        <!--span class="disclaimer">{{ disclaimer }}</span-->
       </p>
       <MDBRow class="d-flex flex-row gap-5 mt-3">
         <MDBBtn @click="close" class="utility-btn btn-black">{{

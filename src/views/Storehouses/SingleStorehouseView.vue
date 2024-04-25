@@ -60,7 +60,10 @@
           v-if="storehouseQrUrl && storehouseQrUrl != ''"
           class="d-flex flex-row justify-content-end"
         >
-          <img class="qr" :src="storehouseQrUrl" />
+          <img v-if="qrLoaded" class="qr" :src="storehouseQrUrl" />
+          <div v-else class="qr">
+            <ProgressSpinner />
+          </div>
         </MDBCol>
       </MDBRow>
     </MDBContainer>
@@ -72,7 +75,7 @@
         <template v-if="!newArrival && !newSale && !newRequest && !newWriteOff">
           <div class="row buttons-row gap-2">
             <MDBBtn
-              v-if="arrivalAvailable"
+              v-if="isArrivalAvailable"
               @click="addNewArrival"
               class="utility-btn"
               outline="black"
@@ -80,21 +83,21 @@
             >
 
             <MDBBtn
-              v-if="saleAvailable"
+              v-if="isSaleAvailable"
               @click="addNewSale"
               class="utility-btn"
               outline="black"
               >{{ localize("newSaleCapslock") }}</MDBBtn
             >
             <MDBBtn
-              v-if="requestAvailable"
+              v-if="isTransferAvailable"
               @click="addNewRequest"
               class="utility-btn"
               outline="black"
               >{{ localize("newRequestCapslock") }}</MDBBtn
             >
             <MDBBtn
-              v-if="writeOffAvailable"
+              v-if="isWriteOffAvailable"
               @click="addWriteOff"
               class="utility-btn"
               outline="black"
@@ -106,7 +109,15 @@
               class="utility-btn upload-btn"
               outline="black"
               ><IconUpload color="black" :size="15" stroke-width="2" />
-              {{ localize("UPLOAD", "router") }}</MDBBtn
+              {{ localize("UPLOAD", "router") }}
+              {{ localize("uploadSale", "storehouses") }}</MDBBtn
+            >
+            <MDBBtn
+              @click="goToOperationsByStock"
+              class="utility-btn upload-btn"
+              outline="black"
+              ><IconRoute color="black" :size="15" stroke-width="2" />
+              {{ localize("OperationsCapslock", "header") }}</MDBBtn
             >
           </div>
 
@@ -184,6 +195,8 @@ import loggerUtil from "@/utils/logger/logger.util";
 import InputText from "primevue/inputtext";
 import { useAuthCheckStore } from "@/stores/auth-check.store";
 import AuthModel from "@/api/modules/auth/models/auth.model";
+import { useFiltersStore } from "@/stores/filters.store";
+import ProgressSpinner from "primevue/progressspinner";
 
 export default {
   name: "SingleStorehouseView",
@@ -203,6 +216,7 @@ export default {
     ModalComponent,
     Toast,
     InputText,
+    ProgressSpinner,
   },
   props: {
     id: {
@@ -255,7 +269,9 @@ export default {
       saleAvailable: true,
       requestAvailable: true,
       writeOffAvailable: true,
+      controlOperationsFromDesktop: true,
       storehouseQrUrl: "",
+      qrLoaded: false,
     };
   },
   async setup() {
@@ -297,6 +313,9 @@ export default {
 
     this.authCheckStore.$onAction(async ({ name }) => {
       if (name == "refresh") {
+        this.storehouseQrUrl = await authModel.getStorehouseQr(
+          this.storehouseId,
+        );
         const loadRes = await this.storehouseStore.loadSelectedStoreHouse(
           this.id,
         );
@@ -314,6 +333,12 @@ export default {
     this.validator = this.validator
       .addRule("name", nameValidateRule)
       .addRule("address", addressValidateRule);
+
+    const qrPreloader = document.createElement("img");
+    qrPreloader.src = this.storehouseQrUrl;
+    qrPreloader.onload = () => {
+      this.qrLoaded = true;
+    };
   },
   computed: {
     modalText() {
@@ -340,6 +365,18 @@ export default {
     },
     editBtnAvailable() {
       return this.authCheckStore.getHasAccessToStockManaging;
+    },
+    isArrivalAvailable() {
+      return this.arrivalAvailable && this.controlOperationsFromDesktop;
+    },
+    isSaleAvailable() {
+      return this.saleAvailable && this.controlOperationsFromDesktop;
+    },
+    isTransferAvailable() {
+      return this.requestAvailable && this.controlOperationsFromDesktop;
+    },
+    isWriteOffAvailable() {
+      return this.writeOffAvailable && this.controlOperationsFromDesktop;
     },
   },
   methods: {
@@ -560,6 +597,29 @@ export default {
     cancelEditing() {
       this.clearValidationErrors();
       this.editing = false;
+    },
+    goToOperationsByStock() {
+      const selectedStockId = this.selectedStorehouse.id;
+      const filtersStore = useFiltersStore();
+      filtersStore.setDefaults({
+        to: [
+          {
+            id: selectedStockId,
+            name: this.selectedStorehouse.name,
+            address: this.selectedStorehouse.address,
+          },
+        ],
+        from: [
+          {
+            id: selectedStockId,
+            name: this.selectedStorehouse.name,
+            address: this.selectedStorehouse.address,
+          },
+        ],
+      });
+      this.router.push({
+        name: "Operations",
+      });
     },
   },
 };

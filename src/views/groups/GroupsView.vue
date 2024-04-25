@@ -8,27 +8,27 @@
     <AddToGroupComponent />
   </Dialog>
   <ScrollPanel
-      style="height: 80vh; width: 88vw"
-      class="main-area animate__animated animate__fadeIn"
+    style="height: 80vh; width: 88vw"
+    class="main-area animate__animated animate__fadeIn"
   >
-  <TabsNavComponent />
-  <MDBContainer class="d-flex container-content">
-    <MDBCol class="col-auto">
-      <MDBContainer class="table-container mt-3">
-        <SearchComponent class="search" @search="handleSearch" />
-        <TableComponent
-          :info-message="noDataMessage"
-          :enable-delete="true"
-          :showEditColumn="false"
-          :rows="getFilteredGroups"
-          :columns="productGroupStore.getColumns"
-          :searchTerm="productsStore.searchTerm"
-          @rowClick="handleGroupClick"
-          @row-delete="handleGroupDelete"
-        />
-      </MDBContainer>
-    </MDBCol>
-  </MDBContainer>
+    <TabsNavComponent />
+    <MDBContainer class="d-flex container-content">
+      <MDBCol class="col-auto">
+        <MDBContainer class="table-container mt-3">
+          <SearchComponent class="search" @search="handleSearch" />
+          <TableComponent
+            :info-message="noDataMessage"
+            :enable-delete="true"
+            :showEditColumn="false"
+            :rows="getFilteredGroups"
+            :columns="productGroupStore.getColumns"
+            :searchTerm="productsStore.searchTerm"
+            @rowClick="handleGroupClick"
+            @row-delete="handleGroupDelete"
+          />
+        </MDBContainer>
+      </MDBCol>
+    </MDBContainer>
   </ScrollPanel>
 </template>
 
@@ -59,7 +59,7 @@ export default {
     Dialog,
     MDBCol,
     MDBContainer,
-    ScrollPanel
+    ScrollPanel,
   },
   async setup() {
     const productGroupStore = useProductGroupStore();
@@ -120,8 +120,8 @@ export default {
       if (removed.success) {
         this.$toast.add({
           severity: "info",
-          summary: "Success",
-          detail: "Group successfully removed",
+          summary: PrintUtil.localize("success", "groups"),
+          detail: `${PrintUtil.localize("group", "groups")} ${PrintUtil.localize("successfully", "groups")} ${PrintUtil.localize("removed", "groups")}`,
           life: 3000,
         });
       } else removed.toastIfError(this.$toast, this.$nextTick);

@@ -38,8 +38,13 @@ export default {
     startItems: [],
     selected: [],
   }),
+  mounted() {},
   created() {
-    if (this.defaultValue) this.startItems = this.defaultValue;
+    if (this.defaultValue) {
+      LoggerUtil.debug("SET DEFAULT VALUE");
+      this.startItems = [...this.defaultValue.map((el) => ({ ...el }))];
+      LoggerUtil.debug(this.startItems, this.selected);
+    }
     const filtersStore = useFiltersStore();
     filtersStore.$onAction(({ name }) => {
       if (name == "clearFilter") {
@@ -50,7 +55,9 @@ export default {
   },
   methods: {
     handleChange(items) {
-      LoggerUtil.debug(items);
+      LoggerUtil.debug("LOGGG");
+      LoggerUtil.debug("items", items);
+      LoggerUtil.debug("selected", this.selected);
       this.$emit("change", items);
     },
   },

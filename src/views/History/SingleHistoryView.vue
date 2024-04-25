@@ -29,22 +29,28 @@
   <MDBContainer class="pt-4 container-info">
     {{ description }}
     <ScrollPanel
-      style="width: 88vw"
+      style="width: 88vw; height: 50vh"
       class="animate__animated animate__fadeIn"
     >
       <BeforeAfterComponent v-if="showBeforeAfter" />
-      <TableComponent
-        v-if="showTable"
-        :infoMessage="noDataMessage"
-        :rows="filteredRows"
-        :columns="table.columns"
-        :searchTerm="table.searchTerm"
-      />
+      <template v-if="showTable">
+        <h5 v-if="tableTitle !== ''" class="operation-name">
+          {{ tableTitle }}
+        </h5>
+        <TableComponent
+          :infoMessage="noDataMessage"
+          :rows="filteredRows"
+          :columns="table.columns"
+          :searchTerm="table.searchTerm"
+        />
+      </template>
       <TabsComponent v-if="showRules" :roles="roles" />
-      <h5 class="operation-name">
-        {{ treeTableTitle }}
-      </h5>
-      <TreeTableComponent v-if="showTreeTable" :nodes="treeTable" />
+      <template v-if="showTreeTable">
+        <h5 class="operation-name">
+          {{ treeTableTitle }}
+        </h5>
+        <TreeTableComponent v-if="showTreeTable" :nodes="treeTable" />
+      </template>
     </ScrollPanel>
   </MDBContainer>
 </template>
@@ -199,6 +205,9 @@ export default {
     table() {
       return this.historyEventStore.table;
     },
+    tableTitle() {
+      return this.historyEventStore.table.title;
+    },
     roles() {
       return this.historyEventStore.rulesComponent.roles;
     },
@@ -218,8 +227,8 @@ export default {
       if (discarded.success) {
         this.$toast.add({
           severity: "info",
-          summary: "Success",
-          detail: `Event successfully discarded`,
+          summary: PrintUtil.localize("Success", "assortment"),
+          detail: `${PrintUtil.localize("eventDiscarded", "history")}`,
           life: 3000,
         });
         this.router.push({ name: "History" });

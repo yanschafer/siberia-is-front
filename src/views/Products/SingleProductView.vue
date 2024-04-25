@@ -511,7 +511,8 @@ export default {
         common = this.newDefaultPrice;
       }
 
-      return (percent / 100) * common;
+      const price = (percent / 100) * common;
+      return Math.round(price * 100) / 100;
     },
     distributionPercent() {
       return this.selectedProduct.distributorPercent || "";
@@ -526,7 +527,8 @@ export default {
         common = this.newDefaultPrice;
       }
 
-      return (percent / 100) * common;
+      const price = (percent / 100) * common;
+      return Math.round(price * 100) / 100;
     },
     professionalPercent() {
       return this.selectedProduct.professionalPercent || "";

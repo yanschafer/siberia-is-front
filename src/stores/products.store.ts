@@ -8,6 +8,7 @@ import ProductInputDto from "@/api/modules/product/dto/product-input.dto";
 import PrintUtil from "@/utils/localization/print.util";
 import ProductListItemDto from "@/api/modules/product/dto/product-list-item.dto";
 import ExportConfigDto from "@/api/modules/product/dto/export-config.dto";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export const useProductsStore = defineStore({
   id: "products",
@@ -16,6 +17,7 @@ export const useProductsStore = defineStore({
     miniGalleryVisible: false,
     miniGallerySelected: [],
     productRows: [],
+    productRowsUnminified: [],
     productColumns: [
       { field: "name", header: PrintUtil.localize("nameCapslock", "default") },
       {
@@ -39,6 +41,7 @@ export const useProductsStore = defineStore({
   getters: {
     getSearchTerm: (state) => state.searchTerm,
     getProductList: (state) => state.productRows,
+    getProductUnminifiedList: (state) => state.productRowsUnminified,
     getSelectedProduct: (state) => state.selectedProduct,
   },
   actions: {
@@ -52,7 +55,17 @@ export const useProductsStore = defineStore({
       }
       return getProducts;
     },
-
+    //For export preview table ONLY!! (DON'T USE INSTEAD OF GET LIST!)
+    async loadUnminifiedProductList(
+      searchFilterDto: ProductSearchFilterDto = new ProductSearchFilterDto(),
+    ) {
+      const productModel = new ProductModel();
+      const getProducts = await productModel.getUnminifiedList(searchFilterDto);
+      if (getProducts.success) {
+        this.productRowsUnminified = getProducts.getData();
+      }
+      return getProducts;
+    },
     async loadSelectedProduct(productId: number) {
       const productModel = new ProductModel();
       const product = await productModel.getOne(productId);
@@ -102,16 +115,21 @@ export const useProductsStore = defineStore({
       if (onUpload.success) {
         const currTime = Date.now();
         let i = 0;
-        this.onUploadRows = [
-          ...this.onUploadRows,
-          ...onUpload.getData().map((el) => {
-            i++;
-            return {
-              ...el,
-              index: currTime + i,
-            };
-          }),
-        ];
+        const uploaded = onUpload.getData();
+        const parsed = uploaded.createList.map((el) => {
+          i++;
+          return {
+            ...el,
+            brandId: el.brand,
+            brand: uploaded.brandMap[el.brand],
+            collectionId: el.collection,
+            collection: uploaded.collectionMap[el.collection],
+            categoryId: el.category,
+            category: uploaded.categoryMap[el.category],
+            index: currTime + i,
+          };
+        });
+        this.onUploadRows = [...this.onUploadRows, ...parsed];
       }
       return onUpload;
     },
@@ -122,9 +140,13 @@ export const useProductsStore = defineStore({
 
     async createUploaded(): ApiResponseDto<ProductListItemDto[]> {
       const productModel = new ProductModel();
+      LoggerUtil.debug(this.onUploadRows);
       const created = await productModel.bulkInsert(
         this.onUploadRows.map((el) => ({
           ...el,
+          brand: el.brand ? el.brandId : null,
+          collection: el.collection ? el.collectionId : null,
+          category: el.category ? el.categoryId : null,
           expirationDate: el.expirationDate * 1000 * 60 * 24,
         })),
       );

@@ -88,6 +88,7 @@ import ValidatorUtil from "@/utils/validator/validator.util";
 import ValidateRule from "@/utils/validator/validate-rule";
 import GalleryUpdateDto from "@/api/modules/gallery/dto/gallery-update.dto";
 import PrintUtil from "@/utils/localization/print.util";
+import LoggerUtil from "@/utils/logger/logger.util";
 
 export default {
   name: "MediaModalComponent",
@@ -100,6 +101,7 @@ export default {
   data: () => ({
     editMode: false,
     validator: new ValidatorUtil(),
+    imageCopy: {},
   }),
   setup() {
     const mediaModalStore = useMediaModalStore();
@@ -123,6 +125,7 @@ export default {
     },
     startEdit() {
       this.editMode = true;
+      this.imageCopy = { ...this.image };
     },
     async removeImage() {
       const removeRes = await this.mediaStore.removeImage(this.image.id);
@@ -130,8 +133,8 @@ export default {
       if (removeRes.success) {
         this.$toast.add({
           severity: "info",
-          summary: "Success",
-          detail: `File '${this.image.name}' removed`,
+          summary: PrintUtil.localize("success", "operations"),
+          detail: `${PrintUtil.localize("file", "media")} '${this.image.name}' ${PrintUtil.localize("removedOne", "media")}`,
           life: 3000,
         });
         this.editMode = false;
@@ -140,6 +143,7 @@ export default {
     },
     cancelEdit() {
       this.editMode = false;
+      this.mediaModalStore.selectedImage = { ...this.imageCopy };
     },
     async saveEdit() {
       const updateImageDto = new GalleryUpdateDto(
@@ -162,11 +166,12 @@ export default {
       if (updateRes.success) {
         this.$toast.add({
           severity: "info",
-          summary: "Success",
-          detail: `File '${this.image.name}' updated`,
+          summary: PrintUtil.localize("success", "operations"),
+          detail: `${PrintUtil.localize("file", "media")} '${this.image.name}' ${PrintUtil.localize("updated", "media")}`,
           life: 3000,
         });
         this.editMode = false;
+        this.imageCopy = { ...this.image };
       } else updateRes.toastIfError(this.$toast, this.$nextTick);
     },
     getUrl() {

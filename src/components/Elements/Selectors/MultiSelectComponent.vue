@@ -33,14 +33,21 @@ export default {
   },
   emits: ["itemsAdded", "itemsRemoved", "itemsChanged"],
   created() {
-    LoggerUtil.debug("START ITEMS", this.startItems);
     if (this.startItems)
       this.selectAll = this.options?.length == this.startItems?.length;
     this.items = [...this.startItems];
     this.updateLastItems();
+    LoggerUtil.debug(
+      "START ITEMS",
+      this.items,
+      this.startItems,
+      this.lastItems,
+      this.options,
+    );
   },
   mounted() {
     this.$watch("modelValue", () => {
+      LoggerUtil.debug("MODEL VALUE CHANGED", this.items, this.modelValue);
       this.items = this.modelValue || [];
     });
   },

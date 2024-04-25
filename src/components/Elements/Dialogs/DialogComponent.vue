@@ -38,7 +38,16 @@
       <MDBRow
         class="btn-row d-flex flex-row align-items-center justify-content-center"
       >
-        <MDBBtn class="btn-black save-btn" @click="save">{{ btnTitle }}</MDBBtn>
+        <MDBBtn class="btn-black save-btn" @click="save">
+          <MDBSpinner
+            v-if="isLoading"
+            tag="span"
+            role="status"
+            size="sm"
+            class="me-2"
+          />
+          <template v-else> {{ btnTitle }} </template>
+        </MDBBtn>
       </MDBRow>
     </MDBContainer>
   </Dialog>
@@ -48,7 +57,7 @@ import TreeDropdownComponent from "@/components/Elements/Selectors/TreeDropdownC
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Dialog from "primevue/dialog";
-import { MDBContainer, MDBRow, MDBBtn } from "mdb-vue-ui-kit";
+import { MDBContainer, MDBRow, MDBBtn, MDBSpinner } from "mdb-vue-ui-kit";
 import { useDialogStore } from "@/stores/dialog.store";
 import loggerUtil from "@/utils/logger/logger.util";
 import PrintUtil from "@/utils/localization/print.util";
@@ -58,6 +67,7 @@ export default {
   components: {
     MDBContainer,
     MDBRow,
+    MDBSpinner,
     TreeDropdownComponent,
     Button,
     MDBBtn,
@@ -79,6 +89,7 @@ export default {
       isVisible: false,
       checkboxValue: false,
       inputError: false,
+      isLoading: false,
     };
   },
   created() {
@@ -110,6 +121,7 @@ export default {
       loggerUtil.debug(this.isVisible);
     },
     async save() {
+      this.isLoading = true;
       this.dialogStore.value = {
         name: this.inputValue == "" ? null : this.inputValue,
         parent: parseInt(this.selectedDropdownItem),
@@ -130,6 +142,7 @@ export default {
           life: 3000,
         });
         this.inputError = true;
+        this.isLoading = false;
         return;
       }
 
@@ -137,6 +150,7 @@ export default {
         this.$toast,
         this.$nextTick,
       );
+      this.isLoading = false;
       if (!res) return;
       if (res.success) {
         this.inputValue = "";
