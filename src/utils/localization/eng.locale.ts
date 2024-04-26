@@ -277,6 +277,8 @@ export default {
         { field: "expirationDate", header: "EXPIRATION DATE" },
         { field: "link", header: "LINK" },
       ],
+      templateDownloadText: "Template with actual assembly data can be downloaded",
+      templateDownloadLink: "here",
       productsUploaded: "Products uploaded",
       //CreateProduct.vue
       productNameCapslock: "PRODUCT NAME",

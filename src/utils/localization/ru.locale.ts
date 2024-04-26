@@ -307,6 +307,8 @@ export default {
         { field: "expirationDate", header: "СРОК ГОДНОСТИ" },
         { field: "link", header: "ССЫЛКА" },
       ],
+      templateDownloadText: "Шаблон с актуальными данными ассортимента можно загрузить",
+      templateDownloadLink: "по ссылке",
       productsUploaded: "Продукты загружены",
       //CreateProduct.vue
       productNameCapslock: "НАЗВАНИЕ ТОВАРА",

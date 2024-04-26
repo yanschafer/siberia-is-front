@@ -263,7 +263,8 @@ export default {
           key: "expirationDate",
         },
       ],
-
+      templateDownloadText: "Se puede descargar la plantilla con los datos de montaje reales",
+      templateDownloadLink: "aquí",
       uploadTableColumns: [
         { field: "vendorCode", header: "SKU" },
         { field: "eanCode", header: "EAN" },
