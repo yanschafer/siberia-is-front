@@ -277,9 +277,18 @@ export default {
         { field: "expirationDate", header: "EXPIRATION DATE" },
         { field: "link", header: "LINK" },
       ],
-      templateDownloadText: "Template with actual assembly data can be downloaded",
+      templateDownloadText:
+        "Template with actual assembly data can be downloaded",
       templateDownloadLink: "here",
       productsUploaded: "Products uploaded",
+      LOAD: "LOAD",
+      CLEAR: "CLEAR",
+      uploadTemplateLocalization: {
+        brandSheetTitle: "Brands",
+        collectionSheetTitle: "Collections",
+        categorySheetTitle: "Categories",
+        productSheetTitle: "Products",
+      },
       //CreateProduct.vue
       productNameCapslock: "PRODUCT NAME",
       skuCapslock: "SKU",

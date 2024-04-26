@@ -309,9 +309,18 @@ export default {
         { field: "expirationDate", header: "СРОК ГОДНОСТИ" },
         { field: "link", header: "ССЫЛКА" },
       ],
-      templateDownloadText: "Шаблон с актуальными данными ассортимента можно загрузить",
+      templateDownloadText:
+        "Шаблон с актуальными данными ассортимента можно загрузить",
       templateDownloadLink: "по ссылке",
       productsUploaded: "Продукты загружены",
+      LOAD: "ЗАГРУЗИТЬ",
+      CLEAR: "ОЧИСТИТЬ",
+      uploadTemplateLocalization: {
+        brandSheetTitle: "Бренды",
+        collectionSheetTitle: "Коллекции",
+        categorySheetTitle: "Категории",
+        productSheetTitle: "Продукты",
+      },
       //CreateProduct.vue
       productNameCapslock: "НАЗВАНИЕ ТОВАРА",
       skuCapslock: "SKU",

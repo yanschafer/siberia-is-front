@@ -9,6 +9,7 @@ import PrintUtil from "@/utils/localization/print.util";
 import ProductListItemDto from "@/api/modules/product/dto/product-list-item.dto";
 import ExportConfigDto from "@/api/modules/product/dto/export-config.dto";
 import LoggerUtil from "@/utils/logger/logger.util";
+import AssortmentExportTemplateDto from "@/api/modules/product/dto/assortment-export-template.dto";
 
 export const useProductsStore = defineStore({
   id: "products",
@@ -165,6 +166,17 @@ export const useProductsStore = defineStore({
       const downloadLink = document.createElement("a");
       downloadLink.href = linkSource;
       downloadLink.download = `export_${new Date().toLocaleString()}.xlsx`;
+      downloadLink.click();
+    },
+
+    async loadUploadTemplate(localization: AssortmentExportTemplateDto) {
+      const productModel = new ProductModel();
+
+      const res = await productModel.loadUploadTemplate(localization);
+      const linkSource = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${res.data}`;
+      const downloadLink = document.createElement("a");
+      downloadLink.href = linkSource;
+      downloadLink.download = `template.xlsx`;
       downloadLink.click();
     },
   },
