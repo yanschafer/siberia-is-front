@@ -29,6 +29,8 @@
 //       А так же: Вере Алексеевне, Вален-
 //       тине Петровне Любимовой, Башке
 
+import { EventType } from "@/api/conf/app.conf";
+
 export default {
   modules: {
     default: {
@@ -203,7 +205,7 @@ export default {
       "Requests managing": "Управление запросами",
       "Create requests": "Регистрация запроса",
       "Approve and cancel requests": "Подтверждение или отмена запроса",
-      "Get request in process": "Запрос в процессе",
+      "Get request in process": "Начать обработку запроса",
       "Approve request delivery": "Подтверждение доставки запроса",
       "Concrete stock managing": "Управление конкретных складов",
       "Concrete stock view": "Просмотр конкретных скаладов",
@@ -643,9 +645,9 @@ export default {
       typeCapslock: "ТИП",
       authorCapslock: "АВТОР",
       dateCapslock: "ДАТА",
-      Create: "Создать",
-      Update: "Обновить",
-      Remove: "Удалить",
+      Create: "Создание",
+      Update: "Обновление",
+      Remove: "Удаление",
       "Stock event": "Событие склада",
       "User event": "Событие пользователя",
       "Role event": "Событие роли",
@@ -671,6 +673,10 @@ export default {
       Sale: "Продажа",
       Request: "Запрос",
       "Write-off": "Списание",
+      1: "Поступление",
+      2: "Продажа",
+      3: "Запрос",
+      4: "Списание",
 
       showClosedOperations: "Показывать завершенные операции",
       operationType: "Тип операции",

@@ -1,7 +1,7 @@
 <template>
   <MultiSelect
     v-model="items"
-    :options="options"
+    :options="sortedOptions"
     filter
     :optionLabel="optionLabel"
     :placeholder="placeholder"
@@ -30,6 +30,10 @@ export default {
     placeholder: String,
     disabled: Boolean,
     modelValue: Array,
+    selectedSorting: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ["itemsAdded", "itemsRemoved", "itemsChanged"],
   created() {
@@ -50,6 +54,22 @@ export default {
       LoggerUtil.debug("MODEL VALUE CHANGED", this.items, this.modelValue);
       this.items = this.modelValue || [];
     });
+  },
+  computed: {
+    sortedOptions() {
+      if (!this.selectedSorting) return this.options;
+      else {
+        const sorted = [];
+        this.options.forEach((el) => {
+          if (this.lastItems[el.id]) {
+            sorted.unshift(el);
+          } else {
+            sorted.push(el);
+          }
+        });
+        return sorted;
+      }
+    },
   },
   methods: {
     listContains(list, item) {

@@ -269,7 +269,7 @@ export default {
       saleAvailable: true,
       requestAvailable: true,
       writeOffAvailable: true,
-      controlOperationsFromDesktop: true,
+      controlOperationsFromDesktop: false,
       storehouseQrUrl: "",
       qrLoaded: false,
     };

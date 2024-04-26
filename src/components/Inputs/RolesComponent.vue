@@ -44,6 +44,7 @@
               option-label="name"
               :placeholder="localize('tabSelectPlaceholder')"
               :disabled="!canChange"
+              :selected-sorting="true"
               @items-added="storehouseAdded(item.id, $event)"
               @items-removed="storehouseRemoved(item.id, $event)"
             />

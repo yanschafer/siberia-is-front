@@ -647,6 +647,10 @@ export default {
       Sale: "Venta",
       Request: "Solicitud",
       "Write-off": "Anular",
+      1: "Llegada",
+      2: "Venta",
+      3: "Solicitud",
+      4: "Anular",
 
       showClosedOperations: "Mostrar operaciones cerradas",
       operationType: "Tipo de operación",

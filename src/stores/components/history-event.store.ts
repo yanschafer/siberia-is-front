@@ -86,7 +86,13 @@ export const useHistoryEventStore = defineStore({
         case EventObjectTypes.TRANSACTION:
           return {
             name: "Single operation",
-            params: { id: state.selectedEvent.eventObjectId },
+            params: {
+              id: parseInt(
+                state.selectedEvent.eventDescription.match(
+                  "\\(id\\s+=\\s+(\\d+)\\)",
+                )[1],
+              ),
+            },
           };
         default:
           return null;

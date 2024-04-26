@@ -642,6 +642,10 @@ export default {
       Sale: "Sale",
       Request: "Request",
       "Write-off": "Write off",
+      1: "Arrival",
+      2: "Sale",
+      3: "Request",
+      4: "Write off",
 
       showClosedOperations: "Show closed operations",
       operationType: "Operation type",
