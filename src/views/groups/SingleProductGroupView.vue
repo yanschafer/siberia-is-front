@@ -25,7 +25,7 @@
           >{{ localize("applyChanges", "groups") }}</MDBBtn
         >
         <MDBBtn
-          class="btn btn-outline-black utility-btn"
+          class="btn btn-danger utility-btn"
           @click="deleteGroup"
           >{{ localize("deleteCapslock", "default") }}</MDBBtn
         >

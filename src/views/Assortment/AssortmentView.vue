@@ -13,10 +13,10 @@
         <template v-if="tab.id === 1">
           <DialogComponentTrigger
             :button-text="localize('createPlusCapslock')"
-            class="mb-2"
+            class="create-btn"
             :init-object="initBrandDialog"
           />
-          <SearchComponent v-model="searchBrands" />
+          <SearchComponent class="search" v-model="searchBrands" />
           <TableComponent
             :enableDelete="true"
             :rows="brandList"
@@ -32,8 +32,9 @@
           <DialogComponentTrigger
             :button-text="localize('createPlusCapslock')"
             :init-object="initCollectionDialog"
+            class="create-btn"
           />
-          <SearchComponent v-model="searchCollections" />
+          <SearchComponent class="search" v-model="searchCollections" />
           <TableComponent
             :editableColumns="editableColumns"
             :showEditColumn="true"
@@ -49,8 +50,9 @@
           <DialogComponentTrigger
             :button-text="localize('createPlusCapslock')"
             :init-object="initCategoryDialog"
+            class="create-btn"
           />
-          <SearchComponent v-model="searchCategories" />
+          <SearchComponent class="search" v-model="searchCategories" />
           <TreeTableComponent
             :editableColumns="editableColumns"
             :showEditColumn="true"
@@ -429,5 +431,12 @@ export default {
 <style scoped>
 .card-body {
   width: 86vw;
+}
+.create-btn {
+  margin-bottom: 0.5rem;
+  margin-right: 0.5rem;
+}
+.search {
+  width: 78vw;
 }
 </style>

@@ -15,13 +15,6 @@
     <div class="row justify-content-between">
       <div class="col-auto">
         <p>{{ localize("columnsForExport") }}</p>
-        <MultiSelectComponent
-          :placeholder="localize('columnsForExport')"
-          :options="availableColumns"
-          :option-label="'name'"
-          :start-items="[]"
-          @items-changed="columnsChanged"
-        />
       </div>
       <div class="col-auto">
         <button
@@ -31,6 +24,16 @@
           {{ localize("export") }}
         </button>
       </div>
+    </div>
+    <div class="row">
+      <MultiSelectComponent
+          :placeholder="localize('columnsForExport')"
+          :options="availableColumns"
+          :option-label="'name'"
+          :start-items="[]"
+          @items-changed="columnsChanged"
+          class="selector-multi"
+      />
     </div>
     <MDBContainer class="d-flex container-content">
       <MDBCol class="col-auto">
@@ -274,5 +277,9 @@ export default defineComponent({
 .export-btn:hover {
   filter: brightness(0) saturate(100%);
   cursor: pointer;
+}
+.selector-multi {
+  max-width: 75vw;
+  margin-bottom: 1rem;
 }
 </style>
