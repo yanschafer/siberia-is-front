@@ -181,6 +181,7 @@ export const useAuthCheckStore = defineStore({
       this.sidebarItems.forEach((el) => {
         this.availableEventTransitions.push(...el.eventTransitionFrom);
       });
+      this.availableEventTransitions.push(EventObjectTypes.TRANSACTION);
       this.hasAccessToHistory = TokenUtil.hasAccessTo(appConf.rules.checkLogs);
       this.assortmentTabs = availableAssortmentTabs.filter((el) =>
         TokenUtil.hasAccessTo(el.ruleId),

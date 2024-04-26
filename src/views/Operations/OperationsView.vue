@@ -150,7 +150,7 @@ export default {
 
       const res = data.map((el) => ({
         id: el.id,
-        operation: this.localize(this.typeMapper[el.type.id]),
+        operation: `${this.localize(this.typeMapper[el.type.id])} ${el.id}`,
         from: el.fromName,
         to: el.toName,
         status: this.localize(el.status.name),
