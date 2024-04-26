@@ -263,7 +263,8 @@ export default {
           key: "expirationDate",
         },
       ],
-      templateDownloadText: "Se puede descargar la plantilla con los datos de montaje reales",
+      templateDownloadText:
+        "Se puede descargar la plantilla con los datos de montaje reales",
       templateDownloadLink: "aquí",
       uploadTableColumns: [
         { field: "vendorCode", header: "SKU" },
@@ -283,6 +284,8 @@ export default {
       ],
 
       productsUploaded: "Productos subidos",
+      LOAD: "CARGAR",
+      CLEAR: "LIMPIAR",
       //CreateProduct.vue
       productNameCapslock: "NOMBRE DEL PRODUCTO",
       skuCapslock: "SKU",

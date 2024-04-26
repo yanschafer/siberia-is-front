@@ -4,7 +4,11 @@
     modal
     :header="localize('uploadFromFile')"
   >
-    <p><IconInfoCircle color="grey" :size="18" stroke-width="2" /> {{localize('templateDownloadText')}} <a href="#">{{localize('templateDownloadLink')}}</a></p>
+    <p>
+      <IconInfoCircle color="grey" :size="18" stroke-width="2" />
+      {{ localize("templateDownloadText") }}
+      <a href="#">{{ localize("templateDownloadLink") }}</a>
+    </p>
     <FileUploadModalComponent :products="true" />
     <TableComponent
       v-if="uploadedProducts.length"
@@ -18,13 +22,13 @@
         class="btn utility-btn btn-outline-black"
         v-if="uploadedProducts.length"
         @click="upload"
-        >LOAD</MDBBtn
+        >{{ localize("LOAD") }}</MDBBtn
       >
       <MDBBtn
         class="btn utility-btn btn-outline-danger"
         v-if="uploadedProducts.length"
         @click="clear"
-        >CLEAR</MDBBtn
+        >{{ localize("CLEAR") }}</MDBBtn
       >
     </div>
   </Dialog>
@@ -38,7 +42,7 @@ import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
 import Dialog from "primevue/dialog";
 import { useProductsStore } from "@/stores/products.store.ts";
 import PrintUtil from "@/utils/localization/print.util";
-import { IconInfoCircle } from '@tabler/icons-vue';
+import { IconInfoCircle } from "@tabler/icons-vue";
 
 export default {
   name: "ProductsUploadModalComponent",
@@ -47,7 +51,7 @@ export default {
     TableComponent,
     Dialog,
     MDBBtn,
-    IconInfoCircle
+    IconInfoCircle,
   },
   setup() {
     const mediaModalStore = useMediaModalStore();
