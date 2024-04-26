@@ -7,7 +7,9 @@
     <p>
       <IconInfoCircle color="grey" :size="18" stroke-width="2" />
       {{ localize("templateDownloadText") }}
-      <a href="#">{{ localize("templateDownloadLink") }}</a>
+      <a href="#" @click="loadProductsUploadTemplate">{{
+        localize("templateDownloadLink")
+      }}</a>
     </p>
     <FileUploadModalComponent :products="true" />
     <TableComponent
@@ -81,6 +83,11 @@ export default {
         this.mediaModalStore.uploadProductsOpen = false;
         this.productsStore.onUploadRows = [];
       } else created.toastIfError(this.$toast, this.$nextTick);
+    },
+    loadProductsUploadTemplate() {
+      this.productsStore.loadUploadTemplate(
+        PrintUtil.localize("uploadTemplateLocalization", "products"),
+      );
     },
     clear() {
       this.productsStore.onUploadRows = [];

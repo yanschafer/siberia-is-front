@@ -61,4 +61,10 @@ export default class ProductModel extends ApiCrudModelUtil<
       new ApiRequestDto("/xls", "POST", exportConfigDto),
     );
   }
+
+  async loadUploadTemplate(exportConfigDto: ExportConfigDto) {
+    return this.plainAuthorizedRequest(
+      new ApiRequestDto("/assortment/sheet", "POST", exportConfigDto),
+    );
+  }
 }

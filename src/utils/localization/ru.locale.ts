@@ -315,6 +315,12 @@ export default {
       productsUploaded: "Продукты загружены",
       LOAD: "ЗАГРУЗИТЬ",
       CLEAR: "ОЧИСТИТЬ",
+      uploadTemplateLocalization: {
+        brandSheetTitle: "Бренды",
+        collectionSheetTitle: "Коллекции",
+        categorySheetTitle: "Категории",
+        productSheetTitle: "Продукты",
+      },
       //CreateProduct.vue
       productNameCapslock: "НАЗВАНИЕ ТОВАРА",
       skuCapslock: "SKU",
