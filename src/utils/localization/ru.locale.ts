@@ -676,6 +676,8 @@ export default {
       categoryTableRemovedChildrenTitle:
         "Удаленные элементы дочерних категорий",
       eventDiscarded: "Изменения успешно отменены",
+      eventDiscardedFailedModelRemoved:
+        "Изменения не отменены, цель была удалена",
     },
     operations: {
       Arrival: "Поступление",

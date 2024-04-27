@@ -650,6 +650,8 @@ export default {
       relatedRules: "Reglas relacionadas",
       categoryTableRemovedChildrenTitle: "Elementos de hijos eliminados",
       eventDiscarded: "Evento descartado exitosamente",
+      eventDiscardedFailedModelRemoved:
+        "Falló el descarte del evento, el objetivo fue eliminado",
     },
     operations: {
       Arrival: "Llegada",

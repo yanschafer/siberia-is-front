@@ -645,6 +645,8 @@ export default {
       relatedRules: "Related rules",
       categoryTableRemovedChildrenTitle: "Removed children",
       eventDiscarded: "Event successfully discarded",
+      eventDiscardedFailedModelRemoved:
+        "Event discarding failed, target was removed",
     },
     operations: {
       Arrival: "Arrival",
