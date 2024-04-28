@@ -41,11 +41,25 @@ export default class ProductModel extends ApiCrudModelUtil<
     throw new DOMException("Not implemented");
   }
 
-  async loadFile(file: File): Promise<ApiResponseDto<ProductParseResultDto>> {
+  async loadFile(
+    file: File,
+    fileType: string,
+  ): Promise<ApiResponseDto<ProductParseResultDto>> {
     const csvData = await file.arrayBuffer();
-    return this.authorizedRequest(
-      new ApiRequestDto("/parse/csv", "POST", csvData),
-    );
+    if (fileType == "csv") {
+      return this.authorizedRequest(
+        new ApiRequestDto(`/parse/${fileType}`, "POST", csvData),
+      );
+    } else {
+      const formData = new FormData();
+      formData.set("file", file);
+      return this.plainAuthorizedRequest(
+        new ApiRequestDto(`/parse/${fileType}`, "POST", formData),
+        {
+          "Content-Type": "multipart/form-data",
+        },
+      );
+    }
   }
 
   async bulkInsert(

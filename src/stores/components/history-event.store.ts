@@ -285,11 +285,19 @@ export const useHistoryEventStore = defineStore({
           break;
         case EventObjectTypes.PRODUCT_GROUP:
           const productModel = new ProductModel();
-          const loaded = await productModel.getList({
-            filters: {
-              ids: this.selectedEvent.afterInstance.products,
-            },
-          });
+          let loaded;
+          if (this.selectedEvent.eventTypeId == EventType.REMOVE)
+            loaded = await productModel.getList({
+              filters: {
+                ids: this.selectedEvent.rollbackDto.products,
+              },
+            });
+          else
+            loaded = await productModel.getList({
+              filters: {
+                ids: this.selectedEvent.afterInstance.products,
+              },
+            });
           this.table.rows = loaded.success ? loaded.getData() : [];
           this.table.columns = useProductsStore().productColumns.filter(
             (el) => el.field != "price",

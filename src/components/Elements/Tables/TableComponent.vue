@@ -122,6 +122,10 @@ export default defineComponent({
   props: {
     rows: Array,
     columns: Array,
+    frozenSelected: {
+      type: Boolean,
+      default: false,
+    },
     selectionMode: {
       type: String,
       default: "single",
@@ -186,6 +190,13 @@ export default defineComponent({
       const filteredData = this.filterDataBySearchTerm();
       return filteredData ? filteredData.slice(start) : [];
     },
+    // frozenValues() {
+    //   if (this.frozenSelected) {
+    //     return this.selectedRows;
+    //   } else {
+    //     return [];
+    //   }
+    // },
   },
   methods: {
     localize(key, module = "default") {

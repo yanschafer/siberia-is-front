@@ -22,6 +22,8 @@ import { useMediaModalStore } from "@/stores/media-modal.store";
 import { useProductsStore } from "@/stores/products.store";
 import PrintUtil from "@/utils/localization/print.util";
 import { usePrimeVue } from "primevue/config";
+import ProductInputDto from "@/api/modules/product/dto/product-input.dto";
+import ApiResponseDto from "@/api/dto/api-response.dto";
 
 export default defineComponent({
   name: "FileUploadModalComponent",
@@ -42,7 +44,7 @@ export default defineComponent({
     primeVue.config.locale.upload = PrintUtil.localize("upload", "media");
   },
   created() {
-    if (this.products) this.accept = "text/csv";
+    if (this.products) this.accept = "text/csv, .xlsx";
   },
   methods: {
     localize(key: string, module: string = "media") {
@@ -52,19 +54,38 @@ export default defineComponent({
       if (this.products) this.productUploader(event);
       else this.photoUploader(event);
     },
-    async productUploader(event) {
+    isCsv(file: File) {
+      const fileName = file.name;
+      const ext = fileName.split(".")[fileName.split(".").length - 1];
+      return ext == "csv";
+    },
+    productUploader: async function (event) {
       await Promise.all(
         event.files.map(async (file: File) => {
           const productsStore = useProductsStore();
-          const uploaded = await productsStore.uploadCsv(file);
-          if (uploaded.success) {
-            this.$toast.add({
-              severity: "info",
-              summary: PrintUtil.localize("success", "operations"),
-              detail: `${PrintUtil.localize("file", "media")} '${file.name}' ${PrintUtil.localize("uploaded", "media")}`,
-              life: 3000,
+          await new Promise(async (resolve) => {
+            if (this.isCsv(file)) {
+              resolve(await productsStore.uploadCsv(file));
+            } else {
+              resolve(await productsStore.uploadXls(file));
+            }
+          })
+            .then(() => {
+              this.$toast.add({
+                severity: "info",
+                summary: PrintUtil.localize("success", "operations"),
+                detail: `${PrintUtil.localize("file", "media")} '${file.name}' ${PrintUtil.localize("uploaded", "media")}`,
+                life: 3000,
+              });
+            })
+            .catch(() => {
+              this.$toast.add({
+                severity: "error",
+                summary: PrintUtil.localize("failed", "operations"),
+                detail: `${PrintUtil.localize("badTemplate", "media")}`,
+                life: 3000,
+              });
             });
-          } else uploaded.toastIfError(this.$toast, this.$nextTick);
         }),
       );
     },

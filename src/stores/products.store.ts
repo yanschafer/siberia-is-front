@@ -10,6 +10,7 @@ import ProductListItemDto from "@/api/modules/product/dto/product-list-item.dto"
 import ExportConfigDto from "@/api/modules/product/dto/export-config.dto";
 import LoggerUtil from "@/utils/logger/logger.util";
 import AssortmentExportTemplateDto from "@/api/modules/product/dto/assortment-export-template.dto";
+import ProductParseResultDto from "@/api/modules/product/dto/product-parse-result.dto";
 
 export const useProductsStore = defineStore({
   id: "products",
@@ -110,29 +111,45 @@ export const useProductsStore = defineStore({
       return await productModel.remove(productId);
     },
 
+    parseDtoToPreview(parseResult: ProductParseResultDto) {
+      const currTime = Date.now();
+      let i = 0;
+      return parseResult.createList.map((el) => {
+        i++;
+        return {
+          ...el,
+          brandId: el.brand,
+          brand: parseResult.brandMap[el.brand],
+          collectionId: el.collection,
+          collection: parseResult.collectionMap[el.collection],
+          categoryId: el.category,
+          category: parseResult.categoryMap[el.category],
+          index: currTime + i,
+        };
+      });
+    },
+
     async uploadCsv(file: File): ApiResponseDto<ProductInputDto[]> {
       const productModel = new ProductModel();
-      const onUpload = await productModel.loadFile(file);
+      const onUpload = await productModel.loadFile(file, "csv");
       if (onUpload.success) {
-        const currTime = Date.now();
-        let i = 0;
-        const uploaded = onUpload.getData();
-        const parsed = uploaded.createList.map((el) => {
-          i++;
-          return {
-            ...el,
-            brandId: el.brand,
-            brand: uploaded.brandMap[el.brand],
-            collectionId: el.collection,
-            collection: uploaded.collectionMap[el.collection],
-            categoryId: el.category,
-            category: uploaded.categoryMap[el.category],
-            index: currTime + i,
-          };
-        });
+        const parsed = this.parseDtoToPreview(onUpload.getData());
         this.onUploadRows = [...this.onUploadRows, ...parsed];
       }
       return onUpload;
+    },
+
+    async uploadXls(file: File): ApiResponseDto<ProductInputDto[]> {
+      const productModel = new ProductModel();
+      productModel
+        .loadFile(file, "xlsx")
+        .then((res) => {
+          const parsed = this.parseDtoToPreview(res.data);
+          this.onUploadRows = [...this.onUploadRows, ...parsed];
+        })
+        .catch((err) => {
+          throw err;
+        });
     },
 
     removeFromUpload(index: number) {

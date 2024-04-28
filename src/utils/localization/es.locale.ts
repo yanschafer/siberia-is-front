@@ -745,6 +745,8 @@ export default {
       mediaGallery: "Galería de medios",
       select: "SELECCIONAR",
       dragAndDrop: "Para cargar, arrastre y suelte los archivos aquí",
+      badTemplate:
+        "Plantilla incorrecta. Descarga una nueva desde el enlace de arriba e inténtalo de nuevo.",
       choose: "Elegir",
       upload: "Subir",
       cancel: "Cancelar",

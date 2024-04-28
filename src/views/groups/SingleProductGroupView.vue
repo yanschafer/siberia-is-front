@@ -24,11 +24,9 @@
           @click="applyChanges"
           >{{ localize("applyChanges", "groups") }}</MDBBtn
         >
-        <MDBBtn
-          class="btn btn-danger utility-btn"
-          @click="deleteGroup"
-          >{{ localize("deleteCapslock", "default") }}</MDBBtn
-        >
+        <MDBBtn class="btn btn-danger utility-btn" @click="deleteGroup">{{
+          localize("deleteCapslock", "default")
+        }}</MDBBtn>
       </MDBRow>
     </MDBRow>
   </MDBContainer>
@@ -171,6 +169,9 @@ export default {
           detail: `${PrintUtil.localize("group", "groups")} ${PrintUtil.localize("successfully", "groups")} ${PrintUtil.localize("removed", "groups")}`,
           life: 3000,
         });
+        this.router.push({ name: "groups" });
+      } else {
+        removed.toastIfError(this.$toast, this.$nextTick);
       }
     },
   },

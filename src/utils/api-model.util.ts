@@ -163,6 +163,7 @@ export default class ApiModelUtil {
 
   async plainAuthorizedRequest(
     request: ApiRequestDto,
+    headers: {},
   ): Promise<axios.AxiosResponse<any>> {
     const requestOptions = this.buildRequestOptions(request);
     LoggerUtil.debugPrefixed(
@@ -176,7 +177,15 @@ export default class ApiModelUtil {
       ...requestOptions,
       headers: {
         ...this.buildHeaders(accessToken),
+        ...headers,
       },
+    }).catch(async (err: axios.AxiosError) => {
+      if (err.code == 401) {
+        await this.authorizedRequest(
+          new ApiRequestDto("/auth/authorized", "GET"),
+        );
+        return this.plainAuthorizedRequest(request, headers);
+      } else throw err;
     }) as Promise<axios.AxiosResponse<any>> | Promise<axios.AxiosError> | any;
   }
 
