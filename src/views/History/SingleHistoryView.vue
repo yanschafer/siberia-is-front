@@ -232,7 +232,17 @@ export default {
           life: 3000,
         });
         this.router.push({ name: "History" });
-      } else discarded.toastIfError(this.$toast, this.$nextTick);
+      } else {
+        const error = discarded.getError().data;
+        if (error == "rollback failed model removed")
+          this.$toast.add({
+            severity: "error",
+            summary: PrintUtil.localize("Failed", "assortment"),
+            detail: `${PrintUtil.localize("eventDiscardedFailedModelRemoved", "history")}`,
+            life: 3000,
+          });
+        else discarded.toastIfError(this.$toast, this.$nextTick);
+      }
     },
     navigate() {
       if (this.showLink) this.router.push(this.link);

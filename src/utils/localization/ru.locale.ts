@@ -676,6 +676,8 @@ export default {
       categoryTableRemovedChildrenTitle:
         "Удаленные элементы дочерних категорий",
       eventDiscarded: "Изменения успешно отменены",
+      eventDiscardedFailedModelRemoved:
+        "Изменения не отменены, цель была удалена",
     },
     operations: {
       Arrival: "Поступление",
@@ -769,6 +771,8 @@ export default {
       mediaGallery: "Галерея медиа",
       select: "ВЫБРАТЬ",
       dragAndDrop: "Перетащите сюда файлы для загрузки.",
+      badTemplate:
+        "Неверный формат файла. Скачайте шаблон по ссылке выше и попробуйте ещё раз.",
       choose: "Выбрать",
       upload: "Загрузить",
       cancel: "Отменить",

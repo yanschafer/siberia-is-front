@@ -650,6 +650,8 @@ export default {
       relatedRules: "Reglas relacionadas",
       categoryTableRemovedChildrenTitle: "Elementos de hijos eliminados",
       eventDiscarded: "Evento descartado exitosamente",
+      eventDiscardedFailedModelRemoved:
+        "Falló el descarte del evento, el objetivo fue eliminado",
     },
     operations: {
       Arrival: "Llegada",
@@ -743,6 +745,8 @@ export default {
       mediaGallery: "Galería de medios",
       select: "SELECCIONAR",
       dragAndDrop: "Para cargar, arrastre y suelte los archivos aquí",
+      badTemplate:
+        "Plantilla incorrecta. Descarga una nueva desde el enlace de arriba e inténtalo de nuevo.",
       choose: "Elegir",
       upload: "Subir",
       cancel: "Cancelar",

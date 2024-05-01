@@ -25,7 +25,7 @@
         <IconInfoCircle color="#b6b6b6" :size="24" stroke-width="1" />
         {{ localize("clickOnRowsToSelect") }}
       </p>
-
+      <SearchComponent v-model="productsStore.searchTerm" />
       <TableComponent
         class="table-data"
         :info-message="noDataMessage"
@@ -35,6 +35,7 @@
         :rows="getFilteredProducts"
         :columns="productsStore.productColumns"
         :searchTerm="addToGroupModalStore.searchTerm"
+        :frozen-selected="true"
       />
     </MDBCol>
   </MDBContainer>
@@ -54,10 +55,16 @@ import { useAddToGroupModalStore } from "@/stores/add-to-group-modal.store";
 import { useProductGroupStore } from "@/stores/product-group.store";
 import LoggerUtil from "@/utils/logger/logger.util";
 import PrintUtil from "@/utils/localization/print.util";
+import SearchComponent from "@/components/Inputs/SearchComponent.vue";
+import { FilterType } from "@/api/conf/app.conf";
+import { useFiltersStore } from "@/stores/filters.store";
+import { useBrandStore } from "@/stores/brand.store";
+import { useCollectionStore } from "@/stores/collection.store";
 
 export default defineComponent({
   name: "AddToGroupComponent",
   components: {
+    SearchComponent,
     FiltersSidebarComponent,
     MDBCol,
     MDBContainer,
@@ -76,6 +83,7 @@ export default defineComponent({
     const productsStore = useProductsStore();
     const productGroupStore = useProductGroupStore();
     const addToGroupModalStore = useAddToGroupModalStore();
+    const filtersStore = useFiltersStore();
 
     const loaders = await Promise.all([productsStore.loadProductList()]);
 
@@ -83,10 +91,58 @@ export default defineComponent({
       productsStore,
       productGroupStore,
       addToGroupModalStore,
+      filtersStore,
       loaders,
     };
   },
   created() {
+    this.filtersStore.setFilters({
+      vendorCode: {
+        title: this.localize("vendorCode", "products"),
+        type: FilterType.TEXT,
+        value: null,
+      },
+      name: {
+        title: this.localize("name", "products"),
+        type: FilterType.TEXT,
+        value: null,
+      },
+      description: {
+        title: this.localize("description", "products"),
+        type: FilterType.TEXT,
+        value: null,
+      },
+      color: {
+        title: this.localize("color", "products"),
+        type: FilterType.TEXT,
+        value: null,
+      },
+      purchasePrice: {
+        title: this.localize("purchasePrice", "products"),
+        type: FilterType.NUMBER,
+        value: { min: null, max: null },
+      },
+      distributorPrice: {
+        title: this.localize("distributorPrice", "products"),
+        type: FilterType.NUMBER,
+        value: { min: null, max: null },
+      },
+      professionalPrice: {
+        title: this.localize("professionalPrice", "products"),
+        type: FilterType.NUMBER,
+        value: { min: null, max: null },
+      },
+      commonPrice: {
+        title: this.localize("commonPrice", "products"),
+        type: FilterType.NUMBER,
+        value: { min: null, max: null },
+      },
+      amountInBox: {
+        title: this.localize("amountInBox", "products"),
+        type: FilterType.NUMBER,
+        value: { min: null, max: null },
+      },
+    });
     this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
 
     this.productGroupStore.$onAction(async (action) => {
@@ -150,18 +206,38 @@ export default defineComponent({
     async save() {
       this.addToGroupModalStore.callback();
     },
+    isSelected(id) {
+      return (
+        this.addToGroupModalStore.selectedRows.filter((el) => el.id == id)
+          .length > 0
+      );
+    },
   },
   computed: {
     getFilteredProducts() {
+      let productList;
+
       const searchTerm = this.productsStore.getSearchTerm;
 
-      if (searchTerm.trim() === "") return this.productsStore.getProductList;
+      if (searchTerm.trim() === "")
+        productList = this.productsStore.getProductList;
 
-      return this.productsStore.getProductList.filter((row) =>
+      productList = this.productsStore.getProductList.filter((row) =>
         Object.values(row).some((value) =>
           String(value).toLowerCase().includes(searchTerm.toLowerCase()),
         ),
       );
+
+      let resultList = [];
+      productList.forEach((el) => {
+        if (this.isSelected(el.id)) {
+          resultList.unshift(el);
+        } else {
+          resultList.push(el);
+        }
+      });
+
+      return resultList;
     },
   },
 });

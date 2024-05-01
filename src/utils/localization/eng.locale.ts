@@ -645,6 +645,8 @@ export default {
       relatedRules: "Related rules",
       categoryTableRemovedChildrenTitle: "Removed children",
       eventDiscarded: "Event successfully discarded",
+      eventDiscardedFailedModelRemoved:
+        "Event discarding failed, target was removed",
     },
     operations: {
       Arrival: "Arrival",
@@ -727,6 +729,7 @@ export default {
       uploaded: "uploaded",
       userFor: "USER FOR",
       delete: "DELETE",
+      badTemplate: "Bad template. Download new from link above and try again.",
 
       imageDetails: "Image Details",
       mediaNamePlaceholder: "Media name...",

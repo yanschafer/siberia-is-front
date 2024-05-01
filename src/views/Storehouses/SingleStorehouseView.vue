@@ -103,15 +103,15 @@
               outline="black"
               >{{ localize("newWriteOffCapslock") }}</MDBBtn
             >
-            <MDBBtn
-              v-if="arrivalAvailable"
-              @click="addNewArrival"
-              class="utility-btn upload-btn"
-              outline="black"
-              ><IconUpload color="black" :size="15" stroke-width="2" />
-              {{ localize("UPLOAD", "router") }}
-              {{ localize("uploadSale", "storehouses") }}</MDBBtn
-            >
+            <!--            <MDBBtn-->
+            <!--              v-if="isSaleAvailable"-->
+            <!--              @click="addNewSale"-->
+            <!--              class="utility-btn upload-btn"-->
+            <!--              outline="black"-->
+            <!--              ><IconUpload color="black" :size="15" stroke-width="2" />-->
+            <!--              {{ localize("UPLOAD", "router") }}-->
+            <!--              {{ localize("uploadSale", "storehouses") }}</MDBBtn-->
+            <!--            >-->
             <MDBBtn
               @click="goToOperationsByStock"
               class="utility-btn upload-btn"
