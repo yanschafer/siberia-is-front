@@ -50,21 +50,21 @@
           </template>
           <template #tip> {{ localize("Operations") }} </template>
         </MDBTooltip>
-        <MDBTooltip v-model="tooltip3" tag="a" direction="left">
-          <template #reference>
-            <NotificationsComponent />
-          </template>
-          <template #tip> {{ localize("Notifications") }} </template>
-        </MDBTooltip>
-        <MDBBadge
-          v-if="showNotificationIcon"
-          class="badge"
-          color="danger"
-          pill
-          notification
-        >
-          {{ notificationCount > 999 ? "999+" : notificationCount }}
-        </MDBBadge>
+<!--        <MDBTooltip v-model="tooltip3" tag="a" direction="left">-->
+<!--          <template #reference>-->
+<!--            <NotificationsComponent />-->
+<!--          </template>-->
+<!--          <template #tip> {{ localize("Notifications") }} </template>-->
+<!--        </MDBTooltip>-->
+<!--        <MDBBadge-->
+<!--          v-if="showNotificationIcon"-->
+<!--          class="badge"-->
+<!--          color="danger"-->
+<!--          pill-->
+<!--          notification-->
+<!--        >-->
+<!--          {{ notificationCount > 999 ? "999+" : notificationCount }}-->
+<!--        </MDBBadge>-->
         <MDBTooltip v-model="tooltip4" tag="a" direction="left">
           <template #reference>
             <ProfileComponent />
