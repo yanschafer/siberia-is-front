@@ -5,6 +5,7 @@
     </div>
     <div class="col-auto">
       <InputText
+          class="name-input"
         v-model="addToGroupModalStore.name"
         :placeholder="localize('groupNamePlaceholder')"
       />
@@ -177,5 +178,8 @@ export default defineComponent({
 }
 .text-info {
   color: #b6b6b6 !important;
+}
+.name-input {
+  width: 50vw;
 }
 </style>

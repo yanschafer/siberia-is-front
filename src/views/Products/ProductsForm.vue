@@ -515,9 +515,12 @@ export default {
 #description {
   width: 100%;
   max-width: auto !important;
-  background: #f8f8f8;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-radius: 8px;
   border: 0;
-  border-bottom: 2px solid #565656;
+  border-bottom: 1px solid rgba(55, 65, 81, 0.17);
+  transition: all 0.3s ease-in-out;
 }
 :deep(#product-name-input) {
   width: 100%;

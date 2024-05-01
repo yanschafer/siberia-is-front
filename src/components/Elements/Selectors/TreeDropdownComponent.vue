@@ -159,4 +159,7 @@ export default {
   padding-bottom: 2px;
   border-radius: 7px;
 }
+:deep(.p-inputtext) {
+  border-radius: 0!important;
+}
 </style>

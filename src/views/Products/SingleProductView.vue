@@ -15,7 +15,30 @@
             <SliderNoThumbnailComponent :images="imageSource" />
           </MDBCol>
           <MDBCol class="product-name-col">
-            <h1 class="product-heading">{{ productName }}</h1>
+            <div class="d-flex flex-row header-row">
+              <div class="col-auto">
+                <h1 class="product-heading">{{ productName }}</h1>
+              </div>
+              <div
+                  v-if="!editing && editBtnAvailable"
+                  class="d-flex flex-column justify-content-start gap-2"
+              >
+                <MDBRow
+                    style="padding-left: 12px; margin-bottom: 1rem"
+                    class="d-flex d-flex justify-content-start gap-2"
+                >
+                  <MDBBtn
+                      @click="startEditing"
+                      class="utility-btn"
+                      outline="black"
+                  >{{ localize("editCapslock", "default") }}</MDBBtn
+                  >
+                  <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
+                      localize("deleteCapslock", "default")
+                    }}</MDBBtn>
+                </MDBRow>
+              </div>
+            </div>
             <MDBRow class="d-flex flex-row flex-nowrap">
               <MDBCol class="d-flex flex-column gap-3 col-auto">
                 <h5 class="field-heading d-flex gap-1 align-items-center">
@@ -57,26 +80,6 @@
                 <!--              <h5 class="field-heading">COST PRICE <span class="field-value">{{ costPrice }}</span></h5>-->
                 <!--              <h5 class="field-heading">STATUS <span class="field-value">{{ status }}</span></h5>-->
               </MDBCol>
-            </MDBRow>
-          </MDBCol>
-
-          <MDBCol
-            v-if="!editing && editBtnAvailable"
-            class="d-flex flex-column justify-content-start gap-2"
-          >
-            <MDBRow
-              style="padding-left: 12px; margin-bottom: 1rem"
-              class="d-flex d-flex justify-content-start gap-2"
-            >
-              <MDBBtn
-                @click="startEditing"
-                class="utility-btn"
-                outline="black"
-                >{{ localize("editCapslock", "default") }}</MDBBtn
-              >
-              <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
-                localize("deleteCapslock", "default")
-              }}</MDBBtn>
             </MDBRow>
           </MDBCol>
         </MDBRow>
@@ -605,6 +608,11 @@ export default {
 .p-cascadeselect-panel .p-cascadeselect-items {
   padding-left: 0 !important;
 }
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
 .username-input {
   width: 100%;
 }
@@ -623,9 +631,13 @@ export default {
 #description {
   width: 100%;
   max-width: auto !important;
-  background: #f8f8f8;
+  padding-top: 0.2rem !important;
+  padding-bottom: 0.2rem !important;
+  background-color: #f9fafb;
+  border-radius: 8px;
   border: 0;
-  border-bottom: 2px solid #565656;
+  border-bottom: 1px solid rgba(55, 65, 81, 0.17);
+  transition: all 0.3s ease-in-out;
 }
 :deep(#product-name-input) {
   width: 100%;

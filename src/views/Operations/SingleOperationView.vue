@@ -3,7 +3,7 @@
     <MDBRow class="d-flex flex-row justify-content-between main-row">
       <MDBCol class="col-auto">
         <MDBRow class="d-flex">
-          <MDBRow class="w-auto">
+          <div class="d-flex flex-row">
             <h1 class="username-heading">
               {{ operation }}
               <template v-if="from !== ''"
@@ -13,7 +13,7 @@
                 {{ localize("to") }} "{{ to }}"</template
               >
             </h1>
-          </MDBRow>
+          </div>
         </MDBRow>
         <MDBRow class="d-flex flex-nowrap mt-2">
           <MDBCol class="col-auto col-status">

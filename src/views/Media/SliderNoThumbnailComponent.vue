@@ -4,7 +4,7 @@
     :responsiveOptions="responsiveOptions"
     :numVisible="5"
     :circular="true"
-    containerStyle="max-width: 640px"
+    containerStyle="max-width: 240px"
     :showItemNavigators="true"
     :showThumbnails="false"
     :showItemNavigatorsOnHover="true"
@@ -60,4 +60,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+:deep(.p-link) {
+  background-color: black!important;
+}
+</style>
