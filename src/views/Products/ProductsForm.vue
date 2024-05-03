@@ -163,7 +163,7 @@
             {{ localize("distributionPercentCapslock") }}
             <InputText
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-              :class="{ 'p-invalid': !validate.distributionPercent }"
+              :class="{ 'p-invalid': !validate.distributorPercent }"
               type="text"
               :placeholder="placeholders.distributionPercent"
               v-model="productFormStore.data.distributorPercent"
@@ -308,7 +308,7 @@ export default {
         brand: true,
         name: true,
         description: true,
-        distributionPercent: true,
+        distributorPercent: true,
         professionalPercent: true,
         commonPrice: true,
         offertaPrice: true,
@@ -325,8 +325,13 @@ export default {
   computed: {
     distributionPrice() {
       const percent =
-        parseFloat(this.productFormStore.data.distributorPercent) || 0;
-      const base = parseFloat(this.productFormStore.data.commonPrice) || 0;
+        parseFloat(
+          `${this.productFormStore.data.distributorPercent}`.replace(",", "."),
+        ) || 0;
+      const base =
+        parseFloat(
+          `${this.productFormStore.data.commonPrice}`.replace(",", "."),
+        ) || 0;
 
       const price = (percent / 100) * base;
 
@@ -334,8 +339,13 @@ export default {
     },
     professionalPrice() {
       const percent =
-        parseFloat(this.productFormStore.data.professionalPercent) || 0;
-      const base = parseFloat(this.productFormStore.data.commonPrice) || 0;
+        parseFloat(
+          `${this.productFormStore.data.professionalPercent}`.replace(",", "."),
+        ) || 0;
+      const base =
+        parseFloat(
+          `${this.productFormStore.data.commonPrice}`.replace(",", "."),
+        ) || 0;
 
       const price = (percent / 100) * base;
 
@@ -344,8 +354,12 @@ export default {
   },
   created() {
     LoggerUtil.debug(this.productFormStore.data);
-    this.productFormStore.data.expirationDatePure =
-      this.productFormStore.data.expirationDate / 24 / 60 / 1000;
+    if (
+      this.productFormStore.data.expirationDate != "" &&
+      this.productFormStore.data.expirationDate != null
+    )
+      this.productFormStore.data.expirationDatePure =
+        this.productFormStore.data.expirationDate / 24 / 60 / 1000;
   },
   methods: {
     localize(key, module = "products") {
@@ -369,7 +383,7 @@ export default {
         brand: true,
         name: true,
         description: true,
-        distributionPercent: true,
+        distributorPercent: true,
         professionalPercent: true,
         commonPrice: true,
         offertaPrice: true,
@@ -401,6 +415,26 @@ export default {
         this.productFormStore.data.category =
           parseInt(this.categorySelectorStore.value) || null;
 
+      if (this.productFormStore.data.professionalPercent != "")
+        this.productFormStore.data.professionalPercent = parseFloat(
+          `${this.productFormStore.data.professionalPercent}`.replace(",", "."),
+        );
+
+      if (this.productFormStore.data.distributorPercent != "")
+        this.productFormStore.data.distributorPercent = parseFloat(
+          `${this.productFormStore.data.distributorPercent}`.replace(",", "."),
+        );
+
+      if (this.productFormStore.data.offertaPrice != "")
+        this.productFormStore.data.offertaPrice = parseFloat(
+          `${this.productFormStore.data.offertaPrice}`.replace(",", "."),
+        );
+
+      if (this.productFormStore.data.commonPrice != "")
+        this.productFormStore.data.commonPrice = parseFloat(
+          `${this.productFormStore.data.commonPrice}`.replace(",", "."),
+        );
+
       const validateRes = this.productFormStore.validate();
       if (validateRes !== true) {
         loggerUtil.debug(validateRes);
@@ -412,18 +446,19 @@ export default {
       this.productFormStore.data["photo"] =
         this.productFormStore.data.photoList;
 
-      this.productFormStore.data.professionalPercent = parseFloat(
-        `${this.productFormStore.data.professionalPercent}`.replace(",", "."),
-      );
-      this.productFormStore.data.distributorPercent = parseFloat(
-        `${this.productFormStore.data.distributorPercent}`.replace(",", "."),
-      );
-      this.productFormStore.data.offertaPrice = parseFloat(
-        `${this.productFormStore.data.offertaPrice}`.replace(",", "."),
-      );
-      this.productFormStore.data.commonPrice = parseFloat(
-        `${this.productFormStore.data.commonPrice}`.replace(",", "."),
-      );
+      // this.productFormStore.data.professionalPercent = parseFloat(
+      //   `${this.productFormStore.data.professionalPercent}`.replace(",", "."),
+      // );
+      // this.productFormStore.data.distributorPercent = parseFloat(
+      //   `${this.productFormStore.data.distributorPercent}`.replace(",", "."),
+      // );
+      // this.productFormStore.data.offertaPrice = parseFloat(
+      //   `${this.productFormStore.data.offertaPrice}`.replace(",", "."),
+      // );
+      // this.productFormStore.data.commonPrice = parseFloat(
+      //   `${this.productFormStore.data.commonPrice}`.replace(",", "."),
+      // );
+
       this.productFormStore.data.amountInBox = parseInt(
         this.productFormStore.data.amountInBox,
       );

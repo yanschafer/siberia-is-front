@@ -6,7 +6,7 @@ export default class ValidateRule {
   private maxLength: number | null = null;
   private regexCheck: RegExp | null = null;
   private checkNumber: boolean = false;
-  private numberRegex: RegExp = new RegExp("^([0-9]+\\.?|\\,?[0-9]+)$");
+  private numberRegex: RegExp = new RegExp("\\d+\\.?\\d+");
   private min: number | null = null;
   private max: number | null = null;
 
