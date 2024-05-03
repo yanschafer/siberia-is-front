@@ -89,7 +89,7 @@ export const useProductsStore = defineStore({
           if (el.id == productId) {
             el.vendorCode = updatedProduct.vendorCode;
             el.name = updatedProduct.name;
-            el.price = updatedProduct.distributorPrice;
+            el.price = updatedProduct.commonPrice;
           }
           return el;
         });
