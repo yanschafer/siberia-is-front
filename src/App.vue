@@ -18,27 +18,48 @@ export default {
 </template>
 
 <style>
-/* ===== Scrollbar CSS ===== */
-/* Firefox */
-* {
-  scrollbar-width: auto;
-  scrollbar-color: #171717 #ffffff;
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
 
-/* Chrome, Edge, and Safari */
-*::-webkit-scrollbar {
-  width: 8px;
+::-webkit-scrollbar-button {
+  width: 12px;
+  height: 12px;
 }
 
-*::-webkit-scrollbar-track {
-  background: #f5f5f5;
+::-webkit-scrollbar-thumb {
+  background: #9B9A9A;
+  border: 0px solid #FFFFFF;
+  border-radius: 5px;
 }
 
-*::-webkit-scrollbar-thumb {
-  background-color: #171717;
-  border-radius: 10px;
-  border: 3px solid #ffffff;
+::-webkit-scrollbar-thumb:hover {
+  background: #9B9A9A;
 }
+
+::-webkit-scrollbar-thumb:active {
+  background: #9B9A9A;
+}
+
+::-webkit-scrollbar-track {
+  background: #DFE9EB;
+  border: 0px solid #FFFFFF;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-track:hover {
+  background: #B8C0C2;
+}
+
+::-webkit-scrollbar-track:active {
+  background: #B8C0C2;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 
 #app {
   width: 100vw !important;
