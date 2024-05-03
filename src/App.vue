@@ -1,10 +1,11 @@
 <script lang="ts">
 import { RouterView } from "vue-router";
 import TokenUtil from "@/utils/token.util";
+import Toast from "primevue/toast"
 import ApiModelUtil from "@/utils/api-model.util";
 
 export default {
-  components: { RouterView },
+  components: { RouterView, Toast },
   created() {
     if (TokenUtil.isAuthorized()) new ApiModelUtil("").initSockets(this.$toast);
   },
@@ -12,6 +13,7 @@ export default {
 </script>
 
 <template>
+  <Toast ref="toast" />
   <RouterView />
 </template>
 

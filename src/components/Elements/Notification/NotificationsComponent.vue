@@ -31,7 +31,6 @@
         </MDBBtn>
       </MDBRow>
     </OverlayPanel>
-    <Toast ref="toast" />
   </div>
 </template>
 
