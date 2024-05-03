@@ -413,16 +413,16 @@ export default {
         this.productFormStore.data.photoList;
 
       this.productFormStore.data.professionalPercent = parseFloat(
-        this.productFormStore.data.professionalPercent,
+        `${this.productFormStore.data.professionalPercent}`.replace(",", "."),
       );
       this.productFormStore.data.distributorPercent = parseFloat(
-        this.productFormStore.data.distributorPercent,
+        `${this.productFormStore.data.distributorPercent}`.replace(",", "."),
       );
       this.productFormStore.data.offertaPrice = parseFloat(
-        this.productFormStore.data.offertaPrice,
+        `${this.productFormStore.data.offertaPrice}`.replace(",", "."),
       );
       this.productFormStore.data.commonPrice = parseFloat(
-        this.productFormStore.data.commonPrice,
+        `${this.productFormStore.data.commonPrice}`.replace(",", "."),
       );
       this.productFormStore.data.amountInBox = parseInt(
         this.productFormStore.data.amountInBox,

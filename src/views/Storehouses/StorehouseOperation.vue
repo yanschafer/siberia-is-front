@@ -220,7 +220,7 @@ export default {
         sku: this.selectedProduct.vendorCode,
         ean: this.selectedProduct.eanCode,
         quantity: this.quantity,
-        price: this.price,
+        price: parseFloat(`${this.price}`.replace(",", ".")),
       });
       this.selectedProduct = null;
       this.price = null;

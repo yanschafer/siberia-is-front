@@ -376,7 +376,7 @@ export default {
       return this.requestAvailable && this.controlOperationsFromDesktop;
     },
     isWriteOffAvailable() {
-      return this.writeOffAvailable && this.controlOperationsFromDesktop;
+      return this.writeOffAvailable;
     },
   },
   methods: {

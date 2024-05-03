@@ -382,13 +382,6 @@ export default {
     getFiltered(list, searchTerm: string) {
       const search = searchTerm.trim();
 
-      LoggerUtil.debug(
-        list,
-        Object.values(list[0]),
-        String(Object.values(list[0])),
-        search.toLowerCase(),
-      );
-
       const removeIdFromSearch = (row) => {
         return {
           ...row,
