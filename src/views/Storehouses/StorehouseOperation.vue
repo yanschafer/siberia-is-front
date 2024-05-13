@@ -187,8 +187,8 @@ export default {
       }
 
       const validateRes = validator.validate({
-        quantity: this.quantity,
-        price: this.price,
+        quantity: parseInt(this.quantity),
+        price: parseFloat(this.price),
       });
       if (validateRes !== true) {
         validator.showErrorToast(this.$toast);
