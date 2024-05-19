@@ -548,7 +548,10 @@ export default {
   font-weight: 500;
   width: 100%;
 }
-
+.separator {
+  gap: 0!important;
+  width: max-content;
+}
 .copy-on {
   text-decoration: underline;
 }
