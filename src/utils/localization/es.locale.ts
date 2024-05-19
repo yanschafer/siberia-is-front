@@ -24,6 +24,7 @@ export default {
         "Tus reglas fueron actualizadas por el administrador",
       sessionExpired: "Sesión expirada.",
       sessionExpiredDetails: "Por favor, intenta iniciar sesión nuevamente.",
+      notSet: "No instalado",
     },
     router: {
       panelName: "Panel de Siberia",
@@ -380,7 +381,7 @@ export default {
       columnsForExport: "Columnas para exportar",
       export: "Exportar",
       uploadFromFile: "Subir productos desde un archivo",
-      creationName: "CREADO"
+      creationName: "CREADO",
     },
     groups: {
       editGroup: "EDITAR GRUPO",
@@ -758,7 +759,7 @@ export default {
     },
     //SliderUpload
     sliderUpload: {
-      update: "Haga clic para actualizar"
+      update: "Haga clic para actualizar",
     },
     beforeAfter: {
       name: "Nombre",

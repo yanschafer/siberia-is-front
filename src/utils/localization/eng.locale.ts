@@ -23,6 +23,7 @@ export default {
       rulesUpdatedToastDetails: "Your rules were updated by administrator",
       sessionExpired: "Session expired",
       sessionExpiredDetails: "Try to re-login",
+      notSet: "Not set",
     },
     router: {
       panelName: "Siberia Panel",
@@ -374,7 +375,7 @@ export default {
       exportToFile: "Export to file",
       columnsForExport: "Columns for export",
       export: "Export",
-      creationName: "CREATED"
+      creationName: "CREATED",
     },
     groups: {
       editGroup: "EDIT GROUP",
@@ -753,7 +754,7 @@ export default {
     },
     //SliderUpload
     sliderUpload: {
-      update: "Click to update"
+      update: "Click to update",
     },
     beforeAfter: {
       name: "Name",
