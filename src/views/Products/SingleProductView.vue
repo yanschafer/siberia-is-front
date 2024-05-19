@@ -26,22 +26,24 @@
                 <h1 class="product-heading">{{ productName }}</h1>
               </div>
               <div
-                  v-if="!editing && editBtnAvailable"
-                  class="d-flex flex-column justify-content-start gap-2"
+                v-if="!editing && editBtnAvailable"
+                class="d-flex flex-column justify-content-start gap-2"
               >
                 <MDBRow
-                    style="padding-left: 12px; margin-bottom: 1rem"
-                    class="d-flex d-flex justify-content-start gap-2"
+                  style="padding-left: 12px; margin-bottom: 1rem"
+                  class="d-flex d-flex justify-content-start gap-2"
                 >
                   <MDBBtn
-                      @click="startEditing"
-                      class="utility-btn"
-                      outline="black"
-                  >{{ localize("editCapslock", "default") }}</MDBBtn
+                    @click="startEditing"
+                    class="utility-btn"
+                    outline="black"
+                    >{{ localize("editCapslock", "default") }}</MDBBtn
                   >
-                  <MDBBtn @click="confirmDeletion" class="utility-btn btn-danger">{{
-                      localize("deleteCapslock", "default")
-                    }}</MDBBtn>
+                  <MDBBtn
+                    @click="confirmDeletion"
+                    class="utility-btn btn-danger"
+                    >{{ localize("deleteCapslock", "default") }}</MDBBtn
+                  >
                 </MDBRow>
               </div>
             </div>
@@ -109,7 +111,7 @@
           <span class="field-heading separator">|</span>
           <span class="field-heading color-name">{{ color }}</span>
         </h1>
-        <p class="description">{{ productDescription }}</p>
+        <pre class="description">{{ productDescription }}</pre>
       </MDBContainer>
       <MDBContainer class="footer-section" fluid>
         <MDBRow>
@@ -600,6 +602,12 @@ export default {
 .description {
   width: 100%;
   max-width: 85vw;
+}
+pre {
+  font-family: var(--font-family) !important;
+  font-feature-settings: var(--font-feature-settings, normal) !important;
+  font-size: 1rem;
+  font-weight: normal;
 }
 .description-section {
   border-bottom: 1px solid #eee;

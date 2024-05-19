@@ -370,7 +370,7 @@ export default {
       return this.arrivalAvailable && this.controlOperationsFromDesktop;
     },
     isSaleAvailable() {
-      return this.saleAvailable && this.controlOperationsFromDesktop;
+      return this.saleAvailable;
     },
     isTransferAvailable() {
       return this.requestAvailable && this.controlOperationsFromDesktop;
