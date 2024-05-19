@@ -70,7 +70,11 @@
                 <!--                  }}</a>-->
                 <!--                </h5>-->
               </MDBCol>
-              <MDBCol class="d-flex flex-column gap-3">
+              <MDBCol class="d-flex flex-column gap-3 col-auto">
+                <h5 class="field-heading">
+                  {{ localize("brandCapslock") }}
+                  <span class="field-value copy-on">{{ brand }}</span>
+                </h5>
                 <h5 class="field-heading d-flex gap-1 align-items-center">
                   {{ localize("quantityCapslock") }}
                   <span class="field-value">{{ quantity }}</span>
@@ -79,6 +83,9 @@
                   {{ localize("lastTimeOrderedCapslock") }}
                   <span class="field-value">{{ lastTimeOrdered }}</span>
                 </h5>
+                <!--              <h5 class="field-heading">STATUS <span class="field-value">{{ status }}</span></h5>-->
+              </MDBCol>
+              <MDBCol class="d-flex flex-column gap-3 col-auto">
                 <h5 class="field-heading d-flex gap-1 align-items-center">
                   {{ localize("costPriceCapslock") }}
                   <span class="field-value">{{ lastPriceOrdered }}</span>
@@ -87,8 +94,10 @@
                   {{ localize("defaultPriceCapslock") }}
                   <span class="field-value">{{ defaultPrice }}</span>
                 </h5>
-                <!--              <h5 class="field-heading">COST PRICE <span class="field-value">{{ costPrice }}</span></h5>-->
-                <!--              <h5 class="field-heading">STATUS <span class="field-value">{{ status }}</span></h5>-->
+                <h5 class="field-heading">
+                  {{ localize("extraChargeCapslock") }}
+                  <span class="field-value">666</span>
+                </h5>
               </MDBCol>
             </MDBRow>
           </MDBCol>
@@ -157,14 +166,14 @@
               <span class="field-value">{{ offertaPrice }}</span>
             </h5>
           </MDBCol>
-          <MDBCol>
-            <h5
-              class="bottom-numbers d-flex flex-column justify-content-start gap-2"
-            >
-              {{ localize("expirationDateCapslock") }}
-              <span class="field-value">{{ expirationDate }}</span>
-            </h5>
-          </MDBCol>
+<!--          <MDBCol>-->
+<!--            <h5-->
+<!--              class="bottom-numbers d-flex flex-column justify-content-start gap-2"-->
+<!--            >-->
+<!--              {{ localize("expirationDateCapslock") }}-->
+<!--              <span class="field-value">{{ expirationDate }}</span>-->
+<!--            </h5>-->
+<!--          </MDBCol>-->
         </MDBRow>
       </MDBContainer>
     </template>

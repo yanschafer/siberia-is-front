@@ -301,6 +301,7 @@ export default {
       quantityPerPackageCapslock: "CANTIDAD POR PAQUETE",
       distributionPriceCapslock: "PRECIO DE DISTRIBUCIÓN",
       professionalPriceCapslock: "PRECIO PROFESIONAL",
+      extraChargeCapslock: "RECARGO",
       offertaPriceCapslock: "PRECIO DE OFERTA",
       distributionPercentCapslock: "PORCENTAJE DE DISTRIBUCIÓN",
       professionalPercentCapslock: "PORCENTAJE PROFESIONAL",

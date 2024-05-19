@@ -297,6 +297,7 @@ export default {
       colorCapslock: "COLOR",
       quantityPerPackageCapslock: "QUANTITY PER PACKAGE",
       distributionPriceCapslock: "DISTRIBUTION PRICE",
+      extraChargeCapslock: "EXTRA CHARGE",
       professionalPriceCapslock: "PROFESSIONAL PRICE",
       offertaPriceCapslock: "OFFERTA PRICE",
       distributionPercentCapslock: "DISTRIBUTION PERCENT",
