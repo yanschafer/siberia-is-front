@@ -3,15 +3,13 @@
   <div class="animate__animated animate__fadeIn">
     <Panel class="animate__animated animate__fadeIn" fluid>
       <MDBRow class="d-flex flex-row gap-5 header-row">
-        <MDBCol
-          class="col-auto"
-        >
-<!--          <div class="product-img placeholder-img" @click="openMiniGallery">-->
-<!--            <IconUpload color="#bbc3c7" :size="48" stroke-width="2" />-->
-<!--            <p class="upload-text">-->
-<!--              {{ localize("chooseFilesFromGallery", "media") }}-->
-<!--            </p>-->
-<!--          </div>-->
+        <MDBCol class="col-auto">
+          <!--          <div class="product-img placeholder-img" @click="openMiniGallery">-->
+          <!--            <IconUpload color="#bbc3c7" :size="48" stroke-width="2" />-->
+          <!--            <p class="upload-text">-->
+          <!--              {{ localize("chooseFilesFromGallery", "media") }}-->
+          <!--            </p>-->
+          <!--          </div>-->
           <SliderUpload />
         </MDBCol>
         <MDBCol class="d-flex flex-column justify-content-center">
@@ -86,36 +84,36 @@
               <h5 class="field-heading d-flex gap-2 align-items-center">
                 {{ localize("defaultPriceCapslock") }}
                 <InputText
-                    class="animate__animated animate__flipInX animate__faster input-wrapper animate__animated animate__fadeIn username-input"
-                    :class="{ 'p-invalid': !validate.commonPrice }"
-                    type="text"
-                    :placeholder="placeholders.commonPrice"
-                    v-model="productFormStore.data.commonPrice"
+                  class="animate__animated animate__flipInX animate__faster input-wrapper animate__animated animate__fadeIn username-input"
+                  :class="{ 'p-invalid': !validate.commonPrice }"
+                  type="text"
+                  :placeholder="placeholders.commonPrice"
+                  v-model="productFormStore.data.commonPrice"
                 />
               </h5>
-<!--              <h5 class="field-heading d-flex gap-1 align-items-center">-->
-<!--                {{ localize("linkCapslock") }}-->
-<!--                <InputText-->
-<!--                  class="input-wrapper animate__animated animate__flipInX animate__faster username-input"-->
-<!--                  :class="{ 'p-invalid': !validate.link }"-->
-<!--                  type="text"-->
-<!--                  :placeholder="placeholders.link"-->
-<!--                  v-model="productFormStore.data.link"-->
-<!--                />-->
-<!--              </h5>-->
-<!--              <h5 class="field-heading d-flex gap-1 align-items-center">-->
-<!--                <span class="field-heading separator">{{-->
-<!--                  localize("expirationDateCapslock")-->
-<!--                }}</span>-->
-<!--                <InputText-->
-<!--                  class="input-wrapper animate__animated animate__flipInX animate__faster username-input"-->
-<!--                  :class="{ 'p-invalid': !validate.expirationDate }"-->
-<!--                  type="text"-->
-<!--                  :placeholder="placeholders.expirationDate"-->
-<!--                  v-model="productFormStore.data.expirationDatePure"-->
-<!--                />-->
-<!--                &lt;!&ndash; We use expirationDatePure here to replace it without user attention in validate stage &ndash;&gt;-->
-<!--              </h5>-->
+              <!--              <h5 class="field-heading d-flex gap-1 align-items-center">-->
+              <!--                {{ localize("linkCapslock") }}-->
+              <!--                <InputText-->
+              <!--                  class="input-wrapper animate__animated animate__flipInX animate__faster username-input"-->
+              <!--                  :class="{ 'p-invalid': !validate.link }"-->
+              <!--                  type="text"-->
+              <!--                  :placeholder="placeholders.link"-->
+              <!--                  v-model="productFormStore.data.link"-->
+              <!--                />-->
+              <!--              </h5>-->
+              <!--              <h5 class="field-heading d-flex gap-1 align-items-center">-->
+              <!--                <span class="field-heading separator">{{-->
+              <!--                  localize("expirationDateCapslock")-->
+              <!--                }}</span>-->
+              <!--                <InputText-->
+              <!--                  class="input-wrapper animate__animated animate__flipInX animate__faster username-input"-->
+              <!--                  :class="{ 'p-invalid': !validate.expirationDate }"-->
+              <!--                  type="text"-->
+              <!--                  :placeholder="placeholders.expirationDate"-->
+              <!--                  v-model="productFormStore.data.expirationDatePure"-->
+              <!--                />-->
+              <!--                &lt;!&ndash; We use expirationDatePure here to replace it without user attention in validate stage &ndash;&gt;-->
+              <!--              </h5>-->
             </MDBCol>
           </MDBRow>
         </MDBCol>
@@ -398,11 +396,11 @@ export default {
     },
     save() {
       this.clearValidationErrors();
-      this.productFormStore.data.expirationDate =
-        parseInt(this.productFormStore.data.expirationDatePure) *
-        24 *
-        60 *
-        1000;
+      this.productFormStore.data.expirationDate = null;
+      // parseInt(this.productFormStore.data.expirationDatePure) *
+      // 24 *
+      // 60 *
+      // 1000;
 
       if (this.brandSelectorStore.value)
         this.productFormStore.data.brand =
@@ -416,25 +414,39 @@ export default {
         this.productFormStore.data.category =
           parseInt(this.categorySelectorStore.value) || null;
 
-      if (this.productFormStore.data.professionalPercent != "")
+      if (
+        this.productFormStore.data.professionalPercent != "" &&
+        this.productFormStore.data.professionalPercent != null
+      )
         this.productFormStore.data.professionalPercent = parseFloat(
           `${this.productFormStore.data.professionalPercent}`.replace(",", "."),
         );
 
-      if (this.productFormStore.data.distributorPercent != "")
+      if (
+        this.productFormStore.data.distributorPercent != "" &&
+        this.productFormStore.data.distributorPercent != null
+      )
         this.productFormStore.data.distributorPercent = parseFloat(
           `${this.productFormStore.data.distributorPercent}`.replace(",", "."),
         );
 
-      if (this.productFormStore.data.offertaPrice != "")
+      if (
+        this.productFormStore.data.offertaPrice != "" &&
+        this.productFormStore.data.offertaPrice != null
+      )
         this.productFormStore.data.offertaPrice = parseFloat(
           `${this.productFormStore.data.offertaPrice}`.replace(",", "."),
         );
 
-      if (this.productFormStore.data.commonPrice != "")
+      if (
+        this.productFormStore.data.commonPrice != "" &&
+        this.productFormStore.data.commonPrice != null
+      ) {
+        console.log(this.productFormStore.data.commonPrice);
         this.productFormStore.data.commonPrice = parseFloat(
           `${this.productFormStore.data.commonPrice}`.replace(",", "."),
         );
+      }
 
       const validateRes = this.productFormStore.validate();
       if (validateRes !== true) {

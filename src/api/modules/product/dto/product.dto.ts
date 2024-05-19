@@ -28,5 +28,6 @@ export default class ProductDto {
     public amountInBox: number,
     public expirationDate: number,
     public link: string,
+    public createdAt: string,
   ) {}
 }

@@ -57,6 +57,7 @@ export default {
       rulesUpdatedToastDetails: "Ваша роль была обновлена администратором.",
       sessionExpired: "Сессия истекла",
       sessionExpiredDetails: "Попробуйте авторизоваться снова",
+      notSet: "Не установлена",
     },
     router: {
       panelName: "Siberia Panel",
@@ -407,7 +408,7 @@ export default {
       columnsForExport: "Колонки для экспорта",
       export: "Экспорт",
       uploadFromFile: "Загрузка товаров из файла",
-      creationName: "СОЗДАН"
+      creationName: "СОЗДАН",
     },
     groups: {
       editGroup: "РЕДАКТИРОВАТЬ ГРУППУ",
@@ -782,7 +783,7 @@ export default {
     },
     //SliderUpload
     sliderUpload: {
-      update: "Нажмите, чтобы обновить"
+      update: "Нажмите, чтобы обновить",
     },
     beforeAfter: {
       name: "Имя",

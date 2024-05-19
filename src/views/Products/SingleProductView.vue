@@ -19,9 +19,7 @@
               <div class="col-auto">
                 <span class="creation-name">
                   {{ localize("creationName") }}
-                  <span class="creation-date">
-                  22/22/22
-                </span>
+                  <span class="creation-date"> {{ createdAt }} </span>
                 </span>
                 <h1 class="product-heading">{{ productName }}</h1>
               </div>
@@ -65,12 +63,12 @@
                   {{ localize("brandCapslock") }}
                   <span class="field-value copy-on">{{ brand }}</span>
                 </h5>
-<!--                <h5 class="field-heading d-flex gap-1 align-items-center">-->
-<!--                  {{ localize("linkCapslock") }}-->
-<!--                  <a target="_blank" :href="link" class="field-value copy-on">{{-->
-<!--                    localize("openInNewWindowCapslock")-->
-<!--                  }}</a>-->
-<!--                </h5>-->
+                <!--                <h5 class="field-heading d-flex gap-1 align-items-center">-->
+                <!--                  {{ localize("linkCapslock") }}-->
+                <!--                  <a target="_blank" :href="link" class="field-value copy-on">{{-->
+                <!--                    localize("openInNewWindowCapslock")-->
+                <!--                  }}</a>-->
+                <!--                </h5>-->
               </MDBCol>
               <MDBCol class="d-flex flex-column gap-3">
                 <h5 class="field-heading d-flex gap-1 align-items-center">
@@ -85,9 +83,7 @@
                   {{ localize("costPriceCapslock") }}
                   <span class="field-value">{{ lastPriceOrdered }}</span>
                 </h5>
-                <h5
-                    class="field-heading d-flex gap-1 align-items-center"
-                >
+                <h5 class="field-heading d-flex gap-1 align-items-center">
                   {{ localize("defaultPriceCapslock") }}
                   <span class="field-value">{{ defaultPrice }}</span>
                 </h5>
@@ -436,6 +432,9 @@ export default {
     productName() {
       return this.selectedProduct.name || "";
     },
+    createdAt() {
+      return this.selectedProduct.createdAt || "";
+    },
     sku() {
       return this.selectedProduct.vendorCode || "";
     },
@@ -546,7 +545,7 @@ export default {
       return this.selectedProduct.commonPrice || "";
     },
     offertaPrice() {
-      return this.selectedProduct.offertaPrice || "";
+      return this.selectedProduct.offertaPrice || PrintUtil.localize("notSet");
     },
     editBtnAvailable() {
       return this.authCheckStore.getHasAccessToProductsManaging;

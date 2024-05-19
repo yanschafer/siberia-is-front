@@ -31,8 +31,13 @@ export default {
     };
   },
   created() {
+    const emptyCheck = new ValidateRule();
     const stringValidateRule = new ValidateRule().required();
     const positiveNumberValidateRule = new ValidateRule().required().setMin(0);
+    const nullablePositiveNumberValidateRule = new ValidateRule()
+      .required()
+      .setMin(0)
+      .skipIfNull();
 
     const brandValidateRule = new ValidateRule().skipIfNull().required();
     const categoryValidateRule = new ValidateRule().required();
@@ -41,20 +46,20 @@ export default {
     const validator = new ValidatorUtil()
       .addRule("vendorCode", stringValidateRule)
       .addRule("eanCode", stringValidateRule)
-      .addRule("barcode", stringValidateRule)
       .addRule("brand", brandValidateRule)
       .addRule("name", stringValidateRule)
       .addRule("description", stringValidateRule)
       .addRule("commonPrice", positiveNumberValidateRule)
-      .addRule("offertaPrice", positiveNumberValidateRule)
       .addRule("distributorPercent", positiveNumberValidateRule)
       .addRule("professionalPercent", positiveNumberValidateRule)
       .addRule("category", categoryValidateRule)
-      .addRule("collection", collectionValidateRule)
-      .addRule("color", stringValidateRule)
       .addRule("amountInBox", positiveNumberValidateRule)
-      .addRule("expirationDate", positiveNumberValidateRule)
-      .addRule("link", stringValidateRule);
+      .addRule("collection", collectionValidateRule)
+      .addRule("offertaPrice", nullablePositiveNumberValidateRule)
+      .addRule("barcode", emptyCheck)
+      .addRule("color", emptyCheck)
+      .addRule("expirationDate", emptyCheck)
+      .addRule("link", emptyCheck);
 
     this.productFormStore.initCreationProcess(validator);
   },
