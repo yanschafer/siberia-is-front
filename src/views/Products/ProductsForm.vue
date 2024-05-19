@@ -83,8 +83,13 @@
                   :placeholder="placeholders.brand"
                 />
               </h5>
-              <h5 class="field-heading d-flex gap-2 align-items-center">
-                {{ localize("defaultPriceCapslock") }}
+
+              <div class="d-flex flex-row">
+                <div class="d-flex flex-column col-auto justify-content-center gap-2">
+                  <h5 class="field-heading special-heading d-flex">
+                    {{ localize("defaultPriceCapslock") }}
+                  </h5>
+                </div>
                 <InputText
                     class="animate__animated animate__flipInX animate__faster input-wrapper animate__animated animate__fadeIn username-input"
                     :class="{ 'p-invalid': !validate.commonPrice }"
@@ -92,6 +97,10 @@
                     :placeholder="placeholders.commonPrice"
                     v-model="productFormStore.data.commonPrice"
                 />
+              </div>
+              <h5 class="field-heading">
+                {{ localize("extraChargeCapslock") }}
+                <span class="field-value">666</span>
               </h5>
 <!--              <h5 class="field-heading d-flex gap-1 align-items-center">-->
 <!--                {{ localize("linkCapslock") }}-->
@@ -502,7 +511,6 @@ export default {
   margin-bottom: 0;
   font-weight: 500;
   width: 100%;
-  max-width: max-content;
 }
 
 .copy-on {
@@ -622,5 +630,9 @@ export default {
   font-weight: 600;
   text-align: center;
   color: #bbc3c7;
+}
+.special-heading {
+  display: flex;
+  margin-right: 1rem;
 }
 </style>

@@ -329,6 +329,7 @@ export default {
       quantityPerPackageCapslock: "КОЛ-ВО В УПАКОВКЕ",
       distributionPriceCapslock: "ЦЕНА РОЗНИЦЫ",
       professionalPriceCapslock: "ЦЕНА ПРОФЕССИОНАЛОВ",
+      extraChargeCapslock: "НАЦЕНКА",
       offertaPriceCapslock: "СПЕЦИАЛЬНАЯ ЦЕНА",
       distributionPercentCapslock: "ПРОЦЕНТ РОЗНИЦЫ",
       professionalPercentCapslock: "ПРОЦЕНТ ПРОФЕССИОНАЛОВ",
