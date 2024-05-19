@@ -96,7 +96,7 @@
                 </h5>
                 <h5 class="field-heading">
                   {{ localize("extraChargeCapslock") }}
-                  <span class="field-value">666</span>
+                  <span class="field-value">{{ markup }}</span>
                 </h5>
               </MDBCol>
             </MDBRow>
@@ -166,14 +166,14 @@
               <span class="field-value">{{ offertaPrice }}</span>
             </h5>
           </MDBCol>
-<!--          <MDBCol>-->
-<!--            <h5-->
-<!--              class="bottom-numbers d-flex flex-column justify-content-start gap-2"-->
-<!--            >-->
-<!--              {{ localize("expirationDateCapslock") }}-->
-<!--              <span class="field-value">{{ expirationDate }}</span>-->
-<!--            </h5>-->
-<!--          </MDBCol>-->
+          <!--          <MDBCol>-->
+          <!--            <h5-->
+          <!--              class="bottom-numbers d-flex flex-column justify-content-start gap-2"-->
+          <!--            >-->
+          <!--              {{ localize("expirationDateCapslock") }}-->
+          <!--              <span class="field-value">{{ expirationDate }}</span>-->
+          <!--            </h5>-->
+          <!--          </MDBCol>-->
         </MDBRow>
       </MDBContainer>
     </template>
@@ -552,6 +552,21 @@ export default {
     },
     defaultPrice() {
       return this.selectedProduct.commonPrice || "";
+    },
+    markup() {
+      if (
+        this.selectedProduct.commonPrice == null ||
+        this.selectedProduct.commonPrice == "" ||
+        this.selectedProduct.lastPurchasePrice == null ||
+        this.selectedProduct.lastPurchasePrice == ""
+      )
+        return this.localize("noInformation");
+      const price = parseFloat(String(this.selectedProduct.commonPrice));
+      const lastPurchase = parseFloat(
+        String(this.selectedProduct.lastPurchasePrice),
+      );
+
+      return `${((price - lastPurchase) / price) * 100}%`;
     },
     offertaPrice() {
       return this.selectedProduct.offertaPrice || PrintUtil.localize("notSet");

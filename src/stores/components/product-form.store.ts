@@ -36,6 +36,7 @@ export const useProductFormStore = defineStore({
     initCreationProcess(validator: ValidatorUtil) {
       this.data = {
         ...emptyProduct,
+        photo: [],
       };
       this.saveBtnTitle = PrintUtil.localize("saveCapslock", "default");
       this.cancelBtnTitle = PrintUtil.localize("cancelCapslock", "default");
@@ -48,7 +49,7 @@ export const useProductFormStore = defineStore({
         brand: productDto.brand,
         collection: productDto.collection,
         category: productDto.category,
-        photoList: null,
+        photoList: productDto.photo,
         photo: productDto.photoIds,
       };
       this.saveBtnTitle = "SAVE";
