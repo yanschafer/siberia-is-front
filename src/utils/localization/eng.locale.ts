@@ -350,7 +350,7 @@ export default {
       openInNewWindowCapslock: "OPEN IN NEW WINDOW",
       quantityCapslock: "QUANTITY",
       lastTimeOrderedCapslock: "LAST TIME ORDERED",
-      lastPriceOrderedCapslock: "LAST PRICE ORDERED",
+      costPriceCapslock: "COST PRICE",
       newColorNameCapslock: "NEW COLOR NAME",
       expirationDateCapslock: "EXPIRATION DATE",
       areYouSureYouWantToDeleteProduct:
@@ -373,6 +373,7 @@ export default {
       exportToFile: "Export to file",
       columnsForExport: "Columns for export",
       export: "Export",
+      creationName: "CREATED"
     },
     groups: {
       editGroup: "EDIT GROUP",
@@ -748,6 +749,10 @@ export default {
       cancel: "Cancel",
 
       chooseFilesFromGallery: "Choose files from gallery",
+    },
+    //SliderUpload
+    sliderUpload: {
+      update: "Click to update"
     },
     beforeAfter: {
       name: "Name",

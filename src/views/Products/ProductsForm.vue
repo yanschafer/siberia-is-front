@@ -4,14 +4,15 @@
     <Panel class="animate__animated animate__fadeIn" fluid>
       <MDBRow class="d-flex flex-row gap-5 header-row">
         <MDBCol
-          class="col-auto animate__animated animate__flipInX animate__faster"
+          class="col-auto"
         >
-          <div class="product-img placeholder-img" @click="openMiniGallery">
-            <IconUpload color="#bbc3c7" :size="48" stroke-width="2" />
-            <p class="upload-text">
-              {{ localize("chooseFilesFromGallery", "media") }}
-            </p>
-          </div>
+<!--          <div class="product-img placeholder-img" @click="openMiniGallery">-->
+<!--            <IconUpload color="#bbc3c7" :size="48" stroke-width="2" />-->
+<!--            <p class="upload-text">-->
+<!--              {{ localize("chooseFilesFromGallery", "media") }}-->
+<!--            </p>-->
+<!--          </div>-->
+          <SliderUpload />
         </MDBCol>
         <MDBCol class="d-flex flex-column justify-content-center">
           <MDBRow>
@@ -82,29 +83,39 @@
                   :placeholder="placeholders.brand"
                 />
               </h5>
-              <h5 class="field-heading d-flex gap-1 align-items-center">
-                {{ localize("linkCapslock") }}
+              <h5 class="field-heading d-flex gap-2 align-items-center">
+                {{ localize("defaultPriceCapslock") }}
                 <InputText
-                  class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-                  :class="{ 'p-invalid': !validate.link }"
-                  type="text"
-                  :placeholder="placeholders.link"
-                  v-model="productFormStore.data.link"
+                    class="animate__animated animate__flipInX animate__faster input-wrapper animate__animated animate__fadeIn username-input"
+                    :class="{ 'p-invalid': !validate.commonPrice }"
+                    type="text"
+                    :placeholder="placeholders.commonPrice"
+                    v-model="productFormStore.data.commonPrice"
                 />
               </h5>
-              <h5 class="field-heading d-flex gap-1 align-items-center">
-                <span class="field-heading separator">{{
-                  localize("expirationDateCapslock")
-                }}</span>
-                <InputText
-                  class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-                  :class="{ 'p-invalid': !validate.expirationDate }"
-                  type="text"
-                  :placeholder="placeholders.expirationDate"
-                  v-model="productFormStore.data.expirationDatePure"
-                />
-                <!-- We use expirationDatePure here to replace it without user attention in validate stage -->
-              </h5>
+<!--              <h5 class="field-heading d-flex gap-1 align-items-center">-->
+<!--                {{ localize("linkCapslock") }}-->
+<!--                <InputText-->
+<!--                  class="input-wrapper animate__animated animate__flipInX animate__faster username-input"-->
+<!--                  :class="{ 'p-invalid': !validate.link }"-->
+<!--                  type="text"-->
+<!--                  :placeholder="placeholders.link"-->
+<!--                  v-model="productFormStore.data.link"-->
+<!--                />-->
+<!--              </h5>-->
+<!--              <h5 class="field-heading d-flex gap-1 align-items-center">-->
+<!--                <span class="field-heading separator">{{-->
+<!--                  localize("expirationDateCapslock")-->
+<!--                }}</span>-->
+<!--                <InputText-->
+<!--                  class="input-wrapper animate__animated animate__flipInX animate__faster username-input"-->
+<!--                  :class="{ 'p-invalid': !validate.expirationDate }"-->
+<!--                  type="text"-->
+<!--                  :placeholder="placeholders.expirationDate"-->
+<!--                  v-model="productFormStore.data.expirationDatePure"-->
+<!--                />-->
+<!--                &lt;!&ndash; We use expirationDatePure here to replace it without user attention in validate stage &ndash;&gt;-->
+<!--              </h5>-->
             </MDBCol>
           </MDBRow>
         </MDBCol>
@@ -192,18 +203,6 @@
         </MDBCol>
         <MDBCol>
           <h5 class="field-heading">
-            {{ localize("defaultPriceCapslock") }}
-            <InputText
-              class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
-              :class="{ 'p-invalid': !validate.commonPrice }"
-              type="text"
-              :placeholder="placeholders.commonPrice"
-              v-model="productFormStore.data.commonPrice"
-            />
-          </h5>
-        </MDBCol>
-        <MDBCol>
-          <h5 class="field-heading">
             {{ localize("offertaPriceCapslock") }}
             <InputText
               class="input-wrapper animate__animated animate__flipInX animate__faster username-input"
@@ -244,10 +243,12 @@ import LoggerUtil from "@/utils/logger/logger.util";
 import { useBrandStore } from "@/stores/brand.store";
 import { useCategoriesStore } from "@/stores/categories.store";
 import { useCollectionStore } from "@/stores/collection.store";
+import SliderUpload from "@/views/Media/SliderUpload.vue";
 
 export default {
   name: "ProductsForm",
   components: {
+    SliderUpload,
     BrandSelector,
     CollectionSelector,
     CategorySelector,

@@ -23,8 +23,8 @@
                   @change="toggleAll"
                   :binary="true"
                 />
-                <Button @click="setSelected" class="btn utility-btn">{{
-                  localize("select")
+                <Button @click="setSelected" class="btn btn-outlined btn-black utility-btn">{{
+                  localize("upload")
                 }}</Button>
                 <SearchComponent
                   class="search"

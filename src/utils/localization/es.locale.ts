@@ -28,7 +28,7 @@ export default {
     router: {
       panelName: "Panel de Siberia",
       dashboard: "tablero",
-      assortments: "asortimentos",
+      assortments: "catálogo",
 
       products: "productos",
       NewProduct: "Nuevo Producto",
@@ -64,7 +64,7 @@ export default {
       //auth-check.store
       Dashboard: "Tablero",
       Products: "Productos",
-      Assortments: "Asortimentos",
+      Assortments: "Catálogo",
       Storehouses: "Almacenes",
       Users: "Usuarios",
       Roles: "Funciones",
@@ -355,7 +355,7 @@ export default {
       openInNewWindowCapslock: "ABRIR EN NUEVA VENTANA",
       quantityCapslock: "CANTIDAD",
       lastTimeOrderedCapslock: "ÚLTIMA VEZ PEDIDO",
-      lastPriceOrderedCapslock: "ÚLTIMO PRECIO PEDIDO",
+      costPriceCapslock: "PRECIO DE COSTA",
       newColorNameCapslock: "NOMBRE DEL NUEVO COLOR",
       expirationDateCapslock: "FECHA DE VENCIMIENTO",
       areYouSureYouWantToDeleteProduct:
@@ -379,6 +379,7 @@ export default {
       columnsForExport: "Columnas para exportar",
       export: "Exportar",
       uploadFromFile: "Subir productos desde un archivo",
+      creationName: "CREADO"
     },
     groups: {
       editGroup: "EDITAR GRUPO",
@@ -744,6 +745,7 @@ export default {
       save: "GUARDAR",
       mediaGallery: "Galería de medios",
       select: "SELECCIONAR",
+      uploadCapslock: "SUBIR",
       dragAndDrop: "Para cargar, arrastre y suelte los archivos aquí",
       badTemplate:
         "Plantilla incorrecta. Descarga una nueva desde el enlace de arriba e inténtalo de nuevo.",
@@ -752,6 +754,10 @@ export default {
       cancel: "Cancelar",
 
       chooseFilesFromGallery: "Elegir archivos de la galería",
+    },
+    //SliderUpload
+    sliderUpload: {
+      update: "Haga clic para actualizar"
     },
     beforeAfter: {
       name: "Nombre",

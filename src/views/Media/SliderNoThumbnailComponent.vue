@@ -17,12 +17,8 @@
         style="width: 100%; display: block"
       />
     </template>
-    <template #thumbnail="slotProps">
-      <img
-        :src="slotProps.item.thumbnailImageSrc"
-        :alt="slotProps.item.alt"
-        style="display: block"
-      />
+    <template #indicator="{ index }">
+      <span :class="['custom-indicator', { 'active-indicator': index === currentIndex }]"></span>
     </template>
   </Galleria>
 </template>
@@ -56,12 +52,39 @@ export default {
         numVisible: 1,
       },
     ],
+    currentIndex: 0,
   }),
 };
 </script>
 
 <style scoped>
-:deep(.p-link) {
-  background-color: black!important;
+.custom-indicator {
+  width: 14px;
+  height: 14px;
+  background-color: #ececec; /* серый цвет */
+  border-radius: 50%; /* круглая форма */
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+:deep(.p-highlight) {
+  background-color: transparent;
+  color: #222222;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #555555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999999;
+}
+:deep(.p-galleria-indicator) {
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+:deep(.p-galleria-item-prev) {
+  z-index: 99999999999;
 }
 </style>

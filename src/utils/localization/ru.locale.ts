@@ -384,7 +384,7 @@ export default {
       openInNewWindowCapslock: "ОТКРЫТЬ В НОВОЙ ВКЛАДКЕ",
       quantityCapslock: "КОЛ-ВО",
       lastTimeOrderedCapslock: "ДАТА ПОСЛЕДНЕЙ ЗАКУПКИ",
-      lastPriceOrderedCapslock: "СТОИМОСТЬ ПРИ ПОСЛЕДНЕЙ ЗАКУПКЕ",
+      costPriceCapslock: "СЕБЕСТОИМОСТЬ",
       newColorNameCapslock: "НОВЫЙ ЦВЕТ",
       expirationDateCapslock: "ГОДЕН ДНЕЙ",
       areYouSureYouWantToDeleteProduct: "Вы уверены что хотите удалить товар",
@@ -407,6 +407,7 @@ export default {
       columnsForExport: "Колонки для экспорта",
       export: "Экспорт",
       uploadFromFile: "Загрузка товаров из файла",
+      creationName: "СОЗДАН"
     },
     groups: {
       editGroup: "РЕДАКТИРОВАТЬ ГРУППУ",
@@ -778,6 +779,10 @@ export default {
       cancel: "Отменить",
 
       chooseFilesFromGallery: "Выбрать файлы из галереи",
+    },
+    //SliderUpload
+    sliderUpload: {
+      update: "Нажмите, чтобы обновить"
     },
     beforeAfter: {
       name: "Имя",

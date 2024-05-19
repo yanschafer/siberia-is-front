@@ -668,7 +668,7 @@ export default {
   max-height: 80vh;
 }
 .qr {
-  width: 20%;
+  width: 30%;
 }
 .btn-edit {
   margin-left: 2rem;

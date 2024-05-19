@@ -17,6 +17,12 @@
           <MDBCol class="product-name-col">
             <div class="d-flex flex-row header-row">
               <div class="col-auto">
+                <span class="creation-name">
+                  {{ localize("creationName") }}
+                  <span class="creation-date">
+                  22/22/22
+                </span>
+                </span>
                 <h1 class="product-heading">{{ productName }}</h1>
               </div>
               <div
@@ -57,12 +63,12 @@
                   {{ localize("brandCapslock") }}
                   <span class="field-value copy-on">{{ brand }}</span>
                 </h5>
-                <h5 class="field-heading d-flex gap-1 align-items-center">
-                  {{ localize("linkCapslock") }}
-                  <a target="_blank" :href="link" class="field-value copy-on">{{
-                    localize("openInNewWindowCapslock")
-                  }}</a>
-                </h5>
+<!--                <h5 class="field-heading d-flex gap-1 align-items-center">-->
+<!--                  {{ localize("linkCapslock") }}-->
+<!--                  <a target="_blank" :href="link" class="field-value copy-on">{{-->
+<!--                    localize("openInNewWindowCapslock")-->
+<!--                  }}</a>-->
+<!--                </h5>-->
               </MDBCol>
               <MDBCol class="d-flex flex-column gap-3">
                 <h5 class="field-heading d-flex gap-1 align-items-center">
@@ -74,8 +80,14 @@
                   <span class="field-value">{{ lastTimeOrdered }}</span>
                 </h5>
                 <h5 class="field-heading d-flex gap-1 align-items-center">
-                  {{ localize("lastPriceOrderedCapslock") }}
+                  {{ localize("costPriceCapslock") }}
                   <span class="field-value">{{ lastPriceOrdered }}</span>
+                </h5>
+                <h5
+                    class="field-heading d-flex gap-1 align-items-center"
+                >
+                  {{ localize("defaultPriceCapslock") }}
+                  <span class="field-value">{{ defaultPrice }}</span>
                 </h5>
                 <!--              <h5 class="field-heading">COST PRICE <span class="field-value">{{ costPrice }}</span></h5>-->
                 <!--              <h5 class="field-heading">STATUS <span class="field-value">{{ status }}</span></h5>-->
@@ -145,14 +157,6 @@
             >
               {{ localize("offertaPriceCapslock") }}
               <span class="field-value">{{ offertaPrice }}</span>
-            </h5>
-          </MDBCol>
-          <MDBCol>
-            <h5
-              class="bottom-numbers d-flex flex-column justify-content-start gap-2"
-            >
-              {{ localize("defaultPriceCapslock") }}
-              <span class="field-value">{{ defaultPrice }}</span>
             </h5>
           </MDBCol>
           <MDBCol>
@@ -664,5 +668,12 @@ export default {
 }
 :deep(.p-panel) {
   border-top: 1px solid #e5e7eb;
+}
+.creation-name {
+  font-weight: 500;
+  color: #c3c3c3;
+}
+.creation-date {
+  font-weight: 700;
 }
 </style>
