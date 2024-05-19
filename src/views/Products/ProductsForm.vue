@@ -10,7 +10,7 @@
           <!--              {{ localize("chooseFilesFromGallery", "media") }}-->
           <!--            </p>-->
           <!--          </div>-->
-          <SliderUpload />
+          <SliderUpload :images="imageSource" @upload-new="openMiniGallery" />
         </MDBCol>
         <MDBCol class="d-flex flex-column justify-content-center">
           <MDBRow>
@@ -83,7 +83,9 @@
               </h5>
 
               <div class="d-flex flex-row">
-                <div class="d-flex flex-column col-auto justify-content-center gap-2">
+                <div
+                  class="d-flex flex-column col-auto justify-content-center gap-2"
+                >
                   <h5 class="field-heading special-heading d-flex">
                     {{ localize("defaultPriceCapslock") }}
                   </h5>
@@ -247,10 +249,8 @@ import BrandSelector from "@/components/Inputs/entities/BrandSelector.vue";
 import { useMediaModalStore } from "@/stores/media-modal.store";
 import loggerUtil from "@/utils/logger/logger.util";
 import LoggerUtil from "@/utils/logger/logger.util";
-import { useBrandStore } from "@/stores/brand.store";
-import { useCategoriesStore } from "@/stores/categories.store";
-import { useCollectionStore } from "@/stores/collection.store";
 import SliderUpload from "@/views/Media/SliderUpload.vue";
+import FilesResolverUtil from "@/utils/files-resolver.util";
 
 export default {
   name: "ProductsForm",
@@ -359,6 +359,28 @@ export default {
 
       return Math.round(price * 100) / 100;
     },
+    imageSource() {
+      if (
+        this.productFormStore.data.photoList &&
+        this.productFormStore.data.photoList.length != 0
+      )
+        return this.productFormStore.data.photoList.map((el) => ({
+          itemImageSrc: FilesResolverUtil.getStreamUrl(el || ""),
+          thumbnailImageSrc: FilesResolverUtil.getStreamUrl(el || ""),
+          alt: el,
+          title: `Title ${el}`,
+        }));
+      else
+        return [
+          {
+            itemImageSrc: FilesResolverUtil.getStreamUrl("fileNotFound.jpeg"),
+            thumbnailImageSrc:
+              FilesResolverUtil.getStreamUrl("fileNotFound.jpeg"),
+            alt: "Not found",
+            title: `Title not found`,
+          },
+        ];
+    },
   },
   created() {
     LoggerUtil.debug(this.productFormStore.data);
@@ -379,8 +401,12 @@ export default {
       this.mediaModalStore.showGallery(this.productFormStore.data.photo || []);
     },
     handleMiniGallerySelection() {
-      this.productFormStore.data.photoList =
-        this.mediaModalStore.miniGallerySelected;
+      this.productFormStore.data.photoList = [];
+      this.productFormStore.data.photo = [];
+      this.mediaModalStore.miniGallerySelected.forEach((el) => {
+        this.productFormStore.data.photoList.push(el.url);
+        this.productFormStore.data.photo.push(el.id);
+      });
       LoggerUtil.debug(this.productFormStore.data.photoList);
     },
     clearValidationErrors() {
@@ -451,7 +477,6 @@ export default {
         this.productFormStore.data.commonPrice != "" &&
         this.productFormStore.data.commonPrice != null
       ) {
-        console.log(this.productFormStore.data.commonPrice);
         this.productFormStore.data.commonPrice = parseFloat(
           `${this.productFormStore.data.commonPrice}`.replace(",", "."),
         );
@@ -465,8 +490,7 @@ export default {
         return;
       }
 
-      this.productFormStore.data["photo"] =
-        this.productFormStore.data.photoList;
+      this.productFormStore.data["photo"] = this.productFormStore.data.photo;
 
       // this.productFormStore.data.professionalPercent = parseFloat(
       //   `${this.productFormStore.data.professionalPercent}`.replace(",", "."),

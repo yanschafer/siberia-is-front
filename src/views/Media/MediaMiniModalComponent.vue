@@ -23,9 +23,12 @@
                   @change="toggleAll"
                   :binary="true"
                 />
-                <Button @click="setSelected" class="btn btn-outlined btn-black utility-btn">{{
-                  localize("upload")
-                }}</Button>
+                <Button
+                  disabled
+                  @click="setSelected"
+                  class="btn btn-outlined btn-black utility-btn"
+                  >{{ localize("upload") }}</Button
+                >
                 <SearchComponent
                   class="search"
                   v-model="mediaStore.searchTerm"
@@ -47,7 +50,7 @@
                   class="d-flex flex-column list-row flex-sm-row align-items-center p-4 gap-3"
                 >
                   <Checkbox v-model="image.selected" :binary="true" />
-                  <div @click="openModal(image)" class="image-container">
+                  <div @click="selectByOverlay(image)" class="image-container">
                     <img
                       class="media-image-list mx-auto d-block"
                       :src="getUrl(image.url)"
@@ -108,7 +111,7 @@
                 class="col-12 col-sm-6 col-md-4 col-xl-3 p-2"
               >
                 <div class="p-4 border rounded d-flex flex-column image-col">
-                  <div @click="openModal(image)" class="image-container">
+                  <div @click="selectByOverlay(image)" class="image-container">
                     <img
                       class="img-fluid media-image"
                       :src="getUrl(image.url)"
@@ -140,7 +143,11 @@
 
                   <div class="pt-4">
                     <div class="d-flex flex-row mt-1 align-items-center gap-2">
-                      <Checkbox v-model="image.selected" :binary="true" />
+                      <Checkbox
+                        @change="setSelected"
+                        v-model="image.selected"
+                        :binary="true"
+                      />
                       <h5 class="m-0 heading-list">{{ image.name }}</h5>
                       <!--                        <p class="text-muted m-0">{{ image.url }}</p>-->
                     </div>
@@ -246,8 +253,9 @@ export default defineComponent({
     getUrl(image) {
       return FilesResolverUtil.getStreamUrl(image);
     },
-    openModal(image) {
+    selectByOverlay(image) {
       image.selected = !image.selected;
+      this.setSelected();
     },
     async removeImage(image) {
       const removeRes = await this.mediaStore.removeImage(image.id);
@@ -264,8 +272,11 @@ export default defineComponent({
     async setSelected() {
       this.mediaModalStore.miniGallerySelected = this.items
         .filter((el) => el.selected)
-        .map((el) => el.id);
-      this.mediaModalStore.miniGalleryVisible = false;
+        .map((el) => ({
+          id: el.id,
+          url: el.url,
+        }));
+      // this.mediaModalStore.miniGalleryVisible = false;
       this.$emit("selected");
     },
     toggleAll() {
