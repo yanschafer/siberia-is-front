@@ -367,7 +367,7 @@ export default {
       return this.authCheckStore.getHasAccessToStockManaging;
     },
     isArrivalAvailable() {
-      return this.arrivalAvailable && this.controlOperationsFromDesktop;
+      return this.arrivalAvailable;
     },
     isSaleAvailable() {
       return this.saleAvailable;
@@ -682,5 +682,9 @@ export default {
   align-items: center;
   align-content: center;
   gap: 5px;
+}
+:deep(.p-dropdown-panel) {
+  width: 30rem!important;
+  min-width: 30rem!important;
 }
 </style>

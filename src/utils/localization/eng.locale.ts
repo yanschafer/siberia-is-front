@@ -71,6 +71,8 @@ export default {
       Roles: "Roles",
       Media: "Media",
     },
+
+
     //HeaderComponent
     header: {
       History: "History",
@@ -290,6 +292,8 @@ export default {
         categorySheetTitle: "Categories",
         productSheetTitle: "Products",
       },
+      //DatePicker.vue
+      datePickerPlaceholder: 'Date',
       //CreateProduct.vue
       productNameCapslock: "PRODUCT NAME",
       skuCapslock: "SKU",
@@ -661,6 +665,11 @@ export default {
       3: "Request",
       4: "Write off",
 
+      created: 'CREATED',
+      arrivalDate: 'ARRIVAL DATE',
+      isPaid: 'IS PAID',
+      isPaidYes: 'Yes',
+      isPaidNo: 'No',
       showClosedOperations: "Show closed operations",
       operationType: "Operation type",
       operationStatus: "Operation status",
@@ -783,6 +792,10 @@ export default {
       hash: "Password",
       relatedUsersCount: "Users with role",
       color: "Color",
+    },
+    //DatePicker.vue
+    datePickerComponent: {
+      datePickerPlaceholder: 'Date',
     },
   },
 };

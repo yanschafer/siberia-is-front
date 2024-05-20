@@ -691,7 +691,11 @@ export default {
       2: "Продажа",
       3: "Запрос",
       4: "Списание",
-
+      created: 'ДАТА СОЗДАНИЯ',
+      arrivalDate: 'ДАТА ПОСТУПЛЕНИЯ',
+      isPaid: 'ОПЛАЧЕНО',
+      isPaidYes: 'Да',
+      isPaidNo: 'Нет',
       showClosedOperations: "Показывать завершенные операции",
       operationType: "Тип операции",
       operationStatus: "Статус операции",
@@ -813,6 +817,10 @@ export default {
       hash: "Пароль",
       relatedUsersCount: "Пользователей с ролью",
       color: "Цвет",
+    },
+    //DatePicker.vue
+    datePickerComponent: {
+      datePickerPlaceholder: 'Дата',
     },
   },
 };

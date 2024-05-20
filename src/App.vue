@@ -59,7 +59,9 @@ export default {
 ::-webkit-scrollbar-corner {
   background: transparent;
 }
-
+.p-dropdown-panel {
+  width: 30rem;
+}
 
 #app {
   width: 100vw !important;

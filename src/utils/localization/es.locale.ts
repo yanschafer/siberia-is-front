@@ -283,7 +283,6 @@ export default {
         { field: "expirationDate", header: "FECHA DE CADUCIDAD" },
         { field: "link", header: "ENLACE" },
       ],
-
       productsUploaded: "Productos subidos",
       LOAD: "CARGAR",
       CLEAR: "LIMPIAR",
@@ -665,7 +664,11 @@ export default {
       2: "Venta",
       3: "Solicitud",
       4: "Anular",
-
+      created: 'CREADO',
+      arrivalDate: 'FECHA DE LLEGADA',
+      isPaid: 'PAGADO',
+      isPaidYes: 'Sí',
+      isPaidNo: 'No',
       showClosedOperations: "Mostrar operaciones cerradas",
       operationType: "Tipo de operación",
       operationStatus: "Estado de la operación",
@@ -788,6 +791,10 @@ export default {
       hash: "Contraseña",
       relatedUsersCount: "Usuarios por rol",
       color: "Color",
+    },
+    //DatePicker.vue
+    datePickerComponent: {
+      datePickerPlaceholder: 'Fecha',
     },
   },
 };
