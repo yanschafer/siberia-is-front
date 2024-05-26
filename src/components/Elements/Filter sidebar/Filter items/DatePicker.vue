@@ -1,13 +1,17 @@
 <template>
-  <Calendar v-model="singleDate" showIcon iconDisplay="input" inputId="datePicker" :placeholder="localize('datePickerPlaceholder')" />
+  <Calendar
+    v-model="singleDate"
+    showIcon
+    iconDisplay="input"
+    inputId="datePicker"
+    :placeholder="localize('datePickerPlaceholder')"
+    :minDate="curDate"
+  />
 </template>
 
 <script lang="ts">
-import loggerUtil from "@/utils/logger/logger.util";
 import PrintUtil from "@/utils/localization/print.util";
 import Calendar from "primevue/calendar";
-import { useFiltersStore } from "@/stores/filters.store";
-import LoggerUtil from "@/utils/logger/logger.util";
 import { usePrimeVue } from "primevue/config";
 
 export default {
@@ -17,13 +21,10 @@ export default {
   },
   data: () => ({
     singleDate: null,
+    curDate: new Date(),
   }),
   props: {
     title: String,
-    defaultValue: {
-      type: Object,
-      default: {},
-    },
   },
   emits: ["change"],
   setup() {
@@ -59,44 +60,13 @@ export default {
     );
   },
   created() {
-    this.dateRange = [];
-    if (
-      Object.keys(this.defaultValue).includes("min") &&
-      this.defaultValue.min != null
-    ) {
-      this.dateRange.push(new Date(this.defaultValue.min));
-    }
-    if (
-      Object.keys(this.defaultValue).includes("max") &&
-      this.defaultValue.max != null
-    ) {
-      this.dateRange.push(new Date(this.defaultValue.max));
-    }
-    const filtersStore = useFiltersStore();
-    filtersStore.$onAction(({ name }) => {
-      if (name == "clearFilter") {
-        this.dateRange = [];
-        this.handleChange();
-      }
-    });
-    this.$watch("dateRange", () => {
+    this.$watch("singleDate", () => {
       this.handleChange();
     });
   },
   methods: {
     handleChange() {
-      const min = this.dateRange[0];
-      const max = this.dateRange[1];
-
-      let minTimestamp = new Date(min).getTime();
-      let maxTimestamp = new Date(max).getTime();
-
-      if (Number.isNaN(minTimestamp) || minTimestamp == 0) minTimestamp = null;
-      //If max selected expand it for 23:59
-      if (Number.isNaN(maxTimestamp) || maxTimestamp == 0) maxTimestamp = null;
-      else maxTimestamp += 23 * 60 * 60 * 1000 + 59 * 60 * 1000;
-
-      this.$emit("change", { min: minTimestamp, max: maxTimestamp });
+      this.$emit("change", new Date(this.singleDate));
     },
     localize(key, module = "datePickerComponent") {
       return PrintUtil.localize(key, module);

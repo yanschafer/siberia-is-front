@@ -282,6 +282,7 @@ export default {
   created() {
     this.loaders.forEach((el) => el.toastIfError(this.$toast, this.$nextTick));
 
+    const emptyCheck = new ValidateRule();
     const stringValidateRule = new ValidateRule().skipIfNull().required();
     const positiveNumberValidateRule = new ValidateRule()
       .skipIfNull()
@@ -304,10 +305,10 @@ export default {
       .addRule("professionalPercent", positiveNumberValidateRule)
       .addRule("category", categoryValidateRule)
       .addRule("collection", collectionValidateRule)
-      .addRule("color", stringValidateRule)
-      .addRule("amountInBox", positiveNumberValidateRule)
-      .addRule("expirationDate", positiveNumberValidateRule)
-      .addRule("link", stringValidateRule);
+      .addRule("barcode", emptyCheck)
+      .addRule("color", emptyCheck)
+      .addRule("expirationDate", emptyCheck)
+      .addRule("link", emptyCheck);
 
     this.productFormStore.initUpdateProcess(this.selectedProduct, validator);
   },
@@ -528,7 +529,7 @@ export default {
         common = this.newDefaultPrice;
       }
 
-      const price = (percent / 100) * common;
+      const price = common - (percent / 100) * common;
       return Math.round(price * 100) / 100;
     },
     distributionPercent() {
@@ -544,7 +545,7 @@ export default {
         common = this.newDefaultPrice;
       }
 
-      const price = (percent / 100) * common;
+      const price = common - (percent / 100) * common;
       return Math.round(price * 100) / 100;
     },
     professionalPercent() {

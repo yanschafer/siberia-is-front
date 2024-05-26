@@ -84,19 +84,21 @@ export const useStorehousesStore = defineStore({
       }
     },
     operationSucceed() {},
-    async newArrival(storehouseId: number, products: ProductListItemDto[]) {
+    async newArrival(storehouseId: number, arrivalData) {
       const transactionModel = new IncomeTransactionModel();
-      loggerUtil.debug(storehouseId, products);
+      loggerUtil.debug(storehouseId, arrivalData.addedList);
       const res = await transactionModel.create(
         new TransactionInputDto(
           storehouseId,
           null,
           TransactionType.INCOME,
-          products.map((el) => ({
+          arrivalData.addedList.map((el) => ({
             productId: el.id,
             amount: parseFloat(String(el.quantity)),
             price: parseFloat(String(el.price)),
           })),
+          arrivalData.isPaid,
+          arrivalData.date,
         ),
       );
       if (res.success) {

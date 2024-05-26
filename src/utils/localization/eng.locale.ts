@@ -72,7 +72,6 @@ export default {
       Media: "Media",
     },
 
-
     //HeaderComponent
     header: {
       History: "History",
@@ -293,7 +292,7 @@ export default {
         productSheetTitle: "Products",
       },
       //DatePicker.vue
-      datePickerPlaceholder: 'Date',
+      datePickerPlaceholder: "Date",
       //CreateProduct.vue
       productNameCapslock: "PRODUCT NAME",
       skuCapslock: "SKU",
@@ -448,6 +447,8 @@ export default {
       tryToEditStorehouse:
         "Try to edit available storehouses in users managing tab, or report to your administrator",
       productsInStock: "Products in stock",
+      youMustSetArrivalDate: "You must set arrival date",
+      isPaid: "Is paid",
 
       //storehouse.store.ts
       addressCapslock: "ADDRESS",
@@ -665,11 +666,11 @@ export default {
       3: "Request",
       4: "Write off",
 
-      created: 'CREATED',
-      arrivalDate: 'ARRIVAL DATE',
-      isPaid: 'IS PAID',
-      isPaidYes: 'Yes',
-      isPaidNo: 'No',
+      created: "CREATED",
+      arrivalDate: "ARRIVAL DATE",
+      isPaid: "IS PAID",
+      isPaidYes: "Yes",
+      isPaidNo: "No",
       showClosedOperations: "Show closed operations",
       operationType: "Operation type",
       operationStatus: "Operation status",
@@ -699,9 +700,11 @@ export default {
       nameCapslock: "NAME",
       skuCapslock: "SKU",
       quantityCapslock: "QUANTITY",
+      actualQuantity: "RECEIVED",
       priceCapslock: "PRICE",
       success: "Success",
       statusUpdated: "Status is updated",
+      partiallyReceived: "Partial receiving complete",
 
       selectStorehousePlaceholder: "Select storehouse",
       save: "Save",
@@ -795,7 +798,7 @@ export default {
     },
     //DatePicker.vue
     datePickerComponent: {
-      datePickerPlaceholder: 'Date',
+      datePickerPlaceholder: "Date",
     },
   },
 };

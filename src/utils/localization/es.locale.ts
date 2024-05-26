@@ -449,6 +449,7 @@ export default {
       tryToEditStorehouse:
         "Intenta editar los almacenes disponibles en la pestaña de administración de usuarios, o informa a tu administrador",
       productsInStock: "Productos en stock",
+      youMustSetArrivalDate: "Está pagado",
 
       //storehouse.store.ts
       addressCapslock: "DIRECCIÓN",
@@ -664,11 +665,11 @@ export default {
       2: "Venta",
       3: "Solicitud",
       4: "Anular",
-      created: 'CREADO',
-      arrivalDate: 'FECHA DE LLEGADA',
-      isPaid: 'PAGADO',
-      isPaidYes: 'Sí',
-      isPaidNo: 'No',
+      created: "CREADO",
+      arrivalDate: "FECHA DE LLEGADA",
+      isPaid: "PAGADO",
+      isPaidYes: "Sí",
+      isPaidNo: "No",
       showClosedOperations: "Mostrar operaciones cerradas",
       operationType: "Tipo de operación",
       operationStatus: "Estado de la operación",
@@ -698,9 +699,11 @@ export default {
       nameCapslock: "NOMBRE",
       skuCapslock: "SKU",
       quantityCapslock: "CANTIDAD",
+      actualQuantity: "RECIBIDO",
       priceCapslock: "PRECIO",
       success: "Éxito",
       statusUpdated: "El estado ha sido actualizado",
+      partiallyReceived: "Aceptación parcial completada",
 
       selectStorehousePlaceholder: "Selecciona un almacén",
       save: "Guardar",
@@ -794,7 +797,7 @@ export default {
     },
     //DatePicker.vue
     datePickerComponent: {
-      datePickerPlaceholder: 'Fecha',
+      datePickerPlaceholder: "Fecha",
     },
   },
 };
