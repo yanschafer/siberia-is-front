@@ -133,6 +133,8 @@
           <template v-if="newArrival">
             <StorehouseOperation
               :title="localize('newArrivalRegistration')"
+              :show-date="true"
+              :show-is-paid="true"
               @cancel="newArrival = false"
               @save="saveNewArrival"
             ></StorehouseOperation>
@@ -437,7 +439,7 @@ export default {
       this.newSale = false;
       this.newRequest = false;
     },
-    async saveNewArrival(arrivalData: ProductListItemDto[]) {
+    async saveNewArrival(arrivalData) {
       const res = await this.storehouseStore.newArrival(this.id, arrivalData);
       if (res.success) {
         this.newArrival = false;
@@ -450,8 +452,9 @@ export default {
         res.toastIfError(this.$toast, this.$nextTick);
       }
     },
-    async saveNewWriteOff(writeOffData: ProductListItemDto[]) {
-      const res = await this.storehouseStore.newWriteOff(this.id, writeOffData);
+    async saveNewWriteOff({ addedList }) {
+      const writeOffList: ProductListItemDto[] = addedList;
+      const res = await this.storehouseStore.newWriteOff(this.id, writeOffList);
 
       if (res.success) {
         this.newWriteOff = false;
@@ -470,8 +473,9 @@ export default {
       this.newSale = true;
       this.newRequest = false;
     },
-    async saveNewSale(saleData: ProductListItemDto[]) {
-      const res = await this.storehouseStore.newSale(this.id, saleData);
+    async saveNewSale({ addedList }) {
+      const saleList: ProductListItemDto[] = addedList;
+      const res = await this.storehouseStore.newSale(this.id, saleList);
       if (res.success) {
         const data = res.getData();
         this.showSuccessTransactionCreation(
@@ -498,8 +502,8 @@ export default {
       this.newSale = false;
       this.newRequest = true;
     },
-    async saveNewRequest(requestData: ProductListItemDto[]) {
-      const res = await this.storehouseStore.newRequest(this.id, requestData);
+    async saveNewRequest({ addedList }) {
+      const res = await this.storehouseStore.newRequest(this.id, addedList);
       if (res.success) {
         const data = res.getData();
         this.showSuccessTransactionCreation(
@@ -684,7 +688,7 @@ export default {
   gap: 5px;
 }
 :deep(.p-dropdown-panel) {
-  width: 30rem!important;
-  min-width: 30rem!important;
+  width: 30rem !important;
+  min-width: 30rem !important;
 }
 </style>

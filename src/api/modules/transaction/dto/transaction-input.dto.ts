@@ -5,7 +5,8 @@ export default class TransactionInputDto {
     public to: number | null = null,
     public from: number | null = null,
     public type: number,
-    public products: TransactionProductItemDto[] = []
-  ) {
-  }
+    public products: TransactionProductItemDto[] = [],
+    public isPaid: boolean | null = null,
+    public arrivalDate: number | null = null,
+  ) {}
 }

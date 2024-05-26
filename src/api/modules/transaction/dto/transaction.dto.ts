@@ -10,7 +10,8 @@ export default class TransactionDto {
     public type: TransactionTypeDto,
     public products: TransactionProductItemDto[],
     public from: StockDto,
-    public to: StockDto
-  ) {
-  }
+    public to: StockDto,
+    public arrivalDate: number | null = null,
+    public isPaid: boolean | null = null,
+  ) {}
 }

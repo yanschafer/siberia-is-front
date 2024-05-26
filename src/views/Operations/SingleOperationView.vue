@@ -7,7 +7,7 @@
             <h1 class="username-heading">
               {{ operation }}
               <template v-if="from !== ''"
-              >{{ localize("from") }} "{{ from }}"</template
+                >{{ localize("from") }} "{{ from }}"</template
               >
               <template v-if="to !== ''">
                 {{ localize("to") }} "{{ to }}"</template
@@ -18,53 +18,57 @@
         <MDBRow class="d-flex flex-nowrap mt-2">
           <MDBCol class="col-auto col-status gap-1">
             <span class="user-roles-heading"
-            >{{ localize("statusCapslock") }}:
+              >{{ localize("statusCapslock") }}:
             </span>
             <span class="username">{{ status }}</span>
           </MDBCol>
           <template v-if="haveAvailableStatuses">
             <MDBCol class="col-auto">
               <MDBBtn
-                  class="btn-outline-black outlined utility-btn"
-                  @click="toggleStatusChange"
+                class="btn-outline-black outlined utility-btn"
+                @click="toggleStatusChange"
               >
                 {{ changeStatusTitle }}
               </MDBBtn>
             </MDBCol>
             <template v-if="isStatusOnSelect">
               <MDBCol class="col-auto">
-                <MDBRow class="flex-nowrap justify-center align-items-center mr-4">
+                <MDBRow
+                  class="flex-nowrap justify-center align-items-center mr-4"
+                >
                   <span class="user-roles-heading">{{
-                      localize("statusCapslock")
-                    }}</span>
+                    localize("statusCapslock")
+                  }}</span>
                   <SelectComponent
-                      v-model="selectedStatus"
-                      @change="handleStatusChange"
-                      :placeholder="statusPlaceholder"
-                      :filter="false"
-                      class="dropdown-wrapper"
-                      :items="availableStatuses"
+                    v-model="selectedStatus"
+                    @change="handleStatusChange"
+                    :placeholder="statusPlaceholder"
+                    :filter="false"
+                    class="dropdown-wrapper"
+                    :items="availableStatuses"
                   />
                 </MDBRow>
               </MDBCol>
               <MDBCol class="col-auto" v-if="selectedStatusNeedStock">
-                <MDBRow class="flex-nowrap justify-center align-items-center mr-4">
+                <MDBRow
+                  class="flex-nowrap justify-center align-items-center mr-4"
+                >
                   <span class="user-roles-heading">{{
-                      localize("storehouseCapslock")
-                    }}</span>
+                    localize("storehouseCapslock")
+                  }}</span>
                   <SelectComponent
-                      v-model="selectedStorehouse"
-                      @click="handleStorehouseChange"
-                      :placeholder="storehousesPlaceholder"
-                      :filter="true"
-                      class="dropdown-wrapper"
-                      :items="storehousesList"
+                    v-model="selectedStorehouse"
+                    @click="handleStorehouseChange"
+                    :placeholder="storehousesPlaceholder"
+                    :filter="true"
+                    class="dropdown-wrapper"
+                    :items="storehousesList"
                   />
                 </MDBRow>
               </MDBCol>
               <MDBBtn
-                  class="btn-outline-black outlined utility-btn ml-4"
-                  @click="saveStatus"
+                class="btn-outline-black outlined utility-btn ml-4"
+                @click="saveStatus"
               >
                 {{ localize("save") }}
               </MDBBtn>
@@ -73,24 +77,18 @@
         </MDBRow>
         <MDBRow class="mt-2">
           <MDBCol class="col-auto gap-1">
-              <span class="user-roles-heading"
-              >{{ localize("created") }}:
-              </span>
-            <span class="username">22/22/22</span>
+            <span class="user-roles-heading">{{ localize("created") }}: </span>
+            <span class="username">{{ createdDateString }}</span>
           </MDBCol>
-          <MDBCol class="col-auto gap-1">
-              <span class="user-roles-heading"
+          <MDBCol class="col-auto gap-1" v-if="showArrivalDate">
+            <span class="user-roles-heading"
               >{{ localize("arrivalDate") }}:
-              </span>
-            <span class="username">22/22/22</span>
+            </span>
+            <span class="username">{{ arrivalDateString }}</span>
           </MDBCol>
-          <MDBCol class="col-auto gap-1">
-              <span class="user-roles-heading"
-              >{{ localize("isPaid") }}:
-              </span>
-<!--            TODO: Свап да/нет по необходимости-->
-            <span class="username">{{ localize("isPaidYes") }}</span>
-<!--            <span class="username">{{ localize("isPaidNo") }}</span>-->
+          <MDBCol class="col-auto gap-1" v-if="showIsPaid">
+            <span class="user-roles-heading">{{ localize("isPaid") }}: </span>
+            <span class="username">{{ isPaidString }}</span>
           </MDBCol>
         </MDBRow>
       </MDBCol>
@@ -106,13 +104,15 @@
       </h1>
     </MDBRow>
     <SearchComponent />
-<!--    TODO: Почему-то редактируемое поле делается со знаком евро-->
     <TableComponent
-        :rows="products"
-        :columns="productColumns"
-        :showEditColumn="true"
-        :editableColumns="editableColumns"
-        :search-term="searchTerm"
+      :rows="products"
+      :columns="productColumns"
+      edit-input-type="num"
+      :showEditColumn="canEditAmount"
+      :editableColumns="editableColumns"
+      :table-formatters="tableFormatters"
+      :search-term="searchTerm"
+      @row-edit-save="handleRowEdit"
     />
   </MDBContainer>
 </template>
@@ -157,7 +157,7 @@ export default {
     },
   },
   data: () => ({
-    editableColumns: ["amount"],
+    editableColumns: ["actualAmount"],
     typeMapper: {
       [TransactionType.INCOME]: "Arrival",
       [TransactionType.OUTCOME]: "Sale",
@@ -180,8 +180,8 @@ export default {
     ],
     searchTerm: "",
     storehousesPlaceholder: PrintUtil.localize(
-        "selectStorehousePlaceholder",
-        "operations",
+      "selectStorehousePlaceholder",
+      "operations",
     ),
     selectedStatus: null,
     selectedStorehouse: null,
@@ -199,7 +199,7 @@ export default {
     const loaders = await Promise.all([
       storehousesStore.loadStorehouseList(),
       operationStore.loadSelectedOperation(
-          parseInt(route.params.id.toString()),
+        parseInt(route.params.id.toString()),
       ),
     ]);
 
@@ -218,12 +218,18 @@ export default {
 
     const authModel = new AuthModel();
     this.transactionQrUrl = await authModel.getTransactionQr(
-        this.transactionId,
+      this.transactionId,
     );
 
+    if (this.selectedOperation.type.id == TransactionType.INCOME)
+      this.productColumns.push({
+        field: "actualAmount",
+        header: this.localize("actualQuantity"),
+      });
+
     if (
-        this.selectedOperation.type.id != TransactionType.TRANSFER &&
-        this.selectedOperation.type.id != TransactionType.WriteOff
+      this.selectedOperation.type.id != TransactionType.TRANSFER &&
+      this.selectedOperation.type.id != TransactionType.WriteOff
     )
       this.productColumns.push({
         field: "price",
@@ -233,8 +239,8 @@ export default {
     this.transactionSocketHandler.$onAction((action) => {
       if (action.name == "updateTransaction") {
         this.operationStore.catchTransactionSocketUpdate(
-            action.args[0],
-            action.args[1],
+          action.args[0],
+          action.args[1],
         );
       }
     });
@@ -242,7 +248,7 @@ export default {
     this.authCheckStore.$onAction(async (action) => {
       if (action.name == "refresh") {
         const loaded = await this.operationStore.loadSelectedOperation(
-            this.selectedOperation.id,
+          this.selectedOperation.id,
         );
         if (!loaded.success) this.router.push({ name: "Operations" });
       }
@@ -251,6 +257,9 @@ export default {
   methods: {
     localize(key, module = "operations") {
       return PrintUtil.localize(key, module);
+    },
+    async handleRowEdit(row) {
+      await this.operationStore.updateActualAmount(row.id, row.actualAmount);
     },
     async changeToStatus(statusId: number) {
       return await this.operationStore.changeStatus(this.id, statusId);
@@ -277,9 +286,9 @@ export default {
       }
 
       if (
-          this.selectedStatusNeedStock &&
-          this.selectedStorehouse &&
-          this.selectedStorehouse.id == this.selectedOperation.to.id
+        this.selectedStatusNeedStock &&
+        this.selectedStorehouse &&
+        this.selectedStorehouse.id == this.selectedOperation.to.id
       ) {
         this.$toast.add({
           severity: "error",
@@ -290,21 +299,20 @@ export default {
         return;
       }
 
-      LoggerUtil.debug(
-          this.selectedStatus,
-          !this.selectedStatusNeedStock,
-          this.selectedStorehouse,
-          this.selectedOperation,
-      );
-
       if (this.selectedStatus) {
+        if (this.partiallyReceivingInProgress) {
+          await this.partialReceiving();
+          return;
+        }
+
         let changed: ApiResponseDto<TransactionSimpleDto> | null = null;
+
         if (!this.selectedStatusNeedStock) {
           changed = await this.changeToStatus(this.selectedStatus.id);
         } else if (this.selectedStorehouse)
           changed = await this.changeToStatusWithStock(
-              this.selectedStatus.id,
-              this.selectedStorehouse.id,
+            this.selectedStatus.id,
+            this.selectedStorehouse.id,
           );
 
         if (changed == null) {
@@ -331,8 +339,8 @@ export default {
           this.toggleStatusChange();
         } else {
           if (
-              changed.getError().httpStatusCode == 400 &&
-              changed.getError().data?.includes("enough")
+            changed.getError().httpStatusCode == 400 &&
+            changed.getError().data?.includes("enough")
           ) {
             this.$toast.add({
               severity: "error",
@@ -353,12 +361,39 @@ export default {
         });
       }
     },
+    async partialReceiving() {
+      const result = await this.operationStore.partiallyReceived();
+
+      if (result == null) {
+        this.$toast.add({
+          severity: "error",
+          summary: this.localize("Failed"),
+          detail: this.localize("updateStatusError"),
+          life: 3000,
+        });
+        return;
+      }
+
+      if (result.success) {
+        this.$toast.add({
+          severity: "success",
+          summary: this.localize("success"),
+          detail: this.localize("partiallyReceived"),
+          life: 3000,
+        });
+        const loadRes = await this.operationStore.loadOperationList();
+        loadRes.toastIfError(this.$toast, this.$nextTick);
+        this.toggleStatusChange();
+      } else {
+        result.toastIfError(this.$toast, this.$nextTick);
+      }
+    },
   },
   computed: {
     changeStatusTitle() {
       return this.isStatusOnSelect
-          ? this.localize("Cancel")
-          : this.localize("Change status");
+        ? this.localize("Cancel")
+        : this.localize("editCapslock", "default");
     },
     selectedStatusNeedStock() {
       if (!this.selectedStatus) return false;
@@ -369,7 +404,7 @@ export default {
     },
     storehousesList() {
       return this.storehousesStore.getStorehouseList.filter((el) =>
-          TokenUtil.hasInProgressAccessToStock(el.id),
+        TokenUtil.hasInProgressAccessToStock(el.id),
       );
     },
     selectedOperation() {
@@ -401,6 +436,7 @@ export default {
       return this.selectedOperation.products.map((el) => ({
         id: el.product.id,
         name: el.product.name,
+        actualAmount: el.actualAmount,
         amount: el.amount,
         vendorCode: el.product.vendorCode,
         price: el.price,
@@ -410,6 +446,55 @@ export default {
       let urlExist = this.transactionQrUrl && this.transactionQrUrl != "";
 
       return urlExist;
+    },
+    createdDateString() {
+      const createdAt = new Date(this.selectedOperation.timestamp);
+
+      const dateStr = `0${createdAt.getDate()}`;
+      const monthStr = `0${createdAt.getMonth() + 1}`;
+      const yearStr = `${createdAt.getFullYear()}`;
+      return `${yearStr}/${monthStr.slice(monthStr.length - 2, monthStr.length)}/${dateStr.slice(dateStr.length - 2, dateStr.length)}`;
+    },
+    showArrivalDate() {
+      return this.selectedOperation.type.id == 1;
+    },
+    showIsPaid() {
+      return this.selectedOperation.type.id == 1;
+    },
+    arrivalDateString() {
+      return this.selectedOperation.arrivalDate.replaceAll("-", "/");
+    },
+    isPaidString() {
+      if (this.selectedOperation.isPaid) return this.localize("isPaidYes");
+      else return this.localize("isPaidNo");
+    },
+    canEditAmount() {
+      if (!this.isStatusOnSelect) return false;
+
+      if (this.selectedOperation.type.id != 1) return false;
+
+      return true;
+    },
+    tableFormatters() {
+      return {
+        actualAmount: (row) => {
+          if (row.actualAmount == null) {
+            return row.amount;
+          } else {
+            return row.actualAmount;
+          }
+        },
+      };
+    },
+    partiallyReceivingInProgress() {
+      const availableStatuses = [
+        TransactionStatus.IN_PROGRESS,
+        TransactionStatus.CREATED,
+      ];
+      return (
+        this.selectedOperation.type.id == TransactionType.INCOME &&
+        availableStatuses.includes(this.selectedOperation.status.id)
+      );
     },
   },
 };

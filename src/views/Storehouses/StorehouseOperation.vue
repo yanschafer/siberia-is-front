@@ -1,14 +1,19 @@
 <template>
   <h5>{{ title }}</h5>
   <MDBRow class="d-flex flex-row flex-nowrap">
-    <MDBCol class="d-flex col-auto">
+    <MDBCol v-if="showIsPaid" class="d-flex col-auto">
       <div class="d-flex gap-1 align-items-center">
-        <Checkbox v-model="paid" inputId="paidValue" name="isPaid" value="Is paid" />
-        <label for="paidValue" class="ml-2"> Is Paid </label>
+        <Checkbox
+          v-model="isPaid"
+          inputId="paidValue"
+          name="isPaid"
+          value="Is paid"
+        />
+        <label for="paidValue" class="ml-2"> {{ localize("isPaid") }} </label>
       </div>
     </MDBCol>
-    <MDBCol clsas="col-auto">
-      <DatePicker />
+    <MDBCol v-if="showDate" clsas="col-auto">
+      <DatePicker @change="handleDateChanged" />
     </MDBCol>
     <MDBCol class="col-auto">
       <SelectComponent
@@ -73,7 +78,7 @@ import InputText from "primevue/inputtext";
 import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 import LoggerUtil from "@/utils/logger/logger.util";
 import DatePicker from "@/components/Elements/Filter sidebar/Filter items/DatePicker.vue";
-import Checkbox from 'primevue/checkbox';
+import Checkbox from "primevue/checkbox";
 
 export default {
   name: "StorehouseOperation",
@@ -88,7 +93,7 @@ export default {
     TableComponent,
     SearchComponent,
     InputText,
-    Checkbox
+    Checkbox,
   },
   props: {
     title: String,
@@ -100,6 +105,14 @@ export default {
     showPrice: {
       type: Boolean,
       default: true,
+    },
+    showDate: {
+      type: Boolean,
+      default: false,
+    },
+    showIsPaid: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ["cancel", "save"],
@@ -113,6 +126,8 @@ export default {
       selectedProduct: null,
       quantity: null,
       price: null,
+      isPaid: false,
+      date: null,
       addedSearchTerm: "",
       addedList: [],
       placeholder: this.localize("selectAProduct"),
@@ -162,6 +177,14 @@ export default {
     },
   },
   methods: {
+    handleDateChanged(newDate: Date) {
+      const dateStr = `0${newDate.getDate()}`;
+      const monthStr = `0${newDate.getMonth() + 1}`;
+      const yearStr = `${newDate.getFullYear()}`;
+      this.date = parseInt(
+        `${yearStr}${monthStr.slice(monthStr.length - 2, monthStr.length)}${dateStr.slice(dateStr.length - 2, dateStr.length)}`,
+      );
+    },
     handleRowDelete(data) {
       this.addedList = this.addedList.filter((el) => el.id != data.id);
     },
@@ -244,8 +267,18 @@ export default {
       this.$emit("cancel");
     },
     save() {
-      if (this.addedList.length) this.$emit("save", this.addedList);
-      else this.cancel();
+      if (this.addedList.length) {
+        if (this.showDate && this.date == null) {
+          this.showErrorToast(this.localize("youMustSetArrivalDate"));
+          return;
+        }
+        this.isPaid = this.isPaid.length != 0;
+        this.$emit("save", {
+          isPaid: this.isPaid,
+          date: this.date,
+          addedList: this.addedList,
+        });
+      }
     },
   },
 };

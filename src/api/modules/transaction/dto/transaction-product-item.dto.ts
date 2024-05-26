@@ -2,7 +2,7 @@ export default class TransactionProductItemDto {
   constructor(
     public productId: number,
     public amount: number,
-    public price: number | null = null
-  ) {
-  }
+    public price: number | null = null,
+    public actualAmount: number | null,
+  ) {}
 }

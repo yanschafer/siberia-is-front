@@ -478,6 +478,8 @@ export default {
       tryToEditStorehouse:
         "Попробуйте отредактировать доступные склады во вкладке 'Пользователи', или сообщите администратору.",
       productsInStock: "Товары в наличии",
+      youMustSetArrivalDate: "Вы должны указать дату прихода",
+      isPaid: "Оплачено",
 
       //storehouse.store.ts
       addressCapslock: "АДРЕС",
@@ -691,11 +693,11 @@ export default {
       2: "Продажа",
       3: "Запрос",
       4: "Списание",
-      created: 'ДАТА СОЗДАНИЯ',
-      arrivalDate: 'ДАТА ПОСТУПЛЕНИЯ',
-      isPaid: 'ОПЛАЧЕНО',
-      isPaidYes: 'Да',
-      isPaidNo: 'Нет',
+      created: "ДАТА СОЗДАНИЯ",
+      arrivalDate: "ДАТА ПОСТУПЛЕНИЯ",
+      isPaid: "ОПЛАЧЕНО",
+      isPaidYes: "Да",
+      isPaidNo: "Нет",
       showClosedOperations: "Показывать завершенные операции",
       operationType: "Тип операции",
       operationStatus: "Статус операции",
@@ -725,9 +727,11 @@ export default {
       nameCapslock: "НАЗВАНИЕ",
       skuCapslock: "SKU",
       quantityCapslock: "КОЛИЧЕСТВО",
+      actualQuantity: "ПРИНЯТО",
       priceCapslock: "ЦЕНА",
       success: "Успешно",
       statusUpdated: "Статус обновлен",
+      partiallyReceived: "Частичная приемка проведена",
 
       selectStorehousePlaceholder: "Выберите склад",
       save: "Сохранить",
@@ -820,7 +824,7 @@ export default {
     },
     //DatePicker.vue
     datePickerComponent: {
-      datePickerPlaceholder: 'Дата',
+      datePickerPlaceholder: "Дата",
     },
   },
 };

@@ -9,7 +9,8 @@ export default class TransactionListItemDto {
     public to: number,
     public toName: string,
     public status: TransactionStatusDto,
-    public type: TransactionTypeDto
-  ) {
-  }
+    public type: TransactionTypeDto,
+    public arrivalDate: number | null,
+    public isPaid: boolean | null,
+  ) {}
 }

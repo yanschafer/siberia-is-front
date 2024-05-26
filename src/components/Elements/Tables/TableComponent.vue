@@ -34,8 +34,23 @@
       :header="column.header"
       sortable
     >
+      <template #body="{ data, field }">
+        <div class="animate__animated animate__fadeIn">
+          {{ withFormatter(data, field) }}
+        </div>
+      </template>
       <template #editor="{ data, field }">
         <template v-if="isEditable(column.field) && editInputType == 'num'">
+          <InputNumber
+            size="small"
+            class="animate__animated animate__fadeIn number w-auto"
+            locale="en-US"
+            v-model="data[field]"
+          />
+        </template>
+        <template
+          v-else-if="isEditable(column.field) && editInputType == 'money'"
+        >
           <InputNumber
             size="small"
             class="animate__animated animate__fadeIn number w-auto"
@@ -56,7 +71,7 @@
           />
         </template>
         <div class="animate__animated animate__fadeIn" v-else>
-          {{ data[field] }}
+          {{ withFormatter(data, field) }}
         </div>
       </template>
     </Column>
@@ -140,7 +155,7 @@ export default defineComponent({
     enableDelete: Boolean,
     editInputType: {
       type: String,
-      default: "num",
+      default: "money",
     },
     rowsPerPage: {
       type: Number,
@@ -156,6 +171,10 @@ export default defineComponent({
       },
     },
     selectedOutputStore: {
+      type: Object,
+      default: {},
+    },
+    tableFormatters: {
       type: Object,
       default: {},
     },
@@ -243,6 +262,11 @@ export default defineComponent({
       } else {
         return this.rows;
       }
+    },
+    withFormatter(data, field) {
+      if (this.tableFormatters[field]) {
+        return this.tableFormatters[field](data);
+      } else return data[field];
     },
   },
   watch: {
