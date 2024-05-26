@@ -1,6 +1,15 @@
 <template>
   <h5>{{ title }}</h5>
   <MDBRow class="d-flex flex-row flex-nowrap">
+    <MDBCol class="d-flex col-auto">
+      <div class="d-flex gap-1 align-items-center">
+        <Checkbox v-model="paid" inputId="paidValue" name="isPaid" value="Is paid" />
+        <label for="paidValue" class="ml-2"> Is Paid </label>
+      </div>
+    </MDBCol>
+    <MDBCol clsas="col-auto">
+      <DatePicker />
+    </MDBCol>
     <MDBCol class="col-auto">
       <SelectComponent
         :placeholder="placeholder"
@@ -11,7 +20,7 @@
       />
     </MDBCol>
     <MDBCol class="col-auto">
-      <MDBInput
+      <InputText
         class="input-wrapper animate__animated animate__fadeIn username-input"
         type="number"
         :placeholder="localize('quantity')"
@@ -19,7 +28,7 @@
       />
     </MDBCol>
     <MDBCol v-if="showPrice" class="col-auto">
-      <MDBInput
+      <InputText
         class="input-wrapper animate__animated animate__fadeIn username-input"
         type="number"
         :placeholder="localize('price')"
@@ -63,10 +72,13 @@ import loggerUtil from "@/utils/logger/logger.util";
 import InputText from "primevue/inputtext";
 import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 import LoggerUtil from "@/utils/logger/logger.util";
+import DatePicker from "@/components/Elements/Filter sidebar/Filter items/DatePicker.vue";
+import Checkbox from 'primevue/checkbox';
 
 export default {
   name: "StorehouseOperation",
   components: {
+    DatePicker,
     MDBBtn,
     MDBCol,
     MDBContainer,
@@ -76,6 +88,7 @@ export default {
     TableComponent,
     SearchComponent,
     InputText,
+    Checkbox
   },
   props: {
     title: String,
