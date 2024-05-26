@@ -100,7 +100,9 @@
               </div>
               <h5 class="field-heading">
                 {{ localize("extraChargeCapslock") }}
-                <span class="field-value">666</span>
+                <span class="field-value">{{
+                  localize("noInformation", "products")
+                }}</span>
               </h5>
               <!--              <h5 class="field-heading d-flex gap-1 align-items-center">-->
               <!--                {{ localize("linkCapslock") }}-->
@@ -341,7 +343,7 @@ export default {
           `${this.productFormStore.data.commonPrice}`.replace(",", "."),
         ) || 0;
 
-      const price = (percent / 100) * base;
+      const price = base - (percent / 100) * base;
 
       return Math.round(price * 100) / 100;
     },
@@ -355,7 +357,7 @@ export default {
           `${this.productFormStore.data.commonPrice}`.replace(",", "."),
         ) || 0;
 
-      const price = (percent / 100) * base;
+      const price = base - (percent / 100) * base;
 
       return Math.round(price * 100) / 100;
     },
@@ -549,7 +551,7 @@ export default {
   width: 100%;
 }
 .separator {
-  gap: 0!important;
+  gap: 0 !important;
   width: max-content;
 }
 .copy-on {
