@@ -657,6 +657,7 @@ export default {
         "Falló el descarte del evento, el objetivo fue eliminado",
     },
     operations: {
+      disclaimerText: "Si la cantidad de algún artículo difiere de lo declarado, cámbielo en la lista.",
       Arrival: "Llegada",
       Sale: "Venta",
       Request: "Solicitud",

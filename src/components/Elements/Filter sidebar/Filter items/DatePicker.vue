@@ -82,4 +82,7 @@ export default {
 .hr {
   border: 1px solid #ececec;
 }
+:deep(.p-inputtext) {
+  min-width: 10rem;
+}
 </style>

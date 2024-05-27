@@ -49,7 +49,7 @@
                   />
                 </MDBRow>
               </MDBCol>
-              <MDBCol class="col-auto" v-if="selectedStatusNeedStock">
+              <MDBCol class="col-auto animate__animated animate__fadeIn" v-if="selectedStatusNeedStock">
                 <MDBRow
                   class="flex-nowrap justify-center align-items-center mr-4"
                 >
@@ -75,7 +75,7 @@
             </template>
           </template>
         </MDBRow>
-        <MDBRow class="mt-2">
+        <MDBRow class="mt-2 animate__animated animate__fadeIn">
           <MDBCol class="col-auto gap-1">
             <span class="user-roles-heading">{{ localize("created") }}: </span>
             <span class="username">{{ createdDateString }}</span>
@@ -91,6 +91,12 @@
             <span class="username">{{ isPaidString }}</span>
           </MDBCol>
         </MDBRow>
+        <template v-if="isStatusOnSelect">
+          <p class="disclaimer animate__animated animate__fadeIn">
+            <IconInfoCircle color="#b6b6b7" :size="16" stroke-width="2" />
+            {{ localize("disclaimerText") }}
+          </p>
+        </template>
       </MDBCol>
       <div v-if="showTransactionQr" class="w-auto">
         <img class="qr" :src="transactionQrUrl" />
@@ -119,6 +125,7 @@
 <script lang="ts">
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdb-vue-ui-kit";
 import TableComponent from "@/components/Elements/Tables/TableComponent.vue";
+import {IconInfoCircle} from "@tabler/icons-vue";
 import SearchComponent from "@/components/Inputs/SearchComponent.vue";
 import { useOperationStore } from "@/stores/operation.store";
 import { useRoute, useRouter } from "vue-router";
@@ -149,6 +156,7 @@ export default {
     MDBContainer,
     MDBCol,
     MDBBtn,
+    IconInfoCircle
   },
   props: {
     id: {
@@ -543,5 +551,10 @@ export default {
 }
 .utility-btn {
   margin-left: 1rem;
+}
+.disclaimer {
+  margin-top: 1rem;
+  color: #b6b6b7;
+  font-weight: 600;
 }
 </style>

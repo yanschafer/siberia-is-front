@@ -320,4 +320,5 @@ export default {
   height: 40px !important;
   padding: 8px;
 }
+
 </style>
