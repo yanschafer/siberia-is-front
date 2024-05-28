@@ -442,6 +442,9 @@ export default {
       areYouSure: "Вы уверены, что хотите удалить группу под названием",
     },
     storehouses: {
+      isPaid: "Опалчено",
+      isPaidYes: "Да",
+      isPaidNo: "Нет",
       //CreateStorehouse.vue
       storehouseName: "Название склада",
       storehouseAddress: "Адрес склада",
@@ -457,6 +460,7 @@ export default {
       uploadSale: "НОВУЮ ПРОДАЖУ",
       newRequestCapslock: "+ НОВЫЙ ЗАПРОС ТОВАРОВ",
       newWriteOffCapslock: "- НОВОЕ СПИСАНИЕ",
+      sasha: "ЗАКАЗЫ",
       newArrivalRegistration: "Регистрация поступления",
       newSaleRegistration: "Регистрация продажи",
       newRequestRegistration: "Регистрация запроса",
@@ -479,7 +483,6 @@ export default {
         "Попробуйте отредактировать доступные склады во вкладке 'Пользователи', или сообщите администратору.",
       productsInStock: "Товары в наличии",
       youMustSetArrivalDate: "Вы должны указать дату прихода",
-      isPaid: "Оплачено",
 
       //storehouse.store.ts
       addressCapslock: "АДРЕС",

@@ -424,6 +424,7 @@ export default {
       newArrivalCapslock: "+ NEW ARRIVAL",
       newSaleCapslock: "- NEW SALE",
       uploadSale: "NEW SALE",
+      sasha: "ORDERS",
       newRequestCapslock: "+ NEW REQUEST",
       newWriteOffCapslock: "- NEW WRITE OFF",
       newArrivalRegistration: "New Arrival Registration",
@@ -449,7 +450,8 @@ export default {
       productsInStock: "Products in stock",
       youMustSetArrivalDate: "You must set arrival date",
       isPaid: "Is paid",
-
+      isPaidYes: "Yes",
+      isPaidNo: "No",
       //storehouse.store.ts
       addressCapslock: "ADDRESS",
 

@@ -12,44 +12,46 @@
         <label for="paidValue" class="ml-2"> {{ localize("isPaid") }} </label>
       </div>
     </MDBCol>
-    <MDBCol v-if="showDate" clsas="col-auto">
-      <DatePicker @change="handleDateChanged" />
+    <MDBCol v-if="showDate" class="col-auto">
+      <DatePicker class="date-picker" @change="handleDateChanged" />
     </MDBCol>
+    <MDBCol class="d-flex gap-2">
+    <MDBBtn class="utility-btn btn-black" @click="cancel">{{
+        localize("cancelCapslock", "default")
+      }}</MDBBtn>
+    <MDBBtn class="utility-btn btn-success" @click="save">{{
+        localize("saveCapslock", "default")
+      }}</MDBBtn>
+  </MDBCol>
+  </MDBRow>
+  <MDBRow class="d-flex flex-row flex-nowrap">
     <MDBCol class="col-auto">
       <SelectComponent
-        :placeholder="placeholder"
-        :items="productList"
-        v-model="selectedProduct"
-        :showBadge="true"
-        :filter="true"
+          :placeholder="placeholder"
+          :items="productList"
+          v-model="selectedProduct"
+          :showBadge="true"
+          :filter="true"
       />
     </MDBCol>
     <MDBCol class="col-auto">
       <InputText
-        class="input-wrapper animate__animated animate__fadeIn username-input"
-        type="number"
-        :placeholder="localize('quantity')"
-        v-model="quantity"
+          class="input-wrapper animate__animated animate__fadeIn username-input"
+          type="number"
+          :placeholder="localize('quantity')"
+          v-model="quantity"
       />
     </MDBCol>
     <MDBCol v-if="showPrice" class="col-auto">
       <InputText
-        class="input-wrapper animate__animated animate__fadeIn username-input"
-        type="number"
-        :placeholder="localize('price')"
-        v-model="price"
+          class="input-wrapper animate__animated animate__fadeIn username-input"
+          type="number"
+          :placeholder="localize('price')"
+          v-model="price"
       />
     </MDBCol>
     <MDBCol class="col-auto">
       <MDBBtn class="utility-btn btn-black" @click="add">+</MDBBtn>
-    </MDBCol>
-    <MDBCol class="d-flex gap-2">
-      <MDBBtn class="utility-btn btn-black" @click="cancel">{{
-        localize("cancelCapslock", "default")
-      }}</MDBBtn>
-      <MDBBtn class="utility-btn btn-success" @click="save">{{
-        localize("saveCapslock", "default")
-      }}</MDBBtn>
     </MDBCol>
   </MDBRow>
   <SearchComponent @search="handleAddedSearch" />
@@ -320,5 +322,8 @@ export default {
   height: 40px !important;
   padding: 8px;
 }
-
+.date-picker {
+  width: 100%;
+  max-width: 10rem;
+}
 </style>

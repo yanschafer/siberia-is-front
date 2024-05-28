@@ -413,6 +413,9 @@ export default {
       areYouSure: "¿Estás seguro de que quieres eliminar el grupo llamado",
     },
     storehouses: {
+      isPaid: "Pagado",
+      isPaidYes: "Sí",
+      isPaidNo: "No",
       //CreateStorehouse.vue
       storehouseName: "Nombre del almacén",
       storehouseAddress: "Dirección del almacén",
@@ -428,6 +431,7 @@ export default {
       uploadSale: "NUEVA VENTA",
       newRequestCapslock: "+ NUEVA SOLICITUD",
       newWriteOffCapslock: "- NUEVA ANULAR",
+      sasha: "PEDIDOS",
       newArrivalRegistration: "Registro de Nueva Llegada",
       newSaleRegistration: "Registro de Nueva Venta",
       newRequestRegistration: "Registro de Nueva Solicitud",
@@ -668,9 +672,6 @@ export default {
       4: "Anular",
       created: "CREADO",
       arrivalDate: "FECHA DE LLEGADA",
-      isPaid: "PAGADO",
-      isPaidYes: "Sí",
-      isPaidNo: "No",
       showClosedOperations: "Mostrar operaciones cerradas",
       operationType: "Tipo de operación",
       operationStatus: "Estado de la operación",
